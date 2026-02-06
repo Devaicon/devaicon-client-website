@@ -36,3 +36,5 @@ const BusinessApplicationsPage = () => {
     </main>
   );
 };
+
+export default BusinessApplicationsPage;

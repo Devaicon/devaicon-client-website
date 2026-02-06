@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DollarSign,
   Building2,
@@ -11,16 +11,10 @@ import {
   Briefcase,
   Heart,
   GraduationCap,
-  Search,
-  Hammer,
-  Settings,
-  Globe,
-  Headphones,
-  Sparkles,
 } from "lucide-react";
-import CapabilityDetailCard from "./CapabilityDetailCard";
-import CapabilitesGroups from "./CapabilitesGroups";
-import CapabilityStickyNav from "./CapabilityStickyNav";
+import IndustryDetailCard from "./IndustryDetailCard";
+import IndustriesGroups from "./IndustriesGroups";
+import IndustryStickyNav from "./IndustryStickyNav";
 
 // Icon mapping for string-based icon names
 const iconMap = {
@@ -32,20 +26,14 @@ const iconMap = {
   Briefcase,
   Heart,
   GraduationCap,
-  Search,
-  Hammer,
-  Settings,
-  Globe,
-  Headphones,
-  Sparkles,
 };
 
 /**
- * CapabilityCard Component
- * Displays a single capability card with icon, title, and learn more link
+ * IndustryCard Component
+ * Displays a single industry card with icon, title, and learn more link
  * Handles click navigation to detail card sections
  */
-const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
+const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
   const handleCardClick = () => {
     const element = document.getElementById(id);
     if (element) {
@@ -106,16 +94,16 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
 };
 
 /**
- * CapabilitiesContainer Component
- * Main container for displaying capability sections
+ * IndustriesContainer Component
+ * Main container for displaying industry sections
  * @param {Object} props
  * @param {string} props.title - Section title
  * @param {string} props.subtitle - Section subtitle
- * @param {Array} props.cards - Array of capability card data
- * @param {boolean} props.showGroups - Whether to show CapabilitesGroups divider
+ * @param {Array} props.cards - Array of industry card data
+ * @param {boolean} props.showGroups - Whether to show IndustriesGroups divider
  * @param {boolean} props.hideBadge - Whether to hide the "HOW IT WORKS" badge in detail cards
  */
-const CapabilitesContainer = ({
+const IndustriesContainer = ({
   title,
   subtitle,
   cards,
@@ -148,70 +136,67 @@ const CapabilitesContainer = ({
   return (
     <>
       {/* Sticky Navigation - appears when scrolling past main cards */}
-      <CapabilityStickyNav cards={cards} activeCardId={activeCardId} />
+      <IndustryStickyNav cards={cards} activeCardId={activeCardId} />
 
-      <section
-        className="w-full bg-[#fef9f3] py-16 md:py-20 lg:py-24"
-        aria-labelledby="capabilities-heading"
-      >
-        <div className="max-w-[96rem] mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
+      {/* Main Content Section */}
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <header className="text-center mb-12 md:mb-16">
-            <h2
-              id="capabilities-heading"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4"
-            >
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
               {title}
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              {subtitle}
-            </p>
-          </header>
+            {subtitle && (
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                {subtitle}
+              </p>
+            )}
+          </div>
 
-          {/* Cards Grid */}
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
-            role="list"
-          >
-            {cards.map((card) => (
-              <div key={card.id} role="listitem">
-                <CapabilityCard
-                  id={card.id}
-                  title={card.title}
-                  icon={card.icon}
-                  iconAlt={card.iconAlt}
-                  onCardClick={setActiveCardId}
-                />
-              </div>
+          {/* Industry Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+            {cards.map((card, index) => (
+              <IndustryCard
+                key={card.id}
+                title={card.title}
+                icon={card.icon}
+                iconAlt={card.iconAlt}
+                id={card.id}
+                onCardClick={setActiveCardId}
+              />
             ))}
           </div>
         </div>
-
-        {/* Dynamic Detail Cards - First half */}
-        {cards.slice(0, Math.ceil(cards.length / 2)).map((card, index) => (
-          <CapabilityDetailCard
-            key={card.id}
-            card={card}
-            index={index}
-            hideBadge={hideBadge}
-          />
-        ))}
-
-        {/* CapabilitesGroups Component - Partition between cards */}
-        {showGroups && <CapabilitesGroups />}
-
-        {/* Dynamic Detail Cards - Second half */}
-        {cards.slice(Math.ceil(cards.length / 2)).map((card, index) => (
-          <CapabilityDetailCard
-            key={card.id}
-            card={card}
-            index={index + Math.ceil(cards.length / 2)}
-            hideBadge={hideBadge}
-          />
-        ))}
       </section>
+
+      {/* Detail Cards Section */}
+      {cards.map((card, index) => (
+        <div key={card.id}>
+          <IndustryDetailCard
+            id={card.id}
+            title={card.title}
+            icon={card.icon}
+            iconAlt={card.iconAlt}
+            image={card.image}
+            industryContext={card.industryContext}
+            painPoints={card.painPoints}
+            ourApproach={card.ourApproach}
+            solutionText={card.solutionText}
+            additionalContent={card.additionalContent}
+            futureHeading={card.futureHeading}
+            futurePoints={card.futurePoints}
+            isOdd={index % 2 === 0}
+            hideBadge={hideBadge}
+          />
+
+          {/* Divider between sections */}
+          {showGroups && index === Math.floor(cards.length / 2) - 1 && (
+            <IndustriesGroups />
+          )}
+        </div>
+      ))}
     </>
   );
 };
 
-export default CapabilitesContainer;
+export default IndustriesContainer;

@@ -36,3 +36,5 @@ const CloudServicesPage = () => {
     </main>
   );
 };
+
+export default CloudServicesPage;

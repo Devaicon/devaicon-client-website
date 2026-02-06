@@ -13,12 +13,6 @@ import {
   Briefcase,
   Heart,
   GraduationCap,
-  Search,
-  Hammer,
-  Settings,
-  Globe,
-  Headphones,
-  Sparkles,
 } from "lucide-react";
 
 // Icon mapping for string-based icon names
@@ -31,20 +25,14 @@ const iconMap = {
   Briefcase,
   Heart,
   GraduationCap,
-  Search,
-  Hammer,
-  Settings,
-  Globe,
-  Headphones,
-  Sparkles,
 };
 
 /**
- * CapabilityStickyNav Component
+ * IndustryStickyNav Component
  * Sticky navigation bar that appears when scrolling past the main cards section
- * Allows quick navigation between capability detail sections
+ * Allows quick navigation between industry detail sections
  */
-const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
+const IndustryStickyNav = ({ cards = [], activeCardId = "" }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -148,33 +136,39 @@ const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
                   ? iconMap[navCard.icon]
                   : null;
 
+              const isActive = activeSection === navCard.id;
+
+              const handleClick = () => {
+                const element = document.getElementById(navCard.id);
+                if (element) {
+                  element.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
+              };
+
               return (
                 <button
                   key={navCard.id}
-                  onClick={() => {
-                    const element = document.getElementById(navCard.id);
-                    if (element) {
-                      element.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
-                    navCard.id === activeSection
-                      ? "bg-blue-600 text-white shadow-md"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow"
+                  onClick={handleClick}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full flex-shrink-0 transition-all border ${
+                    isActive
+                      ? "bg-[#4555A7] text-white border-[#4555A7]"
+                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
                   }`}
                   aria-label={`Navigate to ${navCard.title}`}
+                  aria-current={isActive ? "true" : "false"}
                 >
-                  <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+                  {/* Icon */}
+                  <div className="flex-shrink-0">
                     {IconComponent ? (
                       <IconComponent className="w-5 h-5" />
                     ) : (
                       <div className="relative w-5 h-5">
                         <Image
                           src={navCard.icon}
-                          alt=""
+                          alt={navCard.iconAlt || navCard.title}
                           fill
                           className="object-contain"
                           sizes="20px"
@@ -182,7 +176,11 @@ const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
                       </div>
                     )}
                   </div>
-                  <span className="hidden sm:inline">{navCard.title}</span>
+
+                  {/* Title */}
+                  <span className="text-sm font-medium whitespace-nowrap">
+                    {navCard.title}
+                  </span>
                 </button>
               );
             })}
@@ -204,4 +202,4 @@ const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
   );
 };
 
-export default CapabilityStickyNav;
+export default IndustryStickyNav;

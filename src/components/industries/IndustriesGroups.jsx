@@ -4,16 +4,16 @@ import Link from "next/link";
 import { ArrowRight, Award, Users, Globe } from "lucide-react";
 
 /**
- * CapabilitesGroups Component
- * Divider section displayed between capability detail cards
+ * IndustriesGroups Component
+ * Divider section displayed between industry detail cards
  * Highlights company strengths and provides call-to-action
  */
-const CapabilitesGroups = () => {
+const IndustriesGroups = () => {
   const features = [
     {
       id: 1,
       icon: Award,
-      title: "20+ Years",
+      title: "18+ Years",
       description: "Proven industry experience",
       bgColor: "#37469E",
     },
@@ -27,8 +27,8 @@ const CapabilitesGroups = () => {
     {
       id: 3,
       icon: Globe,
-      title: "Global Partner",
-      description: "Worldwide implementation reach",
+      title: "GCC Partner",
+      description: "Regional implementation expertise",
       bgColor: "#37469E",
     },
   ];
@@ -102,15 +102,14 @@ const CapabilitesGroups = () => {
           })}
         </div>
 
-        {/* Contact Button */}
-        <div className="flex justify-center">
+        {/* CTA Button */}
+        <div className="text-center">
           <Link
             href="/contact-us"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#37469E] hover:bg-[#6B6CEE] 
-                       text-white font-semibold rounded-lg transition-all duration-300 
-                       hover:shadow-lg transform hover:scale-105"
+            className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-[#4555A7] font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full shadow-lg transition-all duration-300"
+            aria-label="Get in touch with us"
           >
-            Contact us
+            <span>Get in Touch</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -119,4 +118,4 @@ const CapabilitesGroups = () => {
   );
 };
 
-export default CapabilitesGroups;
+export default IndustriesGroups;

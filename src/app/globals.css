@@ -54,6 +54,15 @@
   }
 }
 
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .animate-slideDown {
   animation: slideDown 0.4s ease-out forwards;
 }
@@ -68,6 +77,14 @@
 
 .animate-slideInRight {
   animation: slideInFromRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stats-scroll-animation {
+  animation: scroll 15s linear infinite;
+}
+
+.stats-scroll-animation:hover {
+  animation-play-state: paused;
 }
 
 .stagger-animation > * {
@@ -110,7 +127,7 @@ h6 {
 
 /* Container */
 .container-responsive {
-  max-width: 79rem; /* max-w-8xl = 1536px to match navbar */
+  max-width: 96rem; /* 1536px - matches max-w-[96rem] used throughout */
   margin-inline: auto;
   padding-inline: 1rem;
 }

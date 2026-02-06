@@ -11,12 +11,6 @@ import {
   Briefcase,
   Heart,
   GraduationCap,
-  Search,
-  Hammer,
-  Settings,
-  Globe,
-  Headphones,
-  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 import React from "react";
@@ -31,53 +25,64 @@ const iconMap = {
   Briefcase,
   Heart,
   GraduationCap,
-  Search,
-  Hammer,
-  Settings,
-  Globe,
-  Headphones,
-  Sparkles,
 };
 
 /**
- * CapabilityDetailCard Component
- * Reusable component for displaying capability details
- * Handles both odd and even card layouts dynamically
+ * IndustryDetailCard Component
+ * Displays detailed industry information with alternating layouts
  *
- * @param {Object} card - Card data object
- * @param {number} index - Card index to determine odd/even styling
+ * @param {string} id - Industry section ID for scrolling
+ * @param {string} title - Industry title
+ * @param {string} image - Industry image path
+ * @param {string} icon - Icon name string
+ * @param {string} iconAlt - Alt text for icon
+ * @param {string} industryContext - Industry context description
+ * @param {Array} painPoints - List of common pain points
+ * @param {string} ourApproach - Devaicon's approach description
+ * @param {Array} solutionText - List of solutions
+ * @param {string} additionalContent - Additional context
+ * @param {string} futureHeading - Future section heading
+ * @param {Array} futurePoints - Future points list
+ * @param {boolean} isOdd - Whether card index is odd (for layout)
  * @param {boolean} hideBadge - Whether to hide the "HOW IT WORKS" badge
  */
-const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
+const IndustryDetailCard = ({
+  id,
+  title,
+  image,
+  icon,
+  iconAlt,
+  industryContext,
+  painPoints,
+  ourApproach,
+  solutionText,
+  additionalContent,
+  futureHeading,
+  futurePoints,
+  isOdd,
+  hideBadge = false,
+}) => {
   const [openSolution, setOpenSolution] = useState(false);
 
   const toggleSolution = () => {
     setOpenSolution((prev) => !prev);
   };
 
-  // Determine if card is odd or even (1-indexed)
-  const isOdd = (index + 1) % 2 !== 0;
-
   // Set background color based on odd/even
   const backgroundColor = isOdd ? "#fef9f3" : "#DCD3FF33";
 
-  // Set border radius - same for all cards
+  // Set border radius
   const imageBorderRadius = {
     borderTopRightRadius: "37.31px",
     borderTopLeftRadius: "37.31px",
   };
 
-  // Check if card has the new structure (Industry Context, Pain Points, Our Approach)
-  const hasNewStructure =
-    card.industryContext && card.painPoints && card.ourApproach;
-
   // Get the icon component from the string name
-  const IconComponent =
-    typeof card.icon === "string" ? iconMap[card.icon] : null;
+  const IconComponent = typeof icon === "string" ? iconMap[icon] : null;
 
   return (
     <section
-      id={card.id}
+      id={id}
       className="w-full py-10 md:py-12 scroll-mt-20"
       style={{ background: backgroundColor }}
     >
@@ -104,8 +109,8 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
                 ) : (
                   <div className="relative w-20 h-20 p-4 bg-white rounded-lg shadow-md">
                     <Image
-                      src={card.icon}
-                      alt={card.iconAlt}
+                      src={icon}
+                      alt={iconAlt}
                       fill
                       className="object-contain p-2"
                       sizes="80px"
@@ -119,75 +124,70 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
                 {/* Badge */}
                 {!hideBadge && (
                   <span className="inline-block text-xs font-semibold text-[#4555A7] uppercase tracking-wider mb-3">
-                    HOW IT WORKS
+                    INDUSTRY SOLUTIONS
                   </span>
                 )}
 
                 {/* Title */}
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-5">
-                  {card.title}
+                  {title}
                 </h2>
 
-                {hasNewStructure ? (
-                  <>
-                    {/* Industry Context Section */}
-                    <div className="mb-6">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Industry Context
-                      </h3>
-                      <p className="text-gray-600 text-base leading-relaxed">
-                        {card.industryContext}
-                      </p>
-                    </div>
-
-                    {/* Common Pain Points Section */}
-                    <div className="mb-6">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Common Pain Points
-                      </h3>
-                      <ul className="space-y-2">
-                        {card.painPoints.map((point, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start text-gray-600 text-base leading-relaxed"
-                          >
-                            <span className="text-[#4555A7] mr-2">•</span>
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Our Approach Section */}
-                    <div className="mb-5">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                        Our Approach with Dynamics 365
-                      </h3>
-                      <p className="text-gray-600 text-base leading-relaxed">
-                        {card.ourApproach}
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Description */}
-                    <p className="text-gray-600 text-base leading-relaxed mb-5">
-                      {card.description}
+                {/* Industry Context Section */}
+                {industryContext && (
+                  <div className="mb-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      Industry Context
+                    </h3>
+                    <p className="text-gray-600 text-base leading-relaxed">
+                      {industryContext}
                     </p>
-                  </>
+                  </div>
+                )}
+
+                {/* Common Pain Points Section */}
+                {painPoints && painPoints.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      Common Pain Points
+                    </h3>
+                    <ul className="space-y-2">
+                      {painPoints.map((point, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start text-gray-600 text-base leading-relaxed"
+                        >
+                          <span className="text-[#4555A7] mr-2">•</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Our Approach Section */}
+                {ourApproach && (
+                  <div className="mb-5">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      Our Approach with Dynamics 365
+                    </h3>
+                    <p className="text-gray-600 text-base leading-relaxed">
+                      {ourApproach}
+                    </p>
+                  </div>
                 )}
 
                 {/* Solutions Dropdown */}
-                {card.solutionText && (
+                {solutionText && (
                   <div className="mb-5 max-w-2xl">
                     <button
                       onClick={toggleSolution}
                       className="w-full flex items-center justify-between py-4 bg-white hover:bg-gray-50 transition-colors border-l-4 border-[#4555A7]"
                       aria-expanded={openSolution}
-                      aria-controls={`solution-${card.id}`}
+                      aria-controls={`solution-${id}`}
                     >
                       <span className="text-[#4555A7] font-medium text-left text-lg pl-3">
-                        {card.title}
+                        {title}
                       </span>
                       <ChevronDown
                         className={`w-5 h-5 text-gray-400 transition-transform duration-200 mr-4 ${
@@ -196,9 +196,9 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
                       />
                     </button>
 
-                    {openSolution && Array.isArray(card.solutionText) && (
-                      <div id={`solution-${card.id}`} className="bg-white">
-                        {card.solutionText.map((item, idx) => (
+                    {openSolution && Array.isArray(solutionText) && (
+                      <div id={`solution-${id}`} className="bg-white">
+                        {solutionText.map((item, idx) => (
                           <div
                             key={idx}
                             className="flex items-center justify-between py-3 px-6 border-b border-gray-200 hover:bg-gray-50 transition-colors last:border-b-0"
@@ -211,24 +211,42 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
                       </div>
                     )}
 
-                    {openSolution && !Array.isArray(card.solutionText) && (
+                    {openSolution && !Array.isArray(solutionText) && (
                       <div
-                        id={`solution-${card.id}`}
+                        id={`solution-${id}`}
                         className="py-4 bg-gray-50 px-6"
                       >
-                        <p className="text-gray-600 text-sm">
-                          {card.solutionText}
-                        </p>
+                        <p className="text-gray-600 text-sm">{solutionText}</p>
                       </div>
                     )}
                   </div>
                 )}
 
                 {/* Additional Content */}
-                {!hasNewStructure && (
-                  <p className="text-gray-600 text-base leading-relaxed">
-                    {card.additionalContent}
+                {additionalContent && (
+                  <p className="text-gray-600 text-base leading-relaxed mb-6">
+                    {additionalContent}
                   </p>
+                )}
+
+                {/* Future Section */}
+                {futureHeading && futurePoints && futurePoints.length > 0 && (
+                  <div className="mt-6 p-6 bg-white rounded-lg">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                      {futureHeading}
+                    </h3>
+                    <ul className="space-y-2">
+                      {futurePoints.map((point, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start text-gray-600 text-base leading-relaxed"
+                        >
+                          <span className="text-[#4555A7] mr-2">✓</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             </div>
@@ -241,8 +259,8 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
               style={imageBorderRadius}
             >
               <Image
-                src={card.image || "/hero-img.webp"}
-                alt={`${card.title} visualization`}
+                src={image || "/hero-img.webp"}
+                alt={`${title} visualization`}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 35vw"
@@ -256,4 +274,4 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
   );
 };
 
-export default CapabilityDetailCard;
+export default IndustryDetailCard;

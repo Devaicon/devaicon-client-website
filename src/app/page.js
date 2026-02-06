@@ -16,11 +16,11 @@ export default function HomePage() {
       <HeroSection />
       <TrustSection />
       <StatsSection />
+      <IndustrySection />
       <WhatWeDoSection />
       <EnterpriseExcellence />
       <Capabilities />
       <OurServicesSection />
-      <IndustrySection />
       {/* <BadgesSection /> */}
 
       <ResourcesHub />

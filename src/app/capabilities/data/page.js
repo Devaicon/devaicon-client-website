@@ -36,3 +36,5 @@ const DataCapabilitiesPage = () => {
     </main>
   );
 };
+
+export default DataCapabilitiesPage;

@@ -107,7 +107,7 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative8 container-responsive max-w-8xl py-8 sm:py-12 md:py-20 flex items-center h-full">
+      <div className="relative8 container-responsive max-w-[96rem] py-8 sm:py-12 md:py-20 flex items-center h-full">
         <div className="hero-content">
           {/* Main Heading */}
           <h1

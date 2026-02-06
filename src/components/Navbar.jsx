@@ -462,6 +462,13 @@ export default function Navbar() {
       description:
         "Devaicon helps non-profit organizations manage funding, programs, and reporting. These organizations need transparency and accountability. Devaicon delivers platforms that support impact tracking and compliance while keeping operations efficient.",
     },
+    {
+      name: "Education",
+      id: "education",
+      icon: <GraduationCap className="w-5 h-5" />,
+      description:
+        "Devaicon empowers educational institutions with integrated digital platforms for student management, learning, and administration. Schools and universities manage complex academic operations, student data, and teaching resources.",
+    },
   ];
 
   const solutionsCategories = [
@@ -711,7 +718,7 @@ export default function Navbar() {
                       </p>
 
                       <Link
-                        href="/industries"
+                        href={`/industries#${industry.id}`}
                         className="bg-transparent border-2 border-[#3d234b] text-[#3d234b] px-6 py-2.5 rounded-md font-semibold hover:bg-[#3d234b] hover:text-white transition-all duration-200 flex items-center gap-2 w-fit"
                       >
                         LEARN MORE
@@ -1203,7 +1210,7 @@ export default function Navbar() {
                                       {industry.description}
                                     </p>
                                     <Link
-                                      href="/industries"
+                                      href={`/industries#${industry.id}`}
                                       onClick={closeMobileMenu}
                                       className="inline-flex items-center gap-1 text-xs font-semibold text-[#3d234b] hover:underline mt-2"
                                     >

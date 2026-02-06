@@ -36,3 +36,5 @@ const AICapabilitiesPage = () => {
     </main>
   );
 };
+
+export default AICapabilitiesPage;
