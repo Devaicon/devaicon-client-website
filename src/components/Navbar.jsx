@@ -49,11 +49,49 @@ import {
   Newspaper,
   Search,
   Leaf,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Palette,
+  Target,
+  Lightbulb,
+  Server,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  BarChart3,
+  Headphones,
 } from "lucide-react";
+
+// Icon mapping for navbar capability items
+const navIconMap = {
+  Brain,
+  TrendingUp,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Globe,
+  Monitor,
+  Palette,
+  Cloud,
+  Settings,
+  Headphones,
+  Target,
+  Lightbulb,
+  Server,
+  Puzzle,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  BarChart3,
+};
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showSolutionsDropdown, setShowSolutionsDropdown] = useState(false);
   const [showIndustriesDropdown, setShowIndustriesDropdown] = useState(false);
   const [showCapabilitiesDropdown, setShowCapabilitiesDropdown] =
     useState(false);
@@ -63,10 +101,11 @@ export default function Navbar() {
   const [hoveredIndustry, setHoveredIndustry] = useState(
     "Banking & Financial Services",
   );
-  const [hoveredCapability, setHoveredCapability] = useState("AI");
+  const [hoveredCapability, setHoveredCapability] = useState(
+    "Intelligent Systems & Data",
+  );
   const [currentFeedbackIndex, setCurrentFeedbackIndex] = useState(0);
 
-  const dropdownTimeoutRef = useRef(null);
   const industriesTimeoutRef = useRef(null);
   const capabilitiesTimeoutRef = useRef(null);
   const whyVitaTimeoutRef = useRef(null);
@@ -74,7 +113,6 @@ export default function Navbar() {
 
   // Mobile dropdown states
   const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
-  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
   const [mobileCapabilitiesOpen, setMobileCapabilitiesOpen] = useState(false);
   const [mobileWhyVitaOpen, setMobileWhyVitaOpen] = useState(false);
   const [mobileEngagementModelsOpen, setMobileEngagementModelsOpen] =
@@ -104,19 +142,6 @@ export default function Navbar() {
       document.removeEventListener("keydown", handleEscape);
     };
   }, [isMobileMenuOpen, closeMobileMenu]);
-
-  const handleDropdownEnter = () => {
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current);
-    }
-    setShowSolutionsDropdown(true);
-  };
-
-  const handleDropdownLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setShowSolutionsDropdown(false);
-    }, 150);
-  };
 
   const handleIndustriesEnter = () => {
     if (industriesTimeoutRef.current) {
@@ -214,199 +239,137 @@ export default function Navbar() {
 
   const capabilitiesData = [
     {
-      name: "AI",
+      name: "Intelligent Systems & Data",
       icon: <Brain className="w-5 h-5" />,
       description:
-        "Advanced AI and automation solutions that enable intelligent workflows, predictive analytics, and transformative business outcomes across enterprise systems.",
+        "Building systems that think, learn, and make decisions using data rather than gut feeling.",
       items: [
         {
-          name: "Microsoft Copilot for Microsoft 365",
-          icon: "/icons/microsoft-copilot.svg",
-          id: "microsoft-copilot-m365",
+          name: "AI & Machine Learning",
+          icon: "Brain",
+          id: "artificial-intelligence-machine-learning",
         },
         {
-          name: "Dynamics 365 Copilot",
-          icon: "/icons/Dynamics365_scalable.svg",
-          id: "dynamics-365-copilot",
+          name: "Data Science & Analytics",
+          icon: "TrendingUp",
+          id: "data-science-analytics",
         },
         {
-          name: "Azure OpenAI Service",
-          icon: "/icons/azure/03438-icon-service-Azure-OpenAI.svg",
-          id: "azure-openai-service",
+          name: "Natural Language Processing",
+          icon: "MessageSquare",
+          id: "natural-language-processing",
         },
         {
-          name: "Copilot Studio",
-          icon: "/icons/CopilotStudio_scalable.svg",
-          id: "copilot-studio",
+          name: "Computer Vision",
+          icon: "Eye",
+          id: "computer-vision",
         },
         {
-          name: "AI Builder",
-          icon: "/icons/AIBuilder_scalable.svg",
-          id: "ai-builder",
-        },
-        {
-          name: "Azure AI Services",
-          icon: "/icons/azure/10162-icon-service-Cognitive-Services.svg",
-          id: "azure-ai-services",
-        },
-        {
-          name: "Intelligent Document Processing",
-          icon: "/icons/azure/00819-icon-service-Form-Recognizers.svg",
-          id: "intelligent-document-processing",
-        },
-        {
-          name: "Predictive Models",
-          icon: "/icons/azure/10166-icon-service-Machine-Learning.svg",
-          id: "predictive-models",
+          name: "AR & VR Solutions",
+          icon: "Glasses",
+          id: "ar-vr-solutions",
         },
       ],
     },
     {
-      name: "Business Applications",
+      name: "Application & Software",
       icon: <Briefcase className="w-5 h-5" />,
       description:
-        "Comprehensive Dynamics 365 solutions for finance, sales, customer service, supply chain, and operations that drive efficiency and business growth.",
+        "Designing and building reliable software products that users actually want to use.",
       items: [
         {
-          name: "Dynamics 365 Finance",
-          icon: "/icons/Finance_scalable.svg",
-          id: "dynamics-365-finance",
+          name: "Web & Mobile Development",
+          icon: "Globe",
+          id: "web-mobile-application-development",
         },
         {
-          name: "Dynamics 365 Supply Chain Management",
-          icon: "/icons/SupplyChainManagement_scalable.svg",
-          id: "dynamics-365-supply-chain",
+          name: "Desktop Applications",
+          icon: "Monitor",
+          id: "desktop-application-development",
         },
         {
-          name: "Dynamics 365 Sales",
-          icon: "/icons/Sales_scalable.svg",
-          id: "dynamics-365-sales",
-        },
-        {
-          name: "Dynamics 365 Customer Service",
-          icon: "/icons/CustomerServices_scalable.svg",
-          id: "dynamics-365-customer-service",
-        },
-        {
-          name: "Dynamics 365 Field Service",
-          icon: "/icons/FieldService_scalable.svg",
-          id: "dynamics-365-field-service",
-        },
-        {
-          name: "Dynamics 365 Project Operations",
-          icon: "/icons/ProjectOperations_scalable.svg",
-          id: "dynamics-365-project-operations",
-        },
-        {
-          name: "Dynamics 365 Human Resources",
-          icon: "/icons/HumanResources_scalable.svg",
-          id: "dynamics-365-human-resources",
-        },
-        {
-          name: "Dynamics 365 Commerce",
-          icon: "/icons/Commerce_scalable.svg",
-          id: "dynamics-365-commerce",
-        },
-        {
-          name: "Dynamics 365 Business Central",
-          icon: "/icons/BusinessCentral_scalable.svg",
-          id: "dynamics-365-business-central",
+          name: "UI & UX Design",
+          icon: "Palette",
+          id: "ui-ux-design",
         },
       ],
     },
     {
-      name: "Cloud Services",
+      name: "Infrastructure & Enterprise",
       icon: <Cloud className="w-5 h-5" />,
       description:
-        "Scalable Azure cloud infrastructure, integration services, and modern application platforms that provide security, flexibility, and reliability.",
+        "Keeping systems scalable, stable, and automated so teams can focus on actual work.",
       items: [
         {
-          name: "Microsoft Azure Infrastructure",
-          icon: "/icons/azure/10018-icon-service-Azure-A.svg",
-          id: "microsoft-azure-infrastructure",
+          name: "Cloud & DevOps Services",
+          icon: "Cloud",
+          id: "cloud-devops-services",
         },
         {
-          name: "Azure App Services & Web Apps",
-          icon: "/icons/azure/10035-icon-service-App-Services.svg",
-          id: "azure-app-services",
+          name: "ERP & Business Automation",
+          icon: "Settings",
+          id: "erp-systems-business-automation",
         },
         {
-          name: "Azure Kubernetes Service",
-          icon: "/icons/kubernetes.svg",
-          id: "azure-kubernetes-service",
-        },
-        {
-          name: "Azure Virtual Desktop",
-          icon: "/icons/azure/00327-icon-service-Azure-Virtual-Desktop.svg",
-          id: "azure-virtual-desktop",
-        },
-        {
-          name: "Azure Integration Services",
-          icon: "/icons/PowerAutomate_scalable.svg",
-          id: "azure-integration-services",
-        },
-        {
-          name: "Azure Security & Identity",
-          icon: "/icons/azure/00321-icon-service-Security.svg",
-          id: "azure-security-identity",
-        },
-        {
-          name: "Azure DevOps & CI/CD Pipelines",
-          icon: "/icons/azure/10261-icon-service-Azure-DevOps.svg",
-          id: "azure-devops-cicd",
-        },
-        {
-          name: "Cloud Migration & Modernization",
-          icon: "/icons/azure/10281-icon-service-Azure-Migrate.svg",
-          id: "cloud-migration-modernization",
+          name: "Support & Maintenance",
+          icon: "Headphones",
+          id: "support-maintenance",
         },
       ],
     },
     {
-      name: "Data",
+      name: "Consulting & Transformation",
       icon: <TrendingUp className="w-5 h-5" />,
       description:
-        "Modern data platforms, analytics, and governance solutions that transform enterprise data into actionable insights and strategic business intelligence.",
+        "Helping organisations adopt technology properly instead of bolting tools together.",
       items: [
         {
-          name: "Microsoft Fabric",
-          icon: "/icons/PowerPlatform_scalable.svg",
-          id: "microsoft-fabric",
+          name: "Digital Transformation",
+          icon: "Target",
+          id: "digital-transformation-consulting",
         },
         {
-          name: "Azure Data Factory",
-          icon: "/icons/azure/10126-icon-service-Data-Factories.svg",
-          id: "azure-data-factory",
+          name: "Technology Strategy",
+          icon: "Lightbulb",
+          id: "technology-strategy-advisory",
+        },
+      ],
+    },
+    {
+      name: "Open edX Services",
+      icon: <GraduationCap className="w-5 h-5" />,
+      description:
+        "Enterprise learning platforms, customization, and long-term scalability.",
+      items: [
+        {
+          name: "Open edX Hosting",
+          icon: "Server",
+          id: "open-edx-hosting",
         },
         {
-          name: "Azure Synapse Analytics",
-          icon: "/icons/azure/00606-icon-service-Azure-Synapse-Analytics.svg",
-          id: "azure-synapse-analytics",
+          name: "Customization & Features",
+          icon: "Puzzle",
+          id: "customization-feature-development",
         },
         {
-          name: "Power BI",
-          icon: "/icons/azure/03332-icon-service-Power-BI-Embedded.svg",
-          id: "power-bi",
+          name: "Branding & UI/UX",
+          icon: "PenTool",
+          id: "branding-ui-ux",
         },
         {
-          name: "OneLake",
-          icon: "/icons/Dataverse_scalable.svg",
-          id: "onelake",
+          name: "Course Development",
+          icon: "FileText",
+          id: "content-authoring-course-development",
         },
         {
-          name: "Azure SQL & Managed Databases",
-          icon: "/icons/azure/10130-icon-service-SQL-Database.svg",
-          id: "azure-sql-managed-db",
+          name: "Integrations & SSO",
+          icon: "Lock",
+          id: "integrations-sso",
         },
         {
-          name: "Real-Time Analytics",
-          icon: "/icons/azure/10145-icon-service-Azure-Data-Explorer-Clusters.svg",
-          id: "real-time-analytics",
-        },
-        {
-          name: "Data Governance & Security",
-          icon: "/icons/azure/00011-icon-service-Compliance.svg",
-          id: "data-governance-security",
+          name: "Deployment & Setup",
+          icon: "GitBranch",
+          id: "deployment-environment-setup",
         },
       ],
     },
@@ -497,11 +460,10 @@ export default function Navbar() {
     <>
       <header className="absolute top-0 left-0 right-0 z-50 flex justify-center">
         <nav
-          className={`bg-white border-2 border-gray-200 mx-auto w-full lg:w-[calc(100%-280px)] max-w-[79rem] h-[80px] lg:h-[93px] px-4 sm:px-8 lg:px-6 xl:px-[59px] py-4 lg:py-[32px] rounded-none transition-all duration-200 ${
+          className={`bg-white border-2 border-gray-200 mx-auto w-full lg:w-[calc(100%-400px)] h-[80px] lg:h-[93px] px-4 sm:px-8 lg:px-6 xl:px-[59px] py-4 lg:py-[32px] rounded-none transition-all duration-200 ${
             showIndustriesDropdown ||
             showCapabilitiesDropdown ||
             showWhyVitaDropdown ||
-            showSolutionsDropdown ||
             showEngagementModelsDropdown
               ? " border-b-0"
               : "lg:rounded-b-[30px]"
@@ -556,7 +518,7 @@ export default function Navbar() {
                 onMouseLeave={handleCapabilitiesLeave}
               >
                 <Link
-                  href="/capabilities/ai"
+                  href="/capabilities/intelligent-systems-data"
                   className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Capabilities
@@ -592,25 +554,6 @@ export default function Navbar() {
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-300 ${
                       showEngagementModelsDropdown ? "rotate-180" : ""
-                    }`}
-                  />
-                </Link>
-              </li>
-
-              {/* What We Do Dropdown */}
-              <li
-                className="relative"
-                onMouseEnter={handleDropdownEnter}
-                onMouseLeave={handleDropdownLeave}
-              >
-                <Link
-                  href="/whatwedo"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap flex items-center gap-1"
-                >
-                  What We Do
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      showSolutionsDropdown ? "rotate-180" : ""
                     }`}
                   />
                 </Link>
@@ -780,36 +723,54 @@ export default function Navbar() {
 
                       {/* Items */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
-                        {capability.items.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-2 hover:bg-gradient-to-br hover:from-purple-50 hover:to-blue-50 p-2 rounded-lg transition-all duration-200"
-                          >
-                            <div className="flex items-center justify-center h-8 w-8 rounded-lg">
-                              <Image
-                                src={item.icon}
-                                alt={item.name}
-                                width={24}
-                                height={24}
-                                className="w-5 h-5"
-                              />
-                            </div>
-                            <span className="text-sm font-medium text-gray-900">
-                              {item.name}
-                            </span>
-                          </div>
-                        ))}
+                        {capability.items.map((item, idx) => {
+                          const IconComponent = navIconMap[item.icon];
+                          return (
+                            <Link
+                              key={idx}
+                              href={`/capabilities/${
+                                hoveredCapability ===
+                                "Intelligent Systems & Data"
+                                  ? "intelligent-systems-data"
+                                  : hoveredCapability ===
+                                      "Application & Software"
+                                    ? "application-software-development"
+                                    : hoveredCapability ===
+                                        "Infrastructure & Enterprise"
+                                      ? "infrastructure-enterprise-systems"
+                                      : hoveredCapability ===
+                                          "Consulting & Transformation"
+                                        ? "consulting-transformation"
+                                        : "open-edx-services"
+                              }#${item.id}`}
+                              className="flex items-center gap-2 hover:bg-gradient-to-br hover:from-purple-50 hover:to-blue-50 p-2 rounded-lg transition-all duration-200 cursor-pointer"
+                            >
+                              <div className="flex items-center justify-center h-8 w-8 rounded-lg text-[#3d234b]">
+                                {IconComponent && (
+                                  <IconComponent className="w-5 h-5" />
+                                )}
+                              </div>
+                              <span className="text-sm font-medium text-gray-900">
+                                {item.name}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
 
                       <Link
                         href={`/capabilities/${
-                          hoveredCapability === "AI"
-                            ? "ai"
-                            : hoveredCapability === "Business Applications"
-                              ? "business-applications"
-                              : hoveredCapability === "Cloud Services"
-                                ? "cloud-services"
-                                : "data"
+                          hoveredCapability === "Intelligent Systems & Data"
+                            ? "intelligent-systems-data"
+                            : hoveredCapability === "Application & Software"
+                              ? "application-software-development"
+                              : hoveredCapability ===
+                                  "Infrastructure & Enterprise"
+                                ? "infrastructure-enterprise-systems"
+                                : hoveredCapability ===
+                                    "Consulting & Transformation"
+                                  ? "consulting-transformation"
+                                  : "open-edx-services"
                         }`}
                         className="bg-transparent border-2 border-[#3d234b] text-[#3d234b] px-6 py-2.5 rounded-md font-semibold hover:bg-[#3d234b] hover:text-white transition-all duration-200 flex items-center gap-2 w-fit"
                       >
@@ -819,58 +780,6 @@ export default function Navbar() {
                     </div>
                   ),
               )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* What We Do Dropdown */}
-      {showSolutionsDropdown && (
-        <div
-          className="absolute left-1/2 -translate-x-1/2 top-[93px] w-full lg:w-[calc(100%-280px)] max-w-[79rem] z-40 animate-fadeInScale flex justify-center"
-          onMouseEnter={handleDropdownEnter}
-          onMouseLeave={handleDropdownLeave}
-        >
-          <div className="bg-white shadow-2xl rounded-b-[30px] border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-8">
-            <div className="flex">
-              {/* Left Section */}
-              <div className="w-1/3 bg-[#3d234b] p-8 text-white rounded-lg animate-slideInLeft">
-                <h3 className="text-2xl font-bold mb-4">What we do</h3>
-                <p className="text-sm leading-relaxed mb-6">
-                  Devaicon develops industry-specific solutions that leverage
-                  the latest cloud and AI technologies from Microsoft,
-                  accelerating our customers&apos; digital transformation.
-                </p>
-                <Link
-                  href="/whatwedo"
-                  className="bg-white text-[#3d234b] px-6 py-2.5 rounded-md font-semibold hover:bg-[#3d234b] hover:text-white hover:border-2 hover:border-white transition-all duration-300 inline-flex items-center gap-2"
-                >
-                  LEARN MORE
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              {/* Right Section - Grid */}
-              <div className="w-2/3 pl-8 animate-slideInRight">
-                <div className="grid grid-cols-3 gap-4 stagger-animation">
-                  {solutionsCategories.map((category, index) => (
-                    <Link
-                      key={index}
-                      href={`#${category.name
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
-                      className="group flex items-center gap-3 p-3 rounded-lg transition-all duration-300 hover:bg-purple-50 hover:border hover:border-purple-200"
-                    >
-                      <div className="text-[#3d234b] transition-all duration-300 group-hover:text-white group-hover:bg-[#3d234b] group-hover:p-2 group-hover:rounded">
-                        {category.icon}
-                      </div>
-                      <span className="text-sm font-medium text-gray-800 group-hover:text-[#3d234b] transition-colors duration-300">
-                        {category.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1060,7 +969,7 @@ export default function Navbar() {
           onMouseLeave={handleWhyVitaLeave}
         >
           <div className="bg-white shadow-2xl rounded-b-[30px] border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-8 px-64">
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 stagger-animation">
+            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-6 stagger-animation">
               <Link
                 href="/about-devaicon"
                 className="flex flex-col items-center text-center gap-4 p-6 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-blue-50 transition-all duration-300 group hover:shadow-lg hover:scale-105 border-2 border-transparent hover:border-[#3d234b]"
@@ -1074,6 +983,23 @@ export default function Navbar() {
                   </h4>
                   <p className="text-xs text-gray-600 leading-relaxed">
                     Learn about our mission and values
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                href="/whatwedo"
+                className="flex flex-col items-center text-center gap-4 p-6 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-blue-50 transition-all duration-300 group hover:shadow-lg hover:scale-105 border-2 border-transparent hover:border-[#3d234b]"
+              >
+                <div className="text-[#3d234b] group-hover:scale-110 transition-transform duration-300 p-3 rounded-full group-hover:bg-[#3d234b] group-hover:text-white group-hover:shadow-lg">
+                  <Rocket className="w-12 h-12" />
+                </div>
+                <div>
+                  <h4 className="text-base font-bold text-gray-900 mb-2">
+                    What We Do
+                  </h4>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Explore our solutions and services
                   </p>
                 </div>
               </Link>
@@ -1402,46 +1328,6 @@ export default function Navbar() {
                     )}
                   </div>
 
-                  {/* What We Do Dropdown */}
-                  <div className="border-b border-gray-100">
-                    <button
-                      onClick={() =>
-                        setMobileSolutionsOpen(!mobileSolutionsOpen)
-                      }
-                      className="w-full flex items-center justify-between text-gray-900 hover:bg-gray-50 px-4 py-3 text-base font-medium transition-colors rounded-lg"
-                    >
-                      <span>What We Do</span>
-                      <ChevronDown
-                        className={`w-5 h-5 transition-transform duration-300 ${
-                          mobileSolutionsOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                    {mobileSolutionsOpen && (
-                      <div className="bg-gray-50 px-2 pb-3 space-y-2 animate-slideDown rounded-lg mt-1">
-                        <div className="grid grid-cols-2 gap-2">
-                          {solutionsCategories.map((category, index) => (
-                            <Link
-                              key={index}
-                              href={`#${category.name
-                                .toLowerCase()
-                                .replace(/\s+/g, "-")}`}
-                              className="flex items-center gap-2 p-2 rounded-md bg-white hover:bg-purple-50 transition-colors"
-                              onClick={closeMobileMenu}
-                            >
-                              <div className="text-[#3d234b] text-sm">
-                                {category.icon}
-                              </div>
-                              <span className="text-xs font-medium text-gray-800">
-                                {category.name}
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
                   {/* Why Devaicon Dropdown */}
                   <div className="border-b border-gray-100">
                     <button
@@ -1469,6 +1355,21 @@ export default function Navbar() {
                             </div>
                             <div className="text-xs text-gray-600">
                               Learn about our mission
+                            </div>
+                          </div>
+                        </Link>
+                        <Link
+                          href="/whatwedo"
+                          className="flex items-center gap-3 p-3 rounded-md bg-white hover:bg-purple-50 transition-colors"
+                          onClick={closeMobileMenu}
+                        >
+                          <Rocket className="w-5 h-5 text-[#3d234b]" />
+                          <div>
+                            <div className="text-sm font-semibold text-gray-900">
+                              What We Do
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              Explore our solutions
                             </div>
                           </div>
                         </Link>

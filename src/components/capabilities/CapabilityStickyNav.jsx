@@ -19,6 +19,26 @@ import {
   Globe,
   Headphones,
   Sparkles,
+  Brain,
+  TrendingUp,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Monitor,
+  Palette,
+  Cloud,
+  Target,
+  Lightbulb,
+  Server,
+  Puzzle,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  Wrench,
+  BarChart3,
+  Users,
 } from "lucide-react";
 
 // Icon mapping for string-based icon names
@@ -37,6 +57,26 @@ const iconMap = {
   Globe,
   Headphones,
   Sparkles,
+  Brain,
+  TrendingUp,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Monitor,
+  Palette,
+  Cloud,
+  Target,
+  Lightbulb,
+  Server,
+  Puzzle,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  Wrench,
+  BarChart3,
+  Users,
 };
 
 /**
@@ -162,7 +202,7 @@ const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                     navCard.id === activeSection
-                      ? "bg-blue-600 text-white shadow-md"
+                      ? "bg-[#3d234b] text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow"
                   }`}
                   aria-label={`Navigate to ${navCard.title}`}

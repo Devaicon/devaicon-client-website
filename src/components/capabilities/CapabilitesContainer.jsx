@@ -17,6 +17,26 @@ import {
   Globe,
   Headphones,
   Sparkles,
+  Brain,
+  TrendingUp,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Monitor,
+  Palette,
+  Cloud,
+  Target,
+  Lightbulb,
+  Server,
+  Puzzle,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  Wrench,
+  BarChart3,
+  Users,
 } from "lucide-react";
 import CapabilityDetailCard from "./CapabilityDetailCard";
 import CapabilitesGroups from "./CapabilitesGroups";
@@ -38,6 +58,26 @@ const iconMap = {
   Globe,
   Headphones,
   Sparkles,
+  Brain,
+  TrendingUp,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Monitor,
+  Palette,
+  Cloud,
+  Target,
+  Lightbulb,
+  Server,
+  Puzzle,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  Wrench,
+  BarChart3,
+  Users,
 };
 
 /**
@@ -56,9 +96,10 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
     }
   };
 
-  // Get the icon component from the string name
+  // Get the icon component from the string name, or handle React element
   const IconComponent =
     typeof icon === "string" && iconMap[icon] ? iconMap[icon] : null;
+  const isReactElement = icon && typeof icon === "object" && icon.type;
 
   return (
     <article
@@ -77,16 +118,22 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
       {/* Icon Container */}
       <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 transform hover:scale-110 transition-transform duration-300 flex items-center justify-center">
         {IconComponent ? (
-          <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-[#4555A7]" />
-        ) : (
-          <Image
-            src={icon}
-            alt={iconAlt}
-            fill
-            className="object-contain"
-            sizes="(max-width: 640px) 56px, (max-width: 768px) 64px, 80px"
-          />
-        )}
+          <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-(--color-brand-primary)" />
+        ) : isReactElement ? (
+          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-(--color-brand-primary) flex items-center justify-center">
+            {icon}
+          </div>
+        ) : typeof icon === "string" && icon.startsWith("/") ? (
+          <div className="relative w-full h-full">
+            <Image
+              src={icon}
+              alt={iconAlt || title}
+              fill
+              className="object-contain p-2"
+              sizes="(max-width: 640px) 56px, (max-width: 768px) 64px, 80px"
+            />
+          </div>
+        ) : null}
       </div>
 
       {/* Title */}
@@ -98,7 +145,7 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
       </h3>
 
       {/* Learn More Link */}
-      <span className="text-xs sm:text-sm font-medium inline-flex items-center gap-1 text-[#4555A7] hover:text-[#5B6FB6] transition-colors">
+      <span className="text-xs sm:text-sm font-medium inline-flex items-center gap-1 text-[#3d234b] hover:text-[#281333] transition-colors">
         Learn more
       </span>
     </article>

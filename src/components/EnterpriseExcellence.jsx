@@ -2,7 +2,7 @@ import { CircleCheck } from "lucide-react";
 
 const EnterpriseExcellence = () => {
   return (
-    <section className="w-full min-h-[500px] sm:min-h-[600px] md:min-h-[680px] lg:h-[744px] bg-[rgba(55,70,158,1)] flex flex-col items-center justify-center rounded-none sm:rounded-[8px] lg:rounded-[10px] py-8 sm:py-12 md:py-16 lg:py-0 px-4 sm:px-6 md:px-8">
+    <section className="w-full min-h-[500px] sm:min-h-[600px] md:min-h-[680px] lg:h-[744px] bg-(--color-brand-primary) flex flex-col items-center justify-center rounded-none sm:rounded-[8px] lg:rounded-[10px] py-8 sm:py-12 md:py-16 lg:py-0 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-[1180px] box-border flex flex-col items-start justify-center gap-3 sm:gap-4 lg:gap-5">
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[80.06px] font-semibold text-white leading-[1.1] sm:leading-[1.05] lg:leading-[0.95]">
           Microsoft-Aligned Enterprise Excellence

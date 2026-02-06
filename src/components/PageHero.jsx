@@ -67,12 +67,12 @@ const PageHero = ({
         )}
       </div>
 
-      {/* Content Container - Aligned with Navbar Logo */}
-      <div className="relative z-10 container-responsive py-8 sm:py-12 md:py-20 flex items-center h-full">
-        <div className=" container-responsive mt-10">
+      {/* Content Container - Aligned Left */}
+      <div className="relative z-10 w-full py-8 sm:py-12 md:py-20">
+        <div className="max-w-[110rem] mx-auto pt-30 px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
           {/* Title */}
           <h1
-            className={`text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${titleColor} mb-4 sm:mb-6 leading-tight`}
+            className={`text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ${titleColor} mb-4 sm:mb-6 leading-tight text-left`}
           >
             {title}
           </h1>
@@ -80,7 +80,7 @@ const PageHero = ({
           {/* Subtitle */}
           {subtitle && (
             <p
-              className={`text-sm sm:text-base md:text-lg lg:text-xl ${subtitleColor} mb-6 sm:mb-8 leading-relaxed max-w-3xl`}
+              className={`text-sm sm:text-base md:text-lg lg:text-xl ${subtitleColor} mb-6 sm:mb-8 leading-relaxed max-w-3xl text-left`}
             >
               {subtitle}
             </p>

@@ -3,6 +3,7 @@ import Link from "next/link";
 
 const CapabilitiesCards = ({
   image,
+  icon,
   title,
   description,
   categoryUrl,
@@ -16,13 +17,19 @@ const CapabilitiesCards = ({
     <article className="flex flex-col bg-white rounded-xl shadow-sm h-auto min-h-[280px] md:min-h-[300px] w-full p-4 md:p-5">
       <div className="flex flex-col gap-2 md:gap-2.5 h-full pt-0.5">
         <div className="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 rounded-lg border border-gray-100">
-          <Image
-            src={image}
-            alt={title}
-            width={32}
-            height={32}
-            className="w-6 h-6 md:w-7 md:h-7"
-          />
+          {icon ? (
+            <div className="text-[#3d234b] flex items-center justify-center">
+              {icon}
+            </div>
+          ) : image ? (
+            <Image
+              src={image}
+              alt={title}
+              width={32}
+              height={32}
+              className="w-6 h-6 md:w-7 md:h-7"
+            />
+          ) : null}
         </div>
         <h3 className="text-[15px] md:text-[16px] font-semibold text-[#0E1726] leading-[1.3]">
           {title}

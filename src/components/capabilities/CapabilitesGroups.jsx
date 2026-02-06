@@ -15,28 +15,28 @@ const CapabilitesGroups = () => {
       icon: Award,
       title: "20+ Years",
       description: "Proven industry experience",
-      bgColor: "#37469E",
+      bgColor: "#3d234b",
     },
     {
       id: 2,
       icon: Users,
       title: "Strong Client Base",
       description: "Trusted by enterprise customers",
-      bgColor: "#37469E",
+      bgColor: "#3d234b",
     },
     {
       id: 3,
       icon: Globe,
       title: "Global Partner",
       description: "Worldwide implementation reach",
-      bgColor: "#37469E",
+      bgColor: "#3d234b",
     },
   ];
 
   return (
     <section
       className="relative w-full py-10 md:py-12 lg:py-14 overflow-hidden"
-      style={{ background: "#10194f" }}
+      style={{ background: "#3d234b" }}
     >
       {/* Background Image */}
       <div className="absolute inset-0 opacity-20">
@@ -85,13 +85,13 @@ const CapabilitesGroups = () => {
                   <div className="flex-1">
                     <h3
                       className="text-lg md:text-xl font-bold mb-1"
-                      style={{ color: "#4555A7" }}
+                      style={{ color: "#3d234b" }}
                     >
                       {feature.title}
                     </h3>
                     <p
                       className="text-sm md:text-base"
-                      style={{ color: "#4555A7" }}
+                      style={{ color: "#3d234b" }}
                     >
                       {feature.description}
                     </p>
@@ -106,9 +106,7 @@ const CapabilitesGroups = () => {
         <div className="flex justify-center">
           <Link
             href="/contact-us"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#37469E] hover:bg-[#6B6CEE] 
-                       text-white font-semibold rounded-lg transition-all duration-300 
-                       hover:shadow-lg transform hover:scale-105"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[#ffffff] hover:bg-[#2a1834] text-[#3d234b] hover:text-white text-sm md:text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105"
           >
             Contact us
             <ArrowRight className="w-5 h-5" />

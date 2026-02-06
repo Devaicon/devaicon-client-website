@@ -3,323 +3,272 @@
 import { useState } from "react";
 import Image from "next/image";
 import CapabilitiesCards from "./CapabilitiesCards";
+import {
+  Brain,
+  TrendingUp,
+  MessageSquare,
+  Eye,
+  Glasses,
+  Globe,
+  Smartphone,
+  Monitor,
+  Palette,
+  Cloud,
+  Settings,
+  Headphones,
+  Target,
+  Lightbulb,
+  GraduationCap,
+  Server,
+  Puzzle,
+  PenTool,
+  Lock,
+  FileText,
+  GitBranch,
+  RefreshCw,
+  Wrench,
+  BarChart3,
+  Users,
+} from "lucide-react";
 
-const CATEGORIES = ["AI", "Business Applications", "Cloud Services", "Data"];
+const CATEGORIES = [
+  "All",
+  "Intelligent Systems & Data",
+  "Application & Software Development",
+  "Infrastructure & Enterprise Systems",
+  "Consulting & Transformation",
+  "Open edX Services",
+];
 
 const CAPABILITIES_DATA = [
-  // Artificial Intelligence (AI)
+  // Intelligent Systems & Data Capabilities
   {
     id: 1,
-    image: "/icons/microsoft-copilot.svg",
-    title: "Microsoft Copilot for Microsoft 365",
+    icon: <Brain className="w-7 h-7" />,
+    title: "Artificial Intelligence & Machine Learning",
     description:
-      "Smart tools built into Microsoft 365 make writing, analyzing data, and completing work tasks faster and easier for teams.",
-    category: "AI",
-    slug: "microsoft-copilot-m365",
+      "Custom AI models built to solve real business problems, not demo projects. This includes predictive systems, recommendation engines, automation logic, and intelligent decision support tailored to your workflows.",
+    category: "Intelligent Systems & Data",
+    slug: "artificial-intelligence-machine-learning",
   },
   {
     id: 2,
-    image: "/icons/Dynamics365_scalable.svg",
-    title: "Dynamics 365 Copilot",
+    icon: <TrendingUp className="w-7 h-7" />,
+    title: "Data Science & Analytics",
     description:
-      "AI assistance is built right into sales, finance, customer service, and supply chain programs.",
-    category: "AI",
-    slug: "dynamics-365-copilot",
+      "Turning raw data into insight. We design data pipelines, analytics dashboards, and reporting systems that help organisations understand trends, measure performance, and make informed decisions at scale.",
+    category: "Intelligent Systems & Data",
+    slug: "data-science-analytics",
   },
   {
     id: 3,
-    image: "/icons/azure/03438-icon-service-Azure-OpenAI.svg",
-    title: "Azure OpenAI Service",
+    icon: <MessageSquare className="w-7 h-7" />,
+    title: "Natural Language Processing (NLP)",
     description:
-      "Safe access to advanced AI technology that companies can use to build smart applications for their business needs.",
-    category: "AI",
-    slug: "azure-openai-service",
+      "Systems that understand and generate human language. This covers enterprise chatbots, text classification, sentiment analysis, document processing, and AI assistants integrated into existing platforms.",
+    category: "Intelligent Systems & Data",
+    slug: "natural-language-processing",
   },
   {
     id: 4,
-    image: "/icons/CopilotStudio_scalable.svg",
-    title: "Copilot Studio",
+    icon: <Eye className="w-7 h-7" />,
+    title: "Computer Vision",
     description:
-      "Tools that let businesses create their own AI helpers and chatbots designed specifically for how their company works.",
-    category: "AI",
-    slug: "copilot-studio",
+      "AI solutions that interpret images and video. Use cases include object detection, facial recognition, visual inspection, and automated monitoring for security, healthcare, and industrial applications.",
+    category: "Intelligent Systems & Data",
+    slug: "computer-vision",
   },
   {
     id: 5,
-    image: "/icons/AIBuilder_scalable.svg",
-    title: "AI Builder",
+    icon: <Glasses className="w-7 h-7" />,
+    title: "AR & VR Solutions",
     description:
-      "Simple, no-coding-required AI tools that can make predictions, handle documents, and process information automatically.",
-    category: "AI",
-    slug: "ai-builder",
+      "Immersive technologies for training, simulation, and remote collaboration. We develop practical AR and VR experiences that improve learning outcomes and operational efficiency.",
+    category: "Intelligent Systems & Data",
+    slug: "ar-vr-solutions",
   },
+  // Application & Software Development
   {
     id: 6,
-    image: "/icons/azure/10162-icon-service-Cognitive-Services.svg",
-    title: "Azure AI Services",
+    icon: <Globe className="w-7 h-7" />,
+    title: "Web & Mobile Application Development",
     description:
-      "Access ready-to-use AI features that add picture recognition, language understanding, and voice capabilities to business programs.",
-    category: "AI",
-    slug: "azure-ai-services",
+      "End to end development of scalable web platforms and mobile applications. From MVPs to enterprise systems, we handle frontend, backend, APIs, and integrations with a focus on performance and security.",
+    category: "Application & Software Development",
+    slug: "web-mobile-application-development",
   },
   {
     id: 7,
-    image: "/icons/azure/00819-icon-service-Form-Recognizers.svg",
-    title: "Intelligent Document Processing",
+    icon: <Monitor className="w-7 h-7" />,
+    title: "Desktop Application Development",
     description:
-      "AI-powered systems for document processing that read documents, pull out important data automatically, and reduce mistakes from manual typing.",
-    category: "AI",
-    slug: "intelligent-document-processing",
+      "Robust desktop software for business and operational needs. Ideal for environments requiring offline access, local processing, or tight integration with hardware and internal systems.",
+    category: "Application & Software Development",
+    slug: "desktop-application-development",
   },
   {
     id: 8,
-    image: "/icons/azure/10166-icon-service-Machine-Learning.svg",
-    title: "Predictive AI Models",
+    icon: <Palette className="w-7 h-7" />,
+    title: "UI & UX Design",
     description:
-      "AI programs that forecast future trends and suggest the best actions to help businesses make smarter choices.",
-    category: "AI",
-    slug: "predictive-ai-models",
+      "User experience design that prioritises clarity and usability. We create interfaces that are intuitive, consistent, and aligned with business goals, not just visually pleasing.",
+    category: "Application & Software Development",
+    slug: "ui-ux-design",
   },
-  // Business Applications
+  // Infrastructure, Automation & Enterprise Systems
   {
     id: 9,
-    image: "/icons/Finance_scalable.svg",
-    title: "Dynamics 365 Finance",
+    icon: <Cloud className="w-7 h-7" />,
+    title: "Cloud & DevOps Services",
     description:
-      "System that gives companies better control over money, creates detailed reports, and shows what's happening across the entire business.",
-    category: "Business Applications",
-    slug: "dynamics-365-finance",
+      "Designing and managing cloud infrastructure using modern DevOps practices. This includes CI/CD pipelines, containerisation, monitoring, performance optimisation, and secure deployments on AWS, Azure, or GCP.",
+    category: "Infrastructure & Enterprise Systems",
+    slug: "cloud-devops-services",
   },
   {
     id: 10,
-    image: "/icons/SupplyChainManagement_scalable.svg",
-    title: "Dynamics 365 Supply Chain Management",
+    icon: <Settings className="w-7 h-7" />,
+    title: "ERP Systems & Business Automation",
     description:
-      "Platform that helps companies plan inventory, track products, and manage shipping from start to finish.",
-    category: "Business Applications",
-    slug: "dynamics-365-supply-chain-management",
+      "Custom ERP solutions and workflow automation tailored to organisational processes. We replace manual operations with integrated systems that improve efficiency, accuracy, and visibility across departments.",
+    category: "Infrastructure & Enterprise Systems",
+    slug: "erp-systems-business-automation",
   },
   {
     id: 11,
-    image: "/icons/Sales_scalable.svg",
-    title: "Dynamics 365 Sales",
+    icon: <Headphones className="w-7 h-7" />,
+    title: "Support & Maintenance",
     description:
-      "Software that helps sales teams track potential customers, predict future sales, and build stronger relationships with clients.",
-    category: "Business Applications",
-    slug: "dynamics-365-sales",
+      "Ongoing technical support to keep systems running smoothly. This includes monitoring, bug fixes, performance improvements, security updates, and feature enhancements after launch.",
+    category: "Infrastructure & Enterprise Systems",
+    slug: "support-maintenance",
   },
+  // Strategic Consulting & Digital Transformation
   {
     id: 12,
-    image: "/icons/CustomerServices_scalable.svg",
-    title: "Dynamics 365 Customer Service",
+    icon: <Target className="w-7 h-7" />,
+    title: "Digital Transformation Consulting",
     description:
-      "Platform that helps support teams respond to customers quickly through phone, email, chat, and other channels all in one place.",
-    category: "Business Applications",
-    slug: "dynamics-365-customer-service",
+      "Assessment and redesign of business processes using modern technology. We help organisations move from outdated systems to efficient, scalable digital operations with a clear transformation roadmap.",
+    category: "Consulting & Transformation",
+    slug: "digital-transformation-consulting",
   },
   {
     id: 13,
-    image: "/icons/FieldService_scalable.svg",
-    title: "Dynamics 365 Field Service",
+    icon: <Lightbulb className="w-7 h-7" />,
+    title: "Technology Strategy & Advisory",
     description:
-      "Software that organizes technician schedules, tracks equipment, and manages work done at customer locations.",
-    category: "Business Applications",
-    slug: "dynamics-365-field-service",
+      "Guidance on technology decisions that actually align with business objectives. This includes system audits, architecture planning, tool selection, and long term technology roadmaps.",
+    category: "Consulting & Transformation",
+    slug: "technology-strategy-advisory",
   },
+  // Open edX Services
   {
     id: 14,
-    image: "/icons/ProjectOperations_scalable.svg",
-    title: "Dynamics 365 Project Operations",
+    icon: <Server className="w-7 h-7" />,
+    title: "Open edX Hosting",
     description:
-      "System that connects project planning, actual work completion, and budget tracking in one place.",
-    category: "Business Applications",
-    slug: "dynamics-365-project-operations",
+      "Secure, scalable cloud hosting for Open edX platforms, optimized for performance, reliability, and global learner access.",
+    category: "Open edX Services",
+    slug: "open-edx-hosting",
   },
   {
     id: 15,
-    image: "/icons/HumanResources_scalable.svg",
-    title: "Dynamics 365 Human Resources",
+    icon: <Puzzle className="w-7 h-7" />,
+    title: "Customization & Feature Development",
     description:
-      "HR software that helps companies manage employees, follow employment rules, and understand their workforce better.",
-    category: "Business Applications",
-    slug: "dynamics-365-human-resources",
+      "Tailored Open edX enhancements built through plugins and extensions—adding new functionality without modifying the core platform.",
+    category: "Open edX Services",
+    slug: "customization-feature-development",
   },
   {
     id: 16,
-    image: "/icons/Commerce_scalable.svg",
-    title: "Dynamics 365 Commerce",
+    icon: <PenTool className="w-7 h-7" />,
+    title: "Branding & UI/UX",
     description:
-      "Shopping system that connects online stores, physical retail locations, and customer experiences everywhere.",
-    category: "Business Applications",
-    slug: "dynamics-365-commerce",
+      "Fully branded learning experiences with custom themes, layouts, and UI refinements that align Open edX with your organization's identity.",
+    category: "Open edX Services",
+    slug: "branding-ui-ux",
   },
   {
     id: 17,
-    image: "/icons/BusinessCentral_scalable.svg",
-    title: "Dynamics 365 Business Central",
+    icon: <FileText className="w-7 h-7" />,
+    title: "Content Authoring & Course Development",
     description:
-      "Easy-to-use business management software designed for growing companies to handle everyday operations.",
-    category: "Business Applications",
-    slug: "dynamics-365-business-central",
+      "Design and build engaging courses using Open edX Studio, XBlocks, and interactive content aligned with instructional best practices.",
+    category: "Open edX Services",
+    slug: "content-authoring-course-development",
   },
-  // Cloud Services
   {
     id: 18,
-    image: "/icons/azure/10018-icon-service-Azure-A.svg",
-    title: "Microsoft Azure Infrastructure",
+    icon: <Lock className="w-7 h-7" />,
+    title: "Integrations & SSO",
     description:
-      "Expandable cloud computing power that provides secure servers, storage space, and network connections.",
-    category: "Cloud Services",
-    slug: "microsoft-azure-infrastructure",
+      "Seamless integration with enterprise systems including SSO, HR platforms, CRMs, analytics tools, and internal applications.",
+    category: "Open edX Services",
+    slug: "integrations-sso",
   },
   {
     id: 19,
-    image: "/icons/azure/10035-icon-service-App-Services.svg",
-    title: "Azure App Services & Web Apps",
+    icon: <GitBranch className="w-7 h-7" />,
+    title: "Deployment & Environment Setup",
     description:
-      "Managed platform for creating and running secure websites and business applications.",
-    category: "Cloud Services",
-    slug: "azure-app-services-web-apps",
+      "End-to-end setup of development, staging, and production environments following best practices for security and maintainability.",
+    category: "Open edX Services",
+    slug: "deployment-environment-setup",
   },
   {
     id: 20,
-    image: "/icons/kubernetes.svg",
-    title: "Azure Kubernetes Service",
+    icon: <RefreshCw className="w-7 h-7" />,
+    title: "Release Upgrades & Version Management",
     description:
-      "Technology that helps teams launch and grow modern applications using containers.",
-    category: "Cloud Services",
-    slug: "azure-kubernetes-service",
+      "Smooth upgrades to newer Open edX releases with minimal downtime—ensuring access to new features while protecting custom work.",
+    category: "Open edX Services",
+    slug: "release-upgrades-version-management",
   },
   {
     id: 21,
-    image: "/icons/azure/00327-icon-service-Azure-Virtual-Desktop.svg",
-    title: "Azure Virtual Desktop",
+    icon: <Wrench className="w-7 h-7" />,
+    title: "Maintenance & Support",
     description:
-      "Secure computer desktops accessed remotely that support working from anywhere while IT maintains control.",
-    category: "Cloud Services",
-    slug: "azure-virtual-desktop",
+      "Ongoing monitoring, bug fixes, security updates, and operational support to keep your Open edX platform running smoothly.",
+    category: "Open edX Services",
+    slug: "open-edx-maintenance-support",
   },
   {
     id: 22,
-    image: "/icons/PowerAutomate_scalable.svg",
-    title: "Azure Integration Services",
+    icon: <BarChart3 className="w-7 h-7" />,
+    title: "Analytics & Reporting",
     description:
-      "Tools that connect different software systems, automate repetitive processes, and manage how programs communicate.",
-    category: "Cloud Services",
-    slug: "azure-integration-services",
+      "Advanced learner insights, progress tracking, and custom reports using Open edX data pipelines and external BI tools.",
+    category: "Open edX Services",
+    slug: "analytics-reporting",
   },
   {
     id: 23,
-    image: "/icons/azure/00321-icon-service-Security.svg",
-    title: "Azure Security & Identity",
+    icon: <Users className="w-7 h-7" />,
+    title: "Multi-Tenant & Regional Deployments",
     description:
-      "Protection services that keep users, information, and computer systems safe across cloud environments.",
-    category: "Cloud Services",
-    slug: "azure-security-identity",
-  },
-  {
-    id: 24,
-    image: "/icons/azure/10261-icon-service-Azure-DevOps.svg",
-    title: "Azure DevOps & CI/CD Pipelines",
-    description:
-      "Choose development tools that automatically test code, launch updates, and deliver new software features.",
-    category: "Cloud Services",
-    slug: "azure-devops-cicd-pipelines",
-  },
-  {
-    id: 25,
-    image: "/icons/azure/10281-icon-service-Azure-Migrate.svg",
-    title: "Cloud Migration & Modernization",
-    description:
-      "Organized methods to safely move existing systems to the cloud and update them with new technology.",
-    category: "Cloud Services",
-    slug: "cloud-migration-modernization",
-  },
-  // Data
-  {
-    id: 26,
-    image: "/icons/PowerPlatform_scalable.svg",
-    title: "Microsoft Fabric",
-    description:
-      "A combined data platform that brings together analytics, reporting, and data science capabilities.",
-    category: "Data",
-    slug: "microsoft-fabric",
-  },
-  {
-    id: 27,
-    image: "/icons/azure/10126-icon-service-Data-Factories.svg",
-    title: "Azure Data Factory",
-    description:
-      "Complete service that moves information between different systems and transforms it into usable formats.",
-    category: "Data",
-    slug: "azure-data-factory",
-  },
-  {
-    id: 28,
-    image: "/icons/azure/00606-icon-service-Azure-Synapse-Analytics.svg",
-    title: "Azure Synapse Analytics",
-    description:
-      "Easier platform for processing massive amounts of data and creating advanced reports.",
-    category: "Data",
-    slug: "azure-synapse-analytics",
-  },
-  {
-    id: 29,
-    image: "/icons/azure/03332-icon-service-Power-BI-Embedded.svg",
-    title: "Power BI",
-    description:
-      "Access interactive charts and dashboards that turn raw business data into clear, understandable insights.",
-    category: "Data",
-    slug: "power-bi",
-  },
-  {
-    id: 30,
-    image: "/icons/Dataverse_scalable.svg",
-    title: "OneLake",
-    description:
-      "An easy central storage location makes it easy to save and access data across different analytics tools.",
-    category: "Data",
-    slug: "onelake",
-  },
-  {
-    id: 31,
-    image: "/icons/azure/10130-icon-service-SQL-Database.svg",
-    title: "Azure SQL & Managed Databases",
-    description:
-      "Reliable database systems designed to work fast, stay secure, and remain available when needed.",
-    category: "Data",
-    slug: "azure-sql-managed-databases",
-  },
-  {
-    id: 32,
-    image: "/icons/azure/10145-icon-service-Azure-Data-Explorer-Clusters.svg",
-    title: "Real-Time Analytics",
-    description:
-      "Technology that analyzes events and operational activities as they happen right now.",
-    category: "Data",
-    slug: "real-time-analytics",
-  },
-  {
-    id: 33,
-    image: "/icons/azure/00011-icon-service-Compliance.svg",
-    title: "Data Governance & Security (Microsoft Purview)",
-    description:
-      "Tools that help companies control who can access data, follow regulations, and ensure information is trustworthy.",
-    category: "Data",
-    slug: "data-governance-security",
+      "Support for multiple audiences, regions, or business units with isolated data, branding, and configuration options.",
+    category: "Open edX Services",
+    slug: "multi-tenant-regional-deployments",
   },
 ];
 
 // Map category names to capabilities page URLs
 const CATEGORY_TO_URL = {
-  AI: "capabilities",
-  "Business Applications": "capabilities/business-applications",
-  "Cloud Services": "capabilities/cloud-services",
-  Data: "capabilities/data",
+  All: "capabilities",
+  "Intelligent Systems & Data": "capabilities/intelligent-systems-data",
+  "Application & Software Development":
+    "capabilities/application-software-development",
+  "Infrastructure & Enterprise Systems":
+    "capabilities/infrastructure-enterprise-systems",
+  "Consulting & Transformation": "capabilities/consulting-transformation",
+  "Open edX Services": "capabilities/open-edx-services",
 };
 
 export default function Capabilities() {
-  const [activeCategory, setActiveCategory] = useState("AI");
+  const [activeCategory, setActiveCategory] = useState("All");
 
   const filteredCapabilities =
     activeCategory === "All"
@@ -350,17 +299,17 @@ export default function Capabilities() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-3 sm:gap-4 md:gap-5 py-4 sm:py-6 md:py-8 lg:py-10 w-full px-4">
+        <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 py-4 sm:py-6 md:py-8 lg:py-10 w-full px-4 justify-center">
           {CATEGORIES.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
               aria-pressed={activeCategory === category}
-              className={`flex-1 h-[45px] sm:h-[50px] md:h-[55px] lg:h-[59px] px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-[10px] rounded-[36px] text-xs sm:text-sm md:text-base font-medium text-white whitespace-nowrap cursor-pointer
+              className={`min-w-[120px] h-[45px] sm:h-[50px] md:h-[55px] lg:h-[59px] px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-[10px] rounded-[36px] text-xs sm:text-sm md:text-base font-medium text-white
                 bg-gradient-to-b from-[#3e234c] to-[#6c3c85]
                 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[rgba(90,58,104,0.5)]
                 transition-colors duration-200
-                ${activeCategory === category ? "bg-[#6b4775]" : ""}`}
+                ${activeCategory === category ? "bg-[#6b4775] shadow-lg" : "hover:shadow-md"}`}
             >
               {category}
             </button>
