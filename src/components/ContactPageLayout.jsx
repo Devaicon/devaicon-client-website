@@ -11,7 +11,7 @@ const ContactPageLayout = () => {
   const [activeTab, setActiveTab] = useState("callNow");
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-2 sm:py-4 md:py-1 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Left Side - Tabbed Form Section */}
