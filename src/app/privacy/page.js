@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-[59px]">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
               <Shield className="w-7 h-7 text-white" />

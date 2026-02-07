@@ -110,7 +110,7 @@ const IndustryStickyNav = ({ cards = [], activeCardId = "" }) => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b border-gray-200 transition-transform duration-300">
-      <div className="max-w-[96rem] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex items-center gap-4">
           {/* Left Arrow */}
           {showLeftArrow && (

@@ -107,53 +107,55 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative8 container-responsive max-w-[96rem] py-8 sm:py-12 md:py-20 flex items-center h-full">
-        <div className="hero-content">
-          {/* Main Heading */}
-          <h1
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6 transition-all duration-700 ease-in-out ${
-              isAnimating
-                ? "opacity-0 -translate-x-16"
-                : "opacity-100 translate-x-0"
-            }`}
-          >
-            {slides[currentSlide].title}
-          </h1>
+      <div className="relative h-full flex items-center pt-20 lg:pt-28 xl:pt-24">
+        <div className="w-full xl:w-[calc(100%-25rem)] mx-auto px-4 sm:px-8 lg:px-6 xl:px-15">
+          <div className="hero-content">
+            {/* Main Heading */}
+            <h1
+              className={`text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-3 sm:mb-4 lg:mb-5 xl:mb-6 transition-all duration-700 ease-in-out ${
+                isAnimating
+                  ? "opacity-0 -translate-x-16"
+                  : "opacity-100 translate-x-0"
+              }`}
+            >
+              {slides[currentSlide].title}
+            </h1>
 
-          {/* Subtext */}
-          <p
-            className={`text-gray-700 text-sm sm:text-base md:text-lg mb-6 sm:mb-8 leading-relaxed transition-all duration-700 ease-in-out ${
-              isAnimating
-                ? "opacity-0 -translate-x-16"
-                : "opacity-100 translate-x-0"
-            }`}
-          >
-            {slides[currentSlide].subtitle}
-          </p>
+            {/* Subtext */}
+            <p
+              className={`text-gray-700 text-xs sm:text-sm md:text-base lg:text-sm xl:text-base 2xl:text-lg mb-4 sm:mb-5 lg:mb-6 xl:mb-8 leading-relaxed transition-all duration-700 ease-in-out ${
+                isAnimating
+                  ? "opacity-0 -translate-x-16"
+                  : "opacity-100 translate-x-0"
+              }`}
+            >
+              {slides[currentSlide].subtitle}
+            </p>
 
-          {/* CTA Button */}
-          <button
-            className={`btn btn-primary text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-700 ease-in-out ${
-              isAnimating
-                ? "opacity-0 -translate-x-16"
-                : "opacity-100 translate-x-0"
-            }`}
-          >
-            {slides[currentSlide].buttonText}
-          </button>
+            {/* CTA Button */}
+            <button
+              className={`btn btn-primary text-sm sm:text-base lg:text-sm xl:text-base 2xl:text-lg shadow-lg hover:shadow-xl transition-all duration-700 ease-in-out ${
+                isAnimating
+                  ? "opacity-0 -translate-x-16"
+                  : "opacity-100 translate-x-0"
+              }`}
+            >
+              {slides[currentSlide].buttonText}
+            </button>
 
-          {/* Carousel Dots */}
-          <div className="carousel-dots">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`carousel-dot ${
-                  currentSlide === index ? "carousel-dot-active" : ""
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+            {/* Carousel Dots */}
+            <div className="carousel-dots">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`carousel-dot ${
+                    currentSlide === index ? "carousel-dot-active" : ""
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

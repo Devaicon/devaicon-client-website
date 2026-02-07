@@ -72,7 +72,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#3d234b] text-white pt-12 sm:pt-16 pb-6">
-      <div className="container-responsive pt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-24 lg:pt-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 mb-8 sm:mb-12">
           {/* Left Section - Logo, Tagline, Awards */}

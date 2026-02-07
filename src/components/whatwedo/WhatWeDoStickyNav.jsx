@@ -5,86 +5,30 @@ import Image from "next/image";
 import {
   ChevronLeft,
   ChevronRight,
-  DollarSign,
-  Building2,
-  MapPin,
-  Factory,
-  Store,
-  Briefcase,
-  Heart,
-  GraduationCap,
   Search,
   Hammer,
   Settings,
   Globe,
   Headphones,
   Sparkles,
-  Brain,
-  TrendingUp,
-  MessageSquare,
-  Eye,
-  Glasses,
-  Monitor,
-  Palette,
-  Cloud,
-  Target,
-  Lightbulb,
-  Server,
-  Puzzle,
-  PenTool,
-  Lock,
-  FileText,
-  GitBranch,
-  RefreshCw,
-  Wrench,
-  BarChart3,
-  Users,
 } from "lucide-react";
 
 // Icon mapping for string-based icon names
 const iconMap = {
-  DollarSign,
-  Building2,
-  MapPin,
-  Factory,
-  Store,
-  Briefcase,
-  Heart,
-  GraduationCap,
   Search,
   Hammer,
   Settings,
   Globe,
   Headphones,
   Sparkles,
-  Brain,
-  TrendingUp,
-  MessageSquare,
-  Eye,
-  Glasses,
-  Monitor,
-  Palette,
-  Cloud,
-  Target,
-  Lightbulb,
-  Server,
-  Puzzle,
-  PenTool,
-  Lock,
-  FileText,
-  GitBranch,
-  RefreshCw,
-  Wrench,
-  BarChart3,
-  Users,
 };
 
 /**
- * CapabilityStickyNav Component
+ * WhatWeDoStickyNav Component
  * Sticky navigation bar that appears when scrolling past the main cards section
- * Allows quick navigation between capability detail sections
+ * Allows quick navigation between what we do detail sections
  */
-const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
+const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -156,73 +100,80 @@ const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
     }
   };
 
-  if (!isVisible || cards.length === 0) {
-    return null;
-  }
+  const handleCardClick = (cardId) => {
+    const element = document.getElementById(cardId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  if (!isVisible) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b border-gray-200 transition-transform duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="flex items-center gap-4">
+    <nav
+      className="sticky top-0 z-50 bg-white shadow-md transition-all duration-300"
+      role="navigation"
+      aria-label="What We Do Navigation"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div className="relative flex items-center gap-3">
           {/* Left Arrow */}
           {showLeftArrow && (
             <button
               onClick={() => scroll("left")}
-              className="flex-shrink-0 bg-white hover:bg-gray-100 p-2 rounded-full shadow-md transition-all border border-gray-200"
+              className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-700" />
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
             </button>
           )}
 
-          {/* Scrollable Container */}
+          {/* Scrollable Cards Container */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide scroll-smooth"
+            className="flex gap-3 overflow-x-auto scrollbar-hide flex-1"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {cards.map((navCard) => {
-              // Get the icon component from the string name
+            {cards.map((card) => {
               const IconComponent =
-                typeof navCard.icon === "string" && iconMap[navCard.icon]
-                  ? iconMap[navCard.icon]
+                typeof card.icon === "string" && iconMap[card.icon]
+                  ? iconMap[card.icon]
                   : null;
+              const isActive = activeSection === card.id;
 
               return (
                 <button
-                  key={navCard.id}
-                  onClick={() => {
-                    const element = document.getElementById(navCard.id);
-                    if (element) {
-                      element.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
-                    navCard.id === activeSection
-                      ? "bg-[#3d234b] text-white shadow-md"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow"
+                  key={card.id}
+                  onClick={() => handleCardClick(card.id)}
+                  className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#4555A7] text-white shadow-md"
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"
                   }`}
-                  aria-label={`Navigate to ${navCard.title}`}
+                  aria-label={`Navigate to ${card.title}`}
+                  aria-current={isActive ? "true" : "false"}
                 >
-                  <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+                  {/* Icon */}
+                  <div className="w-5 h-5 flex items-center justify-center">
                     {IconComponent ? (
                       <IconComponent className="w-5 h-5" />
                     ) : (
                       <div className="relative w-5 h-5">
                         <Image
-                          src={navCard.icon}
-                          alt=""
+                          src={card.icon}
+                          alt={card.iconAlt}
                           fill
                           className="object-contain"
-                          sizes="20px"
+                          sizes="1.25rem"
                         />
                       </div>
                     )}
                   </div>
-                  <span className="hidden sm:inline">{navCard.title}</span>
+
+                  {/* Title */}
+                  <span className="text-sm font-medium whitespace-nowrap">
+                    {card.title}
+                  </span>
                 </button>
               );
             })}
@@ -232,16 +183,16 @@ const CapabilityStickyNav = ({ cards = [], activeCardId = "" }) => {
           {showRightArrow && (
             <button
               onClick={() => scroll("right")}
-              className="flex-shrink-0 bg-white hover:bg-gray-100 p-2 rounded-full shadow-md transition-all border border-gray-200"
+              className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
               aria-label="Scroll right"
             >
-              <ChevronRight className="w-5 h-5 text-gray-700" />
+              <ChevronRight className="w-5 h-5 text-gray-600" />
             </button>
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
-export default CapabilityStickyNav;
+export default WhatWeDoStickyNav;

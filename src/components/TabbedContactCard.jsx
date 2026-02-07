@@ -29,7 +29,7 @@ const TabbedContactCard = () => {
 
         {/* Card with Tabs and Content */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-128">
             {/* Vertical Tabs Sidebar - 2 columns */}
             <div className="lg:col-span-2 bg-gradient-to-b from-gray-50 to-white border-b lg:border-b-0 lg:border-r border-gray-200">
               <div className="flex flex-row lg:flex-col p-2 lg:p-4 gap-2">

@@ -460,13 +460,13 @@ export default function Navbar() {
     <>
       <header className="absolute top-0 left-0 right-0 z-50 flex justify-center">
         <nav
-          className={`bg-white border-2 border-gray-200 mx-auto w-full lg:w-[calc(100%-400px)] h-[80px] lg:h-[93px] px-4 sm:px-8 lg:px-6 xl:px-[59px] py-4 lg:py-[32px] rounded-none transition-all duration-200 ${
+          className={`bg-white border-2 border-gray-200 mx-auto w-full xl:w-[calc(100%-25rem)] h-20 lg:h-24 px-4 sm:px-8 lg:px-6 xl:px-15 py-4 lg:py-8 rounded-none transition-all duration-200 ${
             showIndustriesDropdown ||
             showCapabilitiesDropdown ||
             showWhyVitaDropdown ||
             showEngagementModelsDropdown
               ? " border-b-0"
-              : "lg:rounded-b-[30px]"
+              : "lg:rounded-b-3xl"
           }`}
           aria-label="Main navigation"
         >
@@ -474,7 +474,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center"
+              className="flex items-center flex-shrink-0"
               aria-label="Devaicon - Go to homepage"
             >
               <Image
@@ -483,13 +483,13 @@ export default function Navbar() {
                 width={124}
                 height={51}
                 priority
-                className="object-contain w-[90px] h-auto lg:w-[124px]"
+                className="object-contain w-20 sm:w-24 lg:w-28 xl:w-32 h-auto"
               />
             </Link>
 
             {/* Desktop Navigation */}
             <ul
-              className="hidden lg:flex items-center gap-5 xl:gap-8"
+              className="hidden lg:flex items-center gap-3 lg:gap-4 xl:gap-6 2xl:gap-8"
               role="list"
             >
               {/* Industries Dropdown */}
@@ -500,11 +500,11 @@ export default function Navbar() {
               >
                 <Link
                   href="/industries"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Industries
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
+                    className={`w-3 h-3 xl:w-4 xl:h-4 transition-transform duration-300 ${
                       showIndustriesDropdown ? "rotate-180" : ""
                     }`}
                   />
@@ -519,11 +519,11 @@ export default function Navbar() {
               >
                 <Link
                   href="/capabilities/intelligent-systems-data"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Capabilities
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
+                    className={`w-3 h-3 xl:w-4 xl:h-4 transition-transform duration-300 ${
                       showCapabilitiesDropdown ? "rotate-180" : ""
                     }`}
                   />
@@ -534,7 +534,7 @@ export default function Navbar() {
               <li>
                 <Link
                   href="/insights"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap"
                 >
                   Insights
                 </Link>
@@ -548,11 +548,11 @@ export default function Navbar() {
               >
                 <Link
                   href="/engagement-models"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Engagement Models
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
+                    className={`w-3 h-3 xl:w-4 xl:h-4 transition-transform duration-300 ${
                       showEngagementModelsDropdown ? "rotate-180" : ""
                     }`}
                   />
@@ -567,11 +567,11 @@ export default function Navbar() {
               >
                 <Link
                   href="/whydevaicon"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Why Devaicon
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${
+                    className={`w-3 h-3 xl:w-4 xl:h-4 transition-transform duration-300 ${
                       showWhyVitaDropdown ? "rotate-180" : ""
                     }`}
                   />
@@ -582,11 +582,11 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <Link
               href="/contact-us"
-              className="hidden lg:flex items-center gap-2 border-gray-300 text-gray-700 hover:border-[#3d234b] hover:text-[#3d234b] transition-all duration-200 font-medium text-sm group"
+              className="hidden lg:flex items-center gap-1 xl:gap-2 border-gray-300 text-gray-700 hover:border-[#3d234b] hover:text-[#3d234b] transition-all duration-200 font-medium text-xs xl:text-sm group whitespace-nowrap"
               aria-label="Get started with Devaicon"
             >
               <span>Get Started</span>
-              <CircleArrowRight size={28} />
+              <CircleArrowRight className="w-5 h-5 xl:w-7 xl:h-7" />
             </Link>
 
             {/* Mobile Menu Button */}
@@ -617,11 +617,11 @@ export default function Navbar() {
       {/* Industries Dropdown */}
       {showIndustriesDropdown && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 top-[93px] w-full lg:w-[calc(100%-280px)] max-w-[79rem] z-40 animate-fadeInScale flex justify-center"
+          className="absolute left-1/2 -translate-x-1/2 top-24 w-full xl:w-[calc(100%-25rem)] z-40 animate-fadeInScale flex justify-center"
           onMouseEnter={handleIndustriesEnter}
           onMouseLeave={handleIndustriesLeave}
         >
-          <div className="bg-white shadow-2xl rounded-b-[30px] border-x-2 border-b-2 border-gray-200 overflow-hidden w-full flex">
+          <div className="bg-white shadow-2xl rounded-b-3xl border-x-2 border-b-2 border-gray-200 overflow-hidden w-full flex">
             {/* Left Section - Industry List */}
             <div className="w-1/3 bg-gradient-to-br from-gray-50 to-gray-100 p-6 animate-slideInLeft">
               <div className="space-y-2 stagger-animation">
@@ -678,11 +678,11 @@ export default function Navbar() {
       {/* Capabilities Dropdown */}
       {showCapabilitiesDropdown && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 top-[93px] w-full lg:w-[calc(100%-280px)] max-w-[79rem] z-40 animate-fadeInScale flex justify-center"
+          className="absolute left-1/2 -translate-x-1/2 top-24 w-full xl:w-[calc(100%-25rem)] z-40 animate-fadeInScale flex justify-center"
           onMouseEnter={handleCapabilitiesEnter}
           onMouseLeave={handleCapabilitiesLeave}
         >
-          <div className="bg-white shadow-2xl rounded-b-[30px] border-x-2 border-b-2 border-gray-200 overflow-hidden w-full flex">
+          <div className="bg-white shadow-2xl rounded-b-3xl border-x-2 border-b-2 border-gray-200 overflow-hidden w-full flex">
             {/* Left Section - Capabilities List */}
             <div className="w-1/3 bg-gradient-to-br from-gray-50 to-gray-100 p-6 animate-slideInLeft">
               <div className="space-y-2 stagger-animation">
@@ -788,11 +788,11 @@ export default function Navbar() {
       {/* Engagement Models Dropdown */}
       {showEngagementModelsDropdown && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 top-[93px] w-full lg:w-[calc(100%-280px)] max-w-[79rem] z-40 animate-fadeInScale flex justify-center"
+          className="absolute left-1/2 -translate-x-1/2 top-24 w-full xl:w-[calc(100%-25rem)] z-40 animate-fadeInScale flex justify-center"
           onMouseEnter={handleEngagementModelsEnter}
           onMouseLeave={handleEngagementModelsLeave}
         >
-          <div className="bg-white shadow-2xl rounded-b-[30px] border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-6">
+          <div className="bg-white shadow-2xl rounded-b-3xl border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-6">
             <div className="flex gap-6">
               {/* Left Section - Client Feedback Carousel */}
               <div className="w-1/2 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6 rounded-2xl animate-slideInLeft shadow-lg">
@@ -815,7 +815,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Feedback Text */}
-                    <div className="mb-0 min-h-[68px]">
+                    <div className="mb-0 min-h-17">
                       <p className="text-gray-700 text-sm leading-relaxed italic">
                         &quot;
                         {clientFeedbacks[currentFeedbackIndex].feedback}
@@ -964,11 +964,11 @@ export default function Navbar() {
       {/* Why Devaicon Dropdown */}
       {showWhyVitaDropdown && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 top-[93px] w-full lg:w-[calc(100%-280px)] max-w-[79rem] z-40 animate-fadeInScale flex items-center"
+          className="absolute left-1/2 -translate-x-1/2 top-24 w-full xl:w-[calc(100%-25rem)] z-40 animate-fadeInScale flex items-center"
           onMouseEnter={handleWhyVitaEnter}
           onMouseLeave={handleWhyVitaLeave}
         >
-          <div className="bg-white shadow-2xl rounded-b-[30px] border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-8 px-64">
+          <div className="bg-white shadow-2xl rounded-b-3xl border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-8 px-64">
             <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-6 stagger-animation">
               <Link
                 href="/about-devaicon"

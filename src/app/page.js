@@ -1,7 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import TrustSection from "@/components/TrustSection";
 import StatsSection from "@/components/StatsSection";
-import WhatWeDoSection from "@/components/WhatWeDoSection";
+import ServicesSection from "@/components/ServicesSection";
 import OurServicesSection from "@/components/OurServicesSection";
 import IndustrySection from "@/components/IndustrySection";
 import BadgesSection from "@/components/BadgesSection";
@@ -17,7 +17,7 @@ export default function HomePage() {
       <TrustSection />
       <StatsSection />
       <IndustrySection />
-      <WhatWeDoSection />
+      <ServicesSection />
       <EnterpriseExcellence />
       <Capabilities />
       <OurServicesSection />

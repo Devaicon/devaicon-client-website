@@ -336,7 +336,7 @@ export default function EngagementModelsPage() {
         subtitle="Choosing the right engagement model can reduce your costs, increase your confidence, and ensure timely project completion."
         buttonText="Discover More"
         buttonLink="#engagement-models"
-        height="min-h-[600px]"
+        height="min-h-[37.5rem]"
       />
 
       <EngagementModelsSection

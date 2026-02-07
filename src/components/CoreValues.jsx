@@ -56,7 +56,7 @@ export default function CoreValues() {
 
   return (
     <div
-      className="min-h-screen p-4 sm:p-8 flex items-center justify-center max-w-7xl mx-auto rounded-2xl sm:rounded-3xl lg:rounded-[30px] mt-16 mb-16"
+      className="min-h-screen p-4 sm:p-8 flex items-center justify-center max-w-7xl mx-auto rounded-2xl sm:rounded-3xl lg:rounded-3xl mt-16 mb-16"
       style={{
         background: "linear-gradient(180deg, #3d234b 0%, #281333 100%)",
       }}
@@ -137,8 +137,8 @@ export default function CoreValues() {
 
         {/* Vertical Line Below Circle */}
         <div
-          className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-0.5 h-32 bg-[#ffffff]"
-          style={{ top: "calc(25% + 144px)" }}
+          className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-0.5 h-32 bg-white"
+          style={{ top: "calc(25% + 9rem)" }}
         ></div>
 
         {/* Center Circle */}
@@ -200,7 +200,7 @@ export default function CoreValues() {
           <div className="w-20 h-20 rounded-xl flex items-center justify-center shadow-md shrink-0 bg-white">
             {React.createElement(data.items[2].icon, {
               className: "w-10 h-10",
-              color: "#281333",
+              color: "#3d234b",
             })}
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function CoreValues() {
           <div className="w-20 h-20 rounded-xl flex items-center justify-center shadow-md shrink-0 bg-white">
             {React.createElement(data.items[3].icon, {
               className: "w-10 h-10",
-              color: "#281333",
+              color: "#3d234b",
             })}
           </div>
           <div className="text-left flex-1">
@@ -228,7 +228,7 @@ export default function CoreValues() {
           <div className="w-20 h-20 rounded-xl flex items-center justify-center shadow-md shrink-0 bg-white">
             {React.createElement(data.items[4].icon, {
               className: "w-10 h-10",
-              color: "#281333",
+              color: "#3d234b",
             })}
           </div>
           <div className="text-center">

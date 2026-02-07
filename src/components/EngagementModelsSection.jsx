@@ -40,9 +40,9 @@ const EngagementModelsSection = ({
 
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
-      <div className="container-responsive">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title Section */}
-        <div className="max-w-5xl mx-auto text-center mb-8 sm:mb-12">
+        <div className="max-w-7xl mx-auto text-center mb-8 sm:mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 sm:mb-8">
             Why Different{" "}
             <span style={{ color: highlightColor }}>Engagement Models</span>?
@@ -63,7 +63,7 @@ const EngagementModelsSection = ({
 
         {/* Tab Bar */}
         <div
-          className={`${tabBarBg} rounded-2xl p-2 sm:p-3 mb-8 sm:mb-12 max-w-4xl mx-auto shadow-lg `}
+          className={`${tabBarBg} rounded-2xl p-2 sm:p-3 mb-8 sm:mb-12 max-w-7xl mx-auto shadow-lg `}
         >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 my-4">
             {models.map((model, index) => (
@@ -84,9 +84,9 @@ const EngagementModelsSection = ({
 
         {/* Content Area */}
         <div
-          className={`max-w-5xl mx-auto ${tabBarBg} p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl overflow-hidden`}
+          className={`max-w-7xl mx-auto ${tabBarBg} p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl overflow-hidden`}
         >
-          <div className="relative min-h-[500px]">
+          <div className="relative min-h-128">
             {models.map(
               (model, index) =>
                 activeModel === index && (
@@ -105,7 +105,7 @@ const EngagementModelsSection = ({
                       <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
                         {model.title}
                       </h3>
-                      <p className="text-base sm:text-lg text-gray-700 leading-relaxed mx-auto max-w-4xl">
+                      <p className="text-base sm:text-lg text-gray-700 leading-relaxed mx-auto max-w-7xl">
                         {model.description}
                       </p>
                     </div>

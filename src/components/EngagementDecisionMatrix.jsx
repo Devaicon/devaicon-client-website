@@ -97,14 +97,14 @@ const EngagementDecisionMatrix = ({
                   className="p-4 border-r border-gray-300 last:border-r-0"
                 >
                   <div className="text-center mb-1">
-                    <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+                    <span className="text-[0.625rem] font-semibold text-gray-500 uppercase tracking-wider">
                       MODEL {modelNumber}
                     </span>
                   </div>
                   <h4 className="text-sm font-bold text-gray-900 text-center mb-2">
                     {name}
                   </h4>
-                  <p className="text-[11px] text-gray-600 text-center leading-relaxed">
+                  <p className="text-[0.6875rem] text-gray-600 text-center leading-relaxed">
                     {modelDescriptions[index]}
                   </p>
                 </div>

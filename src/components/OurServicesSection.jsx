@@ -16,7 +16,7 @@ const OurServicesSection = () => {
         {
           name: "Dynamics 365 Sales",
           desc: "Empower your sales team with AI-driven insights and streamlined processes.",
-          gradient: "bg-gradient-to-br from-[#2d1b4e] to-[#4a3a6e]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#2a1834]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -32,7 +32,7 @@ const OurServicesSection = () => {
         {
           name: "Dynamics 365 Marketing",
           desc: "Create personalized customer journeys and drive engagement at scale.",
-          gradient: "bg-gradient-to-br from-[#00a9e0] to-[#0078d4]",
+          gradient: "bg-gradient-to-b from-[#281333] to-[#2d1b4e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -46,7 +46,7 @@ const OurServicesSection = () => {
         {
           name: "Dynamics 365 Customer Service",
           desc: "Deliver exceptional service experiences across all channels.",
-          gradient: "bg-gradient-to-br from-[#ff6b35] to-[#ff8c42]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#4a3a6e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -59,7 +59,7 @@ const OurServicesSection = () => {
         {
           name: "Dynamics 365 Field Service",
           desc: "Optimize field operations with intelligent scheduling and mobile tools.",
-          gradient: "bg-gradient-to-br from-[#00a9a5] to-[#4ecdc4]",
+          gradient: "bg-gradient-to-b from-[#2a1834] to-[#3d234b]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -82,7 +82,7 @@ const OurServicesSection = () => {
         {
           name: "Azure Migration",
           desc: "Seamlessly migrate your workloads to Azure with minimal disruption.",
-          gradient: "bg-gradient-to-br from-[#2d1b4e] to-[#4a3a6e]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#2a1834]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -95,7 +95,7 @@ const OurServicesSection = () => {
         {
           name: "Cloud Infrastructure",
           desc: "Design and deploy scalable, resilient cloud infrastructure solutions.",
-          gradient: "bg-gradient-to-br from-[#00a9e0] to-[#0078d4]",
+          gradient: "bg-gradient-to-b from-[#281333] to-[#2d1b4e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -111,7 +111,7 @@ const OurServicesSection = () => {
         {
           name: "Cloud Security",
           desc: "Implement comprehensive security and compliance frameworks.",
-          gradient: "bg-gradient-to-br from-[#ff6b35] to-[#ff8c42]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#4a3a6e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -124,7 +124,7 @@ const OurServicesSection = () => {
         {
           name: "Cloud Optimization",
           desc: "Maximize ROI through cost optimization and performance tuning.",
-          gradient: "bg-gradient-to-br from-[#00a9a5] to-[#4ecdc4]",
+          gradient: "bg-gradient-to-b from-[#2a1834] to-[#3d234b]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -148,7 +148,7 @@ const OurServicesSection = () => {
         {
           name: "Data Analytics",
           desc: "Transform raw data into meaningful insights with Power BI and Azure Synapse.",
-          gradient: "bg-gradient-to-br from-[#2d1b4e] to-[#4a3a6e]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#2a1834]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -163,7 +163,7 @@ const OurServicesSection = () => {
         {
           name: "Machine Learning",
           desc: "Build and deploy ML models that solve real business challenges.",
-          gradient: "bg-gradient-to-br from-[#00a9e0] to-[#0078d4]",
+          gradient: "bg-gradient-to-b from-[#281333] to-[#2d1b4e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -177,7 +177,7 @@ const OurServicesSection = () => {
         {
           name: "AI Solutions",
           desc: "Implement intelligent automation and cognitive services.",
-          gradient: "bg-gradient-to-br from-[#ff6b35] to-[#ff8c42]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#4a3a6e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -192,7 +192,7 @@ const OurServicesSection = () => {
         {
           name: "Data Governance",
           desc: "Ensure data quality, security, and compliance across your organization.",
-          gradient: "bg-gradient-to-br from-[#00a9a5] to-[#4ecdc4]",
+          gradient: "bg-gradient-to-b from-[#2a1834] to-[#3d234b]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -214,7 +214,7 @@ const OurServicesSection = () => {
         {
           name: "Power Platform",
           desc: "Build custom apps and workflows with low-code Power Platform tools.",
-          gradient: "bg-gradient-to-br from-[#2d1b4e] to-[#4a3a6e]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#2a1834]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -227,7 +227,7 @@ const OurServicesSection = () => {
         {
           name: "Process Automation",
           desc: "Automate repetitive tasks with Power Automate and RPA.",
-          gradient: "bg-gradient-to-br from-[#00a9e0] to-[#0078d4]",
+          gradient: "bg-gradient-to-b from-[#281333] to-[#2d1b4e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -241,7 +241,7 @@ const OurServicesSection = () => {
         {
           name: "Custom Applications",
           desc: "Develop tailored applications that meet your unique requirements.",
-          gradient: "bg-gradient-to-br from-[#ff6b35] to-[#ff8c42]",
+          gradient: "bg-gradient-to-b from-[#3d234b] to-[#4a3a6e]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -255,7 +255,7 @@ const OurServicesSection = () => {
         {
           name: "Integration Services",
           desc: "Connect systems and data sources for seamless workflows.",
-          gradient: "bg-gradient-to-br from-[#00a9a5] to-[#4ecdc4]",
+          gradient: "bg-gradient-to-b from-[#2a1834] to-[#3d234b]",
           icon: (
             <svg
               viewBox="0 0 24 24"
@@ -286,12 +286,12 @@ const OurServicesSection = () => {
   const currentService = services[activeService];
 
   return (
-    <div className="bg-white py-12 md:py-20 px-4 md:px-5">
-      <div className="container-responsive py-8 sm:py-12 md:py-16 lg:py-20">
+    <div className=" py-6 md:py-20 px-4 md:px-5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 md:gap-12 lg:gap-20 items-start">
           {/* Left Section: Services List */}
           <div className="lg:sticky lg:top-32">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-brand-accent leading-tight mb-6 md:mb-10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#3d234b] leading-tight mb-6 md:mb-10">
               What can we help you with?
             </h2>
 
@@ -302,15 +302,15 @@ const OurServicesSection = () => {
                   onClick={() => setActiveService(service.id)}
                   className={`py-4 md:py-6 border-b border-gray-200 flex items-center justify-between cursor-pointer transition-all duration-300 ${
                     activeService === service.id
-                      ? "bg-gray-50 pl-3 md:pl-5 pr-3 md:pr-5 -ml-3 md:-ml-5 border-l-4 border-l-[#2d1b4e]"
+                      ? "bg-gray-50 pl-3 md:pl-5 pr-3 md:pr-5 -ml-3 md:-ml-5 border-l-4 border-l-[#3d234b]"
                       : "hover:pl-3"
                   }`}
                 >
                   <span
                     className={`text-base sm:text-lg md:text-xl font-semibold transition-colors duration-300 ${
                       activeService === service.id
-                        ? "text-brand-accent"
-                        : "text-[#2d1b4e] hover:text-[#4a3a6e]"
+                        ? "text-[#3d234b]"
+                        : "text-[#281333] hover:text-[#4a3a6e]"
                     }`}
                   >
                     {service.name}
@@ -318,8 +318,8 @@ const OurServicesSection = () => {
                   <div
                     className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ${
                       activeService === service.id
-                        ? "bg-[#2d1b4e]"
-                        : "bg-[#2d1b4e] hover:bg-[#4a3a6e] hover:translate-x-1"
+                        ? "bg-[#3d234b]"
+                        : "bg-[#281333] hover:bg-[#4a3a6e] hover:translate-x-1"
                     }`}
                   >
                     <svg
@@ -337,7 +337,7 @@ const OurServicesSection = () => {
 
           {/* Right Section: Service Details */}
           <div className="bg-gray-50 rounded-xl p-5 sm:p-6 md:p-8 lg:p-12 min-h-100 md:min-h-125">
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#2d1b4e] mb-5 md:mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#3d234b] mb-5 md:mb-8">
               {currentService.title}
             </h3>
 
@@ -357,14 +357,14 @@ const OurServicesSection = () => {
               {currentService.offerings.map((offering, index) => (
                 <div
                   key={index}
-                  className="bg-white p-4 md:p-6 rounded-lg border border-gray-200 transition-all duration-300 hover:border-[#2d1b4e] hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+                  className="bg-white p-4 md:p-6 rounded-lg border border-gray-200 transition-all duration-300 hover:border-[#3d234b] hover:-translate-y-1 hover:shadow-lg cursor-pointer"
                 >
                   <div
                     className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center mb-3 md:mb-4 ${offering.gradient}`}
                   >
                     {offering.icon}
                   </div>
-                  <h4 className="text-base md:text-lg font-semibold text-[#2d1b4e] mb-2">
+                  <h4 className="text-base md:text-lg font-semibold text-[#3d234b] mb-2">
                     {offering.name}
                   </h4>
                   <p className="text-xs md:text-sm leading-relaxed text-gray-600">
@@ -376,7 +376,7 @@ const OurServicesSection = () => {
 
             <a
               href="#"
-              className="inline-block mt-6 md:mt-8 bg-[#2d1b4e] text-white px-5 sm:px-6 md:px-10 py-2 sm:py-2.5 md:py-4 rounded-full text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 hover:bg-[#4a3a6e] hover:-translate-y-1 hover:shadow-lg"
+              className="inline-block mt-6 md:mt-8 bg-gradient-to-b from-[#3d234b] to-[#2a1834] text-white px-5 sm:px-6 md:px-10 py-2 sm:py-2.5 md:py-4 rounded-full text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 hover:from-[#4a3a6e] hover:to-[#3a1a4a] hover:-translate-y-1 hover:shadow-lg"
             >
               Learn more
             </a>

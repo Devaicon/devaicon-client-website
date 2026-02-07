@@ -51,7 +51,7 @@ const ContactPageForm = ({ onSubmit }) => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[15px]"
+              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[0.9375rem]"
             />
           </div>
           <div className="space-y-1.5">
@@ -69,7 +69,7 @@ const ContactPageForm = ({ onSubmit }) => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[15px]"
+              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[0.9375rem]"
             />
           </div>
         </div>
@@ -87,7 +87,7 @@ const ContactPageForm = ({ onSubmit }) => {
                 name="countryCode"
                 value={formData.countryCode}
                 onChange={handleChange}
-                className="px-3 py-3.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[15px] w-[100px] font-medium text-gray-700"
+                className="px-3 py-3.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-base w-25 font-medium text-gray-700"
               >
                 <option value="+92">PK +92</option>
                 <option value="+1">US +1</option>
@@ -103,7 +103,7 @@ const ContactPageForm = ({ onSubmit }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="flex-1 px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[15px]"
+                className="flex-1 px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-base"
               />
             </div>
           </div>
@@ -120,7 +120,7 @@ const ContactPageForm = ({ onSubmit }) => {
               value={formData.service}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[15px] text-gray-700 font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat pr-12"
+              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[0.9375rem] text-gray-700 font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')] bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat pr-12"
             >
               <option value="">Select a service</option>
               <option value="web-development">Web Development</option>
@@ -149,7 +149,7 @@ const ContactPageForm = ({ onSubmit }) => {
               value={formData.budget}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-[15px] text-gray-700 font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat pr-12"
+              className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 text-base text-gray-700 font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')] bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat pr-12"
             >
               <option value="">Select budget range</option>
               <option value="less-than-50k">Less than USD 50,000</option>
@@ -160,7 +160,7 @@ const ContactPageForm = ({ onSubmit }) => {
             </select>
           </div>
           <div className="flex items-end">
-            <div className="flex items-center h-[52px]">
+            <div className="flex items-center h-13">
               <input
                 type="checkbox"
                 name="requestNDA"
@@ -171,7 +171,7 @@ const ContactPageForm = ({ onSubmit }) => {
               />
               <label
                 htmlFor="requestNDA"
-                className="ml-3 text-[15px] font-semibold text-gray-900 cursor-pointer select-none"
+                className="ml-3 text-base font-semibold text-gray-900 cursor-pointer select-none"
               >
                 Request NDA
               </label>
@@ -194,7 +194,7 @@ const ContactPageForm = ({ onSubmit }) => {
             onChange={handleChange}
             required
             rows="5"
-            className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 resize-none text-[15px] leading-relaxed"
+            className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3d234b]/20 focus:border-[#3d234b] transition-all duration-200 resize-none text-base leading-relaxed"
           ></textarea>
         </div>
       </div>
@@ -203,7 +203,7 @@ const ContactPageForm = ({ onSubmit }) => {
       <div className="pt-5">
         <button
           type="submit"
-          className="w-full sm:w-auto min-w-[200px] bg-[#3d234b] text-white px-8 py-3.5 rounded-lg font-semibold text-base hover:bg-[#2d1a3b] focus:outline-none focus:ring-4 focus:ring-[#3d234b]/30 transition-all duration-200 shadow-lg shadow-[#3d234b]/20 hover:shadow-xl hover:shadow-[#3d234b]/30"
+          className="w-full sm:w-auto min-w-48 bg-[#3d234b] text-white px-8 py-3.5 rounded-lg font-semibold text-base hover:bg-[#2d1a3b] focus:outline-none focus:ring-4 focus:ring-[#3d234b]/30 transition-all duration-200 shadow-lg shadow-[#3d234b]/20 hover:shadow-xl hover:shadow-[#3d234b]/30"
         >
           Submit Inquiry
         </button>

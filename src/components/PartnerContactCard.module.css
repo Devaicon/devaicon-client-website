@@ -2,9 +2,8 @@
   height: 10rem;
   position: relative;
   background: linear-gradient(180deg, #3d234b 0%, #281333 100%);
-  padding: 0px 0 0px;
+  padding: 0;
   overflow: visible;
-  /* margin-bottom: 2rem; */
 }
 
 .decorTop {
@@ -13,17 +12,17 @@
   right: 0;
   z-index: 1;
   pointer-events: none;
-  width: 120px;
-  height: 120px;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 
 .decorTop::before {
   content: "";
   position: absolute;
-  top: -20px;
-  right: -20px;
-  width: 140px;
-  height: 140px;
+  top: -1.25rem;
+  right: -1.25rem;
+  width: 8.75rem;
+  height: 8.75rem;
   background: radial-gradient(
     circle at center,
     rgba(61, 35, 75, 0.15) 0%,
@@ -38,15 +37,15 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 5rem;
   background: linear-gradient(
     135deg,
     #3d234b 0%,
     #4a3a6e 50%,
     transparent 100%
   );
-  border-radius: 0 16px 0 100%;
+  border-radius: 0 1rem 0 100%;
   opacity: 0.8;
 }
 
@@ -56,17 +55,17 @@
   left: 0;
   z-index: 1;
   pointer-events: none;
-  width: 120px;
-  height: 120px;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 
 .decorBottom::before {
   content: "";
   position: absolute;
-  bottom: -20px;
-  left: -20px;
-  width: 140px;
-  height: 140px;
+  bottom: -1.25rem;
+  left: -1.25rem;
+  width: 8.75rem;
+  height: 8.75rem;
   background: radial-gradient(
     circle at center,
     rgba(61, 35, 75, 0.15) 0%,
@@ -81,21 +80,21 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 5rem;
   background: linear-gradient(
     315deg,
     #3d234b 0%,
     #4a3a6e 50%,
     transparent 100%
   );
-  border-radius: 0 100% 0 16px;
+  border-radius: 0 100% 0 1rem;
   opacity: 0.8;
 }
 
 .container {
   width: 90%;
-  max-width: 1280px;
+  max-width: 80rem;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -105,31 +104,38 @@
   position: relative;
   z-index: 50;
   width: 100%;
-  max-width: 1120px;
+  max-width: 70rem;
   background: #fff9f5;
-  border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(17, 24, 39, 0.25);
-  padding: 14px;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 2.5rem rgba(17, 24, 39, 0.25);
+  padding: 0.875rem;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
-  transform: translateY(-45px);
+  gap: 1.5rem;
+  transform: translateY(-2.8125rem);
   overflow: hidden;
 }
 
 @media (min-width: 768px) {
   .card {
-    padding: 32px;
-    min-height: 122px;
+    padding: 1.5rem;
+    min-height: 6.5rem;
   }
 }
 
 @media (min-width: 980px) {
   .card {
-    grid-template-columns: 1fr 360px;
-    gap: 28px;
-    padding: 36px;
-    min-height: 250px;
+    grid-template-columns: 1fr 22.5rem;
+    gap: 1.5rem;
+    padding: 1.75rem;
+    min-height: 11.5rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .card {
+    padding: 2.25rem;
+    min-height: 15.625rem;
   }
 }
 
@@ -148,14 +154,14 @@
 
 .title {
   color: #3d234b;
-  font-size: clamp(18px, 4vw, 26px);
+  font-size: clamp(16px, 3.5vw, 26px);
   line-height: 1.3;
   font-weight: 600;
 }
 
 .subtitle {
   margin: 0;
-  font-size: clamp(24px, 5vw, 32px);
+  font-size: clamp(20px, 4.5vw, 32px);
   font-weight: 700;
   background: linear-gradient(180deg, #3d234b 0%, #281333 100%);
   background-clip: text;
@@ -163,21 +169,31 @@
   color: transparent;
 }
 
+@media (min-width: 1440px) {
+  .title {
+    font-size: clamp(18px, 4vw, 26px);
+  }
+
+  .subtitle {
+    font-size: clamp(24px, 5vw, 32px);
+  }
+}
+
 .contentRight {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 0.875rem;
   justify-content: center;
 }
 
 .contactBox {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0.875rem;
   background: #ffffff;
-  border-radius: 12px;
-  padding: 14px 18px;
-  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.375rem 1.125rem rgba(17, 24, 39, 0.06);
 }
 
 .iconWrap {
@@ -186,20 +202,36 @@
 }
 
 .iconBg {
-  width: 56px;
-  height: 56px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #3d234b 0%, #4a3a6e 100%);
-  box-shadow: 0 6px 16px rgba(61, 35, 75, 0.25);
+  box-shadow: 0 0.375rem 1rem rgba(61, 35, 75, 0.25);
+}
+
+@media (min-width: 1440px) {
+  .contentRight {
+    gap: 1.125rem;
+  }
+
+  .contactBox {
+    gap: 1rem;
+    padding: 0.875rem 1.125rem;
+  }
+
+  .iconBg {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
 }
 
 .icon {
   color: white;
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .contactText {
@@ -208,13 +240,13 @@
 }
 
 .contactTitle {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #415264;
   font-weight: 600;
 }
 
 .contactInfo {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #3d234b;
   text-decoration: none;
   font-weight: 600;
@@ -226,10 +258,10 @@
 
 @media (max-width: 979px) {
   .card {
-    transform: translateY(-45px);
-    min-height: 180px;
+    transform: translateY(-2.8125rem);
+    min-height: 11.25rem;
     height: auto;
-    gap: 18px;
+    gap: 1.125rem;
   }
 
   .container {
@@ -238,29 +270,29 @@
 
   .decorTop,
   .decorBottom {
-    width: 100px;
-    height: 100px;
+    width: 6.25rem;
+    height: 6.25rem;
   }
 
   .decorTop::before,
   .decorBottom::before {
-    width: 120px;
-    height: 120px;
-    top: -15px;
-    right: -15px;
+    width: 7.5rem;
+    height: 7.5rem;
+    top: -0.9375rem;
+    right: -0.9375rem;
   }
 
   .decorBottom::before {
-    bottom: -15px;
-    left: -15px;
+    bottom: -0.9375rem;
+    left: -0.9375rem;
     top: auto;
     right: auto;
   }
 
   .decorTop::after,
   .decorBottom::after {
-    width: 60px;
-    height: 60px;
+    width: 3.75rem;
+    height: 3.75rem;
   }
 
   .title {
@@ -273,57 +305,57 @@
   }
 
   .contentRight {
-    gap: 14px;
+    gap: 0.875rem;
   }
 
   .iconBg {
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
   }
 
   .icon {
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   .contactBox {
-    padding: 12px 16px;
-    gap: 14px;
+    padding: 0.75rem 1rem;
+    gap: 0.875rem;
   }
 }
 
 @media (max-width: 768px) {
   .card {
-    transform: translateY(-18px);
-    min-height: 340px;
+    transform: translateY(-1.125rem);
+    min-height: 21.25rem;
     height: auto;
-    gap: 14px;
-    padding: 24px;
+    gap: 0.875rem;
+    padding: 1.5rem;
   }
 
   .decorTop,
   .decorBottom {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
   }
 
   .decorTop::before,
   .decorBottom::before {
-    width: 100px;
-    height: 100px;
-    top: -15px;
-    right: -15px;
+    width: 6.25rem;
+    height: 6.25rem;
+    top: -0.9375rem;
+    right: -0.9375rem;
   }
 
   .decorBottom::before {
-    bottom: -15px;
-    left: -15px;
+    bottom: -0.9375rem;
+    left: -0.9375rem;
   }
 
   .decorTop::after,
   .decorBottom::after {
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
   }
 
   .title {
@@ -337,40 +369,40 @@
   }
 
   .contentRight {
-    gap: 12px;
+    gap: 0.75rem;
   }
 
   .iconBg {
-    width: 46px;
-    height: 46px;
+    width: 2.875rem;
+    height: 2.875rem;
   }
 
   .icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
   }
 
   .contactBox {
-    padding: 10px 14px;
-    gap: 12px;
+    padding: 0.625rem 0.875rem;
+    gap: 0.75rem;
   }
 
   .contactTitle {
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 
   .contactInfo {
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 }
 
 @media (max-width: 640px) {
   .card {
-    transform: translateY(-25px);
-    padding: 18px;
-    min-height: 320px;
+    transform: translateY(-1.5625rem);
+    padding: 1.125rem;
+    min-height: 20rem;
     height: auto;
-    gap: 12px;
+    gap: 0.75rem;
   }
 
   .container {
@@ -379,27 +411,27 @@
 
   .decorTop,
   .decorBottom {
-    width: 70px;
-    height: 70px;
+    width: 4.375rem;
+    height: 4.375rem;
   }
 
   .decorTop::before,
   .decorBottom::before {
-    width: 90px;
-    height: 90px;
-    top: -12px;
-    right: -12px;
+    width: 5.625rem;
+    height: 5.625rem;
+    top: -0.75rem;
+    right: -0.75rem;
   }
 
   .decorBottom::before {
-    bottom: -12px;
-    left: -12px;
+    bottom: -0.75rem;
+    left: -0.75rem;
   }
 
   .decorTop::after,
   .decorBottom::after {
-    width: 45px;
-    height: 45px;
+    width: 2.8125rem;
+    height: 2.8125rem;
   }
 
   .title {
@@ -411,22 +443,22 @@
   }
 
   .contentRight {
-    gap: 10px;
+    gap: 0.625rem;
   }
 
   .iconBg {
-    width: 42px;
-    height: 42px;
+    width: 2.625rem;
+    height: 2.625rem;
   }
 
   .icon {
-    width: 15px;
-    height: 15px;
+    width: 0.9375rem;
+    height: 0.9375rem;
   }
 
   .contactBox {
-    padding: 9px 12px;
-    gap: 10px;
+    padding: 0.5625rem 0.75rem;
+    gap: 0.625rem;
   }
 
   .contactTitle {

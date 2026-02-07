@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import ContactPageLayout from "../../components/ContactPageLayout";
+import FinancialBacking from "../../components/FinancialBacking";
 
 const ContactUs = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden">
+      <section className="relative w-full h-75 sm:h-88 md:h-100 lg:h-112 overflow-hidden">
         {/* Background Image */}
         <Image
           src="/contactus-bgimg.png"
@@ -40,6 +41,9 @@ const ContactUs = () => {
 
       {/* Contact Form and Info Section */}
       <ContactPageLayout />
+
+      {/* Financial Backing Section */}
+      <FinancialBacking />
     </>
   );
 };

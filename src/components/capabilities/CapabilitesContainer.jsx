@@ -110,17 +110,17 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
           handleCardClick();
         }
       }}
-      className="flex flex-col items-center justify-center gap-4 p-6 sm:p-8 md:p-10 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
+      className="flex flex-col items-center justify-center gap-3 sm:gap-4 p-4 sm:p-6 md:p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200"
       aria-labelledby={`${id}-title`}
       role="button"
       tabIndex={0}
     >
       {/* Icon Container */}
-      <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 transform hover:scale-110 transition-transform duration-300 flex items-center justify-center">
+      <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 transform hover:scale-110 transition-transform duration-300 flex items-center justify-center">
         {IconComponent ? (
-          <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-(--color-brand-primary)" />
+          <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-(--color-brand-primary)" />
         ) : isReactElement ? (
-          <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-(--color-brand-primary) flex items-center justify-center">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-(--color-brand-primary) flex items-center justify-center">
             {icon}
           </div>
         ) : typeof icon === "string" && icon.startsWith("/") ? (
@@ -130,7 +130,7 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
               alt={iconAlt || title}
               fill
               className="object-contain p-2"
-              sizes="(max-width: 640px) 56px, (max-width: 768px) 64px, 80px"
+              sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
             />
           </div>
         ) : null}
@@ -139,7 +139,7 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
       {/* Title */}
       <h3
         id={`${id}-title`}
-        className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 text-center"
+        className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 text-center"
       >
         {title}
       </h3>
@@ -198,10 +198,10 @@ const CapabilitesContainer = ({
       <CapabilityStickyNav cards={cards} activeCardId={activeCardId} />
 
       <section
-        className="w-full bg-[#fef9f3] py-16 md:py-20 lg:py-24"
+        className="w-full bg-gradient-to-br from-purple-50 to-blue-50 py-16 md:py-20 lg:py-24"
         aria-labelledby="capabilities-heading"
       >
-        <div className="max-w-[96rem] mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <header className="text-center mb-12 md:mb-16">
             <h2

@@ -76,9 +76,9 @@ const ResourcesHub = () => {
 
   return (
     <section className="section-padding-lg bg-white">
-      <div className="container-responsive py-8 sm:py-12 md:py-16 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-2">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16">
+        <div className="text-center mb-12 sm:mb-8 pb-10">
           <div className="inline-block px-5 py-2 bg-gray-100 rounded-full mb-5">
             <span className="text-[#2D1B3D] text-xs font-bold uppercase tracking-wider">
               Software & Microsoft Services
@@ -89,7 +89,7 @@ const ResourcesHub = () => {
           </h1>
 
           {/* Search Box */}
-          <div className="max-w-2xl mx-auto mb-10">
+          <div className="max-w-4xl mx-auto mb-6">
             <div className="relative">
               <input
                 type="text"

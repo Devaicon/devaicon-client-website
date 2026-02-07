@@ -36,6 +36,16 @@ const RequestCallbackForm = ({ onSubmit, compact = false }) => {
       onSubmit={handleSubmit}
       className="space-y-3 sm:space-y-4 md:space-y-6"
     >
+      {/* Title and Description */}
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+          Request a Callback
+        </h2>
+        <p className="text-gray-600 text-sm sm:text-base">
+          Fill out the form below and we'll get back to you shortly.
+        </p>
+      </div>
+
       {/* Name and Email Row */}
       <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
         <div>

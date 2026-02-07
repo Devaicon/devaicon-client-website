@@ -9,7 +9,7 @@ const TalkTabbedSection = () => {
   const [activeTab, setActiveTab] = useState("callNow");
 
   return (
-    <section className="pt-8 sm:pt-12 pb-0 bg-white">
+    <section className="pt-8 sm:pb-12 pb-0 sm:pb-12 lg:pb-0 bg-white">
       <div className="w-full px-0">
         <div className="grid lg:grid-cols-2 gap-0 shadow-2xl overflow-hidden">
           {/* Left Side - Contact Form */}
@@ -63,13 +63,13 @@ const TalkTabbedSection = () => {
           </div>
 
           {/* Right Side - Background Image */}
-          <div className="hidden lg:flex p-0 relative overflow-hidden min-h-100 items-center justify-center order-2">
+          <div className="hidden lg:flex p-0 relative overflow-hidden min-h-100 lg:min-h-125 xl:min-h-150 items-center justify-center order-2">
             {/* Background Image */}
-            <div className="w-180 h-100">
+            <div className="w-full h-full">
               <img
                 src="/bg.png"
                 alt="Background"
-                className="w-full h-full object-cover rounded-2xl"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>

@@ -279,16 +279,16 @@ export default function Capabilities() {
 
   return (
     <section className="w-full min-h-screen bg-[#dce5ed] flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
-      <div className="w-full max-w-[1180px] flex flex-col items-center rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden">
+      <div className="w-full max-w-7xl flex flex-col items-center rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden">
         {/* Header */}
-        <div className="w-full min-h-[160px] sm:min-h-[180px] md:h-[200px] lg:h-[230px] bg-[rgba(74,45,88,1)] text-white flex flex-col items-center justify-center px-4 py-6">
+        <div className="w-full min-h-40 sm:min-h-45 md:h-50 lg:h-58 bg-[rgba(74,45,88,1)] text-white flex flex-col items-center justify-center px-4 py-6">
           <Image
             src="/vector.svg"
             alt="Capabilities Icon"
             width={100}
             height={80}
             priority
-            className="w-[60px] h-[48px] sm:w-[80px] sm:h-[64px] md:w-[100px] md:h-[80px]"
+            className="w-15 h-12 sm:w-20 sm:h-16 md:w-25 md:h-20"
           />
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.75rem] font-bold text-center my-2">
             Devaicon Capabilities
@@ -299,21 +299,25 @@ export default function Capabilities() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 py-4 sm:py-6 md:py-8 lg:py-10 w-full px-4 justify-center">
-          {CATEGORIES.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              aria-pressed={activeCategory === category}
-              className={`min-w-[120px] h-[45px] sm:h-[50px] md:h-[55px] lg:h-[59px] px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-[10px] rounded-[36px] text-xs sm:text-sm md:text-base font-medium text-white
-                bg-gradient-to-b from-[#3e234c] to-[#6c3c85]
-                focus-visible:outline focus-visible:outline-2 focus-visible:outline-[rgba(90,58,104,0.5)]
-                transition-colors duration-200
-                ${activeCategory === category ? "bg-[#6b4775] shadow-lg" : "hover:shadow-md"}`}
-            >
-              {category}
-            </button>
-          ))}
+        <div className="w-full py-6 sm:py-8 px-4">
+          <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+            <div className="flex gap-2 sm:gap-3 min-w-max pb-2">
+              {CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  aria-pressed={activeCategory === category}
+                  className={`h-9 sm:h-10 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium text-white whitespace-nowrap cursor-pointer
+                    bg-gradient-to-b from-[#3e234c] to-[#6c3c85]
+                    focus-visible:outline-2 focus-visible:outline-[rgba(90,58,104,0.5)]
+                    transition-shadow duration-200
+                    ${activeCategory === category ? "bg-[#6b4775] shadow-lg" : "hover:shadow-md"}`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Cards */}

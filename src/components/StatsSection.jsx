@@ -12,7 +12,7 @@ const StatsSection = () => {
 
   return (
     <section className="bg-gray-50 section-padding-lg">
-      <div className="container-responsive py-8 sm:py-12 md:py-16 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-4">
         {/* Heading */}
         <h2 className="section-heading text-gray-900 leading-tight px-2">
           A Journey of <span className="text-brand">18 years</span> with{" "}

@@ -14,7 +14,7 @@ const CapabilitiesCards = ({
     categoryUrl && slug ? `/${categoryUrl}#${slug}` : "/capabilities";
 
   return (
-    <article className="flex flex-col bg-white rounded-xl shadow-sm h-auto min-h-[280px] md:min-h-[300px] w-full p-4 md:p-5">
+    <article className="flex flex-col bg-white rounded-xl shadow-sm h-auto min-h-70 md:min-h-75 w-full p-4 md:p-5">
       <div className="flex flex-col gap-2 md:gap-2.5 h-full pt-0.5">
         <div className="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 rounded-lg border border-gray-100">
           {icon ? (
@@ -31,20 +31,20 @@ const CapabilitiesCards = ({
             />
           ) : null}
         </div>
-        <h3 className="text-[15px] md:text-[16px] font-semibold text-[#0E1726] leading-[1.3]">
+        <h3 className="text-[0.9375rem] md:text-base font-semibold text-[#0E1726] leading-[1.3]">
           {title}
         </h3>
-        <p className="text-[12px] md:text-[13px] text-[#666666] leading-[1.5] flex-grow">
+        <p className="text-xs md:text-[0.8125rem] text-[#666666] leading-[1.5] flex-grow">
           {description}
         </p>
         <Link
           href={cardUrl}
-          className="relative self-start font-semibold text-[12px] md:text-[13px] mt-1 transition-all duration-500 group inline-flex items-center gap-1 hover:gap-2"
+          className="relative self-start font-semibold text-xs md:text-[0.8125rem] mt-1 transition-all duration-500 group inline-flex items-center gap-1 hover:gap-2"
           aria-label={`Learn more about ${title}`}
         >
           <span className="relative bg-gradient-to-b from-[#4555A7] to-[#53406B] bg-clip-text text-transparent group-hover:from-[#5266bf] group-hover:to-[#654e7f] transition-all duration-500 whitespace-nowrap">
             Learn more
-            <span className="absolute left-0 bottom-0 w-full h-[1px] bg-gradient-to-b from-[#4555A7] to-[#53406B] group-hover:h-[2px] group-hover:from-[#5266bf] group-hover:to-[#654e7f] transition-all duration-300"></span>
+            <span className="absolute left-0 bottom-0 w-full h-px bg-gradient-to-b from-[#4555A7] to-[#53406B] group-hover:h-0.5 group-hover:from-[#5266bf] group-hover:to-[#654e7f] transition-all duration-300"></span>
           </span>
           <svg
             viewBox="0 0 24 24"

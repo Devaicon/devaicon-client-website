@@ -4,39 +4,39 @@ import Link from "next/link";
 import { ArrowRight, Award, Users, Globe } from "lucide-react";
 
 /**
- * CapabilitesGroups Component
- * Divider section displayed between capability detail cards
+ * WhatWeDoGroups Component
+ * Divider section displayed between what we do detail cards
  * Highlights company strengths and provides call-to-action
  */
-const CapabilitesGroups = () => {
+const WhatWeDoGroups = () => {
   const features = [
     {
       id: 1,
       icon: Award,
-      title: "20+ Years",
+      title: "18+ Years",
       description: "Proven industry experience",
-      bgColor: "#3d234b",
+      bgColor: "#37469E",
     },
     {
       id: 2,
       icon: Users,
       title: "Strong Client Base",
       description: "Trusted by enterprise customers",
-      bgColor: "#3d234b",
+      bgColor: "#37469E",
     },
     {
       id: 3,
       icon: Globe,
-      title: "Global Partner",
-      description: "Worldwide implementation reach",
-      bgColor: "#3d234b",
+      title: "GCC Partner",
+      description: "Regional implementation expertise",
+      bgColor: "#37469E",
     },
   ];
 
   return (
     <section
       className="relative w-full py-10 md:py-12 lg:py-14 overflow-hidden"
-      style={{ background: "#3d234b" }}
+      style={{ background: "#10194f" }}
     >
       {/* Background Image */}
       <div className="absolute inset-0 opacity-20">
@@ -63,9 +63,9 @@ const CapabilitesGroups = () => {
             return (
               <div
                 key={feature.id}
-                className="bg-white rounded-2xl p-6 md:p-8 backdrop-blur-3xl"
+                className="bg-white rounded-2xl p-6 md:p-8 backdrop-blur-xl"
                 style={{
-                  boxShadow: "0px 4px 4px 0px #53406B80",
+                  boxShadow: "0 1px 1px 0 rgba(83, 64, 107, 0.5)",
                 }}
               >
                 {/* Icon and Content Container */}
@@ -85,13 +85,13 @@ const CapabilitesGroups = () => {
                   <div className="flex-1">
                     <h3
                       className="text-lg md:text-xl font-bold mb-1"
-                      style={{ color: "#3d234b" }}
+                      style={{ color: "#4555A7" }}
                     >
                       {feature.title}
                     </h3>
                     <p
                       className="text-sm md:text-base"
-                      style={{ color: "#3d234b" }}
+                      style={{ color: "#4555A7" }}
                     >
                       {feature.description}
                     </p>
@@ -102,14 +102,14 @@ const CapabilitesGroups = () => {
           })}
         </div>
 
-        {/* Contact Button */}
+        {/* CTA Button */}
         <div className="flex justify-center">
           <Link
             href="/contact-us"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#ffffff] hover:bg-[#2a1834] text-[#3d234b] hover:text-white text-sm md:text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+            className="group bg-white text-[#10194f] px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-2xl inline-flex items-center gap-2"
           >
-            Contact us
-            <ArrowRight className="w-5 h-5" />
+            Get Started with Vita
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
@@ -117,4 +117,4 @@ const CapabilitesGroups = () => {
   );
 };
 
-export default CapabilitesGroups;
+export default WhatWeDoGroups;

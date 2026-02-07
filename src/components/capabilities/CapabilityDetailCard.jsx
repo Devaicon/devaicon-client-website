@@ -101,12 +101,6 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
   // Set background color based on odd/even
   const backgroundColor = isOdd ? "#fef9f3" : "#DCD3FF33";
 
-  // Set border radius - same for all cards
-  const imageBorderRadius = {
-    borderTopRightRadius: "37.31px",
-    borderTopLeftRadius: "37.31px",
-  };
-
   // Check if card has the new structure (Industry Context, Pain Points, Our Approach)
   const hasNewStructure =
     card.industryContext && card.painPoints && card.ourApproach;
@@ -122,7 +116,7 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
       className="w-full py-10 md:py-12 scroll-mt-20"
       style={{ background: backgroundColor }}
     >
-      <div className="max-w-[96rem] mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Card */}
         <article>
           <div
@@ -276,10 +270,9 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
 
             {/* Image Column */}
             <div
-              className={`relative h-64 lg:h-full min-h-[300px] overflow-hidden ${
+              className={`relative h-64 lg:h-full min-h-75 overflow-hidden rounded-t-[2.3rem] ${
                 isOdd ? "order-2" : "order-1"
               }`}
-              style={imageBorderRadius}
             >
               <Image
                 src={card.image || "/hero-img.webp"}

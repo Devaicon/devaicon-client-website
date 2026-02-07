@@ -65,7 +65,7 @@ const industries = [
 
 const IndustriesSection = () => {
   return (
-    <section className="flex justify-center py-12 sm:py-16 md:py-20 lg:py-[100px] pb-10 sm:pb-12 md:pb-[60px] px-4 sm:px-6 md:px-8 bg-gradient-to-br from-purple-50 to-blue-50 relative overflow-hidden">
+    <section className="flex justify-center py-12 sm:py-16 md:py-20 lg:py-[100px] pb-10 sm:pb-12 md:pb-[60px] px-4 sm:px-6 md:px-8 bg-[#f4efec] relative overflow-hidden">
       {/* Decorative Orbs - Top Left */}
       {/* <Image
         src="/orb-1.webp"
@@ -93,7 +93,7 @@ const IndustriesSection = () => {
           delivers measurable results.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-5 sm:gap-6">
+        <div className="flex flex-wrap gap-5 w-full justify-center">
           {industries.map((industry, index) => (
             <IndustryCard
               key={index}
@@ -101,7 +101,14 @@ const IndustriesSection = () => {
               title={industry.title}
               description={industry.description}
               Icon={industry.icon}
-              className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
+              className="
+        flex-1
+        min-w-full
+        sm:min-w-[calc(50%-10px)]
+        sm:max-w-[calc(50%-10px)]
+        lg:min-w-[calc(33.333%-13.34px)]
+        lg:max-w-[calc(33.333%-13.34px)]
+      "
             />
           ))}
         </div>

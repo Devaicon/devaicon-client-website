@@ -3,37 +3,33 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import {
-  DollarSign,
-  Building2,
-  MapPin,
-  Factory,
-  Store,
-  Briefcase,
-  Heart,
-  GraduationCap,
+  Search,
+  Hammer,
+  Settings,
+  Globe,
+  Headphones,
+  Sparkles,
 } from "lucide-react";
-import IndustryDetailCard from "./IndustryDetailCard";
-import IndustriesGroups from "./IndustriesGroups";
-import IndustryStickyNav from "./IndustryStickyNav";
+import WhatWeDoDetailCard from "./WhatWeDoDetailCard";
+import WhatWeDoGroups from "./WhatWeDoGroups";
+import WhatWeDoStickyNav from "./WhatWeDoStickyNav";
 
 // Icon mapping for string-based icon names
 const iconMap = {
-  DollarSign,
-  Building2,
-  MapPin,
-  Factory,
-  Store,
-  Briefcase,
-  Heart,
-  GraduationCap,
+  Search,
+  Hammer,
+  Settings,
+  Globe,
+  Headphones,
+  Sparkles,
 };
 
 /**
- * IndustryCard Component
- * Displays a single industry card with icon, title, and learn more link
+ * WhatWeDoCard Component
+ * Displays a single what we do card with icon, title, and learn more link
  * Handles click navigation to detail card sections
  */
-const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
+const WhatWeDoCard = ({ title, icon, iconAlt, id, onCardClick }) => {
   const handleCardClick = () => {
     const element = document.getElementById(id);
     if (element) {
@@ -72,7 +68,7 @@ const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
             alt={iconAlt}
             fill
             className="object-contain"
-            sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+            sizes="3.5rem sm:4rem md:5rem"
           />
         )}
       </div>
@@ -94,22 +90,15 @@ const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
 };
 
 /**
- * IndustriesContainer Component
- * Main container for displaying industry sections
+ * WhatWeDoContainer Component
+ * Main container for displaying what we do sections
  * @param {Object} props
  * @param {string} props.title - Section title
  * @param {string} props.subtitle - Section subtitle
- * @param {Array} props.cards - Array of industry card data
- * @param {boolean} props.showGroups - Whether to show IndustriesGroups divider
- * @param {boolean} props.hideBadge - Whether to hide the "HOW IT WORKS" badge in detail cards
+ * @param {Array} props.cards - Array of what we do card data
+ * @param {boolean} props.showGroups - Whether to show WhatWeDoGroups divider
  */
-const IndustriesContainer = ({
-  title,
-  subtitle,
-  cards,
-  showGroups = true,
-  hideBadge = false,
-}) => {
+const WhatWeDoContainer = ({ title, subtitle, cards, showGroups = true }) => {
   const [activeCardId, setActiveCardId] = useState("");
 
   useEffect(() => {
@@ -136,7 +125,7 @@ const IndustriesContainer = ({
   return (
     <>
       {/* Sticky Navigation - appears when scrolling past main cards */}
-      <IndustryStickyNav cards={cards} activeCardId={activeCardId} />
+      <WhatWeDoStickyNav cards={cards} activeCardId={activeCardId} />
 
       {/* Main Content Section */}
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-br from-purple-50 to-blue-50">
@@ -153,10 +142,10 @@ const IndustriesContainer = ({
             )}
           </div>
 
-          {/* Industry Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          {/* What We Do Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {cards.map((card, index) => (
-              <IndustryCard
+              <WhatWeDoCard
                 key={card.id}
                 title={card.title}
                 icon={card.icon}
@@ -172,26 +161,21 @@ const IndustriesContainer = ({
       {/* Detail Cards Section */}
       {cards.map((card, index) => (
         <div key={card.id}>
-          <IndustryDetailCard
+          <WhatWeDoDetailCard
             id={card.id}
             title={card.title}
             icon={card.icon}
             iconAlt={card.iconAlt}
             image={card.image}
-            industryContext={card.industryContext}
-            painPoints={card.painPoints}
-            ourApproach={card.ourApproach}
+            description={card.description}
             solutionText={card.solutionText}
             additionalContent={card.additionalContent}
-            futureHeading={card.futureHeading}
-            futurePoints={card.futurePoints}
             isOdd={index % 2 === 0}
-            hideBadge={hideBadge}
           />
 
           {/* Divider between sections */}
           {showGroups && index === Math.floor(cards.length / 2) - 1 && (
-            <IndustriesGroups />
+            <WhatWeDoGroups />
           )}
         </div>
       ))}
@@ -199,4 +183,4 @@ const IndustriesContainer = ({
   );
 };
 
-export default IndustriesContainer;
+export default WhatWeDoContainer;

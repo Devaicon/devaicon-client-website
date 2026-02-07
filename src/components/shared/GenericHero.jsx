@@ -13,7 +13,7 @@ import Image from "next/image";
  * @param {string} props.bgColor - Background color (default: "#3d234b")
  * @param {string} props.titleColor - Title text color (default: "text-white")
  * @param {string} props.subtitleColor - Subtitle text color (default: "text-gray-100")
- * @param {string} props.height - Height class (default: "min-h-[400px]")
+ * @param {string} props.height - Height class (default: "min-h-96")
  */
 const GenericHero = ({
   title,
@@ -22,7 +22,7 @@ const GenericHero = ({
   bgColor = "#3d234b",
   titleColor = "text-white",
   subtitleColor = "text-gray-100",
-  height = "min-h-[400px]",
+  height = "min-h-96",
 }) => {
   return (
     <section
@@ -47,22 +47,22 @@ const GenericHero = ({
       {/* Background Decorative Shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Large Glowing Circle - Top Right */}
-        <div className="absolute -top-40 -right-40 w-[800px] h-[800px] bg-white/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute -top-40 -right-40 w-200 h-200 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
 
         {/* Large Glowing Circle - Bottom Left */}
-        <div className="absolute -bottom-60 -left-60 w-[900px] h-[900px] bg-purple-300/15 rounded-full blur-[140px]"></div>
+        <div className="absolute -bottom-60 -left-60 w-224 h-224 bg-purple-300/15 rounded-full blur-3xl"></div>
 
         {/* Medium Circle - Center Right */}
-        <div className="absolute top-1/4 -right-32 w-[600px] h-[600px] bg-indigo-300/12 rounded-full blur-[100px]"></div>
+        <div className="absolute top-1/4 -right-32 w-150 h-150 bg-indigo-300/12 rounded-full blur-3xl"></div>
 
         {/* Large Geometric Shape - Top Left */}
-        <div className="absolute -top-32 -left-32 w-[700px] h-[700px] bg-gradient-to-br from-purple-200/10 to-white/8 rotate-45 blur-[100px]"></div>
+        <div className="absolute -top-32 -left-32 w-176 h-176 bg-gradient-to-br from-purple-200/10 to-white/8 rotate-45 blur-3xl"></div>
 
         {/* Accent Circle - Middle */}
-        <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-violet-300/15 rounded-full blur-[90px]"></div>
+        <div className="absolute top-1/2 left-1/3 w-125 h-125 bg-violet-300/15 rounded-full blur-3xl"></div>
 
         {/* Geometric Shape - Bottom Right */}
-        <div className="absolute -bottom-40 -right-20 w-[750px] h-[750px] bg-gradient-to-tl from-purple-200/12 to-indigo-200/10 rotate-12 blur-[110px]"></div>
+        <div className="absolute -bottom-40 -right-20 w-188 h-188 bg-gradient-to-tl from-purple-200/12 to-indigo-200/10 rotate-12 blur-3xl"></div>
 
         {/* Floating Glowing Orbs */}
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>

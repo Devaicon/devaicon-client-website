@@ -6,7 +6,7 @@ import ContactPageForm from "./ContactPageForm";
 const ContactFormSection = () => {
   return (
     <div className="relative -mt-20 sm:-mt-24 lg:-mt-22 pb-16 sm:pb-20 lg:pb-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden border border-gray-100">
           <div className="grid lg:grid-cols-[1.4fr_1fr] gap-0">
             {/* Left Side - Contact Form */}
@@ -125,34 +125,34 @@ const ContactFormSection = () => {
                     <div className="space-y-2">
                       <div className="grid grid-cols-4 gap-2">
                         <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center h-12">
-                          <span className="text-[10px] font-bold text-gray-400">
+                          <span className="text-[0.625rem] font-bold text-gray-400">
                             LOGO
                           </span>
                         </div>
                         <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center h-12">
-                          <span className="text-[10px] font-bold text-gray-400">
+                          <span className="text-[0.625rem] font-bold text-gray-400">
                             LOGO
                           </span>
                         </div>
                         <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center h-12">
-                          <span className="text-[10px] font-bold text-gray-400">
+                          <span className="text-[0.625rem] font-bold text-gray-400">
                             LOGO
                           </span>
                         </div>
                         <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center h-12">
-                          <span className="text-[10px] font-bold text-gray-400">
+                          <span className="text-[0.625rem] font-bold text-gray-400">
                             LOGO
                           </span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center h-12">
-                          <span className="text-[10px] font-bold text-gray-400">
+                          <span className="text-[0.625rem] font-bold text-gray-400">
                             LOGO
                           </span>
                         </div>
                         <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center h-12">
-                          <span className="text-[10px] font-bold text-gray-400">
+                          <span className="text-[0.625rem] font-bold text-gray-400">
                             LOGO
                           </span>
                         </div>

@@ -1,6 +1,14 @@
 const CallNowTab = () => {
   return (
     <div className="space-y-4 sm:space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+          Call Now
+        </h2>
+        <p className="text-gray-600 text-sm sm:text-base">
+          Get instant support from our team of experts.
+        </p>
+      </div>
       <p className="text-gray-600 text-xs sm:text-sm md:text-base">
         Speak directly with our expert team and get immediate answers to your
         questions.

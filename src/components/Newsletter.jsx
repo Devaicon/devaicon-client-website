@@ -15,7 +15,7 @@ const Newsletter = () => {
   return (
     <section className="newsletter-section">
       <div className="divider-smoky"></div>
-      <div className="container-responsive py-8 sm:py-8 md:py-6 lg:py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-8 md:py-6 lg:py-2">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 sm:gap-8">
           {/* Left side - Text content */}
           <div className="flex-1 w-full md:w-auto">

@@ -50,7 +50,7 @@ const IndustriesGroups = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-[96rem] mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white text-center mb-8 md:mb-10">
           Turning technology into measurable business impacts
@@ -63,7 +63,7 @@ const IndustriesGroups = () => {
             return (
               <div
                 key={feature.id}
-                className="bg-white rounded-2xl p-6 md:p-8 backdrop-blur-[59.3px]"
+                className="bg-white rounded-2xl p-6 md:p-8 backdrop-blur-3xl"
                 style={{
                   boxShadow: "0px 4px 4px 0px #53406B80",
                 }}

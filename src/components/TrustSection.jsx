@@ -84,7 +84,7 @@ const TrustSection = () => {
 
   return (
     <section className="bg-gray-50 section-padding-lg relative">
-      <div className="container-responsive py-8 sm:py-12 md:py-16 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-8">
         <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8">
           {/* Left Content */}
           <div
@@ -126,26 +126,29 @@ const TrustSection = () => {
 
           {/* Right Image */}
           <div
-            className={`flex-1 w-full flex justify-center lg:justify-end transition-all duration-700 ease-in-out relative h-64 sm:h-80 lg:h-96 ${
+            className={`w-full lg:flex-1 transition-all duration-700 ease-in-out ${
               isAnimating
                 ? "opacity-0 -translate-x-16 scale-95"
                 : "opacity-100 translate-x-0 scale-100"
             }`}
           >
-            <Image
-              src={slides[currentSlide].image}
-              alt="Trust Section"
-              fill
-              className="object-contain rounded-lg shadow-2xl"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
+            <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-96">
+              <Image
+                src={slides[currentSlide].image}
+                alt="Trust Section"
+                fill
+                className="object-contain rounded-lg shadow-2xl"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 50vw"
+                priority
+              />
+            </div>
           </div>
         </div>
 
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-[#281333] hover:bg-[#3a1a4a] text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md"
+          className="hidden 2xl:flex absolute left-2 sm:left-4 md:left-6 lg:left-50 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-[#281333] hover:bg-[#3a1a4a] text-white rounded-full items-center justify-center transition-colors duration-200 shadow-md"
           aria-label="Previous slide"
         >
           <svg
@@ -165,7 +168,7 @@ const TrustSection = () => {
 
         <button
           onClick={nextSlide}
-          className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-[#281333] hover:bg-[#3a1a4a] text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md"
+          className="hidden 2xl:flex absolute right-2 sm:right-4 md:right-6 lg:right-50 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-[#281333] hover:bg-[#3a1a4a] text-white rounded-full items-center justify-center transition-colors duration-200 shadow-md"
           aria-label="Next slide"
         >
           <svg
