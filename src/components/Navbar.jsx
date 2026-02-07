@@ -566,7 +566,7 @@ export default function Navbar() {
                 onMouseLeave={handleWhyVitaLeave}
               >
                 <Link
-                  href="/whydevaicon"
+                  href="#"
                   className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Why Devaicon

@@ -1,5 +1,6 @@
 "use client";
 
+import PageHero from "../../components/PageHero";
 import TalkTabbedSection from "../../components/TalkTabbedSection";
 import {
   Cookie,
@@ -15,32 +16,14 @@ const CookiePolicy = () => {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#3d234b] via-[#4a2d5a] to-[#5a3464] text-white py-20 sm:py-24 lg:py-32 overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-              <Cookie className="w-7 h-7 text-white" />
-            </div>
-            <div className="h-12 w-1 bg-white/30"></div>
-            <span className="text-sm font-semibold text-white/80 uppercase tracking-wider">
-              Legal Information
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl">
-            Cookie Policy
-          </h1>
-          <div className="flex items-center gap-2 text-white/70">
-            <Clock className="w-5 h-5" />
-            <p className="text-base sm:text-lg">
-              Last Updated: December 24, 2025
-            </p>
-          </div>
-        </div>
-      </div>
+      <PageHero
+        title="Cookie Policy"
+        icon={<Cookie className="w-7 h-7 text-white" />}
+        label="Legal Information"
+        metadata="Last Updated: December 24, 2025"
+        metadataIcon={<Clock className="w-5 h-5" />}
+        showButton={false}
+      />
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-12 py-12 sm:py-16 lg:py-20">
