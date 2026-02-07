@@ -73,14 +73,14 @@ const ServicesSection = () => {
         </div>
       </div>
       {/* Vector decoration under cards */}
-      {/* <Image
-        src="/vector-2.webp"
+      <Image
+        src="/bg.svg"
         alt=""
         width={400}
         height={400}
         className="absolute bottom-0 left-[5px] pointer-events-none z-0 w-[150px] sm:w-[200px] md:w-[250px] lg:w-[300px] xl:w-[350px] 2xl:w-[450px] h-auto"
         aria-hidden="true"
-      /> */}
+      />
     </section>
   );
 };

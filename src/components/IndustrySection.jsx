@@ -67,7 +67,7 @@ const IndustriesSection = () => {
   return (
     <section className="flex justify-center py-12 sm:py-16 md:py-20 lg:py-[100px] pb-10 sm:pb-12 md:pb-[60px] px-4 sm:px-6 md:px-8 bg-[#f4efec] relative overflow-hidden">
       {/* Decorative Orbs - Top Left */}
-      {/* <Image
+      <Image
         src="/orb-1.webp"
         alt=""
         width={750}
@@ -82,7 +82,7 @@ const IndustriesSection = () => {
         height={1850}
         className="absolute top-[-5] left-2 pointer-events-none w-[300px] sm:w-[400px] md:w-[550px] lg:w-[650px] xl:w-[750px] 2xl:w-[850px] h-auto"
         aria-hidden="true"
-      /> */}
+      />
 
       <div className="w-full max-w-[1180px] text-center relative z-10">
         <h2 className="text-3xl sm:text-4xl md:text-[48px] font-bold text-[#333333] mb-2">
@@ -115,14 +115,14 @@ const IndustriesSection = () => {
       </div>
 
       {/* Vector decoration under Healthcare card */}
-      {/* <Image
-        src="/vector-1.webp"
+      <Image
+        src="/bg.svg"
         alt=""
         width={200}
         height={100}
         className="absolute bottom-0 right-[40] sm:right-[60] md:right-[80] lg:right-[100] 2xl:right--[13] pointer-events-none z-0 w-[150px] sm:w-[200px] md:w-[250px] lg:w-[300px] 2xl:w-[450px] h-auto"
         aria-hidden="true"
-      /> */}
+      />
     </section>
   );
 };
