@@ -2,6 +2,7 @@ import CapabilitesContainer from "@/components/capabilities/CapabilitesContainer
 import PageHero from "@/components/PageHero";
 import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { CAPABILITIES_CONFIG } from "@/lib/capabilities-data";
+import { GraduationCap } from "lucide-react";
 import React, { Suspense } from "react";
 
 /**
@@ -22,6 +23,8 @@ const OpenEdXServicesPage = () => {
       <PageHero
         title="Devaicon Capabilities"
         subtitle="Enterprise platforms, AI, and integration services"
+        icon={<GraduationCap className="w-7 h-7 text-white" />}
+        label="Technical Expertise"
         showButton={false}
       />
 

@@ -1,5 +1,6 @@
 import PageHero from "@/components/PageHero";
 import AboutIntro from "@/components/AboutIntro";
+import { Info } from "lucide-react";
 
 export const metadata = {
   title: "About Devaicon - Our Mission, Vision & Values",
@@ -14,6 +15,8 @@ export default function AboutDevaiconPage() {
       <PageHero
         title="About Devaicon"
         subtitle="Empowering enterprises to lead with clarity, intelligence, and confidence through AI, data, and digital transformation."
+        icon={<Info className="w-7 h-7 text-white" />}
+        label="Our Story"
         buttonText="Get in Touch"
         buttonLink="/contact-us"
         showButton={true}

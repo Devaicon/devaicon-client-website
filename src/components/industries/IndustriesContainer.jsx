@@ -65,7 +65,7 @@ const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
       {/* Icon Container */}
       <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 transform hover:scale-110 transition-transform duration-300 flex items-center justify-center">
         {IconComponent ? (
-          <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#4555A7]" />
+          <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#3d234b]" />
         ) : (
           <Image
             src={icon}
@@ -86,7 +86,7 @@ const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
       </h3>
 
       {/* Learn More Link */}
-      <span className="text-xs sm:text-sm font-medium inline-flex items-center gap-1 text-[#4555A7] hover:text-[#5B6FB6] transition-colors">
+      <span className="text-xs sm:text-sm font-medium inline-flex items-center gap-1 text-[#3d234b] hover:text-[#281333] transition-colors">
         Learn more
       </span>
     </article>
@@ -139,31 +139,41 @@ const IndustriesContainer = ({
       <IndustryStickyNav cards={cards} activeCardId={activeCardId} />
 
       {/* Main Content Section */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-br from-purple-50 to-blue-50">
+      <section
+        className="w-full bg-gradient-to-br from-purple-50 to-blue-50 py-16 md:py-20 lg:py-24"
+        aria-labelledby="industries-heading"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-12 sm:mb-16 md:mb-20">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+          <header className="text-center mb-12 md:mb-16">
+            <h2
+              id="industries-heading"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6"
+            >
               {title}
             </h2>
             {subtitle && (
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
                 {subtitle}
               </p>
             )}
-          </div>
+          </header>
 
           {/* Industry Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+            role="list"
+          >
             {cards.map((card, index) => (
-              <IndustryCard
-                key={card.id}
-                title={card.title}
-                icon={card.icon}
-                iconAlt={card.iconAlt}
-                id={card.id}
-                onCardClick={setActiveCardId}
-              />
+              <div key={card.id} role="listitem">
+                <IndustryCard
+                  title={card.title}
+                  icon={card.icon}
+                  iconAlt={card.iconAlt}
+                  id={card.id}
+                  onCardClick={setActiveCardId}
+                />
+              </div>
             ))}
           </div>
         </div>

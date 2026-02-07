@@ -110,28 +110,24 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
   if (!isVisible) return null;
 
   return (
-    <nav
-      className="sticky top-0 z-50 bg-white shadow-md transition-all duration-300"
-      role="navigation"
-      aria-label="What We Do Navigation"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="relative flex items-center gap-3">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b border-gray-200 transition-transform duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="flex items-center gap-4">
           {/* Left Arrow */}
           {showLeftArrow && (
             <button
               onClick={() => scroll("left")}
-              className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+              className="flex-shrink-0 bg-white hover:bg-gray-100 p-2 rounded-full shadow-md transition-all border border-gray-200"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
+              <ChevronLeft className="w-5 h-5 text-gray-700" />
             </button>
           )}
 
-          {/* Scrollable Cards Container */}
+          {/* Scrollable Container */}
           <div
             ref={scrollContainerRef}
-            className="flex gap-3 overflow-x-auto scrollbar-hide flex-1"
+            className="flex-1 flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {cards.map((card) => {
@@ -145,16 +141,16 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
                 <button
                   key={card.id}
                   onClick={() => handleCardClick(card.id)}
-                  className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                     isActive
-                      ? "bg-[#4555A7] text-white shadow-md"
-                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                      ? "bg-[#3d234b] text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow"
                   }`}
                   aria-label={`Navigate to ${card.title}`}
                   aria-current={isActive ? "true" : "false"}
                 >
                   {/* Icon */}
-                  <div className="w-5 h-5 flex items-center justify-center">
+                  <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
                     {IconComponent ? (
                       <IconComponent className="w-5 h-5" />
                     ) : (
@@ -164,16 +160,14 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
                           alt={card.iconAlt}
                           fill
                           className="object-contain"
-                          sizes="1.25rem"
+                          sizes="20px"
                         />
                       </div>
                     )}
                   </div>
 
                   {/* Title */}
-                  <span className="text-sm font-medium whitespace-nowrap">
-                    {card.title}
-                  </span>
+                  <span className="hidden sm:inline">{card.title}</span>
                 </button>
               );
             })}
@@ -183,15 +177,15 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
           {showRightArrow && (
             <button
               onClick={() => scroll("right")}
-              className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+              className="flex-shrink-0 bg-white hover:bg-gray-100 p-2 rounded-full shadow-md transition-all border border-gray-200"
               aria-label="Scroll right"
             >
-              <ChevronRight className="w-5 h-5 text-gray-600" />
+              <ChevronRight className="w-5 h-5 text-gray-700" />
             </button>
           )}
         </div>
       </div>
-    </nav>
+    </div>
   );
 };
 

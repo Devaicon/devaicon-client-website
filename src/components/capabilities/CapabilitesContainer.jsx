@@ -96,10 +96,9 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
     }
   };
 
-  // Get the icon component from the string name, or handle React element
+  // Get the icon component from the string name
   const IconComponent =
     typeof icon === "string" && iconMap[icon] ? iconMap[icon] : null;
-  const isReactElement = icon && typeof icon === "object" && icon.type;
 
   return (
     <article
@@ -118,22 +117,16 @@ const CapabilityCard = ({ title, icon, iconAlt, id, onCardClick }) => {
       {/* Icon Container */}
       <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 transform hover:scale-110 transition-transform duration-300 flex items-center justify-center">
         {IconComponent ? (
-          <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-(--color-brand-primary)" />
-        ) : isReactElement ? (
-          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-(--color-brand-primary) flex items-center justify-center">
-            {icon}
-          </div>
-        ) : typeof icon === "string" && icon.startsWith("/") ? (
-          <div className="relative w-full h-full">
-            <Image
-              src={icon}
-              alt={iconAlt || title}
-              fill
-              className="object-contain p-2"
-              sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
-            />
-          </div>
-        ) : null}
+          <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#3d234b]" />
+        ) : (
+          <Image
+            src={icon}
+            alt={iconAlt || title}
+            fill
+            className="object-contain"
+            sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+          />
+        )}
       </div>
 
       {/* Title */}
@@ -198,15 +191,15 @@ const CapabilitesContainer = ({
       <CapabilityStickyNav cards={cards} activeCardId={activeCardId} />
 
       <section
-        className="w-full bg-gradient-to-br from-purple-50 to-blue-50 py-16 md:py-20 lg:py-24"
+        className="w-full bg-gradient-to-br from-purple-50 to-blue-50 py-12 md:py-20 lg:py-16"
         aria-labelledby="capabilities-heading"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Section Header */}
           <header className="text-center mb-12 md:mb-16">
             <h2
               id="capabilities-heading"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6"
             >
               {title}
             </h2>
@@ -217,7 +210,7 @@ const CapabilitesContainer = ({
 
           {/* Cards Grid */}
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
             role="list"
           >
             {cards.map((card) => (

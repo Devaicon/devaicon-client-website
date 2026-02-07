@@ -98,7 +98,7 @@ const IndustryDetailCard = ({
               <div className="flex-shrink-0">
                 {IconComponent ? (
                   <div className="w-20 h-20 p-4 bg-white rounded-lg shadow-md flex items-center justify-center">
-                    <IconComponent className="w-10 h-10 text-[#4555A7]" />
+                    <IconComponent className="w-10 h-10 text-[#3d234b]" />
                   </div>
                 ) : (
                   <div className="relative w-20 h-20 p-4 bg-white rounded-lg shadow-md">
@@ -117,7 +117,7 @@ const IndustryDetailCard = ({
               <div className="flex-1 flex flex-col">
                 {/* Badge */}
                 {!hideBadge && (
-                  <span className="inline-block text-xs font-semibold text-[#4555A7] uppercase tracking-wider mb-3">
+                  <span className="inline-block text-xs font-semibold text-[#3d234b] uppercase tracking-wider mb-3">
                     INDUSTRY SOLUTIONS
                   </span>
                 )}
@@ -151,7 +151,7 @@ const IndustryDetailCard = ({
                           key={idx}
                           className="flex items-start text-gray-600 text-base leading-relaxed"
                         >
-                          <span className="text-[#4555A7] mr-2">•</span>
+                          <span className="text-[#3d234b] mr-2">•</span>
                           <span>{point}</span>
                         </li>
                       ))}
@@ -176,11 +176,11 @@ const IndustryDetailCard = ({
                   <div className="mb-5 max-w-2xl">
                     <button
                       onClick={toggleSolution}
-                      className="w-full flex items-center justify-between py-4 bg-white hover:bg-gray-50 transition-colors border-l-4 border-[#4555A7]"
+                      className="w-full flex items-center justify-between py-4 bg-white hover:bg-gray-50 transition-colors border-l-4 border-[#3d234b]"
                       aria-expanded={openSolution}
                       aria-controls={`solution-${id}`}
                     >
-                      <span className="text-[#4555A7] font-medium text-left text-lg pl-3">
+                      <span className="text-[#3d234b] font-medium text-left text-lg pl-3">
                         {title}
                       </span>
                       <ChevronDown
@@ -235,7 +235,7 @@ const IndustryDetailCard = ({
                           key={idx}
                           className="flex items-start text-gray-600 text-base leading-relaxed"
                         >
-                          <span className="text-[#4555A7] mr-2">✓</span>
+                          <span className="text-[#3d234b] mr-2">✓</span>
                           <span>{point}</span>
                         </li>
                       ))}

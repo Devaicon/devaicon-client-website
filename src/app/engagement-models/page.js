@@ -2,6 +2,7 @@ import PageHero from "@/components/PageHero";
 import EngagementModelsSection from "@/components/EngagementModelsSection";
 import EngagementModelComparison from "@/components/EngagementModelComparison";
 import EngagementDecisionMatrix from "@/components/EngagementDecisionMatrix";
+import { Handshake } from "lucide-react";
 
 export default function EngagementModelsPage() {
   const engagementModelsData = [
@@ -334,6 +335,8 @@ export default function EngagementModelsPage() {
       <PageHero
         title="Outsourcing, Dedicated Teams, or Augmentation – Choose What Brings You the Most Value at Lower Costs"
         subtitle="Choosing the right engagement model can reduce your costs, increase your confidence, and ensure timely project completion."
+        icon={<Handshake className="w-7 h-7 text-white" />}
+        label="Partnership Approaches"
         buttonText="Discover More"
         buttonLink="#engagement-models"
         height="min-h-[37.5rem]"

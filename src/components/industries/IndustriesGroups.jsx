@@ -15,28 +15,28 @@ const IndustriesGroups = () => {
       icon: Award,
       title: "18+ Years",
       description: "Proven industry experience",
-      bgColor: "#37469E",
+      bgColor: "#3d234b",
     },
     {
       id: 2,
       icon: Users,
       title: "Strong Client Base",
       description: "Trusted by enterprise customers",
-      bgColor: "#37469E",
+      bgColor: "#3d234b",
     },
     {
       id: 3,
       icon: Globe,
       title: "GCC Partner",
       description: "Regional implementation expertise",
-      bgColor: "#37469E",
+      bgColor: "#3d234b",
     },
   ];
 
   return (
     <section
       className="relative w-full py-10 md:py-12 lg:py-14 overflow-hidden"
-      style={{ background: "#10194f" }}
+      style={{ background: "#3d234b" }}
     >
       {/* Background Image */}
       <div className="absolute inset-0 opacity-20">
@@ -85,13 +85,13 @@ const IndustriesGroups = () => {
                   <div className="flex-1">
                     <h3
                       className="text-lg md:text-xl font-bold mb-1"
-                      style={{ color: "#4555A7" }}
+                      style={{ color: "#3d234b" }}
                     >
                       {feature.title}
                     </h3>
                     <p
                       className="text-sm md:text-base"
-                      style={{ color: "#4555A7" }}
+                      style={{ color: "#3d234b" }}
                     >
                       {feature.description}
                     </p>
@@ -106,7 +106,7 @@ const IndustriesGroups = () => {
         <div className="text-center">
           <Link
             href="/contact-us"
-            className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-[#4555A7] font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full shadow-lg transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-[#3d234b] font-semibold px-6 md:px-8 py-3 md:py-4 rounded-lg shadow-lg transition-all duration-300"
             aria-label="Get in touch with us"
           >
             <span>Get in Touch</span>

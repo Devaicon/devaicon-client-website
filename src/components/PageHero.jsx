@@ -29,12 +29,12 @@ const PageHero = ({
   showButton = true,
 }) => {
   return (
-    <div className="relative bg-gradient-to-br from-[#3d234b] via-[#4a2d5a] to-[#5a3464] text-white py-20 sm:py-24 lg:py-32 overflow-hidden">
+    <div className="relative bg-gradient-to-br from-[#3d234b] via-[#4a2d5a] to-[#5a3464] text-white py-20 sm:py-16 lg:py-24 overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15 mt-20">
         {/* Icon and Label */}
         {(icon || label) && (
           <div className="flex items-center gap-3 mb-6">

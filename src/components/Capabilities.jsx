@@ -257,14 +257,14 @@ const CAPABILITIES_DATA = [
 
 // Map category names to capabilities page URLs
 const CATEGORY_TO_URL = {
-  All: "capabilities",
-  "Intelligent Systems & Data": "capabilities/intelligent-systems-data",
+  All: "/capabilities",
+  "Intelligent Systems & Data": "/capabilities/intelligent-systems-data",
   "Application & Software Development":
-    "capabilities/application-software-development",
+    "/capabilities/application-software-development",
   "Infrastructure & Enterprise Systems":
-    "capabilities/infrastructure-enterprise-systems",
-  "Consulting & Transformation": "capabilities/consulting-transformation",
-  "Open edX Services": "capabilities/open-edx-services",
+    "/capabilities/infrastructure-enterprise-systems",
+  "Consulting & Transformation": "/capabilities/consulting-transformation",
+  "Open edX Services": "/capabilities/open-edx-services",
 };
 
 export default function Capabilities() {
@@ -274,8 +274,6 @@ export default function Capabilities() {
     activeCategory === "All"
       ? CAPABILITIES_DATA
       : CAPABILITIES_DATA.filter((item) => item.category === activeCategory);
-
-  const activeCategoryUrl = CATEGORY_TO_URL[activeCategory];
 
   return (
     <section className="w-full min-h-screen bg-[#dce5ed] flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
@@ -326,7 +324,7 @@ export default function Capabilities() {
             <CapabilitiesCards
               key={capability.id}
               {...capability}
-              categoryUrl={activeCategoryUrl}
+              categoryUrl={CATEGORY_TO_URL[capability.category]}
             />
           ))}
         </div>

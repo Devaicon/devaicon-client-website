@@ -1,13 +1,24 @@
+import {
+  Rocket,
+  Award,
+  Handshake,
+  Zap,
+  Target,
+  Star,
+  Lightbulb,
+  Wrench,
+} from "lucide-react";
+
 const StatsSection = () => {
   const scrollingText = [
-    "🚀 Innovation",
-    "💼 Excellence",
-    "🤝 Partnership",
-    "⚡ Quality",
-    "🎯 Reliability",
-    "🌟 Trust",
-    "💡 Solutions",
-    "🔧 Technology",
+    { icon: Rocket, text: "Innovation" },
+    { icon: Award, text: "Excellence" },
+    { icon: Handshake, text: "Partnership" },
+    { icon: Zap, text: "Quality" },
+    { icon: Target, text: "Reliability" },
+    { icon: Star, text: "Trust" },
+    { icon: Lightbulb, text: "Solutions" },
+    { icon: Wrench, text: "Technology" },
   ];
 
   return (
@@ -57,9 +68,15 @@ const StatsSection = () => {
         <div className="relative overflow-hidden py-8">
           <div className="flex stats-scroll-animation whitespace-nowrap">
             <div className="flex gap-16 text-2xl font-semibold text-gray-700">
-              {scrollingText.concat(scrollingText).map((text, index) => (
-                <span key={index}>{text}</span>
-              ))}
+              {scrollingText.concat(scrollingText).map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <span key={index} className="flex items-center gap-2">
+                    <Icon className="w-6 h-6" />
+                    {item.text}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>

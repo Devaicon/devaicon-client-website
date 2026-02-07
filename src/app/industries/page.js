@@ -2,6 +2,7 @@ import IndustriesContainer from "@/components/industries/IndustriesContainer";
 import PageHero from "@/components/PageHero";
 import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
+import { Building2 } from "lucide-react";
 import React, { Suspense } from "react";
 
 /**
@@ -22,6 +23,8 @@ const IndustriesPage = () => {
       <PageHero
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
+        icon={<Building2 className="w-7 h-7 text-white" />}
+        label="Industry Expertise"
         showButton={false}
       />
 

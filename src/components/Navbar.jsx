@@ -478,7 +478,7 @@ export default function Navbar() {
               aria-label="Devaicon - Go to homepage"
             >
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="Devaicon Logo"
                 width={124}
                 height={51}
@@ -1049,7 +1049,7 @@ export default function Navbar() {
                   onClick={closeMobileMenu}
                 >
                   <Image
-                    src="/logo.png"
+                    src="/logo.svg"
                     alt="Devaicon Logo"
                     width={90}
                     height={37}

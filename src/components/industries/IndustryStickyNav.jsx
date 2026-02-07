@@ -152,16 +152,16 @@ const IndustryStickyNav = ({ cards = [], activeCardId = "" }) => {
                 <button
                   key={navCard.id}
                   onClick={handleClick}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full flex-shrink-0 transition-all border ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                     isActive
-                      ? "bg-[#4555A7] text-white border-[#4555A7]"
-                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                      ? "bg-[#3d234b] text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow"
                   }`}
                   aria-label={`Navigate to ${navCard.title}`}
                   aria-current={isActive ? "true" : "false"}
                 >
                   {/* Icon */}
-                  <div className="flex-shrink-0">
+                  <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
                     {IconComponent ? (
                       <IconComponent className="w-5 h-5" />
                     ) : (
@@ -178,9 +178,7 @@ const IndustryStickyNav = ({ cards = [], activeCardId = "" }) => {
                   </div>
 
                   {/* Title */}
-                  <span className="text-sm font-medium whitespace-nowrap">
-                    {navCard.title}
-                  </span>
+                  <span className="hidden sm:inline">{navCard.title}</span>
                 </button>
               );
             })}

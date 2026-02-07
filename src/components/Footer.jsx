@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   const industries = [
@@ -78,19 +79,35 @@ const Footer = () => {
           {/* Left Section - Logo, Tagline, Awards */}
           <div className="lg:col-span-4">
             {/* Logo */}
-            <div className="mb-6 sm:mb-8">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6">
-                With Devaicon
+
+            <div className="flex items-center gap-3 mb-2 sm:mb-2">
+              <h1
+                className="text-3xl sm:text-4xl font-extralight"
+                style={{ fontWeight: "300" }}
+              >
+                With
               </h1>
+              <Image
+                src="/logo_dark.svg"
+                alt="Devaicon Logo"
+                width={100}
+                height={100}
+                className="h-20 sm:h-20 w-auto"
+              />
             </div>
 
             {/* Tagline */}
             <div className="mb-8 sm:mb-10">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-2">
-                If you can imagine
-              </h2>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
-                it, we can build it
+              <h2
+                className="text-2xl sm:text-3xl font-extralight leading-tight"
+                style={{ fontWeight: "300" }}
+              >
+                If you can imagine it,
+                <br />
+                we can{" "}
+                <span style={{ fontWeight: "700" }} className="italic">
+                  build it
+                </span>
               </h2>
             </div>
 

@@ -9,9 +9,9 @@ const CapabilitiesCards = ({
   categoryUrl,
   slug,
 }) => {
-  // Build the full URL path
+  // Build the full URL path - categoryUrl already includes leading slash
   const cardUrl =
-    categoryUrl && slug ? `/${categoryUrl}#${slug}` : "/capabilities";
+    categoryUrl && slug ? `${categoryUrl}#${slug}` : "/capabilities";
 
   return (
     <article className="flex flex-col bg-white rounded-xl shadow-sm h-auto min-h-70 md:min-h-75 w-full p-4 md:p-5">
