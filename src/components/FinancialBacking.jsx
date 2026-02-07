@@ -20,7 +20,7 @@ const FinancialBacking = () => {
   ];
 
   return (
-    <section className="py-1 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-50">
+    <section className="pt-8 sm:pt-12 md:pt-16 pb-12 sm:pb-16 md:pb-20 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         {/* Card Container */}
         <div className="bg-white rounded-2xl shadow-lg p-8 sm:p-10 md:p-12">
