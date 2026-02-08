@@ -159,7 +159,7 @@ const Footer = () => {
                   href="mailto:contact@devaicon.com"
                   className="text-gray-300 hover:text-white transition-colors text-sm sm:text-base break-all"
                 >
-                  contact@withdevaicon.cloud
+                  contact@devaicon.com
                 </a>
               </div>
 

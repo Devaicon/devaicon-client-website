@@ -29,14 +29,18 @@ import {
   Wrench,
   BarChart3,
   Users,
+  Cpu,
+  Code,
+  Network,
+  BookOpen,
 } from "lucide-react";
 
 const CATEGORIES = [
-  "Intelligent Systems & Data",
-  "Application & Software Development",
-  "Infrastructure & Enterprise Systems",
-  "Consulting & Transformation",
-  "Open edX Services",
+  { name: "Intelligent Systems & Data", icon: Cpu },
+  { name: "Application & Software Development", icon: Code },
+  { name: "Infrastructure & Enterprise Systems", icon: Network },
+  { name: "Consulting & Transformation", icon: Target },
+  { name: "Open edX Services", icon: BookOpen },
 ];
 
 const CAPABILITIES_DATA = [
@@ -266,10 +270,12 @@ const CATEGORY_TO_URL = {
 };
 
 export default function Capabilities() {
-  const [activeCategory, setActiveCategory] = useState("Intelligent Systems & Data");
+  const [activeCategory, setActiveCategory] = useState(
+    "Intelligent Systems & Data",
+  );
 
   const filteredCapabilities = CAPABILITIES_DATA.filter(
-    (item) => item.category === activeCategory
+    (item) => item.category === activeCategory,
   );
 
   return (
@@ -294,23 +300,30 @@ export default function Capabilities() {
         </div>
 
         {/* Filters */}
-        <div className="w-full py-6 sm:py-8 px-4">
-          <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            <div className="flex gap-2 sm:gap-3 min-w-max pb-2">
-              {CATEGORIES.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  aria-pressed={activeCategory === category}
-                  className={`h-12 sm:h-13 md:h-14 px-5 sm:px-6 md:px-7 py-2.5 rounded-full text-sm sm:text-base md:text-lg font-semibold text-white whitespace-nowrap cursor-pointer
-                    bg-gradient-to-b from-[#3e234c] to-[#6c3c85]
-                    focus-visible:outline-2 focus-visible:outline-[rgba(90,58,104,0.5)]
-                    transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                    ${activeCategory === category ? "bg-[#6b4775] shadow-lg bg-gradient-to-b from-[#3e2340] to-[#6c3c80]" : "hover:shadow-md hover:from-[#4a2d58] hover:to-[#7a4a9f] opacity-80"}`}
-                >
-                  {category}
-                </button>
-              ))}
+        <div className="w-full py-6 relative">
+          <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative">
+            <div className="flex gap-2 sm:gap-3 min-w-max px-4">
+              {CATEGORIES.map((category) => {
+                const IconComponent = category.icon;
+                return (
+                  <button
+                    key={category.name}
+                    onClick={() => setActiveCategory(category.name)}
+                    aria-pressed={activeCategory === category.name}
+                    className={`h-12 sm:h-13 md:h-14 px-5 sm:px-6 md:px-7 py-2.5 rounded-full text-sm sm:text-base md:text-lg font-semibold text-white whitespace-nowrap cursor-pointer flex items-center gap-2
+                      transition-all duration-200 ease-out
+                      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c3c85]
+                      ${
+                        activeCategory === category.name
+                          ? "bg-gradient-to-b from-[#2a1830] to-[#3d2340] shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)] "
+                          : "bg-gradient-to-b from-[#3e2340] to-[#6c3c85] shadow-[0_2px_4px_rgba(0,0,0,0.2)] hover:from-[#351d40] hover:to-[#5a3271] active:shadow-[inset_0_4px_6px_rgba(0,0,0,0.6)] active:from-[#2d1a38] active:to-[#4a2d58]"
+                      }`}
+                  >
+                    <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>{category.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

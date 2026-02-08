@@ -98,8 +98,8 @@ const ContactPageLayout = () => {
               <div className="space-y-6">
                 {/* Address */}
                 <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-brand-primary" />
+                  <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">
@@ -117,28 +117,24 @@ const ContactPageLayout = () => {
 
                 {/* Phone */}
                 <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-brand-primary" />
+                  <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-brand-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
-                      Phone
-                    </h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
                     <p className="text-sm text-gray-600">+971 50 702 0541</p>
                   </div>
                 </div>
 
                 {/* Email */}
                 <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-brand-primary" />
+                  <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-brand-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">
-                      Email
-                    </h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
                     <p className="text-sm text-gray-600">
-                      contact@withvita.cloud
+                      contact@devaicon.com
                     </p>
                   </div>
                 </div>
