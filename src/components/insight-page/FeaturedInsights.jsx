@@ -36,12 +36,12 @@ const FeaturedBlogCard = ({ post }) => {
   return (
     <div className=" flex flex-col sm:flex-row items-stretch pb-3">
       {/* Image Section */}
-      <div className="relative w-full sm:w-[45%] h-50 sm:h-auto min-h-45 shrink-0">
+      <div className="relative w-full sm:w-[45%] h-64 sm:h-auto min-h-[280px] shrink-0 overflow-hidden">
         <Image
           src={post.image}
           alt={post.title}
           fill
-          className="object-cover"
+          className="object-cover hover:scale-105 transition-transform duration-500"
         />
         {post.comingSoon && (
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
@@ -119,15 +119,18 @@ const FeaturedInsights = () => {
               </h2>
 
               <p className="text-gray-200 text-sm sm:text-base leading-relaxed mb-6">
-                Discover how Vita helps organizations apply AI, automation, and
-                intelligent platforms to improve efficiency, decision-making,
-                and scalability. Learn how enterprises are moving from
-                experimentation to real, measurable outcomes.
+                Discover how Devaicon helps organizations apply AI, automation,
+                and intelligent platforms to improve efficiency,
+                decision-making, and scalability. Learn how enterprises are
+                moving from experimentation to real, measurable outcomes.
               </p>
 
-              <button className="px-5 py-2.5 rounded-[8px] font-semibold text-white bg-gradient-to-b from-[#3d234b] to-[#2a1834] hover:shadow-lg hover:from-[#4a3a6e] hover:to-[#3a1a4a] transition-all duration-300 inline-flex items-center gap-2">
+              <Link
+                href="/insights"
+                className="px-5 py-2.5 rounded-[8px] font-semibold text-white bg-gradient-to-b from-[#3d234b] to-[#2a1834] hover:shadow-lg hover:from-[#4a3a6e] hover:to-[#3a1a4a] transition-all duration-300 inline-flex items-center gap-2"
+              >
                 Read more <ArrowRight size={16} />
-              </button>
+              </Link>
             </div>
 
             {/* Logo Section */}
@@ -135,8 +138,8 @@ const FeaturedInsights = () => {
               <div className=" p-8 flex items-center justify-center ">
                 <div className="relative w-100 h-100">
                   <Image
-                    src="/insights_logo.svg"
-                    alt="Vita Logo"
+                    src="/icon.png"
+                    alt=""
                     fill
                     className="object-contain"
                   />

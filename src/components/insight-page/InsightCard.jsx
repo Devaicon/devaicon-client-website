@@ -31,12 +31,12 @@ const CategoryFilters = ({ activeCategory, onCategoryChange }) => {
 const FeaturedCard = ({ post }) => {
   return (
     <CardWrapper className="w-full mb-8 flex flex-col md:flex-row min-h-96">
-      <div className="relative w-full md:w-[45%] h-70 md:h-auto shrink-0">
+      <div className="relative w-full md:w-[45%] h-96 md:h-auto shrink-0 overflow-hidden">
         <Image
           src={post.image}
           alt={post.title}
           fill
-          className="object-cover"
+          className="object-cover hover:scale-105 transition-transform duration-500"
         />
       </div>
       <div className="p-6 md:p-8 flex flex-col justify-center flex-1">
@@ -64,12 +64,12 @@ const FeaturedCard = ({ post }) => {
 const BlogPostCard = ({ post }) => {
   return (
     <CardWrapper className="flex flex-col">
-      <div className="relative w-full h-55 shrink-0">
+      <div className="relative w-full h-56 shrink-0 overflow-hidden">
         <Image
           src={post.image}
           alt={post.title}
           fill
-          className="object-cover"
+          className="object-cover hover:scale-110 transition-transform duration-500"
         />
       </div>
 

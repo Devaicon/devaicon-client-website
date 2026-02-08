@@ -480,10 +480,10 @@ export default function Navbar() {
               <Image
                 src="/logo.svg"
                 alt="Devaicon Logo"
-                width={124}
-                height={51}
+                width={200}
+                height={100}
                 priority
-                className="object-contain w-20 sm:w-24 lg:w-28 xl:w-32 h-auto"
+                className="object-contain w-28 sm:w-32 lg:w-36 xl:w-40 h-auto"
               />
             </Link>
 
@@ -566,7 +566,7 @@ export default function Navbar() {
                 onMouseLeave={handleWhyVitaLeave}
               >
                 <Link
-                  href="#"
+                  href="/about-devaicon"
                   className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
                 >
                   Why Devaicon
@@ -1051,8 +1051,8 @@ export default function Navbar() {
                   <Image
                     src="/logo.svg"
                     alt="Devaicon Logo"
-                    width={90}
-                    height={37}
+                    width={140}
+                    height={63}
                     className="object-contain"
                   />
                 </Link>

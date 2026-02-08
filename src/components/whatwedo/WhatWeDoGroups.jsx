@@ -108,7 +108,7 @@ const WhatWeDoGroups = () => {
             href="/contact-us"
             className="group bg-white text-[#3d234b] px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-2xl inline-flex items-center gap-2"
           >
-            Get Started with Vita
+            Get Started with Devaicon
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

@@ -24,7 +24,7 @@ const TrustSection = () => {
       ],
     },
     {
-      image: "/kayak.jpg",
+      image: "/openAdex.jpg",
       badge: "Why Market Leaders Trust Us",
       title: (
         <>
@@ -38,7 +38,7 @@ const TrustSection = () => {
       ],
     },
     {
-      image: "/home_value_startups.jpg",
+      image: "/openAdex.jpg",
       badge: "Why Market Leaders Trust Us",
       title: (
         <>

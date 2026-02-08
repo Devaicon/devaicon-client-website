@@ -14,7 +14,7 @@ const FEATURED_POST = {
   category: "Digital Transformation",
   title: "Value Driven Innovation through Automation",
   description:
-    "Vita helps GCC enterprises move beyond the limits of traditional CRM & ERP software. Digital transformation is measured by quantifiable business impact.",
+    "Devaicon helps GCC enterprises move beyond the limits of traditional CRM & ERP software. Digital transformation is measured by quantifiable business impact.",
   link: "/insights/value-driven-innovation-automation",
   tags: ["Digital Transformation", "Automation", "ROI"],
 };

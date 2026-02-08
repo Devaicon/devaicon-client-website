@@ -281,12 +281,12 @@ export default function Capabilities() {
         {/* Header */}
         <div className="w-full min-h-40 sm:min-h-45 md:h-50 lg:h-58 bg-[rgba(74,45,88,1)] text-white flex flex-col items-center justify-center px-4 py-6">
           <Image
-            src="/vector.svg"
+            src="/icon.png"
             alt="Capabilities Icon"
             width={100}
             height={80}
             priority
-            className="w-15 h-12 sm:w-20 sm:h-16 md:w-25 md:h-20"
+            className="w-15 h-auto sm:w-20 sm:h-auto md:w-25 md:h-auto"
           />
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.75rem] font-bold text-center my-2">
             Devaicon Capabilities

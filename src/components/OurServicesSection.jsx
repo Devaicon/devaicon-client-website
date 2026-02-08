@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const OurServicesSection = () => {
   const [activeService, setActiveService] = useState("dynamics");
@@ -374,12 +375,12 @@ const OurServicesSection = () => {
               ))}
             </div>
 
-            <a
-              href="#"
+            <Link
+              href="/whatwedo"
               className="inline-block mt-6 md:mt-8 bg-gradient-to-b from-[#3d234b] to-[#2a1834] text-white px-5 sm:px-6 md:px-10 py-2 sm:py-2.5 md:py-4 rounded-full text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 hover:from-[#4a3a6e] hover:to-[#3a1a4a] hover:-translate-y-1 hover:shadow-lg"
             >
               Learn more
-            </a>
+            </Link>
           </div>
         </div>
       </div>
