@@ -138,7 +138,7 @@ const FeaturedInsights = () => {
               <div className=" p-8 flex items-center justify-center ">
                 <div className="relative w-100 h-100">
                   <Image
-                    src="/icon.png"
+                    src="/icon.webp"
                     alt=""
                     fill
                     className="object-contain"

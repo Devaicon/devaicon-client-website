@@ -74,7 +74,7 @@ export const metadata = {
       "Transform your business with AI, automation, and cloud solutions. 18+ years of expertise, 550+ projects, trusted by global industry leaders.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.webp",
         width: 1200,
         height: 630,
         alt: "Devaicon - Innovation Through Automation & AI",
@@ -86,7 +86,7 @@ export const metadata = {
     title: "Devaicon - Value Driven Innovation Through Automation & AI",
     description:
       "Transform your business with AI, automation, and cloud solutions. 18+ years of expertise, 550+ projects.",
-    images: ["/twitter-image.jpg"],
+    images: ["/twitter-image.webp"],
     creator: "@devaicon",
   },
   robots: {

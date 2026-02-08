@@ -32,7 +32,6 @@ import {
 } from "lucide-react";
 
 const CATEGORIES = [
-  "All",
   "Intelligent Systems & Data",
   "Application & Software Development",
   "Infrastructure & Enterprise Systems",
@@ -257,7 +256,6 @@ const CAPABILITIES_DATA = [
 
 // Map category names to capabilities page URLs
 const CATEGORY_TO_URL = {
-  All: "/capabilities",
   "Intelligent Systems & Data": "/capabilities/intelligent-systems-data",
   "Application & Software Development":
     "/capabilities/application-software-development",
@@ -268,12 +266,11 @@ const CATEGORY_TO_URL = {
 };
 
 export default function Capabilities() {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("Intelligent Systems & Data");
 
-  const filteredCapabilities =
-    activeCategory === "All"
-      ? CAPABILITIES_DATA
-      : CAPABILITIES_DATA.filter((item) => item.category === activeCategory);
+  const filteredCapabilities = CAPABILITIES_DATA.filter(
+    (item) => item.category === activeCategory
+  );
 
   return (
     <section className="w-full min-h-screen bg-[#dce5ed] flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
@@ -281,7 +278,7 @@ export default function Capabilities() {
         {/* Header */}
         <div className="w-full min-h-40 sm:min-h-45 md:h-50 lg:h-58 bg-[rgba(74,45,88,1)] text-white flex flex-col items-center justify-center px-4 py-6">
           <Image
-            src="/icon.png"
+            src="/icon.webp"
             alt="Capabilities Icon"
             width={100}
             height={80}
@@ -298,18 +295,18 @@ export default function Capabilities() {
 
         {/* Filters */}
         <div className="w-full py-6 sm:py-8 px-4">
-          <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+          <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <div className="flex gap-2 sm:gap-3 min-w-max pb-2">
               {CATEGORIES.map((category) => (
                 <button
                   key={category}
                   onClick={() => setActiveCategory(category)}
                   aria-pressed={activeCategory === category}
-                  className={`h-9 sm:h-10 px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium text-white whitespace-nowrap cursor-pointer
+                  className={`h-12 sm:h-13 md:h-14 px-5 sm:px-6 md:px-7 py-2.5 rounded-full text-sm sm:text-base md:text-lg font-semibold text-white whitespace-nowrap cursor-pointer
                     bg-gradient-to-b from-[#3e234c] to-[#6c3c85]
                     focus-visible:outline-2 focus-visible:outline-[rgba(90,58,104,0.5)]
-                    transition-shadow duration-200
-                    ${activeCategory === category ? "bg-[#6b4775] shadow-lg" : "hover:shadow-md"}`}
+                    transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+                    ${activeCategory === category ? "bg-[#6b4775] shadow-lg bg-gradient-to-b from-[#3e2340] to-[#6c3c80]" : "hover:shadow-md hover:from-[#4a2d58] hover:to-[#7a4a9f] opacity-80"}`}
                 >
                   {category}
                 </button>

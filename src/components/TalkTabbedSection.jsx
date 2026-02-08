@@ -67,7 +67,7 @@ const TalkTabbedSection = () => {
             {/* Background Image */}
             <div className="w-full h-full">
               <img
-                src="/bg.png"
+                src="/bg.webp"
                 alt="Background"
                 className="w-full h-full object-cover"
               />

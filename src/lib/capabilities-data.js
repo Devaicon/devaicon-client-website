@@ -15,7 +15,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Artificial Intelligence & Machine Learning",
         icon: "Brain",
         iconAlt: "AI & ML Icon",
-        image: "/images/ai-ml.webp",
+        image: "/Artificial Intelligence.webp",
         description:
           "Custom AI models built to solve real business problems, not demo projects. This includes predictive systems, recommendation engines, automation logic, and intelligent decision support tailored to your workflows.",
         solutionText: [
@@ -32,7 +32,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Data Science & Analytics",
         icon: "TrendingUp",
         iconAlt: "Data Science Icon",
-        image: "/images/data-analytics.webp",
+        image: "/Data Science.webp",
         description:
           "Turning raw data into insight. We design data pipelines, analytics dashboards, and reporting systems that help organisations understand trends, measure performance, and make informed decisions at scale.",
         solutionText: [
@@ -49,7 +49,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Natural Language Processing (NLP)",
         icon: "MessageSquare",
         iconAlt: "NLP Icon",
-        image: "/images/nlp.webp",
+        image: "/Natural Language Processing.webp",
         description:
           "Systems that understand and generate human language. This covers enterprise chatbots, text classification, sentiment analysis, document processing, and AI assistants integrated into existing platforms.",
         solutionText: [
@@ -66,7 +66,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Computer Vision",
         icon: "Eye",
         iconAlt: "Computer Vision Icon",
-        image: "/images/computer-vision.webp",
+        image: "/Computer Vision.webp",
         description:
           "AI solutions that interpret images and video. Use cases include object detection, facial recognition, visual inspection, and automated monitoring for security, healthcare, and industrial applications.",
         solutionText: [
@@ -83,7 +83,7 @@ export const CAPABILITIES_CONFIG = {
         title: "AR & VR Solutions",
         icon: "Glasses",
         iconAlt: "AR VR Icon",
-        image: "/images/ar-vr.webp",
+        image: "/AR & VR Solutions.webp",
         description:
           "Immersive technologies for training, simulation, and remote collaboration. We develop practical AR and VR experiences that improve learning outcomes and operational efficiency.",
         solutionText: [
@@ -109,7 +109,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Web & Mobile Application Development",
         icon: "Globe",
         iconAlt: "Web Mobile Dev Icon",
-        image: "/images/web-mobile-dev.webp",
+        image: "/Mobile Application Development.webp",
         description:
           "End to end development of scalable web platforms and mobile applications. From MVPs to enterprise systems, we handle frontend, backend, APIs, and integrations with a focus on performance and security.",
         solutionText: [
@@ -126,7 +126,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Desktop Application Development",
         icon: "Monitor",
         iconAlt: "Desktop Dev Icon",
-        image: "/images/desktop-dev.webp",
+        image: "/Desktop Application Development.webp",
         description:
           "Robust desktop software for business and operational needs. Ideal for environments requiring offline access, local processing, or tight integration with hardware and internal systems.",
         solutionText: [
@@ -143,7 +143,7 @@ export const CAPABILITIES_CONFIG = {
         title: "UI & UX Design",
         icon: "Palette",
         iconAlt: "UI UX Icon",
-        image: "/images/ui-ux-design.webp",
+        image: "/UI_UX.webp",
         description:
           "User experience design that prioritises clarity and usability. We create interfaces that are intuitive, consistent, and aligned with business goals, not just visually pleasing.",
         solutionText: [
@@ -169,7 +169,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Cloud & DevOps Services",
         icon: "Cloud",
         iconAlt: "Cloud DevOps Icon",
-        image: "/images/cloud-devops.webp",
+        image: "/ai.webp",
         description:
           "Designing and managing cloud infrastructure using modern DevOps practices. This includes CI/CD pipelines, containerisation, monitoring, performance optimisation, and secure deployments on AWS, Azure, or GCP.",
         solutionText: [
@@ -186,7 +186,7 @@ export const CAPABILITIES_CONFIG = {
         title: "ERP Systems & Business Automation",
         icon: "Settings",
         iconAlt: "ERP Icon",
-        image: "/images/erp-automation.webp",
+        image: "/Business Automation.webp",
         description:
           "Custom ERP solutions and workflow automation tailored to organisational processes. We replace manual operations with integrated systems that improve efficiency, accuracy, and visibility across departments.",
         solutionText: [
@@ -203,7 +203,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Support & Maintenance",
         icon: "Headphones",
         iconAlt: "Support Icon",
-        image: "/images/support-maintenance.webp",
+        image: "/Maintenance & Support.webp",
         description:
           "Ongoing technical support to keep systems running smoothly. This includes monitoring, bug fixes, performance improvements, security updates, and feature enhancements after launch.",
         solutionText: [
@@ -229,7 +229,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Digital Transformation Consulting",
         icon: "Target",
         iconAlt: "Digital Transformation Icon",
-        image: "/images/digital-transformation.webp",
+        image: "/Digital Transformation.webp",
         description:
           "Assessment and redesign of business processes using modern technology. We help organisations move from outdated systems to efficient, scalable digital operations with a clear transformation roadmap.",
         solutionText: [
@@ -246,7 +246,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Technology Strategy & Advisory",
         icon: "Lightbulb",
         iconAlt: "Tech Strategy Icon",
-        image: "/images/tech-strategy.webp",
+        image: "/Advisory.webp",
         description:
           "Guidance on technology decisions that actually align with business objectives. This includes system audits, architecture planning, tool selection, and long term technology roadmaps.",
         solutionText: [
@@ -272,7 +272,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Open edX Hosting",
         icon: "Server",
         iconAlt: "Open edX Hosting Icon",
-        image: "/images/openedx-hosting.webp",
+        image: "/Hosting.webp",
         description:
           "Secure, scalable cloud hosting for Open edX platforms, optimized for performance, reliability, and global learner access.",
         solutionText: [
@@ -289,7 +289,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Customization & Feature Development",
         icon: "Puzzle",
         iconAlt: "Customization Icon",
-        image: "/images/openedx-customization.webp",
+        image: "/Feature Development.webp",
         description:
           "Tailored Open edX enhancements built through plugins and extensions—adding new functionality without modifying the core platform.",
         solutionText: [
@@ -306,7 +306,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Branding & UI/UX",
         icon: "PenTool",
         iconAlt: "Branding Icon",
-        image: "/images/openedx-branding.webp",
+        image: "/UI_UX.webp",
         description:
           "Fully branded learning experiences with custom themes, layouts, and UI refinements that align Open edX with your organization's identity.",
         solutionText: [
@@ -323,7 +323,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Content Authoring & Course Development",
         icon: "FileText",
         iconAlt: "Course Development Icon",
-        image: "/images/course-development.webp",
+        image: "/Course Development.webp",
         description:
           "Design and build engaging courses using Open edX Studio, XBlocks, and interactive content aligned with instructional best practices.",
         solutionText: [
@@ -340,7 +340,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Integrations & SSO",
         icon: "Lock",
         iconAlt: "Integration Icon",
-        image: "/images/openedx-integrations.webp",
+        image: "/Integrations.webp",
         description:
           "Seamless integration with enterprise systems including SSO, HR platforms, CRMs, analytics tools, and internal applications.",
         solutionText: [
@@ -357,7 +357,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Deployment & Environment Setup",
         icon: "GitBranch",
         iconAlt: "Deployment Icon",
-        image: "/images/openedx-deployment.webp",
+        image: "/Deployment & Environment Setup.webp",
         description:
           "End-to-end setup of development, staging, and production environments following best practices for security and maintainability.",
         solutionText: [
@@ -374,7 +374,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Release Upgrades & Version Management",
         icon: "RefreshCw",
         iconAlt: "Upgrade Icon",
-        image: "/images/openedx-upgrades.webp",
+        image: "/Version Management.webp",
         description:
           "Smooth upgrades to newer Open edX releases with minimal downtime—ensuring access to new features while protecting custom work.",
         solutionText: [
@@ -391,7 +391,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Maintenance & Support",
         icon: "Wrench",
         iconAlt: "Maintenance Icon",
-        image: "/images/openedx-maintenance.webp",
+        image: "/Maintenance & Support.webp",
         description:
           "Ongoing monitoring, bug fixes, security updates, and operational support to keep your Open edX platform running smoothly.",
         solutionText: [
@@ -408,7 +408,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Analytics & Reporting",
         icon: "BarChart3",
         iconAlt: "Analytics Icon",
-        image: "/images/openedx-analytics.webp",
+        image: "/Analytics.webp",
         description:
           "Advanced learner insights, progress tracking, and custom reports using Open edX data pipelines and external BI tools.",
         solutionText: [
@@ -425,7 +425,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Multi-Tenant & Regional Deployments",
         icon: "Users",
         iconAlt: "Multi-Tenant Icon",
-        image: "/images/openedx-multi-tenant.webp",
+        image: "/Regional.webp",
         description:
           "Support for multiple audiences, regions, or business units with isolated data, branding, and configuration options.",
         solutionText: [

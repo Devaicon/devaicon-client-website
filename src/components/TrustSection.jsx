@@ -9,7 +9,7 @@ const TrustSection = () => {
 
   const slides = [
     {
-      image: "/openAdex.jpg",
+      image: "/openAdex.webp",
       badge: "Why Market Leaders Trust Us",
       title: (
         <>
@@ -24,7 +24,7 @@ const TrustSection = () => {
       ],
     },
     {
-      image: "/openAdex.jpg",
+      image: "/openAdex.webp",
       badge: "Why Market Leaders Trust Us",
       title: (
         <>
@@ -38,7 +38,7 @@ const TrustSection = () => {
       ],
     },
     {
-      image: "/openAdex.jpg",
+      image: "/openAdex.webp",
       badge: "Why Market Leaders Trust Us",
       title: (
         <>

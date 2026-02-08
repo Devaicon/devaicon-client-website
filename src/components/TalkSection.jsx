@@ -414,7 +414,7 @@ const TalkSection = () => {
             {/* Background Image */}
             <div className="w-180 h-100">
               <img
-                src="/bg.png"
+                src="/bg.webp"
                 alt="Background"
                 className="w-full h-full object-cover rounded-2xl"
               />

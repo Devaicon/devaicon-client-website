@@ -14,7 +14,7 @@ export const INDUSTRIES_CONFIG = {
         title: "BFSI (Banking & Financial Services)",
         icon: "DollarSign",
         iconAlt: "Banking & Financial Services Icon",
-        image: "/images/Banking & Financial.webp",
+        image: "/Banking.webp",
         description:
           "Banks and financial institutions and organizations handle millions of transactions daily. So they work with strict regulations and need accurate, secure data management across every touchpoint.",
         industryContext:
@@ -48,7 +48,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Public Sector",
         icon: "Building2",
         iconAlt: "Public Sector Icon",
-        image: "/images/Public Sector.webp",
+        image: "/Public.webp",
         description:
           "Government agencies manage citizen services, budgets and cross-departmental projects. But the digital transformation here means better transparency, faster service delivery and clear accountability.",
         industryContext:
@@ -82,7 +82,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Tourism & Hospitality",
         icon: "MapPin",
         iconAlt: "Tourism & Hospitality Icon",
-        image: "/images/Tourism.webp",
+        image: "/Tourism.webp",
         description:
           "Hotels, resorts, and travel companies compete on experience. Guests expect smooth booking, personalized service and quick response times across every channel.",
         industryContext:
@@ -116,7 +116,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Trading & Manufacturing",
         icon: "Factory",
         iconAlt: "Trading & Manufacturing Icon",
-        image: "/images/Trading.webp",
+        image: "/Trading.webp",
         description:
           "Manufacturers and trading companies need precision. Supply chain disruptions, production delays, or inventory mismatches directly impact revenue and customer satisfaction.",
         industryContext:
@@ -150,7 +150,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Retail",
         icon: "Store",
         iconAlt: "Retail Icon",
-        image: "/images/Retail.webp",
+        image: "/Retail.webp",
         description:
           "Retailers operate in physical stores, online platforms, and hybrid models. Success depends on knowing what customers want, having it in stock, and delivering a consistent experience everywhere.",
         industryContext:
@@ -184,7 +184,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Professional Services",
         icon: "Briefcase",
         iconAlt: "Professional Services Icon",
-        image: "/images/Professional.webp",
+        image: "/Professional Services.webp",
         description:
           "Consulting firms, legal practices, and service providers juggle multiple client projects, billing cycles, and compliance requirements. Efficiency and transparency determine profitability.",
         industryContext:
@@ -218,7 +218,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Non-Profit Organizations",
         icon: "Heart",
         iconAlt: "Non-Profit Organizations Icon",
-        image: "/images/Non-Profit.webp",
+        image: "/Non-Profit Organizations.webp",
         description:
           "Non-profits balance program delivery with donor relationships, regulatory requirements, and impact measurement. Every dollar needs to count, and stakeholders expect clear reporting.",
         industryContext:
@@ -252,7 +252,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Education & Training",
         icon: "GraduationCap",
         iconAlt: "Education & Training Icon",
-        image: "/images/Education & Training.webp",
+        image: "/Education.webp",
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
         industryContext:
