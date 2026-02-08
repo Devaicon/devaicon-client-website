@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://withdevaicon.cloud"),
+  metadataBase: new URL("https://devaicon.com"),
   title: {
     default: "Devaicon - Value Driven Innovation Through Automation & AI",
     template: "%s | Devaicon",

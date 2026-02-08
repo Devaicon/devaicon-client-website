@@ -10,17 +10,6 @@ const ResourcesHub = () => {
 
   const INSIGHTS_DATA = [
     {
-      id: 1,
-      slug: "value-driven-innovation-automation",
-      image: "/Hero-img.webp",
-      tag: "Digital Transformation",
-      readTime: "7 min read",
-      date: "15 JAN",
-      title: "Value Driven Innovation through Automation",
-      description:
-        "Devaicon helps GCC enterprises move beyond the limits of traditional CRM & ERP software.",
-    },
-    {
       id: 2,
       slug: "agentic-ai",
       image: "/hero-img3.webp",
@@ -92,7 +81,7 @@ const ResourcesHub = () => {
 
   const showFeatured =
     activeFilter === "all" &&
-    ("Azure Cloud Migration: Transform Your Business Infrastructure"
+    ("Value Driven Innovation through Automation"
       .toLowerCase()
       .includes(searchTerm.toLowerCase()) ||
       searchTerm === "");
@@ -165,31 +154,31 @@ const ResourcesHub = () => {
             <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-full flex flex-col md:flex-row min-h-96">
               <div className="relative w-full md:w-[45%] h-96 md:h-auto shrink-0 overflow-hidden">
                 <img
-                  src="/on-demand1.webp"
-                  alt="Azure Cloud Migration"
+                  src="/Hero-img.webp"
+                  alt="Value Driven Innovation through Automation"
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="p-6 md:p-8 flex flex-col justify-center flex-1">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="inline-block px-3 py-1 bg-gradient-to-b from-[#3d234b] to-[#2a1834] text-white text-xs font-semibold rounded">
-                    Featured Webinar
+                    Digital Transformation
                   </span>
-                  <span className="text-sm text-gray-500">5 min read</span>
+                  <span className="text-sm text-gray-500">7 min read</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
-                  Azure Cloud Migration: Transform Your Business Infrastructure
+                  Value Driven Innovation through Automation
                 </h2>
                 <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-5">
-                  Join our comprehensive webinar to discover best practices,
-                  strategies, and real-world case studies for successful cloud
-                  migration. Learn from Microsoft certified experts.
+                  Devaicon helps GCC enterprises move beyond the limits of
+                  traditional CRM & ERP software. Discover how automation drives
+                  value and innovation in your business operations.
                 </p>
                 <Link
-                  href="#"
+                  href="/insights/value-driven-innovation-automation"
                   className="px-5 py-2.5 rounded-[8px] font-semibold text-white bg-gradient-to-b from-[#3d234b] to-[#2a1834] hover:shadow-lg hover:from-[#4a3a6e] hover:to-[#3a1a4a] transition-all duration-300 self-start cursor-pointer inline-flex items-center gap-1"
                 >
-                  Register Now
+                  Read More
                   <svg
                     className="w-4 h-4"
                     fill="currentColor"

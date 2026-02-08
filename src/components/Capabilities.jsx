@@ -284,7 +284,7 @@ export default function Capabilities() {
         {/* Header */}
         <div className="w-full min-h-40 sm:min-h-45 md:h-50 lg:h-58 bg-[rgba(74,45,88,1)] text-white flex flex-col items-center justify-center px-4 py-6">
           <Image
-            src="/icon.webp"
+            src="/capabilities_icon.svg"
             alt="Capabilities Icon"
             width={100}
             height={80}
@@ -301,8 +301,8 @@ export default function Capabilities() {
 
         {/* Filters */}
         <div className="w-full py-6 relative">
-          <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative">
-            <div className="flex gap-2 sm:gap-3 min-w-max px-4">
+          <div className="w-full px-4">
+            <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
               {CATEGORIES.map((category) => {
                 const IconComponent = category.icon;
                 return (
@@ -315,7 +315,7 @@ export default function Capabilities() {
                       focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c3c85]
                       ${
                         activeCategory === category.name
-                          ? "bg-gradient-to-b from-[#2a1830] to-[#3d2340] shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)] "
+                          ? "bg-gradient-to-b from-[#3b2244] to-[#2d1a33] shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)] "
                           : "bg-gradient-to-b from-[#3e2340] to-[#6c3c85] shadow-[0_2px_4px_rgba(0,0,0,0.2)] hover:from-[#351d40] hover:to-[#5a3271] active:shadow-[inset_0_4px_6px_rgba(0,0,0,0.6)] active:from-[#2d1a38] active:to-[#4a2d58]"
                       }`}
                   >

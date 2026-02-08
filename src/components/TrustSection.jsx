@@ -15,42 +15,42 @@ const TrustSection = () => {
         <>
           One of the Biggest{" "}
           <span className="text-[#281333]">Open Source Contributors</span> for
-          LearnHub Platform
+          OpenEdX Platform
         </>
       ),
       stats: [
-        { value: "3000+", label: "Pull Requests Across All GitHub Repos." },
-        { value: "10+", label: "Years of Contribution" },
+        { value: "1500+", label: "Pull Requests Across All GitHub Repos." },
+        { value: "2+", label: "Years of Contribution" },
       ],
     },
-    {
-      image: "/openAdex.webp",
-      badge: "Why Market Leaders Trust Us",
-      title: (
-        <>
-          Work with the Team that Made TripFinder into a Leading{" "}
-          <span className="text-[#281333]">Travel Search Engine</span>
-        </>
-      ),
-      stats: [
-        { value: "50M+", label: "Travelers Served Worldwide" },
-        { value: "17+ Years", label: "In the Travel Tech Industry" },
-      ],
-    },
-    {
-      image: "/openAdex.webp",
-      badge: "Why Market Leaders Trust Us",
-      title: (
-        <>
-          Creating Real Value: Our Track Record with{" "}
-          <span className="text-[#281333]">50+ Tech Startups</span>
-        </>
-      ),
-      stats: [
-        { value: "$1B+", label: "In Revenue" },
-        { value: "500M+", label: "Number of Users" },
-      ],
-    },
+    // {
+    //   image: "/openAdex.webp",
+    //   badge: "Why Market Leaders Trust Us",
+    //   title: (
+    //     <>
+    //       Work with the Team that Made TripFinder into a Leading{" "}
+    //       <span className="text-[#281333]">Travel Search Engine</span>
+    //     </>
+    //   ),
+    //   stats: [
+    //     { value: "50M+", label: "Travelers Served Worldwide" },
+    //     { value: "17+ Years", label: "In the Travel Tech Industry" },
+    //   ],
+    // },
+    // {
+    //   image: "/openAdex.webp",
+    //   badge: "Why Market Leaders Trust Us",
+    //   title: (
+    //     <>
+    //       Creating Real Value: Our Track Record with{" "}
+    //       <span className="text-[#281333]">50+ Tech Startups</span>
+    //     </>
+    //   ),
+    //   stats: [
+    //     { value: "$1B+", label: "In Revenue" },
+    //     { value: "500M+", label: "Number of Users" },
+    //   ],
+    // },
   ];
 
   // Auto-play carousel
@@ -61,7 +61,7 @@ const TrustSection = () => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
         setIsAnimating(false);
       }, 300);
-    }, 3000); // Change slide every 3 seconds
+    }, 6000); // Change slide every 3 seconds
 
     return () => clearInterval(interval);
   }, [slides.length]);
@@ -146,7 +146,7 @@ const TrustSection = () => {
         </div>
 
         {/* Navigation Arrows */}
-        <button
+        {/* <button
           onClick={prevSlide}
           className="hidden 2xl:flex absolute left-2 sm:left-4 md:left-6 lg:left-50 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 bg-[#281333] hover:bg-[#3a1a4a] text-white rounded-full items-center justify-center transition-colors duration-200 shadow-md"
           aria-label="Previous slide"
@@ -184,7 +184,7 @@ const TrustSection = () => {
               d="M9 5l7 7-7 7"
             />
           </svg>
-        </button>
+        </button>*/}
 
         {/* Carousel Dots */}
         <div className="carousel-dots justify-center">

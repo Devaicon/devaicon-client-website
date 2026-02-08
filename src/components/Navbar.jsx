@@ -886,14 +886,9 @@ export default function Navbar() {
                 <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                   {/* Link 1 */}
                   <div>
-                    <Link
-                      href="/engagement-models/software-development-outsourcing"
-                      className="group inline-block"
-                    >
-                      <h4 className="text-sm font-bold text-gray-900 mb-2 group-hover:text-[#3d234b] transition-colors border-b-2 border-[#3d234b] pb-1">
-                        Software Development Outsourcing
-                      </h4>
-                    </Link>
+                    <h4 className="group inline-block text-sm font-bold text-gray-900 mb-2 group-hover:text-[#3d234b] transition-colors border-b-2 border-[#3d234b] pb-1">
+                      Software Development Outsourcing
+                    </h4>
                     <p className="text-xs text-gray-600 leading-relaxed mt-2">
                       Building your software with our expert team.
                     </p>
@@ -916,14 +911,10 @@ export default function Navbar() {
 
                   {/* Link 3 */}
                   <div>
-                    <Link
-                      href="/engagement-models/it-staff-augmentation"
-                      className="group inline-block"
-                    >
-                      <h4 className="text-sm font-bold text-gray-900 mb-2 group-hover:text-[#3d234b] transition-colors border-b-2 border-[#3d234b] pb-1">
-                        IT Staff Augmentation
-                      </h4>
-                    </Link>
+                    <h4 className="group inline-block text-sm font-bold text-gray-900 mb-2 group-hover:text-[#3d234b] transition-colors border-b-2 border-[#3d234b] pb-1">
+                      IT Staff Augmentation
+                    </h4>
+
                     <p className="text-xs text-gray-600 leading-relaxed mt-2">
                       Quick engagement to boost your team.
                     </p>
@@ -931,14 +922,10 @@ export default function Navbar() {
 
                   {/* Link 4 */}
                   <div>
-                    <Link
-                      href="/engagement-models/new-venture-partnership"
-                      className="group inline-block"
-                    >
-                      <h4 className="text-sm font-bold text-gray-900 mb-2 group-hover:text-[#3d234b] transition-colors border-b-2 border-[#3d234b] pb-1">
-                        New Venture Partnership
-                      </h4>
-                    </Link>
+                    <h4 className="group inline-block text-sm font-bold text-gray-900 mb-2 group-hover:text-[#3d234b] transition-colors border-b-2 border-[#3d234b] pb-1">
+                      New Venture Partnership
+                    </h4>
+
                     <p className="text-xs text-gray-600 leading-relaxed mt-2">
                       Collaborative launch for your business success.
                     </p>

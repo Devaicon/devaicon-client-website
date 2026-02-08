@@ -5,13 +5,12 @@ const EnterpriseExcellence = () => {
     <section className="w-full min-h-128 sm:min-h-150 md:min-h-170 lg:h-186 bg-brand-primary flex flex-col items-center justify-center rounded-none sm:rounded-lg lg:rounded-xl py-8 sm:py-12 md:py-16 lg:py-0 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-7xl box-border flex flex-col items-start justify-center gap-3 sm:gap-4 lg:gap-5">
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-semibold text-white leading-[1.1] sm:leading-[1.05] lg:leading-[0.95]">
-          Microsoft-Aligned Enterprise Excellence
+          Technology-Driven Enterprise Excellence
         </h2>
 
         <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl font-normal text-white/90 mt-2 sm:mt-3 lg:mt-5">
-          As a trusted Microsoft partner, we deliver world-class solutions that
-          drive digital transformation and business growth across the GCC
-          region.
+          As a trusted Technology partner, we deliver world-class solutions that
+          drive digital transformation and business growth across the Globe.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-2.5 mt-4 sm:mt-5 lg:mt-5 w-full">

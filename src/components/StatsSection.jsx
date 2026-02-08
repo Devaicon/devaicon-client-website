@@ -26,9 +26,9 @@ const StatsSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-4">
         {/* Heading */}
         <h2 className="section-heading text-gray-900 leading-tight px-2">
-          A Journey of <span className="text-brand">18 years</span> with{" "}
-          <span className="text-brand">550+</span> projects and{" "}
-          <span className="text-brand">100+</span> tech partnerships
+          A Journey of <span className="text-brand">5 years</span> with{" "}
+          <span className="text-brand">100+</span> projects and{" "}
+          <span className="text-brand">20+</span> tech partnerships
         </h2>
 
         {/* Stats Box */}
@@ -57,7 +57,7 @@ const StatsSection = () => {
             {/* Stat 4 */}
             <div className="stat-item">
               <div className="text-4xl sm:text-5xl font-bold mb-2">
-                Avg. 5 Years
+                Avg. 2 Years
               </div>
               <div className="text-purple-100 text-sm">Client Relationship</div>
             </div>

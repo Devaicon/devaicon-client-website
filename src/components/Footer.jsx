@@ -17,16 +17,26 @@ const Footer = () => {
 
   const capabilities = [
     { name: "Capabilities Overview", href: "/capabilities" },
-    { name: "AI", href: "/capabilities/intelligent-systems-data" },
     {
-      name: "Business Applications",
+      name: "Intelligent Systems & Data",
+      href: "/capabilities/intelligent-systems-data",
+    },
+    {
+      name: "Application & Software Development",
       href: "/capabilities/application-software-development",
     },
     {
-      name: "Cloud Services",
+      name: "Infrastructure & Enterprise Systems",
       href: "/capabilities/infrastructure-enterprise-systems",
     },
-    { name: "Data", href: "/capabilities/intelligent-systems-data" },
+    {
+      name: "Consulting & Transformation",
+      href: "/capabilities/consulting-transformation",
+    },
+    {
+      name: "Open edX Services",
+      href: "/capabilities/open-edx-services",
+    },
   ];
 
   const company = [
@@ -41,29 +51,14 @@ const Footer = () => {
 
   const offices = [
     {
-      name: "San Francisco",
-      phone: "+1 415 555 0123",
-      address: "500 Market Street, San Francisco, CA 94102",
+      name: "UAE",
+      phone: "+971 50 700 1805",
+      address: "Business Center, Sharjah Publishing City Free Zone, Sharjah.",
     },
     {
-      name: "Toronto",
-      phone: "+1 416 555 7890",
-      address: "250 Yonge Street, Toronto, ON M5B 2L7",
-    },
-    {
-      name: "Mumbai",
-      phone: "+91 22 5555 1234",
-      address: "350 Marine Drive, Mumbai, India 400002",
-    },
-    {
-      name: "Sydney",
-      phone: "+61 2 5555 6789",
-      address: "100 George Street, Sydney, NSW 2000",
-    },
-    {
-      name: "Paris",
-      phone: "+33 1 5555 4321",
-      address: "75 Champs-Élysées, Paris, France 75008",
+      name: "Pakistan",
+      phone: "+92 330 6467955",
+      address: "Zakaria Arcade, Khanewal Rd, Chungi No.9, Multan, Punjab.",
     },
   ];
 
@@ -166,9 +161,10 @@ const Footer = () => {
               {/* Social Media Icons */}
               <div className="flex flex-wrap gap-3 sm:gap-4">
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/company/devaicon"
                   className="w-10 h-10 rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-white transition-colors"
                   aria-label="LinkedIn"
+                  target="_blank"
                 >
                   <svg
                     className="w-5 h-5"
