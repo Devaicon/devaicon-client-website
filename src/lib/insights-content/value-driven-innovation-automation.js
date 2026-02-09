@@ -6,11 +6,11 @@ export default {
   title: "Value Driven Innovation through Automation",
   subtitle:
     "Digital transformation is no longer defined by system deployments alone. It's measured by quantifiable business impact. Organizations and businesses worldwide implement Dynamics 365, AI, and intelligent automation, expecting efficiency, visibility, and accelerated growth. But are these technologies actually improving business outcomes?",
-  heroImage: "/hero-img.webp",
+  heroImage: "/hero-img3.webp",
   author: {
     name: "Devaicon Technology Team",
     role: "Enterprise Transformation Specialists",
-    avatar: "/hero-img.webp",
+    avatar: "/hero-img2.webp",
   },
   tags: ["Digital Transformation", "Automation", "ROI", "Dynamics 365"],
   content: {
