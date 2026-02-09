@@ -20,6 +20,7 @@ export default function HomePage() {
       <ServicesSection />
       <EnterpriseExcellence />
       <Capabilities />
+      {/* TODO: Update these Sections later */}
       {/* <OurServicesSection />*/}
       {/* <BadgesSection /> */}
 
