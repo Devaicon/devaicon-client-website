@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -9,7 +10,7 @@ const HeroSection = () => {
 
   const slides = [
     {
-      image: "/heroimg1.jpeg",
+      image: "/heroimg1.webp",
       title: (
         <>
           {/* <span className="text-gray-900"> </span> */}
@@ -133,15 +134,17 @@ const HeroSection = () => {
             </p>
 
             {/* CTA Button */}
-            <button
-              className={`btn btn-primary text-sm sm:text-base lg:text-sm xl:text-base 2xl:text-lg shadow-lg hover:shadow-xl transition-all duration-700 ease-in-out ${
-                isAnimating
-                  ? "opacity-0 -translate-x-16"
-                  : "opacity-100 translate-x-0"
-              }`}
-            >
-              {slides[currentSlide].buttonText}
-            </button>
+            <Link href="/contact-us">
+              <button
+                className={`btn btn-primary text-sm sm:text-base lg:text-sm xl:text-base 2xl:text-lg shadow-lg hover:shadow-xl transition-all duration-700 ease-in-out ${
+                  isAnimating
+                    ? "opacity-0 -translate-x-16"
+                    : "opacity-100 translate-x-0"
+                }`}
+              >
+                {slides[currentSlide].buttonText}
+              </button>
+            </Link>
 
             {/* Carousel Dots */}
             <div className="carousel-dots">

@@ -44,8 +44,8 @@ export default function PartnerContactCard() {
               </div>
               <div className={styles.contactText}>
                 <div className={styles.contactTitle}>Give us a call</div>
-                <a href="tel:+12148563756" className={styles.contactInfo}>
-                  +1 214 856 3756
+                <a href="tel:+971507001805" className={styles.contactInfo}>
+                  +971 50 700 1805
                 </a>
               </div>
             </div>

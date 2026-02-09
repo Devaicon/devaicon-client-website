@@ -16,7 +16,6 @@ const Footer = () => {
   ];
 
   const capabilities = [
-    { name: "Capabilities Overview", href: "/capabilities" },
     {
       name: "Intelligent Systems & Data",
       href: "/capabilities/intelligent-systems-data",

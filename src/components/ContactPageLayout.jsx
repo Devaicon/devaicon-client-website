@@ -81,13 +81,17 @@ const ContactPageLayout = () => {
           {/* Right Side - Map and Visit Office */}
           <div className="flex-1 space-y-6">
             {/* Map Section */}
-            <div className="bg-white rounded-2xl shadow-lg py-8 flex justify-center h-100">
-              <Image
-                src="/map.svg"
-                alt="Office Location Map"
-                width={600}
-                height={400}
-              />
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[400px]">
+              <iframe
+                src="https://maps.google.com/maps?q=Business+Center,+Sharjah+Publishing+City+Free+Zone,+Sharjah&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Office Location Map"
+              ></iframe>
             </div>
 
             {/* Visit Our Office Section */}
@@ -106,11 +110,11 @@ const ContactPageLayout = () => {
                       Address
                     </h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      Office 704, 7th Floor, 5EA Building (East Wing)
+                      Business Center
                       <br />
-                      Dubai Airport Freezone Authority – DAFZA
+                      Sharjah Publishing City Free Zone
                       <br />
-                      Dubai, United Arab Emirates
+                      Sharjah, United Arab Emirates
                     </p>
                   </div>
                 </div>
@@ -122,7 +126,7 @@ const ContactPageLayout = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
-                    <p className="text-sm text-gray-600">+971 50 702 0541</p>
+                    <p className="text-sm text-gray-600">+971 50 700 1805</p>
                   </div>
                 </div>
 

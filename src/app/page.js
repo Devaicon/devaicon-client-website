@@ -14,13 +14,13 @@ export default function HomePage() {
   return (
     <main>
       <HeroSection />
-      <TrustSection />
+      {/* TODO: Update these Sections later */}
+      {/* <TrustSection /> */}
       <StatsSection />
       <IndustrySection />
       <ServicesSection />
       <EnterpriseExcellence />
       <Capabilities />
-      {/* TODO: Update these Sections later */}
       {/* <OurServicesSection />*/}
       {/* <BadgesSection /> */}
 

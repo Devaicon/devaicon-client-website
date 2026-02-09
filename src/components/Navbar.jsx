@@ -500,7 +500,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/industries"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-md xl:text-md relative whitespace-nowrap flex items-center gap-1"
                 >
                   Industries
                   <ChevronDown
@@ -519,7 +519,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/capabilities/intelligent-systems-data"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-md xl:text-md relative whitespace-nowrap flex items-center gap-1"
                 >
                   Capabilities
                   <ChevronDown
@@ -534,7 +534,7 @@ export default function Navbar() {
               <li>
                 <Link
                   href="/insights"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-md xl:text-md relative whitespace-nowrap"
                 >
                   Insights
                 </Link>
@@ -548,7 +548,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/engagement-models"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-md xl:text-md relative whitespace-nowrap flex items-center gap-1"
                 >
                   Engagement Models
                   <ChevronDown
@@ -567,7 +567,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/about-devaicon"
-                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-xs xl:text-sm relative whitespace-nowrap flex items-center gap-1"
+                  className="text-gray-700 hover:text-[#3d234b] transition-colors font-bold text-md xl:text-md relative whitespace-nowrap flex items-center gap-1"
                 >
                   Why Devaicon
                   <ChevronDown
@@ -794,91 +794,17 @@ export default function Navbar() {
         >
           <div className="bg-white shadow-2xl rounded-b-3xl border-x-2 border-b-2 border-gray-200 overflow-hidden w-full p-6">
             <div className="flex gap-6">
-              {/* Left Section - Client Feedback Carousel */}
-              <div className="w-1/2 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-6 rounded-2xl animate-slideInLeft shadow-lg">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Hear From Our Clients
+              {/* Left Section - Engagement Models Header */}
+              <div className="w-1/2 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-8 rounded-2xl animate-slideInLeft shadow-lg flex flex-col justify-center">
+                <h3 className="text-4xl font-bold text-gray-900 mb-4">
+                  Engagement Models
                 </h3>
-
-                <div className="relative">
-                  {/* Feedback Content */}
-                  <div className="transition-all duration-500 ease-in-out">
-                    {/* Company Logo */}
-                    <div className="mb-3">
-                      <Image
-                        src={clientFeedbacks[currentFeedbackIndex].logo}
-                        alt={clientFeedbacks[currentFeedbackIndex].company}
-                        width={100}
-                        height={32}
-                        className="h-8 w-auto object-contain"
-                      />
-                    </div>
-
-                    {/* Feedback Text */}
-                    <div className="mb-0 min-h-17">
-                      <p className="text-gray-700 text-sm leading-relaxed italic">
-                        &quot;
-                        {clientFeedbacks[currentFeedbackIndex].feedback}
-                        &quot;
-                      </p>
-                    </div>
-
-                    {/* Client Info */}
-                    <div className="flex items-center gap-1 mb-3">
-                      <Image
-                        src={clientFeedbacks[currentFeedbackIndex].clientImage}
-                        alt={clientFeedbacks[currentFeedbackIndex].clientName}
-                        width={48}
-                        height={48}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-[#3d234b]"
-                      />
-                      <div>
-                        <h4 className="text-sm font-bold text-gray-900">
-                          {clientFeedbacks[currentFeedbackIndex].clientName}
-                        </h4>
-                        <p className="text-xs text-gray-600">
-                          {
-                            clientFeedbacks[currentFeedbackIndex]
-                              .clientDesignation
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Navigation Arrows */}
-                  <div className="flex items-center gap-3 mt-3">
-                    <button
-                      onClick={handlePrevFeedback}
-                      className="p-2 rounded-full bg-white hover:bg-[#3d234b] text-[#3d234b] hover:text-white transition-all duration-300 shadow-md hover:shadow-lg group"
-                      aria-label="Previous feedback"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={handleNextFeedback}
-                      className="p-2 rounded-full bg-white hover:bg-[#3d234b] text-[#3d234b] hover:text-white transition-all duration-300 shadow-md hover:shadow-lg group"
-                      aria-label="Next feedback"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                    {/* Indicators */}
-                    <div className="flex gap-2 ml-auto">
-                      {clientFeedbacks.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentFeedbackIndex(index)}
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            index === currentFeedbackIndex
-                              ? "bg-[#3d234b] w-8"
-                              : "bg-gray-300 hover:bg-gray-400"
-                          }`}
-                          aria-label={`Go to feedback ${index + 1}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <p className="text-gray-700 text-base leading-relaxed">
+                  Choose the right collaboration model that fits your business
+                  needs. From dedicated teams to staff augmentation, we offer
+                  flexible engagement options tailored to help you achieve your
+                  project goals efficiently.
+                </p>
               </div>
 
               {/* Right Section - Engagement Model Links */}
