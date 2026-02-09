@@ -154,7 +154,7 @@ const ResourcesHub = () => {
             <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-full flex flex-col md:flex-row min-h-96">
               <div className="relative w-full md:w-[45%] h-96 md:h-auto shrink-0 overflow-hidden">
                 <Image
-                  src="/Hero-img.webp"
+                  src="/hero-img.webp"
                   alt="Value Driven Innovation through Automation"
                   width={1000}
                   height={1000}

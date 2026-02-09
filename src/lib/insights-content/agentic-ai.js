@@ -78,7 +78,7 @@ export default {
         ],
       },
     ],
-    bodyImage: "/Hero-img.webp",
+    bodyImage: "/hero-img.webp",
     bodyImageCaption: "Enterprise-grade Agentic AI implementation framework",
     conclusion: {
       title: "",

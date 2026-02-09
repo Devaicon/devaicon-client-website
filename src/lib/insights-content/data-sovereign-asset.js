@@ -115,7 +115,7 @@ export default {
         ],
       },
     ],
-    bodyImage: "/Hero-img.webp",
+    bodyImage: "/hero-img.webp",
     bodyImageCaption: "Data is Going to Be Your New Sovereign Asset",
     conclusion: {
       title: "",
@@ -153,7 +153,7 @@ export default {
       title: "Building Real-Time Analytics with Azure",
       description:
         "Explore how cloud-native analytics platforms enable real-time insights and operational intelligence.",
-      image: "/Hero-img.webp",
+      image: "/hero-img.webp",
       readTime: "6 min read",
       slug: "realtime-analytics-azure",
     },

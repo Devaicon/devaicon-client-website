@@ -26,7 +26,7 @@ const autonomousAICustomerService = {
     introduction: {
       title: "",
       paragraphs: [],
-      image: "/Hero-img.webp",
+      image: "/hero-img.webp",
       imageCaption: "Autonomous AI transforming customer service operations",
     },
     body: [
@@ -93,7 +93,7 @@ const autonomousAICustomerService = {
       title: "Enterprise Digital Transformation Strategies",
       description:
         "Learn how to modernize your enterprise with cloud-native solutions and AI.",
-      image: "/Hero-img.webp",
+      image: "/hero-img.webp",
       readTime: "6 min read",
       slug: "data-sovereign-asset",
     },
