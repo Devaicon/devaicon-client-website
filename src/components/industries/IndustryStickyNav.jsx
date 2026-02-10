@@ -98,14 +98,14 @@ const IndustryStickyNav = ({ cards = [], activeCardId = "" }) => {
   useEffect(() => {
     if (scrollContainerRef.current && activeSection) {
       const activeButton = scrollContainerRef.current.querySelector(
-        `button[data-card-id="${activeSection}"]`
+        `button[data-card-id="${activeSection}"]`,
       );
-      
+
       if (activeButton) {
         activeButton.scrollIntoView({
           behavior: "smooth",
           block: "nearest",
-          inline: "center"
+          inline: "center",
         });
       }
     }
