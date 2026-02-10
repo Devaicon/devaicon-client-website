@@ -6,11 +6,11 @@ export default {
   title: "Value Driven Innovation through Automation",
   subtitle:
     "Digital transformation is no longer defined by system deployments alone. It's measured by quantifiable business impact. Organizations and businesses worldwide implement Dynamics 365, AI, and intelligent automation, expecting efficiency, visibility, and accelerated growth. But are these technologies actually improving business outcomes?",
-  heroImage: "/hero-img3.webp",
+  heroImage: "/digital-transformation.webp",
   author: {
     name: "Devaicon Technology Team",
     role: "Enterprise Transformation Specialists",
-    avatar: "/hero-img2.webp",
+    avatar: "/digital-transformation.webp",
   },
   tags: ["Digital Transformation", "Automation", "ROI", "Dynamics 365"],
   content: {
@@ -28,7 +28,7 @@ export default {
       paragraphs: [
         "This principle highlights that innovation alone is not enough. Enterprises must link every technology investment to real, measurable business outcomes or risk deploying tools that add complexity without value.",
       ],
-      image: "/hero-img.webp",
+      image: "/business-automation.webp",
       imageCaption: "Maximizing ROI through intelligent automation",
     },
     body: [
@@ -75,7 +75,7 @@ export default {
           "Dynamics 365 and AI platforms are powerful but their true enterprise value emerges only when business metrics improve measurably.",
       },
     ],
-    bodyImage: "/hero-img3.webp",
+    bodyImage: "/implementing-ai-automation.webp",
     bodyImageCaption: "ROI-driven digital transformation framework",
     conclusion: {
       title: "",
@@ -95,7 +95,7 @@ export default {
       title: "Agentic AI is Revolutionizing the Industries",
       description:
         "Discover how agentic AI transforms customer experience across modern enterprises.",
-      image: "/hero-img3.webp",
+      image: "/implementing-ai-automation.webp",
       readTime: "8 min read",
       slug: "agentic-ai",
     },
@@ -105,7 +105,7 @@ export default {
       title: "Data is Going to Be Your New Sovereign Asset",
       description:
         "Explore how unified data drives faster and better business decisions.",
-      image: "/hero-img4.webp",
+      image: "/data-is-valuable.webp",
       readTime: "7 min read",
       slug: "data-sovereign-asset",
     },
@@ -115,7 +115,7 @@ export default {
       title: "How Customer Services Are Achieving Productivity with AI",
       description:
         "Learn how AI-powered voice assistants are transforming customer service productivity.",
-      image: "/hero-img2.webp",
+      image: "/ai-doing-customer-support.webp",
       readTime: "8 min read",
       slug: "autonomous-ai-customer-service",
     },

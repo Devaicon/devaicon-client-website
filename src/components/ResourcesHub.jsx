@@ -12,7 +12,7 @@ const ResourcesHub = () => {
     {
       id: 2,
       slug: "agentic-ai",
-      image: "/hero-img3.webp",
+      image: "/implementing-ai-automation.webp",
       tag: "AI & Automation",
       readTime: "8 min read",
       date: "12 JAN",
@@ -23,7 +23,7 @@ const ResourcesHub = () => {
     {
       id: 3,
       slug: "data-sovereign-asset",
-      image: "/hero-img4.webp",
+      image: "/data-is-valuable.webp",
       tag: "Data & Analytics",
       readTime: "7 min read",
       date: "10 JAN",
@@ -34,7 +34,7 @@ const ResourcesHub = () => {
     {
       id: 4,
       slug: "autonomous-ai-customer-service",
-      image: "/hero-img2.webp",
+      image: "/ai-doing-customer-support.webp",
       tag: "AI & Customer Service",
       readTime: "8 min read",
       date: "08 JAN",
@@ -46,7 +46,7 @@ const ResourcesHub = () => {
     {
       id: 5,
       slug: "powering-enterprise-transformation-ai",
-      image: "/insight-card-5.webp",
+      image: "/business-automation.webp",
       tag: "Automation",
       readTime: "6 min read",
       date: "05 JAN",
@@ -58,7 +58,7 @@ const ResourcesHub = () => {
     {
       id: 6,
       slug: "powering-enterprise-transformation-ai",
-      image: "/insight-card-6.webp",
+      image: "/customer-support.webp",
       tag: "Customer Experience",
       readTime: "5 min read",
       date: "03 JAN",
@@ -154,7 +154,7 @@ const ResourcesHub = () => {
             <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-full flex flex-col md:flex-row min-h-96">
               <div className="relative w-full md:w-[45%] h-96 md:h-auto shrink-0 overflow-hidden">
                 <Image
-                  src="/hero-img.webp"
+                  src="/interaction-with-ai.webp"
                   alt="Value Driven Innovation through Automation"
                   width={1000}
                   height={1000}
@@ -207,7 +207,7 @@ const ResourcesHub = () => {
                       <img
                         src={card.image}
                         alt={card.title}
-                        className={`h-full w-full object-cover object-center transition-transform duration-500 ${
+                        className={`w-full h-full object-cover transition-transform duration-500 ${
                           card.comingSoon
                             ? "group-hover:scale-105 blur-sm"
                             : "group-hover:scale-110"

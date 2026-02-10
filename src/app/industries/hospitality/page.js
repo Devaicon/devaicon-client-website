@@ -23,6 +23,7 @@ const HospitalityIndustryPage = () => {
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}
+        backgroundImage="/tourism.webp"
       />
 
       {/* Industries Container */}

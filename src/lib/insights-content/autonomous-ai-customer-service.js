@@ -6,11 +6,11 @@ const autonomousAICustomerService = {
   title: "How Customer Services Are Achieving Productivity with AI",
   subtitle:
     "Enterprise leaders are facing more service requests, higher expectations and tighter budgets. Without smart technology, keeping up seems impossible for businesses. Traditional ways of working can't keep up. The solution? Voice and digital assistants are proving to be the best answer. Tools like Microsoft Copilot help organizations handle requests faster, solve problems quickly, and make employees more efficient without hiring more people.",
-  heroImage: "/hero-img2.webp",
+  heroImage: "/ai-doing-customer-support.webp",
   author: {
     name: "Devaicon Technology Team",
     role: "Enterprise AI & CX Specialists",
-    avatar: "/hero-img2.webp",
+    avatar: "/ai-doing-customer-support.webp",
   },
   tags: ["Autonomous AI", "Customer Service", "Productivity", "AI Agents"],
   content: {
@@ -26,7 +26,7 @@ const autonomousAICustomerService = {
     introduction: {
       title: "",
       paragraphs: [],
-      image: "/hero-img.webp",
+      image: "/customer-support.webp",
       imageCaption: "Autonomous AI transforming customer service operations",
     },
     body: [
@@ -55,7 +55,7 @@ const autonomousAICustomerService = {
         ],
       },
     ],
-    bodyImage: "/blog-insight-img1.webp",
+    bodyImage: "/implementing-ai-automation.webp",
     bodyImageCaption: "AI-powered customer service transformation framework",
     conclusion: {
       title: "",
@@ -73,7 +73,7 @@ const autonomousAICustomerService = {
       title: "Agentic AI is Revolutionizing the Industries",
       description:
         "Discover how agentic AI transforms customer experience across modern enterprises.",
-      image: "/hero-img3.webp",
+      image: "/implementing-ai-automation.webp",
       readTime: "8 min read",
       slug: "agentic-ai",
     },
@@ -83,7 +83,7 @@ const autonomousAICustomerService = {
       title: "Data is Going to Be Your New Sovereign Asset",
       description:
         "Explore how unified data drives faster and better business decisions.",
-      image: "/hero-img4.webp",
+      image: "/data-is-valuable.webp",
       readTime: "7 min read",
       slug: "data-sovereign-asset",
     },
@@ -93,7 +93,7 @@ const autonomousAICustomerService = {
       title: "Enterprise Digital Transformation Strategies",
       description:
         "Learn how to modernize your enterprise with cloud-native solutions and AI.",
-      image: "/hero-img.webp",
+      image: "/digital-transformation.webp",
       readTime: "6 min read",
       slug: "data-sovereign-asset",
     },

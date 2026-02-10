@@ -13,6 +13,7 @@ const InsightHero = () => {
       showButton={false}
       bgColor="bg-gradient-to-br from-[#3d234b] via-[#4a2d58] to-[#37469E]"
       height="min-h-96"
+      backgroundImage="/data-science.webp"
     />
   );
 };

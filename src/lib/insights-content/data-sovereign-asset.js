@@ -6,11 +6,11 @@ export default {
   title: "Data is Going to Be Your New Sovereign Asset",
   subtitle:
     "Modern leadership runs on data. Executives are expected to make high-stakes decisions quickly, backed by reliable insights. However, trust and the capacity to act confidently are undermined when data is disjointed and reports present disparate narratives.",
-  heroImage: "/hero-img2.webp",
+  heroImage: "/data-is-valuable.webp",
   author: {
     name: "Devaicon Technology Team",
     role: "Enterprise Data Specialists",
-    avatar: "/hero-img2.webp",
+    avatar: "/data-is-valuable.webp",
   },
   tags: ["Data Governance", "Microsoft Fabric", "Business Intelligence"],
   content: {
@@ -33,7 +33,7 @@ export default {
         "Data teams spend nearly 40% of their time reconciling reports rather than analyzing them",
         "Organizations with unified data platforms are three times more likely to make faster, confident decisions",
       ],
-      image: "/hero-img4.webp",
+      image: "/data-science.webp",
       imageCaption:
         "The disconnect between data availability and decision readiness",
     },
@@ -115,7 +115,7 @@ export default {
         ],
       },
     ],
-    bodyImage: "/hero-img.webp",
+    bodyImage: "/analytics.webp",
     bodyImageCaption: "Data is Going to Be Your New Sovereign Asset",
     conclusion: {
       title: "",
@@ -133,7 +133,7 @@ export default {
       title: "Driving Value with Agentic AI in the Enterprise",
       description:
         "Discover how intelligent agents enhance decision-making, and productivity across modern organizations.",
-      image: "/hero-img3.webp",
+      image: "/implementing-ai-automation.webp",
       readTime: "5 min read",
       slug: "agentic-ai",
     },
@@ -143,7 +143,7 @@ export default {
       title: "Modernizing Enterprise Platforms with Dynamics 365",
       description:
         "Learn how cloud-native solutions optimize operations, and customer engagement with Microsoft.",
-      image: "/hero-img2.webp",
+      image: "/digital-transformation.webp",
       readTime: "4 min read",
       slug: "modernizing-platforms-dynamics",
     },
@@ -153,7 +153,7 @@ export default {
       title: "Building Real-Time Analytics with Azure",
       description:
         "Explore how cloud-native analytics platforms enable real-time insights and operational intelligence.",
-      image: "/hero-img.webp",
+      image: "/analytics.webp",
       readTime: "6 min read",
       slug: "realtime-analytics-azure",
     },

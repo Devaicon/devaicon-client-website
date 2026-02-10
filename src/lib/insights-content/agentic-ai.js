@@ -6,11 +6,11 @@ export default {
   title: "Agentic AI is Revolutionizing the Industries",
   subtitle:
     "Customer experience has evolved into one of the most decisive competitive differentiators for modern enterprises. Insight-only AI and rule-based automation are no longer sufficient. Organizations now require AI that can reason, act, and resolve autonomously at scale. This is especially critical for high-volume industries like banking, retail, telecom, and e-commerce in the UAE and GCC.",
-  heroImage: "/hero-img3.webp",
+  heroImage: "/implementing-ai-automation.webp",
   author: {
     name: "Devaicon Technology Team",
     role: "Enterprise AI Specialists",
-    avatar: "/hero-img3.webp",
+    avatar: "/implementing-ai-automation.webp",
   },
   tags: ["Agentic AI", "Customer Experience", "Enterprise AI"],
   content: {
@@ -29,7 +29,7 @@ export default {
       paragraphs: [
         "Agentic AI refers to a new generation of intelligent systems that can understand context, make decisions, and complete end-to-end processes. All done with minimal human intervention. Agentic AI operates with clear objectives, governed autonomy, and measurable business outcomes.",
       ],
-      image: "/hero-img4.webp",
+      image: "/ai-and-automation.webp",
       imageCaption: "Agentic AI transforming customer experience at scale",
     },
     body: [
@@ -78,7 +78,7 @@ export default {
         ],
       },
     ],
-    bodyImage: "/hero-img.webp",
+    bodyImage: "/artificial-intelligence.webp",
     bodyImageCaption: "Enterprise-grade Agentic AI implementation framework",
     conclusion: {
       title: "",
@@ -99,7 +99,7 @@ export default {
       title: "Driving Value with Agentic AI in the Enterprise",
       description:
         "Discover how intelligent agents enhance decision-making, and productivity across modern organizations.",
-      image: "/hero-img3.webp",
+      image: "/implementing-ai-automation.webp",
       readTime: "5 min read",
       slug: "driving-value-agentic-ai",
     },
@@ -109,7 +109,7 @@ export default {
       title: "Modernizing Enterprise Platforms with Dynamics 365",
       description:
         "Learn how cloud-native solutions optimize operations, and customer engagement with Microsoft.",
-      image: "/hero-img2.webp",
+      image: "/digital-transformation.webp",
       readTime: "4 min read",
       slug: "modernizing-platforms-dynamics",
     },
@@ -119,7 +119,7 @@ export default {
       title: "Why Data is Becoming a Sovereign Enterprise Asset",
       description:
         "Explore the strategic importance of data governance, security, and ownership in regulated.",
-      image: "/hero-img4.webp",
+      image: "/data-is-valuable.webp",
       readTime: "5 min read",
       slug: "data-sovereign-asset",
     },

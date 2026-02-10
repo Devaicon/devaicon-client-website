@@ -23,6 +23,7 @@ const EducationIndustryPage = () => {
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}
+        backgroundImage="/education.webp"
       />
 
       {/* Industries Container */}

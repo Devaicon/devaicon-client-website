@@ -20,6 +20,7 @@ export default function AboutDevaiconPage() {
         buttonText="Get in Touch"
         buttonLink="/contact-us"
         showButton={true}
+        backgroundImage="/professional-collaboration.webp"
       />
 
       {/* Intro Section - Mission, Vision, Purpose */}

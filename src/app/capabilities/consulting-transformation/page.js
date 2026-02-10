@@ -26,6 +26,7 @@ const ConsultingTransformationPage = () => {
         icon={<Target className="w-7 h-7 text-white" />}
         label="Technical Expertise"
         showButton={false}
+        backgroundImage="/advisory.webp"
       />
 
       {/* Capabilities Container */}

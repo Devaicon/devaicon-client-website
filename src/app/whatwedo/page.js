@@ -26,6 +26,7 @@ const WhatWeDoPage = () => {
         icon={<Briefcase className="w-7 h-7 text-white" />}
         label="Services & Solutions"
         showButton={false}
+        backgroundImage="/digital-transformation.webp"
       />
 
       {/* What We Do Container */}

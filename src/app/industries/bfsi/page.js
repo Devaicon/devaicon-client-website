@@ -23,6 +23,7 @@ const BFSIIndustryPage = () => {
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}
+        backgroundImage="/banking.webp"
       />
 
       {/* Industries Container */}

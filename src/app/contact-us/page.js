@@ -15,6 +15,7 @@ const ContactUs = () => {
         icon={<Phone className="w-7 h-7 text-white" />}
         label="Get In Touch"
         showButton={false}
+        backgroundImage="/contact-card-helper.webp"
       />
 
       {/* Contact Form and Info Section */}

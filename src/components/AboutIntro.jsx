@@ -111,7 +111,7 @@ const AboutIntro = () => {
                 {/* Circular Image Container */}
                 <div className="absolute inset-0 rounded-full overflow-hidden shadow-2xl">
                   <Image
-                    src="/hero-img.webp"
+                    src="/interaction-with-ai.webp"
                     alt="Devaicon Team"
                     fill
                     className="object-cover"

@@ -23,6 +23,7 @@ const NonProfitIndustryPage = () => {
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}
+        backgroundImage="/non-profit-organizations.webp"
       />
 
       {/* Industries Container */}

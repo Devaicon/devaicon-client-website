@@ -74,7 +74,7 @@ const ServicesSection = () => {
       </div>
       {/* Vector decoration under cards */}
       <Image
-        src="/bg.svg"
+        src="/bg_icon.svg"
         alt=""
         width={400}
         height={400}

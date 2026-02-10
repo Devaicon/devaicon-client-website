@@ -198,30 +198,30 @@ export default function Navbar() {
   const clientFeedbacks = [
     {
       company: "Travelliance",
-      logo: "/blog1.jfif",
+      logo: "/blog1.webp",
       feedback:
         "Arbisoft partnered with Travelliance (TVA) to develop Accounting, Reporting, & Operations solutions. We helped cut downtime to zero, providing 24/7 support, and making sure their database of 7 million users functions smoothly.",
       clientName: "Dori Hotoran",
       clientDesignation: "Director Global Operations - Travelliance",
-      clientImage: "/blog1.jfif",
+      clientImage: "/blog1.webp",
     },
     {
       company: "TechCorp Solutions",
-      logo: "/blog3.jfif",
+      logo: "/blog3.webp",
       feedback:
         "Working with Devaicon transformed our digital infrastructure. Their expertise in cloud migration and AI integration helped us reduce operational costs by 40% while improving system performance and scalability.",
       clientName: "Sarah Mitchell",
       clientDesignation: "CTO - TechCorp Solutions",
-      clientImage: "/blog3.jfif",
+      clientImage: "/blog3.webp",
     },
     {
       company: "GlobalRetail Inc",
-      logo: "/event1.avif",
+      logo: "/event1.webp",
       feedback:
         "Devaicon's dedicated team approach ensured seamless implementation of our enterprise resource planning system. Their 24/7 support and proactive monitoring have been instrumental in our digital transformation journey.",
       clientName: "Michael Chen",
       clientDesignation: "VP of Operations - GlobalRetail Inc",
-      clientImage: "/event1.avif",
+      clientImage: "/event1.webp",
     },
   ];
 

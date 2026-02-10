@@ -26,6 +26,7 @@ const InfrastructureEnterpriseSystemsPage = () => {
         icon={<Server className="w-7 h-7 text-white" />}
         label="Technical Expertise"
         showButton={false}
+        backgroundImage="/ai.webp"
       />
 
       {/* Capabilities Container */}

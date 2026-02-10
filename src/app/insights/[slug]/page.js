@@ -61,6 +61,7 @@ export default async function BlogPostPage({ params }) {
         buttonText="Back to Insights"
         buttonLink="/insights"
         showButton={true}
+        backgroundImage={post.heroImage}
       />
 
       {/* Article Content */}

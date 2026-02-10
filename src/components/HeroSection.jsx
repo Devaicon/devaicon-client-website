@@ -10,7 +10,7 @@ const HeroSection = () => {
 
   const slides = [
     {
-      image: "/heroimg1.webp",
+      image: "/professional-collaboration.webp",
       title: (
         <>
           {/* <span className="text-gray-900"> </span> */}
@@ -31,7 +31,7 @@ const HeroSection = () => {
       buttonText: "Start a Project",
     },
     {
-      image: "/ai.jpeg",
+      image: "/ai.webp",
       title: (
         <>
           <span className="text-gray-900">Devaicon AI & ML </span>

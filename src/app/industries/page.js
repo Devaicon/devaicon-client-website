@@ -26,6 +26,7 @@ const IndustriesPage = () => {
         icon={<Building2 className="w-7 h-7 text-white" />}
         label="Industry Expertise"
         showButton={false}
+        backgroundImage="/professional-services.webp"
       />
 
       {/* Industries Container */}
