@@ -241,6 +241,7 @@ export const CAPABILITIES_CONFIG = {
         additionalContent:
           "Digital transformation isn't about technology alone—it's about changing how organizations work. We help identify inefficiencies, design better processes, select appropriate tools, and manage the cultural change required for successful adoption.",
       },
+      // Fixed this image
       {
         id: "technology-strategy-advisory",
         title: "Technology Strategy & Advisory",
