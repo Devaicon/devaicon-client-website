@@ -3,7 +3,7 @@ import { UserRound, Trophy, Globe } from "lucide-react";
 const FinancialBacking = () => {
   const financial = [
     {
-      title: "20+ Years",
+      title: "5+ Years",
       description: "Proven industry experience",
       icon: UserRound,
     },

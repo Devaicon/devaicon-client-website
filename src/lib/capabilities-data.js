@@ -66,7 +66,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Computer Vision",
         icon: "Eye",
         iconAlt: "Computer Vision Icon",
-        image: "/computer-vision.webp",
+        image: "/ai.webp",
         description:
           "AI solutions that interpret images and video. Use cases include object detection, facial recognition, visual inspection, and automated monitoring for security, healthcare, and industrial applications.",
         solutionText: [

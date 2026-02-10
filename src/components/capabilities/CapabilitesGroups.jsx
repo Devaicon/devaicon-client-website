@@ -13,7 +13,7 @@ const CapabilitesGroups = () => {
     {
       id: 1,
       icon: Award,
-      title: "20+ Years",
+      title: "5+ Years",
       description: "Proven industry experience",
       bgColor: "#3d234b",
     },
