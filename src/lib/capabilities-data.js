@@ -247,7 +247,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Technology Strategy & Advisory",
         icon: "Lightbulb",
         iconAlt: "Tech Strategy Icon",
-        image: "/advisory.webp",
+        image: "/assess-and-envision.webp",
         description:
           "Guidance on technology decisions that actually align with business objectives. This includes system audits, architecture planning, tool selection, and long term technology roadmaps.",
         solutionText: [
@@ -274,7 +274,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Open edX Hosting",
         icon: "Server",
         iconAlt: "Open edX Hosting Icon",
-        image: "/hosting.webp",
+        image: "/openedx.webp",
         description:
           "Secure, scalable cloud hosting for Open edX platforms, optimized for performance, reliability, and global learner access.",
         solutionText: [
@@ -337,12 +337,13 @@ export const CAPABILITIES_CONFIG = {
         additionalContent:
           "We help organizations create effective online courses—from instructional design through content production. Our courses balance pedagogy with engagement, using interactive elements, assessments, and multimedia that improve learning outcomes.",
       },
+      // Fixed this image
       {
         id: "integrations-sso",
         title: "Integrations & SSO",
         icon: "Lock",
         iconAlt: "Integration Icon",
-        image: "/integrations.webp",
+        image: "/build-and-implement.webp",
         description:
           "Seamless integration with enterprise systems including SSO, HR platforms, CRMs, analytics tools, and internal applications.",
         solutionText: [
