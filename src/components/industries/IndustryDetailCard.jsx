@@ -257,6 +257,7 @@ const IndustryDetailCard = ({
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 35vw"
+                loading="lazy"
               />
             </div>
           </div>

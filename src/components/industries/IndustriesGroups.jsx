@@ -41,11 +41,11 @@ const IndustriesGroups = () => {
       {/* Background Image */}
       <div className="absolute inset-0 opacity-20">
         <Image
-          src="/transformation.webp"
+          src="/digital-transformation.webp"
           alt="Background"
           fill
           className="object-cover"
-          priority
+          loading="lazy"
         />
       </div>
 

@@ -218,7 +218,7 @@ export const INDUSTRIES_CONFIG = {
         title: "Non-Profit Organizations",
         icon: "Heart",
         iconAlt: "Non-Profit Organizations Icon",
-        image: "/hero-img.webp",
+        image: "/non-profit-organizations.webp",
         description:
           "Non-profits balance program delivery with donor relationships, regulatory requirements, and impact measurement. Every dollar needs to count, and stakeholders expect clear reporting.",
         industryContext:
