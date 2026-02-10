@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   ChevronDown,
   DollarSign,
@@ -101,14 +100,11 @@ const IndustryDetailCard = ({
                     <IconComponent className="w-10 h-10 text-[#3d234b]" />
                   </div>
                 ) : (
-                  <div className="relative w-20 h-20 p-4 bg-white rounded-lg shadow-md">
-                    <Image
+                  <div className="w-20 h-20 p-4 bg-white rounded-lg shadow-md flex items-center justify-center">
+                    <img
                       src={icon}
                       alt={iconAlt}
-                      fill
-                      className="object-contain p-2"
-                      sizes="80px"
-                      unoptimized
+                      className="w-full h-full object-contain"
                     />
                   </div>
                 )}
@@ -248,18 +244,14 @@ const IndustryDetailCard = ({
 
             {/* Image Column */}
             <div
-              className={`relative h-64 lg:h-full min-h-75 overflow-hidden rounded-t-[2.3rem] ${
+              className={`h-64 lg:h-full min-h-75 overflow-hidden rounded-t-[2.3rem] ${
                 isOdd ? "order-2" : "order-1"
               }`}
             >
-              <Image
+              <img
                 src={image || "/hero-img.webp"}
                 alt={`${title} visualization`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 35vw"
-                loading="lazy"
-                unoptimized
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
