@@ -42,6 +42,7 @@ const FeaturedBlogCard = ({ post }) => {
           alt={post.title}
           fill
           className="object-cover hover:scale-105 transition-transform duration-500"
+          unoptimized
         />
         {post.comingSoon && (
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
@@ -142,6 +143,7 @@ const FeaturedInsights = () => {
                     alt=""
                     fill
                     className="object-contain"
+                    unoptimized
                   />
                 </div>
               </div>

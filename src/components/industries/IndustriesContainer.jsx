@@ -73,6 +73,7 @@ const IndustryCard = ({ title, icon, iconAlt, id, onCardClick }) => {
             fill
             className="object-contain"
             sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+            unoptimized
           />
         )}
       </div>

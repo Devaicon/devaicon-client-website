@@ -46,6 +46,7 @@ const IndustriesGroups = () => {
           fill
           className="object-cover"
           loading="lazy"
+          unoptimized
         />
       </div>
 

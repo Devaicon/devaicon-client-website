@@ -108,6 +108,7 @@ const IndustryDetailCard = ({
                       fill
                       className="object-contain p-2"
                       sizes="80px"
+                      unoptimized
                     />
                   </div>
                 )}
@@ -258,6 +259,7 @@ const IndustryDetailCard = ({
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 35vw"
                 loading="lazy"
+                unoptimized
               />
             </div>
           </div>
