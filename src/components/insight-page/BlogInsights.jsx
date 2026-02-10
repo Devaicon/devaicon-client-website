@@ -10,7 +10,7 @@ import {
 } from "./insightUtils";
 
 const FEATURED_POST = {
-  image: "/digital-transformation.webp",
+  image: "/interaction-with-ai.webp",
   category: "Digital Transformation",
   title: "Value Driven Innovation through Automation",
   description:
