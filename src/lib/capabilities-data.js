@@ -267,6 +267,7 @@ export const CAPABILITIES_CONFIG = {
     subtitle:
       "Enterprise learning platforms, customization, and long-term scalability. We provide comprehensive Open edX services from hosting to feature development, ensuring your learning platform meets organizational needs.",
     cards: [
+      // Fixed this image
       {
         id: "open-edx-hosting",
         title: "Open edX Hosting",
