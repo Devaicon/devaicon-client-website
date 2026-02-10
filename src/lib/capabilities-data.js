@@ -411,7 +411,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Analytics & Reporting",
         icon: "BarChart3",
         iconAlt: "Analytics Icon",
-        image: "/analytics.webp",
+        image: "/data-science.webp",
         description:
           "Advanced learner insights, progress tracking, and custom reports using Open edX data pipelines and external BI tools.",
         solutionText: [
@@ -428,7 +428,7 @@ export const CAPABILITIES_CONFIG = {
         title: "Multi-Tenant & Regional Deployments",
         icon: "Users",
         iconAlt: "Multi-Tenant Icon",
-        image: "/regional.webp",
+        image: "/global-rollouts.webp",
         description:
           "Support for multiple audiences, regions, or business units with isolated data, branding, and configuration options.",
         solutionText: [
