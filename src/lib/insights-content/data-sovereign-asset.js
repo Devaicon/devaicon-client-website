@@ -115,7 +115,7 @@ export default {
         ],
       },
     ],
-    bodyImage: "/analytics.webp",
+    bodyImage: "/data-science.webp",
     bodyImageCaption: "Data is Going to Be Your New Sovereign Asset",
     conclusion: {
       title: "",

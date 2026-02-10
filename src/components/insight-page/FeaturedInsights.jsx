@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 const FEATURED_BLOG_POSTS = [
   {
-    image: "/blog-insight-img1.webp",
+    image: "/upcoming-blog.webp",
     category: "Cloud",
     title: "Building Scalable Cloud Foundations for Growth",
     description:
@@ -13,7 +13,7 @@ const FEATURED_BLOG_POSTS = [
     comingSoon: true,
   },
   {
-    image: "/blog-insight-img1.webp",
+    image: "/upcoming-blog.webp",
     category: "Cloud",
     title: "Building Scalable Cloud Foundations for Growth",
     description:
@@ -22,7 +22,7 @@ const FEATURED_BLOG_POSTS = [
     comingSoon: true,
   },
   {
-    image: "/blog-insight-img1.webp",
+    image: "/upcoming-blog.webp",
     category: "Cloud",
     title: "Building Scalable Cloud Foundations for Growth",
     description:
