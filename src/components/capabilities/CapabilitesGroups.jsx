@@ -41,7 +41,7 @@ const CapabilitesGroups = () => {
       {/* Background Image */}
       <div className="absolute inset-0 opacity-20">
         <Image
-          src="/transformation.webp"
+          src="/digital-trasformation.webp"
           alt="Background"
           fill
           className="object-cover"

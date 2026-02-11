@@ -256,7 +256,7 @@ const IndustryDetailCard = ({
                 alt={`${title} visualization`}
                 fill
                 className="object-cover"
-                // sizes="(max-width: 1024px) 100vw, 35vw"
+                sizes="(max-width: 1024px) 100vw, 35vw"
               />
             </div>
           </div>
