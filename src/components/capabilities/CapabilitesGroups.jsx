@@ -13,7 +13,7 @@ const CapabilitesGroups = () => {
     {
       id: 1,
       icon: Award,
-      title: "20+ Years",
+      title: "5+ Years",
       description: "Proven industry experience",
       bgColor: "#3d234b",
     },
@@ -41,7 +41,7 @@ const CapabilitesGroups = () => {
       {/* Background Image */}
       <div className="absolute inset-0 opacity-20">
         <Image
-          src="/transformation.webp"
+          src="/digital-trasformation.webp"
           alt="Background"
           fill
           className="object-cover"

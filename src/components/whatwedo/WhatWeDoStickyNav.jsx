@@ -90,6 +90,23 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
     }
   }, [isVisible]);
 
+  // Auto-scroll to active nav item when activeSection changes
+  useEffect(() => {
+    if (scrollContainerRef.current && activeSection) {
+      const activeButton = scrollContainerRef.current.querySelector(
+        `button[data-card-id="${activeSection}"]`,
+      );
+
+      if (activeButton) {
+        activeButton.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    }
+  }, [activeSection]);
+
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
       const scrollAmount = 300;
@@ -111,7 +128,7 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b border-gray-200 transition-transform duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex items-center gap-4">
           {/* Left Arrow */}
           {showLeftArrow && (
@@ -140,6 +157,7 @@ const WhatWeDoStickyNav = ({ cards = [], activeCardId = "" }) => {
               return (
                 <button
                   key={card.id}
+                  data-card-id={card.id}
                   onClick={() => handleCardClick(card.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                     isActive

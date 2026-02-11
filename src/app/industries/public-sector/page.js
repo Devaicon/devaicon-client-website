@@ -23,6 +23,7 @@ const PublicSectorIndustryPage = () => {
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}
+        backgroundImage="/public.webp"
       />
 
       {/* Industries Container */}

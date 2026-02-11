@@ -110,6 +110,12 @@
 .stagger-animation > *:nth-child(6) {
   animation-delay: 0.3s;
 }
+.stagger-animation > *:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.stagger-animation > *:nth-child(8) {
+  animation-delay: 0.4s;
+}
 
 * {
   font-family: var(--font-inter), sans-serif;

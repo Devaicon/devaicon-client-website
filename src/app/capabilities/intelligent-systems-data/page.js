@@ -26,6 +26,7 @@ const IntelligentSystemsDataPage = () => {
         icon={<Sparkles className="w-7 h-7 text-white" />}
         label="Technical Expertise"
         showButton={false}
+        backgroundImage="/artificial-intelligence.webp"
       />
 
       {/* Capabilities Container */}

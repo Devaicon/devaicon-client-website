@@ -23,6 +23,7 @@ const CookiePolicy = () => {
         metadata="Last Updated: December 24, 2025"
         metadataIcon={<Clock className="w-5 h-5" />}
         showButton={false}
+        backgroundImage="/file.svg"
       />
 
       {/* Content */}

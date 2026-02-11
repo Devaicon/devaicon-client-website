@@ -26,6 +26,7 @@ const OpenEdXServicesPage = () => {
         icon={<GraduationCap className="w-7 h-7 text-white" />}
         label="Technical Expertise"
         showButton={false}
+        backgroundImage="/openedx.webp"
       />
 
       {/* Capabilities Container */}

@@ -340,6 +340,7 @@ export default function EngagementModelsPage() {
         buttonText="Discover More"
         buttonLink="#engagement-models"
         height="min-h-[37.5rem]"
+        backgroundImage="/professional-collaboration.webp"
       />
 
       <EngagementModelsSection

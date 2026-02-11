@@ -16,6 +16,8 @@ import { ChevronRight } from "lucide-react";
  * @param {string} props.metadata - Metadata text (e.g., "Last Updated: ...")
  * @param {React.ReactNode} props.metadataIcon - Icon for metadata
  * @param {boolean} props.showButton - Whether to show the CTA button (default: true)
+ * @param {string} props.backgroundImage - Optional background image URL
+ * @param {number} props.backgroundOpacity - Opacity for background image (default: 0.2)
  */
 const PageHero = ({
   title,
@@ -27,9 +29,25 @@ const PageHero = ({
   metadata,
   metadataIcon,
   showButton = true,
+  backgroundImage,
+  backgroundOpacity = 0.5,
 }) => {
   return (
     <div className="relative bg-gradient-to-br from-[#3d234b] via-[#4a2d5a] to-[#5a3464] text-white py-20 sm:py-16 lg:py-24 overflow-hidden">
+      {/* Background Image Layer */}
+      {backgroundImage && (
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+            opacity: backgroundOpacity,
+          }}
+        ></div>
+      )}
+
+      {/* Gradient Overlay - ensures gradient is on top of background image */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#3d234b] via-[#4a2d5a] to-[#5a3464] opacity-90"></div>
+
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>

@@ -10,7 +10,7 @@ import {
 } from "./insightUtils";
 
 const FEATURED_POST = {
-  image: "/Hero-img.webp",
+  image: "/interaction-with-ai.webp",
   category: "Digital Transformation",
   title: "Value Driven Innovation through Automation",
   description:
@@ -21,7 +21,7 @@ const FEATURED_POST = {
 
 const BLOG_POSTS = [
   {
-    image: "/hero-img3.webp",
+    image: "/implementing-ai-automation.webp",
     category: "AI",
     title: "Agentic AI is Revolutionizing the Industries",
     description:
@@ -30,7 +30,7 @@ const BLOG_POSTS = [
     tags: ["AI", "Automation", "Enterprise AI"],
   },
   {
-    image: "/hero-img4.webp",
+    image: "/data-is-valuable.webp",
     category: "Data",
     title: "Data is Going to Be Your New Sovereign Asset",
     description:
@@ -39,7 +39,7 @@ const BLOG_POSTS = [
     tags: ["Data", "Analytics", "Business Intelligence"],
   },
   {
-    image: "/hero-img2.webp",
+    image: "/ai-doing-customer-support.webp",
     category: "AI",
     title:
       "How Customer Service Teams Are Achieving a 20% to 45% Increase in Productivity with AI",

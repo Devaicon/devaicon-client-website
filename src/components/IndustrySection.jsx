@@ -116,7 +116,7 @@ const IndustriesSection = () => {
 
       {/* Vector decoration under Healthcare card */}
       <Image
-        src="/bg.svg"
+        src="/bg_icon.svg"
         alt=""
         width={200}
         height={100}

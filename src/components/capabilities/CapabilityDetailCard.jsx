@@ -116,7 +116,7 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
       className="w-full py-10 md:py-12 scroll-mt-20"
       style={{ background: backgroundColor }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Card */}
         <article>
           <div

@@ -26,6 +26,7 @@ const ApplicationSoftwareDevelopmentPage = () => {
         icon={<Code className="w-7 h-7 text-white" />}
         label="Technical Expertise"
         showButton={false}
+        backgroundImage="/mobile-application-development.webp"
       />
 
       {/* Capabilities Container */}
