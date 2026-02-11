@@ -18,7 +18,7 @@ const CallNowTab = () => {
           href="tel:03336224007"
           className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-brand hover:text-[#3d234b] transition-colors break-all"
         >
-          03336224007
+          +971 50 700 1805
         </a>
       </div>
       <button className="btn btn-primary rounded-md group text-xs sm:text-sm md:text-base px-4 sm:px-6 py-2 sm:py-3">
@@ -39,8 +39,8 @@ const CallNowTab = () => {
       </button>
       <div className="border-l-4 border-[#281333] pl-4 py-2">
         <h3 className="font-bold text-gray-900 mb-2">Available:</h3>
-        <p className="text-gray-700">Monday - Friday</p>
-        <p className="text-gray-700">6:00 AM - 3:00 PM PT</p>
+        <p className="text-gray-700">24 Hours a Day</p>
+        <p className="text-gray-700">7 Days a Week</p>
       </div>
     </div>
   );
