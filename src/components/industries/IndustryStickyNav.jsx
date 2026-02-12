@@ -143,7 +143,7 @@ const IndustryStickyNav = ({ cards = [], activeCardId = "" }) => {
           {/* Scrollable Container */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide scroll-smooth"
+            className="flex-1 flex items-center justify-center gap-2 py-3 overflow-x-auto scrollbar-hide scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {cards.map((navCard) => {
