@@ -66,6 +66,8 @@ export function DesktopNav({ onDropdownStateChange }) {
           Engagement Models
         </NavItem>
 
+        <NavItem href={ROUTES.CAREERS}>Careers</NavItem>
+
         <NavItem
           href={ROUTES.ABOUT}
           hasDropdown

@@ -110,6 +110,14 @@ export function MobileNav({ isOpen, onClose }) {
                 onToggle={() => setWhyDevaiconOpen(!whyDevaiconOpen)}
                 onClose={onClose}
               />
+
+              <Link
+                href={ROUTES.CAREERS}
+                className="block text-gray-900 hover:bg-gray-50 px-4 py-3 text-base font-medium border-b border-gray-100 transition-colors rounded-lg"
+                onClick={onClose}
+              >
+                Careers
+              </Link>
             </div>
           </nav>
 

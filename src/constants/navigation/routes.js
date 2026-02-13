@@ -10,6 +10,7 @@ export const ROUTES = {
   ENGAGEMENT_MODELS: "/engagement-models",
   ABOUT: "/about-devaicon",
   WHAT_WE_DO: "/whatwedo",
+  CAREERS: "/careers",
   CONTACT: "/contact-us",
 
   // Capability-specific routes
