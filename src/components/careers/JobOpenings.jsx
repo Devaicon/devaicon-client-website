@@ -4,16 +4,25 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
-  Clock,
   Briefcase,
+  ChevronRight,
   Code,
   Brain,
   Cloud,
   Database,
   Users,
-  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { jobsData } from "@/lib/jobs-data";
+
+// Icon mapping
+const iconMap = {
+  Code: Code,
+  Brain: Brain,
+  Cloud: Cloud,
+  Database: Database,
+  Users: Users,
+};
 
 /**
  * Job Openings Section
@@ -22,98 +31,7 @@ import Link from "next/link";
 const JobOpenings = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("All");
 
-  const jobOpenings = [
-    {
-      id: 1,
-      title: "Senior Full Stack Developer",
-      department: "Engineering",
-      location: "Remote",
-      type: "Full-time",
-      icon: <Code className="w-5 h-5" />,
-      description:
-        "Build scalable web applications using modern frameworks and cloud technologies.",
-      requirements: [
-        "5+ years of experience",
-        "React, Node.js, TypeScript",
-        "Cloud platforms (Azure/AWS)",
-      ],
-    },
-    {
-      id: 2,
-      title: "AI/ML Engineer",
-      department: "Data Science",
-      location: "Hybrid",
-      type: "Full-time",
-      icon: <Brain className="w-5 h-5" />,
-      description:
-        "Develop and deploy machine learning models to solve complex business problems.",
-      requirements: [
-        "3+ years ML experience",
-        "Python, TensorFlow, PyTorch",
-        "NLP and Computer Vision",
-      ],
-    },
-    {
-      id: 3,
-      title: "Cloud Solutions Architect",
-      department: "Infrastructure",
-      location: "On-site",
-      type: "Full-time",
-      icon: <Cloud className="w-5 h-5" />,
-      description:
-        "Design and implement cloud infrastructure solutions for enterprise clients.",
-      requirements: [
-        "Azure/AWS certified",
-        "6+ years experience",
-        "DevOps expertise",
-      ],
-    },
-    {
-      id: 4,
-      title: "Data Engineer",
-      department: "Data Science",
-      location: "Remote",
-      type: "Full-time",
-      icon: <Database className="w-5 h-5" />,
-      description:
-        "Build and maintain data pipelines and analytics infrastructure.",
-      requirements: [
-        "4+ years experience",
-        "SQL, Python, Spark",
-        "ETL/ELT processes",
-      ],
-    },
-    {
-      id: 5,
-      title: "Product Manager",
-      department: "Product",
-      location: "Hybrid",
-      type: "Full-time",
-      icon: <Users className="w-5 h-5" />,
-      description:
-        "Lead product strategy and work with cross-functional teams to deliver impactful solutions.",
-      requirements: [
-        "5+ years PM experience",
-        "Agile methodology",
-        "Stakeholder management",
-      ],
-    },
-    {
-      id: 6,
-      title: "Frontend Developer",
-      department: "Engineering",
-      location: "Remote",
-      type: "Full-time",
-      icon: <Code className="w-5 h-5" />,
-      description:
-        "Create beautiful, responsive user interfaces using modern frontend technologies.",
-      requirements: [
-        "3+ years experience",
-        "React, Next.js, Tailwind",
-        "UI/UX principles",
-      ],
-    },
-  ];
+  const jobOpenings = jobsData;
 
   const departments = [
     "All",
@@ -180,75 +98,81 @@ const JobOpenings = () => {
         {/* Job Listings */}
         <div className="grid md:grid-cols-2 gap-6">
           <AnimatePresence mode="popLayout">
-            {filteredJobs.map((job, index) => (
-              <motion.div
-                key={job.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="bg-white rounded-2xl p-8 border border-gray-200 hover:border-[#3d234b]/30 hover:shadow-xl transition-all duration-300 group"
-              >
-                {/* Job Header */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#3d234b] to-[#5a3464] text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      {job.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-1">
-                        {job.title}
-                      </h3>
-                      <span className="text-sm text-[#3d234b] font-medium">
-                        {job.department}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Job Details */}
-                <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span>{job.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="w-4 h-4" />
-                    <span>{job.type}</span>
-                  </div>
-                </div>
-
-                {/* Job Description */}
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {job.description}
-                </p>
-
-                {/* Requirements */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                    Key Requirements:
-                  </h4>
-                  <ul className="space-y-2">
-                    {job.requirements.map((req, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 bg-[#3d234b] rounded-full"></div>
-                        <span className="text-gray-600">{req}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Apply Button */}
-                <Link
-                  href={`/contact-us?position=${encodeURIComponent(job.title)}`}
-                  className="inline-flex items-center gap-2 text-[#3d234b] font-semibold hover:gap-3 transition-all duration-300"
+            {filteredJobs.map((job, index) => {
+              const IconComponent = iconMap[job.icon] || Code;
+              return (
+                <motion.div
+                  key={job.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="bg-white rounded-2xl p-8 border border-gray-200 hover:border-[#3d234b]/30 hover:shadow-xl transition-all duration-300 group"
                 >
-                  <span>Apply Now</span>
-                  <ChevronRight className="w-5 h-5" />
-                </Link>
-              </motion.div>
-            ))}
+                  {/* Job Header */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-[#3d234b] to-[#5a3464] text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-1">
+                          {job.title}
+                        </h3>
+                        <span className="text-sm text-[#3d234b] font-medium">
+                          {job.department}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Job Details */}
+                  <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      <span>{job.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="w-4 h-4" />
+                      <span>{job.type}</span>
+                    </div>
+                  </div>
+
+                  {/* Job Description */}
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    {job.shortDescription}
+                  </p>
+
+                  {/* Requirements */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-3">
+                      Key Requirements:
+                    </h4>
+                    <ul className="space-y-2">
+                      {job.requirements.slice(0, 3).map((req, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center gap-2 text-sm"
+                        >
+                          <div className="w-1.5 h-1.5 bg-[#3d234b] rounded-full"></div>
+                          <span className="text-gray-600">{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Apply Button */}
+                  <Link
+                    href={`/careers/${job.slug}`}
+                    className="inline-flex items-center gap-2 text-[#3d234b] font-semibold hover:gap-3 transition-all duration-300"
+                  >
+                    <span>View Details</span>
+                    <ChevronRight className="w-5 h-5" />
+                  </Link>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
 

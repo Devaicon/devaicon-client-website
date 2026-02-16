@@ -40,7 +40,7 @@ const ApplicationProcess = () => {
   ];
 
   return (
-    <section className="py-16 lg:py-24 bg-white">
+    <section id="application-process" className="py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">

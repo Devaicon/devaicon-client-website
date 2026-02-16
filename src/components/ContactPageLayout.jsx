@@ -6,6 +6,7 @@ import { MapPin, Phone, Mail, MessageSquare, UserCircle } from "lucide-react";
 import CallNowTab from "./CallNowTab";
 import RequestCallbackForm from "./RequestCallbackForm";
 import TalkToExpertForm from "./TalkToExpertForm";
+import OptimizedMap from "./OptimizedMap";
 
 const ContactPageLayout = () => {
   const [activeTab, setActiveTab] = useState("callNow");
@@ -81,18 +82,11 @@ const ContactPageLayout = () => {
           {/* Right Side - Map and Visit Office */}
           <div className="flex-1 space-y-6">
             {/* Map Section */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-[400px]">
-              <iframe
-                src="https://maps.google.com/maps?q=Business+Center,+Sharjah+Publishing+City+Free+Zone,+Sharjah&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Office Location Map"
-              ></iframe>
-            </div>
+            <OptimizedMap
+              src="https://maps.google.com/maps?q=Business+Center,+Sharjah+Publishing+City+Free+Zone,+Sharjah&output=embed"
+              title="Office Location Map"
+              height="400px"
+            />
 
             {/* Visit Our Office Section */}
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
