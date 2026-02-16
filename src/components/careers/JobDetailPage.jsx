@@ -38,6 +38,7 @@ const iconMap = {
 const JobDetailPage = ({ job }) => {
   const IconComponent = iconMap[job.icon] || Code;
   const [isCopied, setIsCopied] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCopyUrl = () => {
@@ -45,7 +46,21 @@ const JobDetailPage = ({ job }) => {
     setIsCopied(true);
     setTimeout(() => {
       setIsCopied(false);
-    }, 2000);
+    }, 1200);
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: job.title,
+        text: job.shortDescription,
+        url: window.location.href,
+      });
+    }
+    setIsShared(true);
+    setTimeout(() => {
+      setIsShared(false);
+    }, 1200);
   };
 
   return (
@@ -292,18 +307,34 @@ const JobDetailPage = ({ job }) => {
                   </h4>
                   <div className="flex gap-3">
                     <button
-                      onClick={() => {
-                        if (navigator.share) {
-                          navigator.share({
-                            title: job.title,
-                            text: job.shortDescription,
-                            url: window.location.href,
-                          });
-                        }
-                      }}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg transition-colors font-medium text-sm"
+                      onClick={handleShare}
+                      className={`flex-1 px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-sm ${
+                        isShared
+                          ? "bg-[#3d234b] text-white"
+                          : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                      }`}
                     >
-                      Share
+                      <AnimatePresence mode="wait">
+                        {isShared ? (
+                          <motion.span
+                            key="shared"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                          >
+                            Shared!
+                          </motion.span>
+                        ) : (
+                          <motion.span
+                            key="share"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                          >
+                            Share
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
                     </button>
                     <button
                       onClick={handleCopyUrl}

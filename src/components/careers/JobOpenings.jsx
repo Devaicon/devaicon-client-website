@@ -108,7 +108,7 @@ const JobOpenings = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-white rounded-2xl p-8 border border-gray-200 hover:border-[#3d234b]/30 hover:shadow-xl transition-all duration-300 group"
+                  className="bg-white rounded-2xl p-8 border border-gray-200 hover:border-[#3d234b]/30 hover:shadow-xl transition-all duration-300 group flex flex-col"
                 >
                   {/* Job Header */}
                   <div className="flex items-start justify-between mb-6">
@@ -145,7 +145,7 @@ const JobOpenings = () => {
                   </p>
 
                   {/* Requirements */}
-                  <div className="mb-6">
+                  <div className="mb-6 flex-grow">
                     <h4 className="text-sm font-semibold text-gray-900 mb-3">
                       Key Requirements:
                     </h4>
@@ -162,10 +162,10 @@ const JobOpenings = () => {
                     </ul>
                   </div>
 
-                  {/* Apply Button */}
+                  {/* Apply Button - Now at bottom left */}
                   <Link
                     href={`/careers/${job.slug}`}
-                    className="inline-flex items-center gap-2 text-[#3d234b] font-semibold hover:gap-3 transition-all duration-300"
+                    className="inline-flex items-center gap-2 text-[#3d234b] font-semibold hover:gap-3 transition-all duration-300 self-start mt-auto"
                   >
                     <span>View Details</span>
                     <ChevronRight className="w-5 h-5" />
