@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { jobsData } from "@/lib/jobs-data";
+import GeneralResumeModal from "./GeneralResumeModal";
 
 // Icon mapping
 const iconMap = {
@@ -30,6 +31,7 @@ const iconMap = {
  */
 const JobOpenings = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("All");
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const jobOpenings = jobsData;
 
@@ -204,14 +206,20 @@ const JobOpenings = () => {
             We&apos;re always looking for talented individuals. Send us your
             resume and we&apos;ll keep you in mind for future opportunities.
           </p>
-          <Link
-            href="/contact-us?subject=General Application"
+          <button
+            onClick={() => setIsResumeModalOpen(true)}
             className="inline-flex items-center gap-2 bg-[#3d234b] text-white px-8 py-3.5 rounded-lg hover:bg-[#2d1a3b] transition-colors font-medium"
           >
             <span>Submit Your Resume</span>
             <ChevronRight className="w-5 h-5" />
-          </Link>
+          </button>
         </motion.div>
+
+        {/* General Resume Modal */}
+        <GeneralResumeModal
+          isOpen={isResumeModalOpen}
+          onClose={() => setIsResumeModalOpen(false)}
+        />
       </div>
     </section>
   );
