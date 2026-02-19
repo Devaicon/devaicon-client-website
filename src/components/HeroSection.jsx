@@ -21,10 +21,10 @@ const HeroSection = () => {
       ),
       subtitle: (
         <>
-          Trusted by top platforms like{" "}
-          <span className="font-semibold">edX</span>,{" "}
-          <span className="font-semibold">KAYAK</span>, and{" "}
-          <span className="font-semibold">Careem</span> for our transformative
+          Trusted by top platforms and companies like{" "}
+          <span className="font-semibold">JETEX</span>,{" "}
+          <span className="font-semibold">MICROSOFT</span>, and{" "}
+          <span className="font-semibold">N8N</span> for our transformative
           solutions and exceptional results.
         </>
       ),
@@ -45,10 +45,10 @@ const HeroSection = () => {
       ),
       subtitle: (
         <>
-          Trusted by top platforms like{" "}
-          <span className="font-semibold">LearnHub</span>,{" "}
-          <span className="font-semibold">TripFinder</span>, and{" "}
-          <span className="font-semibold">RideShare</span> for our
+          Trusted by top platforms and companies like{" "}
+          <span className="font-semibold">JETEX</span>,{" "}
+          <span className="font-semibold">MICROSOFT</span>, and{" "}
+          <span className="font-semibold">N8N</span> for our
           transformative solutions and exceptional results.
         </>
       ),
