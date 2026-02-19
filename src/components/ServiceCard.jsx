@@ -16,7 +16,7 @@ const ServiceCard = ({ tag, title, description, icon: Icon }) => {
     <div className="bg-white rounded-[16px] shadow-lg overflow-hidden flex flex-col h-full">
       <div className="relative flex items-center justify-center py-8">
         <div className="w-24 h-24 rounded-full bg-gradient-to-b from-[#3d234b] to-[#2a1834] flex items-center justify-center shadow-lg">
-          <Icon className="w-12 h-12 text-white" strokeWidth={1.5} />
+          <Icon className="w-12 h-12 text-white" strokeWidth={1.75} />
         </div>
       </div>
 
