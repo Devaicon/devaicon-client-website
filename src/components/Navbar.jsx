@@ -20,7 +20,7 @@ export default function Navbar() {
     <>
       <header className="absolute top-0 left-0 right-0 z-50 flex justify-center">
         <nav
-          className={`bg-white border-2 border-gray-200 mx-auto w-full xl:w-[calc(100%-25rem)] h-20 lg:h-24 px-4 sm:px-8 lg:px-6 xl:px-15 py-4 lg:py-8 rounded-none transition-all duration-200 ${
+          className={`bg-white border-2 border-gray-200 mx-auto w-full xl:w-[calc(100%-20rem)] 2xl:w-[calc(100%-25rem)] h-20 lg:h-24 px-4 sm:px-8 lg:px-6 xl:px-8 2xl:px-12 py-4 lg:py-8 rounded-none transition-all duration-200 navbar-container-responsive ${
             hasActiveDropdown ? "border-b-0" : "lg:rounded-b-3xl"
           }`}
           aria-label="Main navigation"
@@ -38,7 +38,7 @@ export default function Navbar() {
                 width={200}
                 height={100}
                 priority
-                className="object-contain w-28 sm:w-32 lg:w-36 xl:w-40 h-auto"
+                className="object-contain w-28 sm:w-32 lg:w-36 xl:w-36 2xl:w-40 h-auto navbar-logo-responsive"
               />
             </Link>
 

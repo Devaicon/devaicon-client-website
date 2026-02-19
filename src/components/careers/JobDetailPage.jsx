@@ -308,7 +308,7 @@ const JobDetailPage = ({ job }) => {
                   <div className="flex gap-3">
                     <button
                       onClick={handleShare}
-                      className={`flex-1 px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-sm ${
+                      className={`flex-1 px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-sm cursor-pointer ${
                         isShared
                           ? "bg-[#3d234b] text-white"
                           : "bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -338,7 +338,7 @@ const JobDetailPage = ({ job }) => {
                     </button>
                     <button
                       onClick={handleCopyUrl}
-                      className={`flex-1 px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-sm ${
+                      className={`flex-1 px-4 py-2.5 rounded-lg transition-all duration-300 font-medium text-sm cursor-pointer ${
                         isCopied
                           ? "bg-green-100 text-green-700"
                           : "bg-gray-100 hover:bg-gray-200 text-gray-700"

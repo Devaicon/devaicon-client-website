@@ -34,7 +34,7 @@ export function DesktopNav({ onDropdownStateChange }) {
     <>
       {/* Desktop Navigation Links */}
       <ul
-        className="hidden lg:flex items-center gap-3 lg:gap-4 xl:gap-6 2xl:gap-8"
+        className="hidden lg:flex items-center gap-3 lg:gap-4 xl:gap-5 2xl:gap-8 flex-1 justify-center mx-4 xl:mx-6 navbar-links-responsive"
         role="list"
       >
         <NavItem
@@ -81,11 +81,11 @@ export function DesktopNav({ onDropdownStateChange }) {
       {/* Desktop CTA */}
       <Link
         href={ROUTES.CONTACT}
-        className="hidden lg:flex items-center gap-1 xl:gap-2 border-gray-300 text-gray-700 hover:border-[#3d234b] hover:text-[#3d234b] transition-all duration-200 font-medium text-xs xl:text-sm group whitespace-nowrap"
+        className="hidden lg:flex items-center gap-1 xl:gap-2 border-gray-300 text-gray-700 hover:border-[#3d234b] hover:text-[#3d234b] transition-all duration-200 font-medium text-xs xl:text-sm group whitespace-nowrap shrink-0 navbar-cta-responsive"
         aria-label="Get started with Devaicon"
       >
         <span>Get Started</span>
-        <CircleArrowRight className="w-5 h-5 xl:w-7 xl:h-7" />
+        <CircleArrowRight className="w-5 h-5 xl:w-6 xl:h-6 2xl:w-7 2xl:h-7 get-started-icon" />
       </Link>
 
       {/* Dropdown Menus */}

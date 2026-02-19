@@ -656,3 +656,27 @@ h6 {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
+
+/* Navbar fixes for 1279px - 1384px screen range */
+@media (min-width: 1279px) and (max-width: 1384px) {
+  .navbar-container-responsive {
+    width: calc(100% - 16rem) !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .navbar-logo-responsive {
+    width: 8.5rem !important;
+  }
+
+  .navbar-links-responsive {
+    gap: 1rem !important;
+    margin-left: 0.75rem !important;
+    margin-right: 0.75rem !important;
+  }
+
+  .navbar-cta-responsive .get-started-icon {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+}
