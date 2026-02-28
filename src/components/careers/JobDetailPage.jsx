@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   MapPin,
   Briefcase,
-  DollarSign,
   Clock,
   CheckCircle2,
   ChevronRight,
@@ -104,7 +103,7 @@ const JobDetailPage = ({ job }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
@@ -123,16 +122,6 @@ const JobDetailPage = ({ job }) => {
               <div>
                 <div className="text-white/70 text-sm">Experience</div>
                 <div className="text-white font-semibold">{job.experience}</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <div className="text-white/70 text-sm">Salary Range</div>
-                <div className="text-white font-semibold">{job.salary}</div>
               </div>
             </div>
 

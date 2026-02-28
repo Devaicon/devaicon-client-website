@@ -11,7 +11,6 @@ export const jobsData = [
     location: "Remote",
     type: "Full-time",
     experience: "5+ years",
-    salary: "$120,000 - $160,000",
     icon: "Code",
     shortDescription:
       "Build scalable web applications using modern frameworks and cloud technologies.",
@@ -64,7 +63,6 @@ export const jobsData = [
     location: "Hybrid",
     type: "Full-time",
     experience: "3+ years",
-    salary: "$130,000 - $180,000",
     icon: "Brain",
     shortDescription:
       "Develop and deploy machine learning models to solve complex business problems.",
@@ -117,7 +115,6 @@ export const jobsData = [
     location: "On-site",
     type: "Full-time",
     experience: "6+ years",
-    salary: "$140,000 - $190,000",
     icon: "Cloud",
     shortDescription:
       "Design and implement cloud infrastructure solutions for enterprise clients.",
@@ -170,7 +167,6 @@ export const jobsData = [
     location: "Remote",
     type: "Full-time",
     experience: "4+ years",
-    salary: "$110,000 - $150,000",
     icon: "Database",
     shortDescription:
       "Build and maintain data pipelines and analytics infrastructure.",
@@ -223,7 +219,6 @@ export const jobsData = [
     location: "Hybrid",
     type: "Full-time",
     experience: "5+ years",
-    salary: "$125,000 - $170,000",
     icon: "Users",
     shortDescription:
       "Lead product strategy and work with cross-functional teams to deliver impactful solutions.",
@@ -276,7 +271,6 @@ export const jobsData = [
     location: "Remote",
     type: "Full-time",
     experience: "3+ years",
-    salary: "$95,000 - $135,000",
     icon: "Code",
     shortDescription:
       "Create beautiful, responsive user interfaces using modern frontend technologies.",
