@@ -26,6 +26,16 @@ function getSheetsClient(): sheets_v4.Sheets {
   const privateKey = rawKey.includes("-----BEGIN PRIVATE KEY-----")
     ? rawKey.replace(/\\n/g, "\n")
     : Buffer.from(rawKey, "base64").toString("utf-8");
+
+  console.log("=== DEBUG GOOGLE KEY ===");
+  console.log("Raw Key starts with:", rawKey.substring(0, 40));
+  console.log("Raw Key includes literal '\\n'?", rawKey.includes("\\n"));
+  console.log("Processed Key starts with:", privateKey.substring(0, 40));
+  console.log("Processed Key ends with:", privateKey.substring(privateKey.length - 40));
+  console.log("Processed Key has actual newlines?", privateKey.includes("\n"));
+  console.log("Processed Key raw string:", JSON.stringify(privateKey.substring(0, 80)) + "...");
+  console.log("========================");
+
   // When stored in env, newlines in the private key are usually escaped as \n.
   // const privateKey = rawKey.replace(/\\n/g, '\n');
 
