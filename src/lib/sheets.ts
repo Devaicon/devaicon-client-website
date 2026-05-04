@@ -23,21 +23,12 @@ function getSheetsClient(): sheets_v4.Sheets {
   }
   // ...
   // If they stored it as base64 to avoid \n issues on Vercel:
-  const privateKey = rawKey.includes("-----BEGIN PRIVATE KEY-----")
-    ? rawKey.replace(/\\n/g, "\n")
-    : Buffer.from(rawKey, "base64").toString("utf-8");
-
-  console.log("=== DEBUG GOOGLE KEY ===");
-  console.log("Raw Key starts with:", rawKey.substring(0, 40));
-  console.log("Raw Key includes literal '\\n'?", rawKey.includes("\\n"));
-  console.log("Processed Key starts with:", privateKey.substring(0, 40));
-  console.log("Processed Key ends with:", privateKey.substring(privateKey.length - 40));
-  console.log("Processed Key has actual newlines?", privateKey.includes("\n"));
-  console.log("Processed Key raw string:", JSON.stringify(privateKey.substring(0, 80)) + "...");
-  console.log("========================");
+  // const privateKey = rawKey.includes("-----BEGIN PRIVATE KEY-----")
+  //   ? rawKey.replace(/\\n/g, "\n")
+  //   : Buffer.from(rawKey, "base64").toString("utf-8");
 
   // When stored in env, newlines in the private key are usually escaped as \n.
-  // const privateKey = rawKey.replace(/\\n/g, '\n');
+  const privateKey = rawKey.replace(/\\n/g, "\n");
 
   const auth = new google.auth.JWT({
     email,
@@ -121,27 +112,13 @@ function columnLetter(n: number): string {
   return s;
 }
 
-let _sheetsEnsured = false;
-
-async function ensureSheetsOnce() {
-  if (_sheetsEnsured) return;
+async function withSheetFallback<T>(action: () => Promise<T>): Promise<T> {
   try {
-    await ensureSheets();
-    _sheetsEnsured = true;
+    return await action();
   } catch (error: any) {
-    console.error("\n==================================");
-    console.error("❌ GOOGLE SHEETS CONNECTION ERROR");
-    console.error("==================================");
-    console.error("Message:", error.message);
-    if (error.response?.data) {
-      console.error("API Response Data:", JSON.stringify(error.response.data, null, 2));
-    }
-    if (error.code) {
-      console.error("Error Code:", error.code);
-    }
-    console.error("Stack Trace:", error.stack);
-    console.error("==================================\n");
-    throw error;
+    // Treat as fallback: ensure sheets and try again
+    await ensureSheets();
+    return await action();
   }
 }
 
@@ -152,77 +129,79 @@ async function ensureSheetsOnce() {
 export async function appendLog(
   log: Omit<TimeLog, "id" | "loggedAt" | "approvedAt" | "approvedBy">,
 ): Promise<TimeLog> {
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  const full: TimeLog = {
-    id: randomUUID(),
-    loggedAt: new Date().toISOString(),
-    approvedAt: "",
-    approvedBy: "",
-    ...log,
-  };
+    const full: TimeLog = {
+      id: randomUUID(),
+      loggedAt: new Date().toISOString(),
+      approvedAt: "",
+      approvedBy: "",
+      ...log,
+    };
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: `${SHEET_LOGS}!A:J`,
-    valueInputOption: "USER_ENTERED",
-    insertDataOption: "INSERT_ROWS",
-    requestBody: {
-      values: [
-        [
-          full.id,
-          full.date,
-          full.username,
-          full.project,
-          full.category,
-          full.hours,
-          full.description,
-          full.loggedAt,
-          full.approvedAt,
-          full.approvedBy,
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${SHEET_LOGS}!A:J`,
+      valueInputOption: "USER_ENTERED",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: {
+        values: [
+          [
+            full.id,
+            full.date,
+            full.username,
+            full.project,
+            full.category,
+            full.hours,
+            full.description,
+            full.loggedAt,
+            full.approvedAt,
+            full.approvedBy,
+          ],
         ],
-      ],
-    },
-  });
+      },
+    });
 
-  return full;
+    return full;
+  });
 }
 
 export async function readLogs(filter?: {
   username?: string;
 }): Promise<TimeLog[]> {
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${SHEET_LOGS}!A2:J`,
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_LOGS}!A2:J`,
+    });
+
+    const rows = res.data.values ?? [];
+    const logs: TimeLog[] = rows
+      .filter((r) => r && r.length >= 7 && r[0])
+      .map((r) => ({
+        id: String(r[0] ?? ""),
+        date: String(r[1] ?? ""),
+        username: String(r[2] ?? "").toLowerCase(),
+        project: String(r[3] ?? ""),
+        category: String(r[4] ?? ""),
+        hours: Number(r[5] ?? 0),
+        description: String(r[6] ?? ""),
+        loggedAt: String(r[7] ?? ""),
+        approvedAt: String(r[8] ?? ""),
+        approvedBy: String(r[9] ?? ""),
+      }));
+
+    if (filter?.username) {
+      const u = filter.username.toLowerCase();
+      return logs.filter((l) => l.username === u);
+    }
+    return logs;
   });
-
-  const rows = res.data.values ?? [];
-  const logs: TimeLog[] = rows
-    .filter((r) => r && r.length >= 7 && r[0])
-    .map((r) => ({
-      id: String(r[0] ?? ""),
-      date: String(r[1] ?? ""),
-      username: String(r[2] ?? "").toLowerCase(),
-      project: String(r[3] ?? ""),
-      category: String(r[4] ?? ""),
-      hours: Number(r[5] ?? 0),
-      description: String(r[6] ?? ""),
-      loggedAt: String(r[7] ?? ""),
-      approvedAt: String(r[8] ?? ""),
-      approvedBy: String(r[9] ?? ""),
-    }));
-
-  if (filter?.username) {
-    const u = filter.username.toLowerCase();
-    return logs.filter((l) => l.username === u);
-  }
-  return logs;
 }
 
 export async function findLogById(id: string): Promise<TimeLog | null> {
@@ -231,43 +210,44 @@ export async function findLogById(id: string): Promise<TimeLog | null> {
 }
 
 export async function deleteLogById(id: string): Promise<boolean> {
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${SHEET_LOGS}!A2:A`,
-  });
-  const ids = res.data.values ?? [];
-  const idx = ids.findIndex((r) => r[0] === id);
-  if (idx < 0) return false;
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_LOGS}!A2:A`,
+    });
+    const ids = res.data.values ?? [];
+    const idx = ids.findIndex((r) => r[0] === id);
+    if (idx < 0) return false;
 
-  const meta = await sheets.spreadsheets.get({ spreadsheetId });
-  const tab = (meta.data.sheets ?? []).find(
-    (s) => s.properties?.title === SHEET_LOGS,
-  );
-  const sheetId = tab?.properties?.sheetId;
-  if (sheetId == null) return false;
+    const meta = await sheets.spreadsheets.get({ spreadsheetId });
+    const tab = (meta.data.sheets ?? []).find(
+      (s) => s.properties?.title === SHEET_LOGS,
+    );
+    const sheetId = tab?.properties?.sheetId;
+    if (sheetId == null) return false;
 
-  await sheets.spreadsheets.batchUpdate({
-    spreadsheetId,
-    requestBody: {
-      requests: [
-        {
-          deleteDimension: {
-            range: {
-              sheetId,
-              dimension: "ROWS",
-              startIndex: idx + 1,
-              endIndex: idx + 2,
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            deleteDimension: {
+              range: {
+                sheetId,
+                dimension: "ROWS",
+                startIndex: idx + 1,
+                endIndex: idx + 2,
+              },
             },
           },
-        },
-      ],
-    },
+        ],
+      },
+    });
+    return true;
   });
-  return true;
 }
 
 /**
@@ -280,43 +260,44 @@ export async function setLogsApproval(
   adminUsername: string,
 ): Promise<number> {
   if (ids.length === 0) return 0;
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  // Map ID -> 1-based row number (data starts at row 2).
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${SHEET_LOGS}!A2:A`,
+    // Map ID -> 1-based row number (data starts at row 2).
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_LOGS}!A2:A`,
+    });
+    const rows = res.data.values ?? [];
+    const idToRow = new Map<string, number>();
+    rows.forEach((r, i) => {
+      if (r[0]) idToRow.set(String(r[0]), i + 2);
+    });
+
+    const approvedAt = approved ? new Date().toISOString() : "";
+    const approvedBy = approved ? adminUsername : "";
+
+    const data = ids
+      .map((id) => idToRow.get(id))
+      .filter((row): row is number => typeof row === "number")
+      .map((row) => ({
+        range: `${SHEET_LOGS}!I${row}:J${row}`,
+        values: [[approvedAt, approvedBy]],
+      }));
+
+    if (data.length === 0) return 0;
+
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        valueInputOption: "USER_ENTERED",
+        data,
+      },
+    });
+
+    return data.length;
   });
-  const rows = res.data.values ?? [];
-  const idToRow = new Map<string, number>();
-  rows.forEach((r, i) => {
-    if (r[0]) idToRow.set(String(r[0]), i + 2);
-  });
-
-  const approvedAt = approved ? new Date().toISOString() : "";
-  const approvedBy = approved ? adminUsername : "";
-
-  const data = ids
-    .map((id) => idToRow.get(id))
-    .filter((row): row is number => typeof row === "number")
-    .map((row) => ({
-      range: `${SHEET_LOGS}!I${row}:J${row}`,
-      values: [[approvedAt, approvedBy]],
-    }));
-
-  if (data.length === 0) return 0;
-
-  await sheets.spreadsheets.values.batchUpdate({
-    spreadsheetId,
-    requestBody: {
-      valueInputOption: "USER_ENTERED",
-      data,
-    },
-  });
-
-  return data.length;
 }
 
 /* ------------------------------------------------------------------ */
@@ -324,93 +305,96 @@ export async function setLogsApproval(
 /* ------------------------------------------------------------------ */
 
 export async function readProjects(): Promise<Project[]> {
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${SHEET_PROJECTS}!A2:D`,
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_PROJECTS}!A2:D`,
+    });
+    const rows = res.data.values ?? [];
+    return rows
+      .filter((r) => r && r[0] && r[1])
+      .map((r) => ({
+        id: String(r[0]),
+        name: String(r[1]),
+        addedAt: String(r[2] ?? ""),
+        addedBy: String(r[3] ?? ""),
+      }));
   });
-  const rows = res.data.values ?? [];
-  return rows
-    .filter((r) => r && r[0] && r[1])
-    .map((r) => ({
-      id: String(r[0]),
-      name: String(r[1]),
-      addedAt: String(r[2] ?? ""),
-      addedBy: String(r[3] ?? ""),
-    }));
 }
 
 export async function appendProject(
   name: string,
   addedBy: string,
 ): Promise<Project> {
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  const project: Project = {
-    id: randomUUID(),
-    name: name.trim(),
-    addedAt: new Date().toISOString(),
-    addedBy,
-  };
+    const project: Project = {
+      id: randomUUID(),
+      name: name.trim(),
+      addedAt: new Date().toISOString(),
+      addedBy,
+    };
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: `${SHEET_PROJECTS}!A:D`,
-    valueInputOption: "USER_ENTERED",
-    insertDataOption: "INSERT_ROWS",
-    requestBody: {
-      values: [[project.id, project.name, project.addedAt, project.addedBy]],
-    },
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${SHEET_PROJECTS}!A:D`,
+      valueInputOption: "USER_ENTERED",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: {
+        values: [[project.id, project.name, project.addedAt, project.addedBy]],
+      },
+    });
+
+    return project;
   });
-
-  return project;
 }
 
 export async function deleteProjectById(id: string): Promise<boolean> {
-  await ensureSheetsOnce();
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
 
-  // Find the row index (1-based, including header).
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${SHEET_PROJECTS}!A2:A`,
-  });
-  const ids = res.data.values ?? [];
-  const idx = ids.findIndex((r) => r[0] === id);
-  if (idx < 0) return false;
+    // Find the row index (1-based, including header).
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_PROJECTS}!A2:A`,
+    });
+    const ids = res.data.values ?? [];
+    const idx = ids.findIndex((r) => r[0] === id);
+    if (idx < 0) return false;
 
-  // Need the sheetId (not the tab name) to delete a row.
-  const meta = await sheets.spreadsheets.get({ spreadsheetId });
-  const tab = (meta.data.sheets ?? []).find(
-    (s) => s.properties?.title === SHEET_PROJECTS,
-  );
-  const sheetId = tab?.properties?.sheetId;
-  if (sheetId == null) return false;
+    // Need the sheetId (not the tab name) to delete a row.
+    const meta = await sheets.spreadsheets.get({ spreadsheetId });
+    const tab = (meta.data.sheets ?? []).find(
+      (s) => s.properties?.title === SHEET_PROJECTS,
+    );
+    const sheetId = tab?.properties?.sheetId;
+    if (sheetId == null) return false;
 
-  await sheets.spreadsheets.batchUpdate({
-    spreadsheetId,
-    requestBody: {
-      requests: [
-        {
-          deleteDimension: {
-            range: {
-              sheetId,
-              dimension: "ROWS",
-              startIndex: idx + 1, // +1 because header is row 0 internally
-              endIndex: idx + 2,
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            deleteDimension: {
+              range: {
+                sheetId,
+                dimension: "ROWS",
+                startIndex: idx + 1, // +1 because header is row 0 internally
+                endIndex: idx + 2,
+              },
             },
           },
-        },
-      ],
-    },
+        ],
+      },
+    });
+    return true;
   });
-  return true;
 }
 
 /* ------------------------------------------------------------------ */
