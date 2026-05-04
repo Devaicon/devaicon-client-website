@@ -1,5 +1,5 @@
-import { google, sheets_v4 } from 'googleapis';
-import { randomUUID } from 'crypto';
+import { google, sheets_v4 } from "googleapis";
+import { randomUUID } from "crypto";
 import {
   HEADERS_LOGS,
   HEADERS_PROJECTS,
@@ -7,7 +7,7 @@ import {
   SHEET_PROJECTS,
   type Project,
   type TimeLog,
-} from './types';
+} from "./types";
 
 let cachedClient: sheets_v4.Sheets | null = null;
 
@@ -18,25 +18,30 @@ function getSheetsClient(): sheets_v4.Sheets {
   const rawKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
   if (!email || !rawKey) {
     throw new Error(
-      'Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.',
+      "Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.",
     );
   }
+  // ...
+  // If they stored it as base64 to avoid \n issues on Vercel:
+  const privateKey = rawKey.includes("-----BEGIN PRIVATE KEY-----")
+    ? rawKey.replace(/\\n/g, "\n")
+    : Buffer.from(rawKey, "base64").toString("utf-8");
   // When stored in env, newlines in the private key are usually escaped as \n.
-  const privateKey = rawKey.replace(/\\n/g, '\n');
+  // const privateKey = rawKey.replace(/\\n/g, '\n');
 
   const auth = new google.auth.JWT({
     email,
     key: privateKey,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
 
-  cachedClient = google.sheets({ version: 'v4', auth });
+  cachedClient = google.sheets({ version: "v4", auth });
   return cachedClient;
 }
 
 function getSpreadsheetId(): string {
   const id = process.env.GOOGLE_SHEET_ID;
-  if (!id) throw new Error('Missing GOOGLE_SHEET_ID env var.');
+  if (!id) throw new Error("Missing GOOGLE_SHEET_ID env var.");
   return id;
 }
 
@@ -50,7 +55,9 @@ export async function ensureSheets(): Promise<void> {
 
   const meta = await sheets.spreadsheets.get({ spreadsheetId });
   const existingTitles = new Set(
-    (meta.data.sheets ?? []).map((s) => s.properties?.title).filter(Boolean) as string[],
+    (meta.data.sheets ?? [])
+      .map((s) => s.properties?.title)
+      .filter(Boolean) as string[],
   );
 
   const requests: sheets_v4.Schema$Request[] = [];
@@ -84,7 +91,7 @@ async function ensureHeaderRow(tab: string, headers: string[]): Promise<void> {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range,
-      valueInputOption: 'RAW',
+      valueInputOption: "RAW",
       requestBody: { values: [headers] },
     });
   }
@@ -92,7 +99,7 @@ async function ensureHeaderRow(tab: string, headers: string[]): Promise<void> {
 
 function columnLetter(n: number): string {
   // 1 -> A, 26 -> Z, 27 -> AA  (only handles up to ZZ which is plenty)
-  let s = '';
+  let s = "";
   while (n > 0) {
     const rem = (n - 1) % 26;
     s = String.fromCharCode(65 + rem) + s;
@@ -114,7 +121,7 @@ async function ensureSheetsOnce() {
 /* ------------------------------------------------------------------ */
 
 export async function appendLog(
-  log: Omit<TimeLog, 'id' | 'loggedAt' | 'approvedAt' | 'approvedBy'>,
+  log: Omit<TimeLog, "id" | "loggedAt" | "approvedAt" | "approvedBy">,
 ): Promise<TimeLog> {
   await ensureSheetsOnce();
   const sheets = getSheetsClient();
@@ -123,16 +130,16 @@ export async function appendLog(
   const full: TimeLog = {
     id: randomUUID(),
     loggedAt: new Date().toISOString(),
-    approvedAt: '',
-    approvedBy: '',
+    approvedAt: "",
+    approvedBy: "",
     ...log,
   };
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: `${SHEET_LOGS}!A:J`,
-    valueInputOption: 'USER_ENTERED',
-    insertDataOption: 'INSERT_ROWS',
+    valueInputOption: "USER_ENTERED",
+    insertDataOption: "INSERT_ROWS",
     requestBody: {
       values: [
         [
@@ -170,16 +177,16 @@ export async function readLogs(filter?: {
   const logs: TimeLog[] = rows
     .filter((r) => r && r.length >= 7 && r[0])
     .map((r) => ({
-      id: String(r[0] ?? ''),
-      date: String(r[1] ?? ''),
-      username: String(r[2] ?? '').toLowerCase(),
-      project: String(r[3] ?? ''),
-      category: String(r[4] ?? ''),
+      id: String(r[0] ?? ""),
+      date: String(r[1] ?? ""),
+      username: String(r[2] ?? "").toLowerCase(),
+      project: String(r[3] ?? ""),
+      category: String(r[4] ?? ""),
       hours: Number(r[5] ?? 0),
-      description: String(r[6] ?? ''),
-      loggedAt: String(r[7] ?? ''),
-      approvedAt: String(r[8] ?? ''),
-      approvedBy: String(r[9] ?? ''),
+      description: String(r[6] ?? ""),
+      loggedAt: String(r[7] ?? ""),
+      approvedAt: String(r[8] ?? ""),
+      approvedBy: String(r[9] ?? ""),
     }));
 
   if (filter?.username) {
@@ -222,7 +229,7 @@ export async function deleteLogById(id: string): Promise<boolean> {
           deleteDimension: {
             range: {
               sheetId,
-              dimension: 'ROWS',
+              dimension: "ROWS",
               startIndex: idx + 1,
               endIndex: idx + 2,
             },
@@ -259,12 +266,12 @@ export async function setLogsApproval(
     if (r[0]) idToRow.set(String(r[0]), i + 2);
   });
 
-  const approvedAt = approved ? new Date().toISOString() : '';
-  const approvedBy = approved ? adminUsername : '';
+  const approvedAt = approved ? new Date().toISOString() : "";
+  const approvedBy = approved ? adminUsername : "";
 
   const data = ids
     .map((id) => idToRow.get(id))
-    .filter((row): row is number => typeof row === 'number')
+    .filter((row): row is number => typeof row === "number")
     .map((row) => ({
       range: `${SHEET_LOGS}!I${row}:J${row}`,
       values: [[approvedAt, approvedBy]],
@@ -275,7 +282,7 @@ export async function setLogsApproval(
   await sheets.spreadsheets.values.batchUpdate({
     spreadsheetId,
     requestBody: {
-      valueInputOption: 'USER_ENTERED',
+      valueInputOption: "USER_ENTERED",
       data,
     },
   });
@@ -302,8 +309,8 @@ export async function readProjects(): Promise<Project[]> {
     .map((r) => ({
       id: String(r[0]),
       name: String(r[1]),
-      addedAt: String(r[2] ?? ''),
-      addedBy: String(r[3] ?? ''),
+      addedAt: String(r[2] ?? ""),
+      addedBy: String(r[3] ?? ""),
     }));
 }
 
@@ -325,8 +332,8 @@ export async function appendProject(
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: `${SHEET_PROJECTS}!A:D`,
-    valueInputOption: 'USER_ENTERED',
-    insertDataOption: 'INSERT_ROWS',
+    valueInputOption: "USER_ENTERED",
+    insertDataOption: "INSERT_ROWS",
     requestBody: {
       values: [[project.id, project.name, project.addedAt, project.addedBy]],
     },
@@ -365,7 +372,7 @@ export async function deleteProjectById(id: string): Promise<boolean> {
           deleteDimension: {
             range: {
               sheetId,
-              dimension: 'ROWS',
+              dimension: "ROWS",
               startIndex: idx + 1, // +1 because header is row 0 internally
               endIndex: idx + 2,
             },
@@ -392,14 +399,14 @@ export async function downloadAsXlsx(): Promise<{
   filename: string;
 }> {
   const drive = google.drive({
-    version: 'v3',
+    version: "v3",
     auth: new google.auth.JWT({
       email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: (process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY ?? '').replace(
+      key: (process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY ?? "").replace(
         /\\n/g,
-        '\n',
+        "\n",
       ),
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+      scopes: ["https://www.googleapis.com/auth/drive.readonly"],
     }),
   });
 
@@ -408,9 +415,9 @@ export async function downloadAsXlsx(): Promise<{
     {
       fileId,
       mimeType:
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     },
-    { responseType: 'arraybuffer' },
+    { responseType: "arraybuffer" },
   );
   return {
     body: res.data as ArrayBuffer,
