@@ -10,7 +10,7 @@ import type { Role, SessionUser } from "./types";
  * To add a person you just add another env var and redeploy. No DB.
  */
 
-const USER_ENV_PATTERN = /^([A-Z0-9_]+)_PASSWORD$/;
+const USER_ENV_PATTERN = /^([A-Za-z0-9_]+)_PASSWORD$/;
 
 export function listUsernames(): SessionUser[] {
   const users: SessionUser[] = [];
@@ -20,7 +20,11 @@ export function listUsernames(): SessionUser[] {
     const name = m[1].toLowerCase();
     // For the role, if the username starts with 'admin', assign admin. Otherwise dev.
     const role: Role = name.startsWith("admin") ? "admin" : "dev";
-    users.push({ username: name, role });
+    
+    // Avoid adding duplicates if they somehow added multiple casings
+    if (!users.find(u => u.username === name)) {
+      users.push({ username: name, role });
+    }
   }
   // stable order: admins first, then devs, then by name
   return users.sort((a, b) => {
@@ -41,8 +45,11 @@ export function verifyCredentials(
   const m = username.match(/^[a-z0-9_]+$/);
   if (!m) return { error: "invalid_username" };
 
-  const envKey = `${username.toUpperCase()}_PASSWORD`;
-  const expected = process.env[envKey];
+  // Case-insensitive lookup for the environment variable
+  const targetEnvKey = `${username}_password`;
+  const actualEnvKey = Object.keys(process.env).find(k => k.toLowerCase() === targetEnvKey);
+  const expected = actualEnvKey ? process.env[actualEnvKey] : undefined;
+  
   if (!expected) return { error: "invalid_username" };
 
   // constant-time compare to avoid leaking length / prefix info
