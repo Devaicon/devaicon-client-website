@@ -10,16 +10,17 @@ import type { Role, SessionUser } from "./types";
  * To add a person you just add another env var and redeploy. No DB.
  */
 
-const USER_ENV_PATTERN = /^(DEV|ADMIN)([A-Z0-9_]+)_PASSWORD$/;
+const USER_ENV_PATTERN = /^([A-Z0-9_]+)_PASSWORD$/;
 
 export function listUsernames(): SessionUser[] {
   const users: SessionUser[] = [];
   for (const key of Object.keys(process.env)) {
     const m = key.match(USER_ENV_PATTERN);
     if (!m) continue;
-    const role = m[1].toLowerCase() as Role;
-    const num = m[2].toLowerCase(); // username suffix can be names now
-    users.push({ username: `${role}${num}`, role });
+    const name = m[1].toLowerCase();
+    // For the role, if the username starts with 'admin', assign admin. Otherwise dev.
+    const role: Role = name.startsWith("admin") ? "admin" : "dev";
+    users.push({ username: name, role });
   }
   // stable order: admins first, then devs, then by name
   return users.sort((a, b) => {
@@ -31,25 +32,31 @@ export function listUsernames(): SessionUser[] {
 export function verifyCredentials(
   rawUsername: string,
   password: string,
-): SessionUser | null {
+): { user?: SessionUser; error?: "invalid_username" | "invalid_password" } {
   if (typeof rawUsername !== "string" || typeof password !== "string")
-    return null;
+    return { error: "invalid_username" };
 
   const username = rawUsername.trim().toLowerCase();
-  const m = username.match(/^(dev|admin)([a-z0-9_]+)$/);
-  if (!m) return null;
+  // We only require it to match letters/numbers/underscores
+  const m = username.match(/^[a-z0-9_]+$/);
+  if (!m) return { error: "invalid_username" };
 
-  const role = m[1] as Role;
-  const num = m[2];
-  const envKey = `${role.toUpperCase()}${num.toUpperCase()}_PASSWORD`;
+  const envKey = `${username.toUpperCase()}_PASSWORD`;
   const expected = process.env[envKey];
-  if (!expected) return null;
+  if (!expected) return { error: "invalid_username" };
 
   // constant-time compare to avoid leaking length / prefix info
   const a = Buffer.from(password, "utf8");
   const b = Buffer.from(expected, "utf8");
-  if (a.length !== b.length) return null;
-  if (!timingSafeEqual(a, b)) return null;
+  let matches = false;
+  try {
+     matches = a.length === b.length && timingSafeEqual(a, b);
+  } catch {
+     matches = false;
+  }
+  
+  if (!matches) return { error: "invalid_password" };
 
-  return { username, role };
+  const role: Role = username.startsWith("admin") ? "admin" : "dev";
+  return { user: { username, role } };
 }

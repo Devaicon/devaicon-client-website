@@ -43,15 +43,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
   }
 
-  const user = verifyCredentials(body.username ?? '', body.password ?? '');
-  if (!user) {
+  const verification = verifyCredentials(body.username ?? '', body.password ?? '');
+  if (verification.error) {
     recordFailure(`login:${ip}`);
-    // Generic error — don't tell the attacker whether the user exists.
     return NextResponse.json(
-      { error: 'invalid_credentials' },
+      { error: verification.error },
       { status: 401 },
     );
   }
+  
+  const user = verification.user!;
 
   // Successful login — clear any prior failures from this IP.
   clearAttempts(`login:${ip}`);
