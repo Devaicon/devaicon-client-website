@@ -51,7 +51,10 @@ function getSheetsClient(): sheets_v4.Sheets {
 
 function getSpreadsheetId(): string {
   const id = process.env.GOOGLE_SHEET_ID;
-  if (!id) throw new Error("Missing GOOGLE_SHEET_ID env var.");
+  if (!id) {
+    console.error("❌ ERROR: Missing GOOGLE_SHEET_ID env var.");
+    throw new Error("Missing GOOGLE_SHEET_ID env var.");
+  }
   return id;
 }
 
@@ -122,8 +125,24 @@ let _sheetsEnsured = false;
 
 async function ensureSheetsOnce() {
   if (_sheetsEnsured) return;
-  await ensureSheets();
-  _sheetsEnsured = true;
+  try {
+    await ensureSheets();
+    _sheetsEnsured = true;
+  } catch (error: any) {
+    console.error("\n==================================");
+    console.error("❌ GOOGLE SHEETS CONNECTION ERROR");
+    console.error("==================================");
+    console.error("Message:", error.message);
+    if (error.response?.data) {
+      console.error("API Response Data:", JSON.stringify(error.response.data, null, 2));
+    }
+    if (error.code) {
+      console.error("Error Code:", error.code);
+    }
+    console.error("Stack Trace:", error.stack);
+    console.error("==================================\n");
+    throw error;
+  }
 }
 
 /* ------------------------------------------------------------------ */
