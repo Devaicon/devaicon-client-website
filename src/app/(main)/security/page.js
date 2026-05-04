@@ -1,7 +1,7 @@
 "use client";
 
-import PageHero from "../../components/PageHero";
-import TalkTabbedSection from "../../components/TalkTabbedSection";
+import PageHero from "@/components/PageHero";
+import TalkTabbedSection from "@/components/TalkTabbedSection";
 import {
   Shield,
   Lock,

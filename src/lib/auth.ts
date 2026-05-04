@@ -10,7 +10,7 @@ import type { Role, SessionUser } from './types';
  * To add a person you just add another env var and redeploy. No DB.
  */
 
-const USER_ENV_PATTERN = /^(DEV|ADMIN)(\d+)_PASSWORD$/;
+const USER_ENV_PATTERN = /^(DEV|ADMIN)([A-Z0-9_]+)_PASSWORD$/;
 
 export function listUsernames(): SessionUser[] {
   const users: SessionUser[] = [];
@@ -18,10 +18,10 @@ export function listUsernames(): SessionUser[] {
     const m = key.match(USER_ENV_PATTERN);
     if (!m) continue;
     const role = m[1].toLowerCase() as Role;
-    const num = m[2];
+    const num = m[2].toLowerCase(); // username suffix can be names now
     users.push({ username: `${role}${num}`, role });
   }
-  // stable order: admins first, then devs, then by number
+  // stable order: admins first, then devs, then by name
   return users.sort((a, b) => {
     if (a.role !== b.role) return a.role === 'admin' ? -1 : 1;
     return a.username.localeCompare(b.username, undefined, { numeric: true });
@@ -35,12 +35,12 @@ export function verifyCredentials(
   if (typeof rawUsername !== 'string' || typeof password !== 'string') return null;
 
   const username = rawUsername.trim().toLowerCase();
-  const m = username.match(/^(dev|admin)(\d+)$/);
+  const m = username.match(/^(dev|admin)([a-z0-9_]+)$/);
   if (!m) return null;
 
   const role = m[1] as Role;
   const num = m[2];
-  const envKey = `${role.toUpperCase()}${num}_PASSWORD`;
+  const envKey = `${role.toUpperCase()}${num.toUpperCase()}_PASSWORD`;
   const expected = process.env[envKey];
   if (!expected) return null;
 

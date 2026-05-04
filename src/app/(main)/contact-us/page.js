@@ -1,8 +1,8 @@
 "use client";
 
-import PageHero from "../../components/PageHero";
-import ContactPageLayout from "../../components/ContactPageLayout";
-import FinancialBacking from "../../components/FinancialBacking";
+import PageHero from "@/components/PageHero";
+import ContactPageLayout from "@/components/ContactPageLayout";
+import FinancialBacking from "@/components/FinancialBacking";
 import { Phone } from "lucide-react";
 
 const ContactUs = () => {

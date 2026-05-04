@@ -1,8 +1,5 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PartnerContactCard from "@/components/PartnerContactCard";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -119,12 +116,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://maps.googleapis.com" />
         <link rel="dns-prefetch" href="https://maps.gstatic.com" />
       </head>
-      <body className={`${inter.variable} antialiased`}>
-        <Navbar />
-        {children}
-        <PartnerContactCard />
-        <Footer />
-      </body>
+      <body className={`${inter.variable} antialiased`}>{children}</body>
     </html>
   );
 }

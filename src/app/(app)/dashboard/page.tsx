@@ -77,6 +77,10 @@ export default function DashboardPage() {
       setSubmitMsg({ kind: 'err', text: 'Enter hours.' });
       return;
     }
+    if (!form.description) {
+      setSubmitMsg({ kind: 'err', text: 'Description is required.' });
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch('/api/logs', {
@@ -151,11 +155,11 @@ export default function DashboardPage() {
               {me?.username} {me?.role === 'admin' && <span className="text-neutral-400">(admin)</span>}
             </span>
             {me?.role === 'admin' && (
-              <a href="/admin" className="text-neutral-700 hover:text-neutral-900">
+              <a href="/admin" className="text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-md hover:bg-neutral-100 transition-colors">
                 Admin
               </a>
             )}
-            <button onClick={logout} className="text-neutral-700 hover:text-neutral-900">
+            <button onClick={logout} className="text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-md border border-neutral-200 hover:bg-neutral-50 transition-colors shadow-sm ml-2">
               Sign out
             </button>
           </div>
@@ -183,8 +187,18 @@ export default function DashboardPage() {
 
         <section className="rounded-xl border border-neutral-200 bg-white p-6">
           <h2 className="font-semibold mb-4">Log time</h2>
-          <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-3">
-            <div className="md:col-span-1">
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 animate-pulse">
+              <div className="md:col-span-1"><div className="h-4 bg-neutral-200 rounded w-10 mb-1"></div><div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div></div>
+              <div className="md:col-span-2"><div className="h-4 bg-neutral-200 rounded w-12 mb-1"></div><div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div></div>
+              <div className="md:col-span-1"><div className="h-4 bg-neutral-200 rounded w-16 mb-1"></div><div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div></div>
+              <div className="md:col-span-1"><div className="h-4 bg-neutral-200 rounded w-10 mb-1"></div><div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div></div>
+              <div className="md:col-span-1 flex items-end"><div className="h-9 bg-neutral-200 rounded w-full"></div></div>
+              <div className="md:col-span-6"><div className="h-4 bg-neutral-200 rounded w-20 mb-1 mt-2"></div><div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div></div>
+            </div>
+          ) : (
+            <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-3">
+              <div className="md:col-span-1">
               <label className="block text-xs text-neutral-600 mb-1">Date</label>
               <input
                 type="date"
@@ -210,7 +224,7 @@ export default function DashboardPage() {
                   </option>
                 ))}
               </select>
-              {projects.length === 0 && (
+              {!loading && projects.length === 0 && (
                 <p className="text-xs text-amber-700 mt-1">
                   No projects yet — ask your admin to add one.
                 </p>
@@ -245,20 +259,21 @@ export default function DashboardPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+                className="w-full rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
               >
                 {submitting ? 'Saving…' : 'Save'}
               </button>
             </div>
             <div className="md:col-span-6">
               <label className="block text-xs text-neutral-600 mb-1">
-                Description (optional)
+                Description
               </label>
               <input
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 placeholder="What did you work on?"
                 className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm"
+                required
               />
             </div>
             {submitMsg && (
@@ -272,7 +287,8 @@ export default function DashboardPage() {
                 {submitMsg.text}
               </div>
             )}
-          </form>
+            </form>
+          )}
         </section>
 
         <section className="rounded-xl border border-neutral-200 bg-white">
@@ -317,11 +333,19 @@ export default function DashboardPage() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-neutral-500">
-                      Loading…
-                    </td>
-                  </tr>
+                  <>
+                    {[1, 2, 3].map((i) => (
+                      <tr key={`skeleton-${i}`} className="border-t border-neutral-100 animate-pulse">
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-20"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-32"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-24"></div></td>
+                        <td className="px-4 py-3 text-right flex justify-end"><div className="h-4 bg-neutral-200 rounded w-8"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-48"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-16"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-12"></div></td>
+                      </tr>
+                    ))}
+                  </>
                 ) : filtered.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="px-4 py-8 text-center text-neutral-500">

@@ -4,7 +4,8 @@
 // Run with:  npx tsx scripts/setup-sheet.ts
 // (You only need to run it once. After that the app uses the sheet directly.)
 import dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
+dotenv.config(); // fall back to .env if .env.local isn't present
+
 import { ensureSheets } from "../src/lib/sheets";
 
 async function main() {

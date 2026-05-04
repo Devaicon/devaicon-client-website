@@ -339,10 +339,16 @@ export default function AdminPage() {
           </form>
           {pMsg && <p className="text-sm text-red-600 mb-3">{pMsg}</p>}
 
-          {projects.length === 0 ? (
-            <p className="text-sm text-neutral-500">No projects yet.</p>
+          {loading ? (
+            <div className="space-y-2 animate-pulse mt-4">
+              {[1, 2, 3].map(i => (
+                <div key={`pskel-${i}`} className="h-12 bg-neutral-100 border border-neutral-200 rounded-md"></div>
+              ))}
+            </div>
+          ) : projects.length === 0 ? (
+            <p className="text-sm text-neutral-500 mt-4">No projects yet.</p>
           ) : (
-            <ul className="divide-y divide-neutral-100 border border-neutral-200 rounded-md">
+            <ul className="divide-y divide-neutral-100 border border-neutral-200 rounded-md mt-4">
               {projects.map((p) => (
                 <li key={p.id} className="flex items-center justify-between px-4 py-2 text-sm">
                   <div>
@@ -584,11 +590,21 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr>
-                    <td colSpan={9} className="px-4 py-8 text-center text-neutral-500">
-                      Loading…
-                    </td>
-                  </tr>
+                  <>
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <tr key={`skeleton-${i}`} className="border-t border-neutral-100 animate-pulse">
+                        <td className="px-3 py-3 w-8"><div className="h-4 bg-neutral-200 rounded w-4"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-20"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-16"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-32"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-24"></div></td>
+                        <td className="px-4 py-3 text-right flex justify-end"><div className="h-4 bg-neutral-200 rounded w-8"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-48"></div></td>
+                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-16"></div></td>
+                        <td className="px-4 py-3"></td>
+                      </tr>
+                    ))}
+                  </>
                 ) : filtered.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="px-4 py-8 text-center text-neutral-500">
