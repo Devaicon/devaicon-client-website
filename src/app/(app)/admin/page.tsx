@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { CATEGORIES, type Project, type TimeLog } from '@/lib/types';
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { CATEGORIES, type Project, type TimeLog } from "@/lib/types";
 
 function todayLocal(): string {
   const d = new Date();
@@ -11,7 +11,7 @@ function todayLocal(): string {
 }
 
 function shiftDays(iso: string, days: number): string {
-  const d = new Date(iso + 'T00:00:00');
+  const d = new Date(iso + "T00:00:00");
   d.setDate(d.getDate() + days);
   return d.toISOString().slice(0, 10);
 }
@@ -36,17 +36,17 @@ export default function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [logs, setLogs] = useState<TimeLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [newProject, setNewProject] = useState('');
+  const [newProject, setNewProject] = useState("");
   const [pMsg, setPMsg] = useState<string | null>(null);
 
   // filters
-  const [fUser, setFUser] = useState('');
-  const [fProject, setFProject] = useState('');
-  const [fCategory, setFCategory] = useState('');
-  const [fFrom, setFFrom] = useState('');
-  const [fTo, setFTo] = useState('');
-  const [fStatus, setFStatus] = useState<'all' | 'pending' | 'approved'>('all');
-  const [activePreset, setActivePreset] = useState<string>('all');
+  const [fUser, setFUser] = useState("");
+  const [fProject, setFProject] = useState("");
+  const [fCategory, setFCategory] = useState("");
+  const [fFrom, setFFrom] = useState("");
+  const [fTo, setFTo] = useState("");
+  const [fStatus, setFStatus] = useState<"all" | "pending" | "approved">("all");
+  const [activePreset, setActivePreset] = useState<string>("all");
 
   // selection (for bulk approve)
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -56,17 +56,17 @@ export default function AdminPage() {
     setLoading(true);
     try {
       const [meRes, pRes, lRes] = await Promise.all([
-        fetch('/api/auth/me'),
-        fetch('/api/projects'),
-        fetch('/api/logs?all=1'),
+        fetch("/api/auth/me"),
+        fetch("/api/projects"),
+        fetch("/api/logs?all=1"),
       ]);
       if (meRes.status === 401) {
-        router.push('/login');
+        router.push("/login");
         return;
       }
       const meData = await meRes.json();
-      if (meData.user.role !== 'admin') {
-        router.push('/dashboard');
+      if (meData.user.role !== "admin") {
+        router.push("/dashboard");
         return;
       }
       setMe(meData.user);
@@ -86,33 +86,35 @@ export default function AdminPage() {
     setPMsg(null);
     const name = newProject.trim();
     if (!name) return;
-    const res = await fetch('/api/projects', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
     });
     const data = await res.json();
     if (!res.ok) {
       setPMsg(
-        data.error === 'duplicate_project'
-          ? 'Project already exists.'
-          : 'Failed to add project.',
+        data.error === "duplicate_project"
+          ? "Project already exists."
+          : "Failed to add project.",
       );
       return;
     }
-    setNewProject('');
+    setNewProject("");
     load();
   }
 
   async function deleteProject(id: string) {
-    if (!confirm('Delete this project? Existing logs are not removed.')) return;
-    await fetch(`/api/projects?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    if (!confirm("Delete this project? Existing logs are not removed.")) return;
+    await fetch(`/api/projects?id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    });
     load();
   }
 
   async function deleteLog(id: string) {
-    if (!confirm('Delete this entry permanently?')) return;
-    await fetch(`/api/logs?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    if (!confirm("Delete this entry permanently?")) return;
+    await fetch(`/api/logs?id=${encodeURIComponent(id)}`, { method: "DELETE" });
     load();
   }
 
@@ -120,14 +122,14 @@ export default function AdminPage() {
     if (ids.length === 0) return;
     setApprovalBusy(true);
     try {
-      const res = await fetch('/api/admin/approve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/admin/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids, approved }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        alert(data.message ?? 'Approval update failed.');
+        alert(data.message ?? "Approval update failed.");
         return;
       }
       setSelected(new Set());
@@ -147,8 +149,8 @@ export default function AdminPage() {
   }
 
   async function logout() {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/login');
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
   }
 
   /* ---------------- presets ---------------- */
@@ -156,30 +158,30 @@ export default function AdminPage() {
     setActivePreset(preset);
     const today = todayLocal();
     switch (preset) {
-      case 'today':
+      case "today":
         setFFrom(today);
         setFTo(today);
         break;
-      case 'week':
+      case "week":
         setFFrom(startOfWeekIso());
         setFTo(today);
         break;
-      case 'month':
+      case "month":
         setFFrom(startOfMonthIso());
         setFTo(today);
         break;
-      case 'last7':
+      case "last7":
         setFFrom(shiftDays(today, -6));
         setFTo(today);
         break;
-      case 'last30':
+      case "last30":
         setFFrom(shiftDays(today, -29));
         setFTo(today);
         break;
-      case 'all':
+      case "all":
       default:
-        setFFrom('');
-        setFTo('');
+        setFFrom("");
+        setFTo("");
     }
   }
 
@@ -198,8 +200,8 @@ export default function AdminPage() {
         if (fCategory && l.category !== fCategory) return false;
         if (fFrom && l.date < fFrom) return false;
         if (fTo && l.date > fTo) return false;
-        if (fStatus === 'pending' && l.approvedAt) return false;
-        if (fStatus === 'approved' && !l.approvedAt) return false;
+        if (fStatus === "pending" && l.approvedAt) return false;
+        if (fStatus === "approved" && !l.approvedAt) return false;
         return true;
       })
       .sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -241,27 +243,27 @@ export default function AdminPage() {
   }, [filtered]);
 
   function clearFilters() {
-    setFUser('');
-    setFProject('');
-    setFCategory('');
-    setFFrom('');
-    setFTo('');
-    setFStatus('all');
-    setActivePreset('all');
+    setFUser("");
+    setFProject("");
+    setFCategory("");
+    setFFrom("");
+    setFTo("");
+    setFStatus("all");
+    setActivePreset("all");
     setSelected(new Set());
   }
 
   function downloadFilteredCsv() {
     const headers = [
-      'Date',
-      'User',
-      'Project',
-      'Category',
-      'Hours',
-      'Description',
-      'Status',
-      'Approved By',
-      'Approved At',
+      "Date",
+      "User",
+      "Project",
+      "Category",
+      "Hours",
+      "Description",
+      "Status",
+      "Approved By",
+      "Approved At",
     ];
     const rows = filtered.map((l) => [
       l.date,
@@ -270,7 +272,7 @@ export default function AdminPage() {
       l.category,
       Number(l.hours).toFixed(2),
       l.description,
-      l.approvedAt ? 'Approved' : 'Pending',
+      l.approvedAt ? "Approved" : "Pending",
       l.approvedBy,
       l.approvedAt,
     ]);
@@ -278,15 +280,15 @@ export default function AdminPage() {
       .map((r) =>
         r
           .map((cell) => {
-            const s = String(cell ?? '');
+            const s = String(cell ?? "");
             return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
           })
-          .join(','),
+          .join(","),
       )
-      .join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `devaicon-timelogs-${todayLocal()}.csv`;
     a.click();
@@ -294,12 +296,12 @@ export default function AdminPage() {
   }
 
   const presets = [
-    { id: 'today', label: 'Today' },
-    { id: 'week', label: 'This week' },
-    { id: 'month', label: 'This month' },
-    { id: 'last7', label: 'Last 7 days' },
-    { id: 'last30', label: 'Last 30 days' },
-    { id: 'all', label: 'All time' },
+    { id: "today", label: "Today" },
+    { id: "week", label: "This week" },
+    { id: "month", label: "This month" },
+    { id: "last7", label: "Last 7 days" },
+    { id: "last30", label: "Last 30 days" },
+    { id: "all", label: "All time" },
   ];
 
   return (
@@ -309,10 +311,16 @@ export default function AdminPage() {
           <div className="font-semibold tracking-tight">Devaicon · Admin</div>
           <div className="flex items-center gap-4 text-sm">
             <span className="text-neutral-600">{me?.username}</span>
-            <a href="/dashboard" className="text-neutral-700 hover:text-neutral-900">
+            <a
+              href="/dashboard"
+              className="text-neutral-700 hover:text-neutral-900"
+            >
               My dashboard
             </a>
-            <button onClick={logout} className="text-neutral-700 hover:text-neutral-900">
+            <button
+              onClick={logout}
+              className="text-neutral-700 hover:text-neutral-900"
+            >
               Sign out
             </button>
           </div>
@@ -341,8 +349,11 @@ export default function AdminPage() {
 
           {loading ? (
             <div className="space-y-2 animate-pulse mt-4">
-              {[1, 2, 3].map(i => (
-                <div key={`pskel-${i}`} className="h-12 bg-neutral-100 border border-neutral-200 rounded-md"></div>
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={`pskel-${i}`}
+                  className="h-12 bg-neutral-100 border border-neutral-200 rounded-md"
+                ></div>
               ))}
             </div>
           ) : projects.length === 0 ? (
@@ -350,11 +361,15 @@ export default function AdminPage() {
           ) : (
             <ul className="divide-y divide-neutral-100 border border-neutral-200 rounded-md mt-4">
               {projects.map((p) => (
-                <li key={p.id} className="flex items-center justify-between px-4 py-2 text-sm">
+                <li
+                  key={p.id}
+                  className="flex items-center justify-between px-4 py-2 text-sm"
+                >
                   <div>
                     <div className="font-medium">{p.name}</div>
                     <div className="text-xs text-neutral-500">
-                      Added {new Date(p.addedAt).toLocaleDateString()} by {p.addedBy}
+                      Added {new Date(p.addedAt).toLocaleDateString()} by{" "}
+                      {p.addedBy}
                     </div>
                   </div>
                   <button
@@ -379,8 +394,8 @@ export default function AdminPage() {
                 onClick={() => applyPreset(p.id)}
                 className={`text-xs rounded-md px-3 py-1.5 border ${
                   activePreset === p.id
-                    ? 'bg-neutral-900 text-white border-neutral-900'
-                    : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50'
+                    ? "bg-neutral-900 text-white border-neutral-900"
+                    : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50"
                 }`}
               >
                 {p.label}
@@ -433,7 +448,7 @@ export default function AdminPage() {
               value={fFrom}
               onChange={(e) => {
                 setFFrom(e.target.value);
-                setActivePreset('custom');
+                setActivePreset("custom");
               }}
               className="rounded-md border border-neutral-300 px-2 py-2 text-sm"
             />
@@ -442,7 +457,7 @@ export default function AdminPage() {
               value={fTo}
               onChange={(e) => {
                 setFTo(e.target.value);
-                setActivePreset('custom');
+                setActivePreset("custom");
               }}
               className="rounded-md border border-neutral-300 px-2 py-2 text-sm"
             />
@@ -483,7 +498,8 @@ export default function AdminPage() {
         <div className="hidden print:block mb-4">
           <h1 className="text-xl font-bold">Devaicon — Time Log Report</h1>
           <p className="text-sm text-neutral-600">
-            Generated {new Date().toLocaleString()} · {filtered.length} entries · {totals.total.toFixed(1)}h total
+            Generated {new Date().toLocaleString()} · {filtered.length} entries
+            · {totals.total.toFixed(1)}h total
           </p>
           {(fUser || fProject || fCategory || fFrom || fTo) && (
             <p className="text-xs text-neutral-600 mt-1">
@@ -535,7 +551,8 @@ export default function AdminPage() {
               ) : (
                 <>
                   <span className="text-neutral-600">
-                    {pendingInView.length} pending entr{pendingInView.length === 1 ? 'y' : 'ies'} in view
+                    {pendingInView.length} pending entr
+                    {pendingInView.length === 1 ? "y" : "ies"} in view
                   </span>
                   <button
                     disabled={approvalBusy}
@@ -583,7 +600,9 @@ export default function AdminPage() {
                   <th className="text-left px-4 py-2 font-medium">Project</th>
                   <th className="text-left px-4 py-2 font-medium">Category</th>
                   <th className="text-right px-4 py-2 font-medium">Hours</th>
-                  <th className="text-left px-4 py-2 font-medium">Description</th>
+                  <th className="text-left px-4 py-2 font-medium">
+                    Description
+                  </th>
                   <th className="text-left px-4 py-2 font-medium">Status</th>
                   <th className="text-right px-4 py-2 font-medium print:hidden"></th>
                 </tr>
@@ -592,22 +611,44 @@ export default function AdminPage() {
                 {loading ? (
                   <>
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <tr key={`skeleton-${i}`} className="border-t border-neutral-100 animate-pulse">
-                        <td className="px-3 py-3 w-8"><div className="h-4 bg-neutral-200 rounded w-4"></div></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-20"></div></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-16"></div></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-32"></div></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-24"></div></td>
-                        <td className="px-4 py-3 text-right flex justify-end"><div className="h-4 bg-neutral-200 rounded w-8"></div></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-48"></div></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-neutral-200 rounded w-16"></div></td>
+                      <tr
+                        key={`skeleton-${i}`}
+                        className="border-t border-neutral-100 animate-pulse"
+                      >
+                        <td className="px-3 py-3 w-8">
+                          <div className="h-4 bg-neutral-200 rounded w-4"></div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="h-4 bg-neutral-200 rounded w-20"></div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="h-4 bg-neutral-200 rounded w-16"></div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="h-4 bg-neutral-200 rounded w-32"></div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="h-4 bg-neutral-200 rounded w-24"></div>
+                        </td>
+                        <td className="px-4 py-3 text-right flex justify-end">
+                          <div className="h-4 bg-neutral-200 rounded w-8"></div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="h-4 bg-neutral-200 rounded w-48"></div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="h-4 bg-neutral-200 rounded w-16"></div>
+                        </td>
                         <td className="px-4 py-3"></td>
                       </tr>
                     ))}
                   </>
                 ) : filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="px-4 py-8 text-center text-neutral-500">
+                    <td
+                      colSpan={9}
+                      className="px-4 py-8 text-center text-neutral-500"
+                    >
                       No entries match these filters.
                     </td>
                   </tr>
@@ -623,14 +664,20 @@ export default function AdminPage() {
                             onChange={() => toggleSelect(l.id)}
                           />
                         </td>
-                        <td className="px-4 py-2 whitespace-nowrap">{l.date}</td>
-                        <td className="px-4 py-2 whitespace-nowrap">{l.username}</td>
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {l.date}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {l.username}
+                        </td>
                         <td className="px-4 py-2">{l.project}</td>
                         <td className="px-4 py-2">{l.category}</td>
                         <td className="px-4 py-2 text-right tabular-nums">
                           {Number(l.hours).toFixed(2)}
                         </td>
-                        <td className="px-4 py-2 text-neutral-700">{l.description}</td>
+                        <td className="px-4 py-2 text-neutral-700">
+                          {l.description}
+                        </td>
                         <td className="px-4 py-2">
                           {isApproved ? (
                             <button
@@ -692,19 +739,19 @@ export default function AdminPage() {
               title="Hours by user"
               entries={[...totals.byUser.entries()]}
               activeKey={fUser}
-              onClick={(k) => setFUser(fUser === k ? '' : k)}
+              onClick={(k) => setFUser(fUser === k ? "" : k)}
             />
             <SummaryCard
               title="Hours by project"
               entries={[...totals.byProject.entries()]}
               activeKey={fProject}
-              onClick={(k) => setFProject(fProject === k ? '' : k)}
+              onClick={(k) => setFProject(fProject === k ? "" : k)}
             />
             <SummaryCard
               title="Hours by category"
               entries={[...totals.byCategory.entries()]}
               activeKey={fCategory}
-              onClick={(k) => setFCategory(fCategory === k ? '' : k)}
+              onClick={(k) => setFCategory(fCategory === k ? "" : k)}
             />
           </section>
         )}
@@ -740,21 +787,25 @@ function SummaryCard({
               <button
                 onClick={() => onClick?.(k)}
                 className={`w-full text-left rounded-md px-2 py-1 -mx-2 transition ${
-                  isActive ? 'bg-neutral-900/5' : 'hover:bg-neutral-50'
+                  isActive ? "bg-neutral-900/5" : "hover:bg-neutral-50"
                 }`}
               >
                 <div className="flex justify-between text-sm">
-                  <span className={isActive ? 'font-semibold' : 'text-neutral-700'}>
+                  <span
+                    className={isActive ? "font-semibold" : "text-neutral-700"}
+                  >
                     {k}
                   </span>
-                  <span className="tabular-nums font-medium">{v.toFixed(1)}h</span>
+                  <span className="tabular-nums font-medium">
+                    {v.toFixed(1)}h
+                  </span>
                 </div>
                 <div className="mt-1 h-1.5 bg-neutral-100 rounded">
                   <div
                     className={`h-1.5 rounded ${
-                      isActive ? 'bg-neutral-900' : 'bg-neutral-700'
+                      isActive ? "bg-neutral-900" : "bg-neutral-700"
                     }`}
-                    style={{ width: total ? `${(v / total) * 100}%` : '0%' }}
+                    style={{ width: total ? `${(v / total) * 100}%` : "0%" }}
                   />
                 </div>
               </button>

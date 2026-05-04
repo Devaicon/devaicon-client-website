@@ -101,6 +101,14 @@ function columnLetter(n: number): string {
   return s;
 }
 
+let _sheetsEnsured = false;
+
+async function ensureSheetsOnce() {
+  if (_sheetsEnsured) return;
+  await ensureSheets();
+  _sheetsEnsured = true;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Time logs                                                         */
 /* ------------------------------------------------------------------ */
@@ -108,6 +116,7 @@ function columnLetter(n: number): string {
 export async function appendLog(
   log: Omit<TimeLog, 'id' | 'loggedAt' | 'approvedAt' | 'approvedBy'>,
 ): Promise<TimeLog> {
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
@@ -148,6 +157,7 @@ export async function appendLog(
 export async function readLogs(filter?: {
   username?: string;
 }): Promise<TimeLog[]> {
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
@@ -185,6 +195,7 @@ export async function findLogById(id: string): Promise<TimeLog | null> {
 }
 
 export async function deleteLogById(id: string): Promise<boolean> {
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
@@ -233,6 +244,7 @@ export async function setLogsApproval(
   adminUsername: string,
 ): Promise<number> {
   if (ids.length === 0) return 0;
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
@@ -276,6 +288,7 @@ export async function setLogsApproval(
 /* ------------------------------------------------------------------ */
 
 export async function readProjects(): Promise<Project[]> {
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
@@ -298,6 +311,7 @@ export async function appendProject(
   name: string,
   addedBy: string,
 ): Promise<Project> {
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
@@ -322,6 +336,7 @@ export async function appendProject(
 }
 
 export async function deleteProjectById(id: string): Promise<boolean> {
+  await ensureSheetsOnce();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
