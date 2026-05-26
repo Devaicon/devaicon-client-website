@@ -1,22 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyCredentials } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { verifyCredentials } from "@/lib/auth";
 import {
   createSessionCookie,
   SESSION_COOKIE_NAME,
   SESSION_TTL_SECONDS,
-} from '@/lib/session';
-import {
-  checkRateLimit,
-  recordFailure,
-  clearAttempts,
-} from '@/lib/rate-limit';
-import { getClientIp, isSameOrigin } from '@/lib/origin-check';
+} from "@/lib/session";
+import { checkRateLimit, recordFailure, clearAttempts } from "@/lib/rate-limit";
+import { getClientIp, isSameOrigin } from "@/lib/origin-check";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   if (!isSameOrigin(req)) {
-    return NextResponse.json({ error: 'forbidden_origin' }, { status: 403 });
+    return NextResponse.json({ error: "forbidden_origin" }, { status: 403 });
   }
 
   const ip = getClientIp(req);
@@ -24,14 +20,14 @@ export async function POST(req: NextRequest) {
   if (!rate.allowed) {
     return NextResponse.json(
       {
-        error: 'too_many_attempts',
+        error: "too_many_attempts",
         message: `Too many failed attempts. Try again in ${Math.ceil(
           (rate as any).retryAfterSeconds / 60,
         )} minute(s).`,
       },
       {
         status: 429,
-        headers: { 'Retry-After': String((rate as any).retryAfterSeconds) },
+        headers: { "Retry-After": String((rate as any).retryAfterSeconds) },
       },
     );
   }
@@ -40,18 +36,18 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
+    return NextResponse.json({ error: "invalid_body" }, { status: 400 });
   }
 
-  const verification = verifyCredentials(body.username ?? '', body.password ?? '');
+  const verification = verifyCredentials(
+    body.username ?? "",
+    body.password ?? "",
+  );
   if (verification.error) {
     recordFailure(`login:${ip}`);
-    return NextResponse.json(
-      { error: verification.error },
-      { status: 401 },
-    );
+    return NextResponse.json({ error: verification.error }, { status: 401 });
   }
-  
+
   const user = verification.user!;
 
   // Successful login — clear any prior failures from this IP.
@@ -63,9 +59,9 @@ export async function POST(req: NextRequest) {
     name: SESSION_COOKIE_NAME,
     value: token,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
     maxAge: SESSION_TTL_SECONDS,
   });
   return res;

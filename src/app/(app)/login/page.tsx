@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { Suspense } from 'react';
+import { Suspense } from "react";
 
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -35,32 +35,32 @@ function LoginForm() {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username.trim(), password }),
       });
       const data = await res.json();
       if (!res.ok) {
-        if (data?.error === 'invalid_username') {
-          setUsernameError('Username not found.');
-        } else if (data?.error === 'invalid_password') {
-          setPasswordError('Incorrect password.');
+        if (data?.error === "invalid_username") {
+          setUsernameError("Username not found.");
+        } else if (data?.error === "invalid_password") {
+          setPasswordError("Incorrect password.");
         } else {
-          setError('Login failed. Try again.');
+          setError("Login failed. Try again.");
         }
         return;
       }
-      const next = params.get('next');
-      if (next && next.startsWith('/')) {
+      const next = params.get("next");
+      if (next && next.startsWith("/")) {
         router.push(next);
-      } else if (data.user.role === 'admin') {
-        router.push('/admin');
+      } else if (data.user.role === "admin") {
+        router.push("/admin");
       } else {
-        router.push('/dashboard');
+        router.push("/dashboard");
       }
     } catch {
-      setError('Network error. Check your connection.');
+      setError("Network error. Check your connection.");
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,9 @@ function LoginForm() {
     <main className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Devaicon Time Tracker</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Devaicon Time Tracker
+          </h1>
           <p className="mt-1 text-sm text-neutral-500">
             Sign in to log your hours.
           </p>
@@ -95,7 +97,9 @@ function LoginForm() {
               }}
               placeholder="e.g. devarish or administrator"
               className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 ${
-                usernameError ? "border-red-500" : "border-neutral-300 focus:border-neutral-900"
+                usernameError
+                  ? "border-red-500"
+                  : "border-neutral-300 focus:border-neutral-900"
               }`}
             />
             {usernameError && (
@@ -118,7 +122,9 @@ function LoginForm() {
                   setError(null);
                 }}
                 className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 pr-10 ${
-                  passwordError ? "border-red-500" : "border-neutral-300 focus:border-neutral-900"
+                  passwordError
+                    ? "border-red-500"
+                    : "border-neutral-300 focus:border-neutral-900"
                 }`}
               />
               <button
@@ -146,14 +152,13 @@ function LoginForm() {
             disabled={loading}
             className="w-full rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
           >
-            {loading ? 'Signing in…' : 'Sign in'}
+            {loading ? "Signing in…" : "Sign in"}
           </button>
         </form>
       </div>
     </main>
   );
 }
-
 
 export default function LoginPage() {
   return (

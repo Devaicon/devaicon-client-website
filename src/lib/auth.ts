@@ -20,9 +20,9 @@ export function listUsernames(): SessionUser[] {
     const name = m[1].toLowerCase();
     // For the role, if the username starts with 'admin', assign admin. Otherwise dev.
     const role: Role = name.startsWith("admin") ? "admin" : "dev";
-    
+
     // Avoid adding duplicates if they somehow added multiple casings
-    if (!users.find(u => u.username === name)) {
+    if (!users.find((u) => u.username === name)) {
       users.push({ username: name, role });
     }
   }
@@ -47,9 +47,11 @@ export function verifyCredentials(
 
   // Case-insensitive lookup for the environment variable
   const targetEnvKey = `${username}_password`;
-  const actualEnvKey = Object.keys(process.env).find(k => k.toLowerCase() === targetEnvKey);
+  const actualEnvKey = Object.keys(process.env).find(
+    (k) => k.toLowerCase() === targetEnvKey,
+  );
   const expected = actualEnvKey ? process.env[actualEnvKey] : undefined;
-  
+
   if (!expected) return { error: "invalid_username" };
 
   // constant-time compare to avoid leaking length / prefix info
@@ -57,11 +59,11 @@ export function verifyCredentials(
   const b = Buffer.from(expected, "utf8");
   let matches = false;
   try {
-     matches = a.length === b.length && timingSafeEqual(a, b);
+    matches = a.length === b.length && timingSafeEqual(a, b);
   } catch {
-     matches = false;
+    matches = false;
   }
-  
+
   if (!matches) return { error: "invalid_password" };
 
   const role: Role = username.startsWith("admin") ? "admin" : "dev";

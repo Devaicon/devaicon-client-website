@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readSessionFromToken, SESSION_COOKIE_NAME } from "./lib/session";
 
-const PUBLIC_PATHS = ["/login", "/api/auth/login"];
+const PUBLIC_PATHS = [
+  "/login",
+  "/api/auth/login",
+  "/api/legacy/auth/login",
+];
 
 // All matcher paths in `config.matcher` below run through this function.
 export default async function proxy(req: NextRequest) {
@@ -33,7 +37,9 @@ export default async function proxy(req: NextRequest) {
 
   // Admin-only paths
   const adminOnly =
-    pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/api/admin") ||
+    pathname.startsWith("/api/legacy/admin");
   if (adminOnly && user.role !== "admin") {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "forbidden" }, { status: 403 });
@@ -50,10 +56,17 @@ export const config = {
     "/login",
     "/dashboard/:path*",
     "/admin/:path*",
+    // New Express-backed routes (rewritten to the Express server)
     "/api/logs/:path*",
     "/api/projects/:path*",
     "/api/admin/:path*",
     "/api/auth/me",
     "/api/auth/logout",
+    // Legacy Google-Sheets-backed routes
+    "/api/legacy/logs/:path*",
+    "/api/legacy/projects/:path*",
+    "/api/legacy/admin/:path*",
+    "/api/legacy/auth/me",
+    "/api/legacy/auth/logout",
   ],
 };
