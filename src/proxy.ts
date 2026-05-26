@@ -3,6 +3,7 @@ import { readSessionFromToken, SESSION_COOKIE_NAME } from "./lib/session";
 
 const PUBLIC_PATHS = [
   "/login",
+  "/legacy/login",
   "/api/auth/login",
   "/api/legacy/auth/login",
 ];
@@ -10,13 +11,21 @@ const PUBLIC_PATHS = [
 // All matcher paths in `config.matcher` below run through this function.
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const isLegacy =
+    pathname === "/legacy/login" ||
+    pathname.startsWith("/legacy/dashboard") ||
+    pathname.startsWith("/legacy/admin") ||
+    pathname.startsWith("/api/legacy/");
+  const loginPath = isLegacy ? "/legacy/login" : "/login";
+  const dashboardPath = isLegacy ? "/legacy/dashboard" : "/dashboard";
+
   const token = req.cookies.get(SESSION_COOKIE_NAME)?.value;
   const user = await readSessionFromToken(token);
 
-  if (pathname === "/login") {
+  if (pathname === "/login" || pathname === "/legacy/login") {
     if (user) {
       // Authenticated users shouldn't access login page, redirect to dashboard
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL(dashboardPath, req.url));
     }
     return NextResponse.next();
   }
@@ -30,7 +39,7 @@ export default async function proxy(req: NextRequest) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = loginPath;
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
@@ -38,13 +47,14 @@ export default async function proxy(req: NextRequest) {
   // Admin-only paths
   const adminOnly =
     pathname.startsWith("/admin") ||
+    pathname.startsWith("/legacy/admin") ||
     pathname.startsWith("/api/admin") ||
     pathname.startsWith("/api/legacy/admin");
   if (adminOnly && user.role !== "admin") {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "forbidden" }, { status: 403 });
     }
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL(dashboardPath, req.url));
   }
 
   // Devs landing on /admin already handled above; admins on /dashboard is fine.
@@ -62,7 +72,11 @@ export const config = {
     "/api/admin/:path*",
     "/api/auth/me",
     "/api/auth/logout",
-    // Legacy Google-Sheets-backed routes
+    // Legacy Sheets-backed UI pages
+    "/legacy/login",
+    "/legacy/dashboard/:path*",
+    "/legacy/admin/:path*",
+    // Legacy Google-Sheets-backed API routes
     "/api/legacy/logs/:path*",
     "/api/legacy/projects/:path*",
     "/api/legacy/admin/:path*",
