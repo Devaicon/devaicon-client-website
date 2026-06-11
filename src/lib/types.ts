@@ -59,3 +59,8 @@ export const HEADERS_LOGS = [
 ];
 
 export const HEADERS_PROJECTS = ['ID', 'Name', 'AddedAt', 'AddedBy'];
+
+// Listing / pagination defaults (shared by the logs listing endpoint).
+export const PAGE_SIZE_DEFAULT = 12;
+export const PAGE_SIZE_MAX = 100;
+export const BULK_IDS_MAX = 500;

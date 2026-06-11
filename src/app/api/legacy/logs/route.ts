@@ -3,29 +3,107 @@ import { getCurrentUser } from '@/lib/server-session';
 import {
   appendLog,
   deleteLogById,
+  deleteLogsByIds,
   findLogById,
   readLogs,
   readProjects,
 } from '@/lib/sheets';
-import { CATEGORIES } from '@/lib/types';
+import {
+  CATEGORIES,
+  PAGE_SIZE_DEFAULT,
+  PAGE_SIZE_MAX,
+  BULK_IDS_MAX,
+  type TimeLog,
+} from '@/lib/types';
 import { isSameOrigin } from '@/lib/origin-check';
 
 export const runtime = 'nodejs';
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function num(v: string | null): number | null {
+  if (v == null || v.trim() === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+/**
+ * Apply optional list filters:
+ *   dateFrom/dateTo    inclusive YYYY-MM-DD range
+ *   hoursMin/hoursMax  inclusive numeric range
+ *   status             approved | pending  (flagged is latest-backend only)
+ *   project/category   exact match
+ */
+function filterLogs(logs: TimeLog[], sp: URLSearchParams): TimeLog[] {
+  const dateFrom = (sp.get('dateFrom') ?? '').trim();
+  const dateTo = (sp.get('dateTo') ?? '').trim();
+  const hoursMin = num(sp.get('hoursMin'));
+  const hoursMax = num(sp.get('hoursMax'));
+  const status = (sp.get('status') ?? '').trim().toLowerCase();
+  const project = (sp.get('project') ?? '').trim();
+  const category = (sp.get('category') ?? '').trim();
+
+  return logs.filter((l) => {
+    if (DATE_RE.test(dateFrom) && l.date < dateFrom) return false;
+    if (DATE_RE.test(dateTo) && l.date > dateTo) return false;
+    if (hoursMin != null && l.hours < hoursMin) return false;
+    if (hoursMax != null && l.hours > hoursMax) return false;
+    if (status === 'approved' && !l.approvedAt) return false;
+    if (status === 'pending' && l.approvedAt) return false;
+    // The Sheets backend has no flag data, so a flag filter matches nothing.
+    if (status === 'flagged') return false;
+    if (project && l.project !== project) return false;
+    if (category && l.category !== category) return false;
+    return true;
+  });
+}
+
+function parsePagination(sp: URLSearchParams): { page: number; pageSize: number } {
+  let page = parseInt(sp.get('page') ?? '', 10);
+  let pageSize = parseInt(sp.get('pageSize') ?? '', 10);
+  if (!Number.isFinite(page) || page < 1) page = 1;
+  if (!Number.isFinite(pageSize) || pageSize < 1) pageSize = PAGE_SIZE_DEFAULT;
+  if (pageSize > PAGE_SIZE_MAX) pageSize = PAGE_SIZE_MAX;
+  return { page, pageSize };
+}
 
 export async function GET(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 
-  const wantAll = req.nextUrl.searchParams.get('all') === '1';
+  const sp = req.nextUrl.searchParams;
+  const wantAll = sp.get('all') === '1';
   if (wantAll && user.role !== 'admin') {
     return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   }
 
   try {
-    const logs = await readLogs(
-      wantAll ? undefined : { username: user.username },
-    );
-    return NextResponse.json({ logs });
+    let logs = await readLogs(wantAll ? undefined : { username: user.username });
+
+    // Admins viewing everything can still narrow to one user.
+    if (wantAll) {
+      const username = (sp.get('username') ?? '').trim().toLowerCase();
+      if (username) logs = logs.filter((l) => l.username === username);
+    }
+
+    logs = filterLogs(logs, sp);
+    // Newest first, matching the Express backend's ordering.
+    logs.sort((a, b) => (a.loggedAt < b.loggedAt ? 1 : a.loggedAt > b.loggedAt ? -1 : 0));
+
+    const total = logs.length;
+    const { page, pageSize } = parsePagination(sp);
+    const start = (page - 1) * pageSize;
+    const pageLogs = logs.slice(start, start + pageSize);
+
+    return NextResponse.json({
+      logs: pageLogs,
+      pagination: {
+        page,
+        pageSize,
+        total,
+        totalPages: Math.max(1, Math.ceil(total / pageSize)),
+      },
+    });
   } catch (e: any) {
     console.error('GET /api/logs failed:', e?.message ?? e);
     return NextResponse.json(
@@ -120,6 +198,50 @@ export async function DELETE(req: NextRequest) {
 
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+
+  const idsParam = req.nextUrl.searchParams.get('ids');
+
+  // Multi-select: delete several logs at once via ?ids=a,b,c
+  if (idsParam) {
+    const requested = Array.from(
+      new Set(
+        idsParam
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      ),
+    );
+    if (requested.length === 0) {
+      return NextResponse.json({ error: 'id_required' }, { status: 400 });
+    }
+    if (requested.length > BULK_IDS_MAX) {
+      return NextResponse.json({ error: 'too_many_ids' }, { status: 400 });
+    }
+
+    try {
+      const all = await readLogs();
+      const byId = new Map(all.map((l) => [l.id, l]));
+      const allowed = requested.filter((id) => {
+        const log = byId.get(id);
+        if (!log) return false;
+        // Devs can only delete their own un-approved logs; admins anything.
+        if (user.role !== 'admin') {
+          if (log.username !== user.username) return false;
+          if (log.approvedAt) return false;
+        }
+        return true;
+      });
+
+      const deleted = allowed.length ? await deleteLogsByIds(allowed) : 0;
+      return NextResponse.json({ ok: true, deleted, requested: requested.length });
+    } catch (e: any) {
+      console.error('DELETE /api/logs (bulk) failed:', e?.message ?? e);
+      return NextResponse.json(
+        { error: 'sheets_error', detail: e?.message ?? String(e) },
+        { status: 500 },
+      );
+    }
+  }
 
   const id = req.nextUrl.searchParams.get('id');
   if (!id) return NextResponse.json({ error: 'id_required' }, { status: 400 });

@@ -10,7 +10,7 @@ type Entry = { count: number; firstAttempt: number };
 const store = new Map<string, Entry>();
 
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = 20;
 
 export type RateLimitResult =
   | { allowed: true; remaining: number }

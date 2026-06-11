@@ -251,6 +251,59 @@ export async function deleteLogById(id: string): Promise<boolean> {
 }
 
 /**
+ * Delete many logs at once. Returns the number of rows actually removed
+ * (IDs that don't match an existing row are skipped).
+ */
+export async function deleteLogsByIds(ids: string[]): Promise<number> {
+  if (ids.length === 0) return 0;
+  return withSheetFallback(async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
+
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${SHEET_LOGS}!A2:A`,
+    });
+    const rows = res.data.values ?? [];
+    const idSet = new Set(ids);
+
+    // 0-based offsets into the data region (row 2 == offset 0).
+    const targets: number[] = [];
+    rows.forEach((r, i) => {
+      if (r[0] && idSet.has(String(r[0]))) targets.push(i);
+    });
+    if (targets.length === 0) return 0;
+
+    const meta = await sheets.spreadsheets.get({ spreadsheetId });
+    const tab = (meta.data.sheets ?? []).find(
+      (s) => s.properties?.title === SHEET_LOGS,
+    );
+    const sheetId = tab?.properties?.sheetId;
+    if (sheetId == null) return 0;
+
+    // Delete bottom-up so earlier deletions don't shift later row indices.
+    const requests = targets
+      .sort((a, b) => b - a)
+      .map((idx) => ({
+        deleteDimension: {
+          range: {
+            sheetId,
+            dimension: "ROWS",
+            startIndex: idx + 1,
+            endIndex: idx + 2,
+          },
+        },
+      }));
+
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: { requests },
+    });
+    return targets.length;
+  });
+}
+
+/**
  * Batch-update approval status for many logs at once.
  * Returns the number of rows actually updated (IDs that didn't match are skipped).
  */

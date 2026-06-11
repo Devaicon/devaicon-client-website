@@ -19,6 +19,15 @@ function startOfWeek(d: Date): Date {
   return x;
 }
 
+// Local YYYY-MM-DD. Used to compare against stored log dates (also local
+// date strings) without the UTC drift that `new Date("YYYY-MM-DD")` causes.
+function isoLocal(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const [me, setMe] = useState<{ username: string; role: string } | null>(null);
@@ -138,9 +147,9 @@ export default function DashboardPage() {
   }, [sortedLogs, filterCategory, filterProject]);
 
   const weekTotal = useMemo(() => {
-    const start = startOfWeek(new Date());
+    const startStr = isoLocal(startOfWeek(new Date()));
     return logs
-      .filter((l) => new Date(l.date) >= start)
+      .filter((l) => l.date >= startStr)
       .reduce((sum, l) => sum + (Number(l.hours) || 0), 0);
   }, [logs]);
 

@@ -10,10 +10,19 @@ function todayLocal(): string {
   return new Date(d.getTime() - tz).toISOString().slice(0, 10);
 }
 
+// Local YYYY-MM-DD. Avoid toISOString() here: it converts to UTC and can
+// shift the calendar date by a day depending on timezone / time-of-day.
+function isoLocal(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 function shiftDays(iso: string, days: number): string {
   const d = new Date(iso + "T00:00:00");
   d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  return isoLocal(d);
 }
 
 function startOfWeekIso(): string {
@@ -21,13 +30,13 @@ function startOfWeekIso(): string {
   const day = d.getDay();
   const diff = day === 0 ? -6 : 1 - day; // Mon = start
   d.setDate(d.getDate() + diff);
-  return d.toISOString().slice(0, 10);
+  return isoLocal(d);
 }
 
 function startOfMonthIso(): string {
   const d = new Date();
   d.setDate(1);
-  return d.toISOString().slice(0, 10);
+  return isoLocal(d);
 }
 
 export default function AdminPage() {
