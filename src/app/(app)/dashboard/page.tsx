@@ -52,6 +52,17 @@ export default function DashboardPage() {
   // filter state
   const [filterCategory, setFilterCategory] = useState<string>("");
   const [filterProject, setFilterProject] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
+  const [filterDateFrom, setFilterDateFrom] = useState<string>("");
+  const [filterDateTo, setFilterDateTo] = useState<string>("");
+  const [filterHoursMin, setFilterHoursMin] = useState<string>("");
+  const [filterHoursMax, setFilterHoursMax] = useState<string>("");
+
+  // pagination + multi-select
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -69,6 +80,7 @@ export default function DashboardPage() {
       setMe(meData.user);
       if (pRes.ok) setProjects((await pRes.json()).projects ?? []);
       if (lRes.ok) setLogs((await lRes.json()).logs ?? []);
+      setSelected(new Set());
     } finally {
       setLoading(false);
     }
@@ -134,17 +146,108 @@ export default function DashboardPage() {
     load();
   }
 
+  async function bulkDelete() {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+    if (
+      !confirm(
+        `Delete ${ids.length} selected ${ids.length === 1 ? "entry" : "entries"}?`,
+      )
+    )
+      return;
+    setBulkBusy(true);
+    try {
+      const res = await fetch("/api/logs/bulk-delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data.message ?? data.error ?? "Could not delete selected entries.");
+        return;
+      }
+      load();
+    } finally {
+      setBulkBusy(false);
+    }
+  }
+
+  function toggleOne(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
   const sortedLogs = useMemo(() => {
     return [...logs].sort((a, b) => (a.date < b.date ? 1 : -1));
   }, [logs]);
 
   const filtered = useMemo(() => {
+    const hMin = filterHoursMin === "" ? null : Number(filterHoursMin);
+    const hMax = filterHoursMax === "" ? null : Number(filterHoursMax);
     return sortedLogs.filter((l) => {
       if (filterCategory && l.category !== filterCategory) return false;
       if (filterProject && l.project !== filterProject) return false;
+      if (filterStatus === "approved" && !l.approvedAt) return false;
+      if (filterStatus === "pending" && l.approvedAt) return false;
+      if (filterDateFrom && l.date < filterDateFrom) return false;
+      if (filterDateTo && l.date > filterDateTo) return false;
+      if (hMin != null && !Number.isNaN(hMin) && Number(l.hours) < hMin) return false;
+      if (hMax != null && !Number.isNaN(hMax) && Number(l.hours) > hMax) return false;
       return true;
     });
-  }, [sortedLogs, filterCategory, filterProject]);
+  }, [
+    sortedLogs,
+    filterCategory,
+    filterProject,
+    filterStatus,
+    filterDateFrom,
+    filterDateTo,
+    filterHoursMin,
+    filterHoursMax,
+  ]);
+
+  // Reset to first page whenever the filters or page size change.
+  useEffect(() => {
+    setPage(1);
+  }, [
+    filterCategory,
+    filterProject,
+    filterStatus,
+    filterDateFrom,
+    filterDateTo,
+    filterHoursMin,
+    filterHoursMax,
+    pageSize,
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pageItems = useMemo(
+    () => filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    [filtered, currentPage, pageSize],
+  );
+
+  // Only un-approved entries can be deleted, so only those are selectable.
+  const selectablePageIds = pageItems
+    .filter((l) => !l.approvedAt)
+    .map((l) => l.id);
+  const allPageSelected =
+    selectablePageIds.length > 0 &&
+    selectablePageIds.every((id) => selected.has(id));
+
+  function toggleAllOnPage() {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allPageSelected) selectablePageIds.forEach((id) => next.delete(id));
+      else selectablePageIds.forEach((id) => next.add(id));
+      return next;
+    });
+  }
 
   const weekTotal = useMemo(() => {
     const startStr = isoLocal(startOfWeek(new Date()));
@@ -157,6 +260,14 @@ export default function DashboardPage() {
     const t = todayLocal();
     return logs
       .filter((l) => l.date === t)
+      .reduce((sum, l) => sum + (Number(l.hours) || 0), 0);
+  }, [logs]);
+
+  const monthTotal = useMemo(() => {
+    const now = new Date();
+    const startStr = isoLocal(new Date(now.getFullYear(), now.getMonth(), 1));
+    return logs
+      .filter((l) => l.date >= startStr)
       .reduce((sum, l) => sum + (Number(l.hours) || 0), 0);
   }, [logs]);
 
@@ -213,11 +324,10 @@ export default function DashboardPage() {
           </div>
           <div className="rounded-xl border border-neutral-200 bg-white p-5">
             <div className="text-xs uppercase tracking-wide text-neutral-500">
-              All time
+              This month
             </div>
             <div className="mt-1 text-2xl font-semibold">
-              {logs.reduce((s, l) => s + (Number(l.hours) || 0), 0).toFixed(1)}{" "}
-              h
+              {monthTotal.toFixed(1)} h
             </div>
           </div>
         </div>
@@ -363,9 +473,14 @@ export default function DashboardPage() {
         </section>
 
         <section className="rounded-xl border border-neutral-200 bg-white">
-          <div className="flex items-center justify-between p-4 border-b border-neutral-200">
-            <h2 className="font-semibold">Your entries</h2>
-            <div className="flex gap-2">
+          <div className="p-4 border-b border-neutral-200 space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold">Your entries</h2>
+              <span className="text-xs text-neutral-500">
+                {filtered.length} {filtered.length === 1 ? "entry" : "entries"}
+              </span>
+            </div>
+            <div className="flex flex-wrap items-end gap-2">
               <select
                 value={filterProject}
                 onChange={(e) => setFilterProject(e.target.value)}
@@ -386,13 +501,107 @@ export default function DashboardPage() {
                   <option key={c}>{c}</option>
                 ))}
               </select>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="rounded-md border border-neutral-300 px-2 py-1 text-sm bg-white"
+              >
+                <option value="">Any status</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+              </select>
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+                From
+                <input
+                  type="date"
+                  value={filterDateFrom}
+                  onChange={(e) => setFilterDateFrom(e.target.value)}
+                  className="rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                />
+              </label>
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+                To
+                <input
+                  type="date"
+                  value={filterDateTo}
+                  onChange={(e) => setFilterDateTo(e.target.value)}
+                  className="rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                />
+              </label>
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+                Min h
+                <input
+                  type="number"
+                  min={0}
+                  step={0.25}
+                  value={filterHoursMin}
+                  onChange={(e) => setFilterHoursMin(e.target.value)}
+                  className="w-20 rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                />
+              </label>
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+                Max h
+                <input
+                  type="number"
+                  min={0}
+                  step={0.25}
+                  value={filterHoursMax}
+                  onChange={(e) => setFilterHoursMax(e.target.value)}
+                  className="w-20 rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  setFilterProject("");
+                  setFilterCategory("");
+                  setFilterStatus("");
+                  setFilterDateFrom("");
+                  setFilterDateTo("");
+                  setFilterHoursMin("");
+                  setFilterHoursMax("");
+                }}
+                className="px-2 py-1 text-xs text-neutral-600 underline hover:text-neutral-900"
+              >
+                Clear
+              </button>
             </div>
+            {selected.size > 0 && (
+              <div className="flex items-center gap-3 rounded-md bg-neutral-900 px-3 py-2 text-sm text-white">
+                <span>{selected.size} selected</span>
+                <button
+                  type="button"
+                  onClick={bulkDelete}
+                  disabled={bulkBusy}
+                  className="rounded bg-red-600 px-2 py-1 text-xs font-medium hover:bg-red-700 disabled:opacity-50"
+                >
+                  {bulkBusy ? "Deleting…" : "Delete selected"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelected(new Set())}
+                  className="text-xs text-neutral-300 hover:text-white"
+                >
+                  Clear selection
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead className="bg-neutral-50 text-neutral-600">
                 <tr>
+                  <th className="w-10 px-4 py-2">
+                    <input
+                      type="checkbox"
+                      aria-label="Select all on page"
+                      checked={allPageSelected}
+                      disabled={selectablePageIds.length === 0}
+                      onChange={toggleAllOnPage}
+                      className="align-middle"
+                    />
+                  </th>
                   <th className="text-left px-4 py-2 font-medium">Date</th>
                   <th className="text-left px-4 py-2 font-medium">Project</th>
                   <th className="text-left px-4 py-2 font-medium">Category</th>
@@ -412,6 +621,9 @@ export default function DashboardPage() {
                         key={`skeleton-${i}`}
                         className="border-t border-neutral-100 animate-pulse"
                       >
+                        <td className="px-4 py-3">
+                          <div className="h-4 w-4 bg-neutral-200 rounded"></div>
+                        </td>
                         <td className="px-4 py-3">
                           <div className="h-4 bg-neutral-200 rounded w-20"></div>
                         </td>
@@ -436,20 +648,32 @@ export default function DashboardPage() {
                       </tr>
                     ))}
                   </>
-                ) : filtered.length === 0 ? (
+                ) : pageItems.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={7}
+                      colSpan={8}
                       className="px-4 py-8 text-center text-neutral-500"
                     >
-                      No entries yet.
+                      {filtered.length === 0
+                        ? "No entries match your filters."
+                        : "No entries on this page."}
                     </td>
                   </tr>
                 ) : (
-                  filtered.map((l) => {
+                  pageItems.map((l) => {
                     const isApproved = !!l.approvedAt;
                     return (
                       <tr key={l.id} className="border-t border-neutral-100">
+                        <td className="px-4 py-2">
+                          <input
+                            type="checkbox"
+                            aria-label={`Select entry from ${l.date}`}
+                            checked={selected.has(l.id)}
+                            disabled={isApproved}
+                            onChange={() => toggleOne(l.id)}
+                            className="align-middle disabled:opacity-30"
+                          />
+                        </td>
                         <td className="px-4 py-2">{l.date}</td>
                         <td className="px-4 py-2">{l.project}</td>
                         <td className="px-4 py-2">{l.category}</td>
@@ -499,6 +723,50 @@ export default function DashboardPage() {
               </tbody>
             </table>
           </div>
+
+          {!loading && filtered.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 p-4 text-sm">
+              <div className="flex items-center gap-2 text-neutral-600">
+                <span>
+                  {(currentPage - 1) * pageSize + 1}–
+                  {Math.min(currentPage * pageSize, filtered.length)} of{" "}
+                  {filtered.length}
+                </span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="rounded-md border border-neutral-300 px-2 py-1 text-sm bg-white"
+                >
+                  {[12, 24, 48, 96].map((n) => (
+                    <option key={n} value={n}>
+                      {n} / page
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage <= 1}
+                  className="rounded-md border border-neutral-300 px-3 py-1 hover:bg-neutral-50 disabled:opacity-40"
+                >
+                  Prev
+                </button>
+                <span className="text-neutral-600">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage >= totalPages}
+                  className="rounded-md border border-neutral-300 px-3 py-1 hover:bg-neutral-50 disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </main>

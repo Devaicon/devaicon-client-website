@@ -90,10 +90,18 @@ export async function GET(req: NextRequest) {
     // Newest first, matching the Express backend's ordering.
     logs.sort((a, b) => (a.loggedAt < b.loggedAt ? 1 : a.loggedAt > b.loggedAt ? -1 : 0));
 
+    // Pagination is opt-in: without page/pageSize we return all matching logs,
+    // since consumers like the dashboard need the full set for accurate totals.
     const total = logs.length;
-    const { page, pageSize } = parsePagination(sp);
-    const start = (page - 1) * pageSize;
-    const pageLogs = logs.slice(start, start + pageSize);
+    const paginate = sp.get('page') != null || sp.get('pageSize') != null;
+    let page = 1;
+    let pageSize = total;
+    let pageLogs = logs;
+    if (paginate) {
+      ({ page, pageSize } = parsePagination(sp));
+      const start = (page - 1) * pageSize;
+      pageLogs = logs.slice(start, start + pageSize);
+    }
 
     return NextResponse.json({
       logs: pageLogs,
@@ -101,7 +109,7 @@ export async function GET(req: NextRequest) {
         page,
         pageSize,
         total,
-        totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        totalPages: paginate ? Math.max(1, Math.ceil(total / pageSize)) : 1,
       },
     });
   } catch (e: any) {
