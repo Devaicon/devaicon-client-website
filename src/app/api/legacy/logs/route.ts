@@ -16,6 +16,11 @@ import {
   type TimeLog,
 } from '@/lib/types';
 import { isSameOrigin } from '@/lib/origin-check';
+import {
+  composeDescription,
+  DESCRIPTION_MIN_LENGTH,
+  DESCRIPTION_MAX_LENGTH,
+} from '@/lib/description';
 
 export const runtime = 'nodejs';
 
@@ -140,7 +145,9 @@ export async function POST(req: NextRequest) {
   const project = String(body.project ?? '').trim();
   const category = String(body.category ?? '').trim();
   const hours = Number(body.hours);
-  const description = String(body.description ?? '').trim();
+  // Free-text summary is required; structured fields are optional and composed
+  // into the stored description (keeps the single-column model unchanged).
+  const summary = String(body.description ?? '').trim();
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json(
@@ -157,6 +164,32 @@ export async function POST(req: NextRequest) {
   if (!Number.isFinite(hours) || hours <= 0 || hours > 24) {
     return NextResponse.json(
       { error: 'invalid_hours', message: 'Hours must be between 0 and 24.' },
+      { status: 400 },
+    );
+  }
+  if (summary.length < DESCRIPTION_MIN_LENGTH) {
+    return NextResponse.json(
+      {
+        error: 'description_too_short',
+        message: `Summary must be at least ${DESCRIPTION_MIN_LENGTH} characters.`,
+      },
+      { status: 400 },
+    );
+  }
+
+  const description = composeDescription({
+    summary,
+    tools: body.tools,
+    areas: body.areas,
+    status: body.status,
+    reference: body.reference,
+  });
+  if (description.length > DESCRIPTION_MAX_LENGTH) {
+    return NextResponse.json(
+      {
+        error: 'description_too_long',
+        message: `Description must be at most ${DESCRIPTION_MAX_LENGTH} characters.`,
+      },
       { status: 400 },
     );
   }

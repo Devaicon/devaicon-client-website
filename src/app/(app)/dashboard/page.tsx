@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES, type Project, type TimeLog } from "@/lib/types";
+import DescriptionBuilder from "@/components/DescriptionBuilder";
 
 function todayLocal(): string {
   const d = new Date();
@@ -41,7 +42,11 @@ export default function DashboardPage() {
     project: "",
     category: "Coding",
     hours: "",
-    description: "",
+    description: "", // summary
+    tools: [] as string[],
+    areas: [] as string[],
+    status: "",
+    reference: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitMsg, setSubmitMsg] = useState<{
@@ -101,8 +106,8 @@ export default function DashboardPage() {
       setSubmitMsg({ kind: "err", text: "Enter hours." });
       return;
     }
-    if (!form.description) {
-      setSubmitMsg({ kind: "err", text: "Description is required." });
+    if (!form.description.trim()) {
+      setSubmitMsg({ kind: "err", text: "Summary is required." });
       return;
     }
     setSubmitting(true);
@@ -121,7 +126,15 @@ export default function DashboardPage() {
         return;
       }
       setSubmitMsg({ kind: "ok", text: "Logged." });
-      setForm({ ...form, hours: "", description: "" });
+      setForm({
+        ...form,
+        hours: "",
+        description: "",
+        tools: [],
+        areas: [],
+        status: "",
+        reference: "",
+      });
       load();
     } finally {
       setSubmitting(false);
@@ -444,17 +457,17 @@ export default function DashboardPage() {
                 </button>
               </div>
               <div className="md:col-span-6">
-                <label className="block text-xs text-neutral-600 mb-1">
-                  Description
-                </label>
-                <input
-                  value={form.description}
-                  onChange={(e) =>
-                    setForm({ ...form, description: e.target.value })
-                  }
-                  placeholder="What did you work on?"
-                  className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm"
-                  required
+                <DescriptionBuilder
+                  summary={form.description}
+                  onSummary={(v) => setForm({ ...form, description: v })}
+                  tools={form.tools}
+                  onTools={(v) => setForm({ ...form, tools: v })}
+                  areas={form.areas}
+                  onAreas={(v) => setForm({ ...form, areas: v })}
+                  status={form.status}
+                  onStatus={(v) => setForm({ ...form, status: v })}
+                  reference={form.reference}
+                  onReference={(v) => setForm({ ...form, reference: v })}
                 />
               </div>
               {submitMsg && (
@@ -680,7 +693,7 @@ export default function DashboardPage() {
                         <td className="px-4 py-2 text-right tabular-nums">
                           {Number(l.hours).toFixed(2)}
                         </td>
-                        <td className="px-4 py-2 text-neutral-700">
+                        <td className="px-4 py-2 text-neutral-700 whitespace-pre-line">
                           {l.description}
                         </td>
                         <td className="px-4 py-2">
