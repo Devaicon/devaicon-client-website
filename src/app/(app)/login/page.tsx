@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense } from "react";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 function LoginForm() {
   const router = useRouter();
@@ -67,23 +68,26 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
+    <main className="min-h-screen text-neutral-900 dark:text-neutral-100 flex items-center justify-center bg-neutral-50 dark:bg-neutral-950 px-4">
+      <div className="fixed top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
             Devaicon Time Tracker
           </h1>
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             Sign in to log your hours.
           </p>
         </div>
 
         <form
           onSubmit={onSubmit}
-          className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm space-y-4"
+          className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm space-y-4"
         >
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Username
             </label>
             <input
@@ -96,19 +100,19 @@ function LoginForm() {
                 setError(null);
               }}
               placeholder="e.g. devarish or administrator"
-              className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 ${
+              className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 dark:focus:ring-neutral-100/20 ${
                 usernameError
                   ? "border-red-500"
-                  : "border-neutral-300 focus:border-neutral-900"
+                  : "border-neutral-300 dark:border-neutral-700 focus:border-neutral-900 dark:focus:border-neutral-100"
               }`}
             />
             {usernameError && (
-              <p className="mt-1 text-xs text-red-600">{usernameError}</p>
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{usernameError}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Password
             </label>
             <div className="relative">
@@ -121,15 +125,15 @@ function LoginForm() {
                   setPasswordError(null);
                   setError(null);
                 }}
-                className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 pr-10 ${
+                className={`w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 dark:focus:ring-neutral-100/20 pr-10 ${
                   passwordError
                     ? "border-red-500"
-                    : "border-neutral-300 focus:border-neutral-900"
+                    : "border-neutral-300 dark:border-neutral-700 focus:border-neutral-900 dark:focus:border-neutral-100"
                 }`}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-sm text-neutral-500 hover:text-neutral-700"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
@@ -137,12 +141,12 @@ function LoginForm() {
               </button>
             </div>
             {passwordError && (
-              <p className="mt-1 text-xs text-red-600">{passwordError}</p>
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{passwordError}</p>
             )}
           </div>
 
           {error && (
-            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+            <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 rounded-md px-3 py-2">
               {error}
             </div>
           )}
@@ -150,7 +154,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+            className="w-full rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50"
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>

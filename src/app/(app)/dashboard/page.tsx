@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES, type Project, type TimeLog } from "@/lib/types";
 import DescriptionBuilder from "@/components/DescriptionBuilder";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 function todayLocal(): string {
   const d = new Date();
@@ -285,30 +286,31 @@ export default function DashboardPage() {
   }, [logs]);
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white">
+    <main className="min-h-screen text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-950">
+      <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="font-semibold tracking-tight">
             Devaicon · Time Tracker
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-neutral-600">
+            <ThemeToggle />
+            <span className="text-neutral-600 dark:text-neutral-400">
               {me?.username}{" "}
               {me?.role === "admin" && (
-                <span className="text-neutral-400">(admin)</span>
+                <span className="text-neutral-400 dark:text-neutral-500">(admin)</span>
               )}
             </span>
             {me?.role === "admin" && (
               <a
                 href="/admin"
-                className="text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-md hover:bg-neutral-100 transition-colors"
+                className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
               >
                 Admin
               </a>
             )}
             <button
               onClick={logout}
-              className="text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-md border border-neutral-200 hover:bg-neutral-50 transition-colors shadow-sm ml-2"
+              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors shadow-sm ml-2"
             >
               Sign out
             </button>
@@ -319,24 +321,24 @@ export default function DashboardPage() {
       <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
         {/* Top row: stats + form */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="rounded-xl border border-neutral-200 bg-white p-5">
-            <div className="text-xs uppercase tracking-wide text-neutral-500">
+          <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
+            <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
               Today
             </div>
             <div className="mt-1 text-2xl font-semibold">
               {todayTotal.toFixed(1)} h
             </div>
           </div>
-          <div className="rounded-xl border border-neutral-200 bg-white p-5">
-            <div className="text-xs uppercase tracking-wide text-neutral-500">
+          <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
+            <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
               This week
             </div>
             <div className="mt-1 text-2xl font-semibold">
               {weekTotal.toFixed(1)} h
             </div>
           </div>
-          <div className="rounded-xl border border-neutral-200 bg-white p-5">
-            <div className="text-xs uppercase tracking-wide text-neutral-500">
+          <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
+            <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
               This month
             </div>
             <div className="mt-1 text-2xl font-semibold">
@@ -345,32 +347,32 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <section className="rounded-xl border border-neutral-200 bg-white p-6">
+        <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
           <h2 className="font-semibold mb-4">Log time</h2>
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-6 gap-3 animate-pulse">
               <div className="md:col-span-1">
-                <div className="h-4 bg-neutral-200 rounded w-10 mb-1"></div>
-                <div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10 mb-1"></div>
+                <div className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-800 w-full"></div>
               </div>
               <div className="md:col-span-2">
-                <div className="h-4 bg-neutral-200 rounded w-12 mb-1"></div>
-                <div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-12 mb-1"></div>
+                <div className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-800 w-full"></div>
               </div>
               <div className="md:col-span-1">
-                <div className="h-4 bg-neutral-200 rounded w-16 mb-1"></div>
-                <div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-16 mb-1"></div>
+                <div className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-800 w-full"></div>
               </div>
               <div className="md:col-span-1">
-                <div className="h-4 bg-neutral-200 rounded w-10 mb-1"></div>
-                <div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-10 mb-1"></div>
+                <div className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-800 w-full"></div>
               </div>
               <div className="md:col-span-1 flex items-end">
-                <div className="h-9 bg-neutral-200 rounded w-full"></div>
+                <div className="h-9 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
               </div>
               <div className="md:col-span-6">
-                <div className="h-4 bg-neutral-200 rounded w-20 mb-1 mt-2"></div>
-                <div className="h-9 bg-neutral-100 rounded border border-neutral-200 w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-20 mb-1 mt-2"></div>
+                <div className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-800 w-full"></div>
               </div>
             </div>
           ) : (
@@ -379,7 +381,7 @@ export default function DashboardPage() {
               className="grid grid-cols-1 md:grid-cols-6 gap-3"
             >
               <div className="md:col-span-1">
-                <label className="block text-xs text-neutral-600 mb-1">
+                <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
                   Date
                 </label>
                 <input
@@ -387,12 +389,12 @@ export default function DashboardPage() {
                   value={form.date}
                   onChange={(e) => setForm({ ...form, date: e.target.value })}
                   max={todayLocal()}
-                  className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm"
+                  className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm"
                   required
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs text-neutral-600 mb-1">
+                <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
                   Project
                 </label>
                 <select
@@ -400,7 +402,7 @@ export default function DashboardPage() {
                   onChange={(e) =>
                     setForm({ ...form, project: e.target.value })
                   }
-                  className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm bg-white"
+                  className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
                   required
                 >
                   <option value="">Select…</option>
@@ -411,13 +413,13 @@ export default function DashboardPage() {
                   ))}
                 </select>
                 {!loading && projects.length === 0 && (
-                  <p className="text-xs text-amber-700 mt-1">
+                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-1">
                     No projects yet — ask your admin to add one.
                   </p>
                 )}
               </div>
               <div className="md:col-span-1">
-                <label className="block text-xs text-neutral-600 mb-1">
+                <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
                   Category
                 </label>
                 <select
@@ -425,7 +427,7 @@ export default function DashboardPage() {
                   onChange={(e) =>
                     setForm({ ...form, category: e.target.value })
                   }
-                  className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm bg-white"
+                  className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
                 >
                   {CATEGORIES.map((c) => (
                     <option key={c}>{c}</option>
@@ -433,7 +435,7 @@ export default function DashboardPage() {
                 </select>
               </div>
               <div className="md:col-span-1">
-                <label className="block text-xs text-neutral-600 mb-1">
+                <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
                   Hours
                 </label>
                 <input
@@ -443,7 +445,7 @@ export default function DashboardPage() {
                   step={0.25}
                   value={form.hours}
                   onChange={(e) => setForm({ ...form, hours: e.target.value })}
-                  className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm"
+                  className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm"
                   required
                 />
               </div>
@@ -451,7 +453,7 @@ export default function DashboardPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
+                  className="w-full rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
                 >
                   {submitting ? "Saving…" : "Save"}
                 </button>
@@ -474,8 +476,8 @@ export default function DashboardPage() {
                 <div
                   className={`md:col-span-6 text-sm rounded-md px-3 py-2 ${
                     submitMsg.kind === "ok"
-                      ? "bg-green-50 text-green-700 border border-green-200"
-                      : "bg-red-50 text-red-700 border border-red-200"
+                      ? "bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900"
+                      : "bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900"
                   }`}
                 >
                   {submitMsg.text}
@@ -485,11 +487,11 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-xl border border-neutral-200 bg-white">
-          <div className="p-4 border-b border-neutral-200 space-y-3">
+        <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+          <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">Your entries</h2>
-              <span className="text-xs text-neutral-500">
+              <span className="text-xs text-neutral-500 dark:text-neutral-400">
                 {filtered.length} {filtered.length === 1 ? "entry" : "entries"}
               </span>
             </div>
@@ -497,7 +499,7 @@ export default function DashboardPage() {
               <select
                 value={filterProject}
                 onChange={(e) => setFilterProject(e.target.value)}
-                className="rounded-md border border-neutral-300 px-2 py-1 text-sm bg-white"
+                className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm bg-white dark:bg-neutral-900"
               >
                 <option value="">All projects</option>
                 {projects.map((p) => (
@@ -507,7 +509,7 @@ export default function DashboardPage() {
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="rounded-md border border-neutral-300 px-2 py-1 text-sm bg-white"
+                className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm bg-white dark:bg-neutral-900"
               >
                 <option value="">All categories</option>
                 {CATEGORIES.map((c) => (
@@ -517,31 +519,31 @@ export default function DashboardPage() {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="rounded-md border border-neutral-300 px-2 py-1 text-sm bg-white"
+                className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm bg-white dark:bg-neutral-900"
               >
                 <option value="">Any status</option>
                 <option value="approved">Approved</option>
                 <option value="pending">Pending</option>
               </select>
-              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                 From
                 <input
                   type="date"
                   value={filterDateFrom}
                   onChange={(e) => setFilterDateFrom(e.target.value)}
-                  className="rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm"
                 />
               </label>
-              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                 To
                 <input
                   type="date"
                   value={filterDateTo}
                   onChange={(e) => setFilterDateTo(e.target.value)}
-                  className="rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm"
                 />
               </label>
-              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                 Min h
                 <input
                   type="number"
@@ -549,10 +551,10 @@ export default function DashboardPage() {
                   step={0.25}
                   value={filterHoursMin}
                   onChange={(e) => setFilterHoursMin(e.target.value)}
-                  className="w-20 rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                  className="w-20 rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm"
                 />
               </label>
-              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500">
+              <label className="flex flex-col text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                 Max h
                 <input
                   type="number"
@@ -560,7 +562,7 @@ export default function DashboardPage() {
                   step={0.25}
                   value={filterHoursMax}
                   onChange={(e) => setFilterHoursMax(e.target.value)}
-                  className="w-20 rounded-md border border-neutral-300 px-2 py-1 text-sm"
+                  className="w-20 rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm"
                 />
               </label>
               <button
@@ -574,13 +576,13 @@ export default function DashboardPage() {
                   setFilterHoursMin("");
                   setFilterHoursMax("");
                 }}
-                className="px-2 py-1 text-xs text-neutral-600 underline hover:text-neutral-900"
+                className="px-2 py-1 text-xs text-neutral-600 dark:text-neutral-400 underline hover:text-neutral-900 dark:hover:text-neutral-100"
               >
                 Clear
               </button>
             </div>
             {selected.size > 0 && (
-              <div className="flex items-center gap-3 rounded-md bg-neutral-900 px-3 py-2 text-sm text-white">
+              <div className="flex items-center gap-3 rounded-md bg-neutral-900 dark:bg-neutral-700 px-3 py-2 text-sm text-white">
                 <span>{selected.size} selected</span>
                 <button
                   type="button"
@@ -603,7 +605,7 @@ export default function DashboardPage() {
 
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
-              <thead className="bg-neutral-50 text-neutral-600">
+              <thead className="bg-neutral-50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400">
                 <tr>
                   <th className="w-10 px-4 py-2">
                     <input
@@ -632,31 +634,31 @@ export default function DashboardPage() {
                     {[1, 2, 3].map((i) => (
                       <tr
                         key={`skeleton-${i}`}
-                        className="border-t border-neutral-100 animate-pulse"
+                        className="border-t border-neutral-100 dark:border-neutral-800 animate-pulse"
                       >
                         <td className="px-4 py-3">
-                          <div className="h-4 w-4 bg-neutral-200 rounded"></div>
+                          <div className="h-4 w-4 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-20"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-32"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-32"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-24"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-24"></div>
                         </td>
                         <td className="px-4 py-3 text-right flex justify-end">
-                          <div className="h-4 bg-neutral-200 rounded w-8"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-8"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-48"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-48"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-16"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-16"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-12"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-12"></div>
                         </td>
                       </tr>
                     ))}
@@ -665,7 +667,7 @@ export default function DashboardPage() {
                   <tr>
                     <td
                       colSpan={8}
-                      className="px-4 py-8 text-center text-neutral-500"
+                      className="px-4 py-8 text-center text-neutral-500 dark:text-neutral-400"
                     >
                       {filtered.length === 0
                         ? "No entries match your filters."
@@ -676,7 +678,7 @@ export default function DashboardPage() {
                   pageItems.map((l) => {
                     const isApproved = !!l.approvedAt;
                     return (
-                      <tr key={l.id} className="border-t border-neutral-100">
+                      <tr key={l.id} className="border-t border-neutral-100 dark:border-neutral-800">
                         <td className="px-4 py-2">
                           <input
                             type="checkbox"
@@ -693,7 +695,7 @@ export default function DashboardPage() {
                         <td className="px-4 py-2 text-right tabular-nums">
                           {Number(l.hours).toFixed(2)}
                         </td>
-                        <td className="px-4 py-2 text-neutral-700 whitespace-pre-line">
+                        <td className="px-4 py-2 text-neutral-700 dark:text-neutral-300 whitespace-pre-line">
                           {l.description}
                         </td>
                         <td className="px-4 py-2">
@@ -702,12 +704,12 @@ export default function DashboardPage() {
                               title={`Approved by ${l.approvedBy} on ${new Date(
                                 l.approvedAt,
                               ).toLocaleDateString()}`}
-                              className="inline-flex items-center gap-1 rounded-full bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 text-xs font-medium"
+                              className="inline-flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900 px-2 py-0.5 text-xs font-medium"
                             >
                               ✓ Approved
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 text-xs font-medium">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900 px-2 py-0.5 text-xs font-medium">
                               Pending
                             </span>
                           )}
@@ -715,7 +717,7 @@ export default function DashboardPage() {
                         <td className="px-4 py-2 text-right">
                           {isApproved ? (
                             <span
-                              className="text-xs text-neutral-400"
+                              className="text-xs text-neutral-400 dark:text-neutral-500"
                               title="Approved entries are locked. Ask an admin to unapprove first."
                             >
                               Locked
@@ -723,7 +725,7 @@ export default function DashboardPage() {
                           ) : (
                             <button
                               onClick={() => deleteLog(l.id)}
-                              className="text-xs text-red-600 hover:text-red-700"
+                              className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                             >
                               Delete
                             </button>
@@ -738,8 +740,8 @@ export default function DashboardPage() {
           </div>
 
           {!loading && filtered.length > 0 && (
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 p-4 text-sm">
-              <div className="flex items-center gap-2 text-neutral-600">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 dark:border-neutral-800 p-4 text-sm">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                 <span>
                   {(currentPage - 1) * pageSize + 1}–
                   {Math.min(currentPage * pageSize, filtered.length)} of{" "}
@@ -748,7 +750,7 @@ export default function DashboardPage() {
                 <select
                   value={pageSize}
                   onChange={(e) => setPageSize(Number(e.target.value))}
-                  className="rounded-md border border-neutral-300 px-2 py-1 text-sm bg-white"
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm bg-white dark:bg-neutral-900"
                 >
                   {[12, 24, 48, 96].map((n) => (
                     <option key={n} value={n}>
@@ -762,18 +764,18 @@ export default function DashboardPage() {
                   type="button"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage <= 1}
-                  className="rounded-md border border-neutral-300 px-3 py-1 hover:bg-neutral-50 disabled:opacity-40"
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40"
                 >
                   Prev
                 </button>
-                <span className="text-neutral-600">
+                <span className="text-neutral-600 dark:text-neutral-400">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
                   type="button"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage >= totalPages}
-                  className="rounded-md border border-neutral-300 px-3 py-1 hover:bg-neutral-50 disabled:opacity-40"
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40"
                 >
                   Next
                 </button>

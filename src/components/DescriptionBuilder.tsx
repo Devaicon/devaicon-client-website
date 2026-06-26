@@ -37,8 +37,8 @@ function Chip({
       onClick={onClick}
       className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
         active
-          ? "border-neutral-900 bg-neutral-900 text-white"
-          : "border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50"
+          ? "border-neutral-900 dark:border-neutral-700 bg-neutral-900 dark:bg-neutral-700 text-white"
+          : "border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
       }`}
     >
       {label}
@@ -91,9 +91,9 @@ export default function DescriptionBuilder({
   return (
     <div className="space-y-3">
       <div>
-        <label className="block text-xs text-neutral-600 mb-1">
-          Summary <span className="text-red-500">*</span>
-          <span className="text-neutral-400">
+        <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
+          Summary <span className="text-red-500 dark:text-red-400">*</span>
+          <span className="text-neutral-400 dark:text-neutral-500">
             {" "}
             — what did you work on? (min {DESCRIPTION_MIN_LENGTH} chars)
           </span>
@@ -103,13 +103,13 @@ export default function DescriptionBuilder({
           onChange={(e) => onSummary(e.target.value)}
           rows={2}
           placeholder="e.g. Implemented JWT auth and fixed the token refresh bug"
-          className="w-full rounded-md border border-neutral-300 px-2 py-2 text-sm"
+          className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm"
           required
         />
       </div>
 
       <div>
-        <span className="block text-[10px] uppercase tracking-wide text-neutral-500 mb-1">
+        <span className="block text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1">
           Tools / Tech
         </span>
         <div className="flex flex-wrap gap-1.5">
@@ -140,12 +140,12 @@ export default function DescriptionBuilder({
                 }
               }}
               placeholder="add…"
-              className="w-20 rounded-full border border-dashed border-neutral-300 px-2.5 py-1 text-xs"
+              className="w-20 rounded-full border border-dashed border-neutral-300 dark:border-neutral-700 px-2.5 py-1 text-xs"
             />
             <button
               type="button"
               onClick={addCustomTool}
-              className="text-xs text-neutral-600 hover:text-neutral-900"
+              className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
             >
               +
             </button>
@@ -155,7 +155,7 @@ export default function DescriptionBuilder({
 
       <div className="flex flex-wrap gap-x-8 gap-y-3">
         <div>
-          <span className="block text-[10px] uppercase tracking-wide text-neutral-500 mb-1">
+          <span className="block text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1">
             Area / Module
           </span>
           <div className="flex flex-wrap gap-1.5">
@@ -171,7 +171,7 @@ export default function DescriptionBuilder({
         </div>
 
         <div>
-          <span className="block text-[10px] uppercase tracking-wide text-neutral-500 mb-1">
+          <span className="block text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1">
             Status
           </span>
           <div className="flex flex-wrap gap-1.5">
@@ -188,23 +188,23 @@ export default function DescriptionBuilder({
       </div>
 
       <div>
-        <label className="block text-[10px] uppercase tracking-wide text-neutral-500 mb-1">
+        <label className="block text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1">
           Reference (ticket / PR / link)
         </label>
         <input
           value={reference}
           onChange={(e) => onReference(e.target.value)}
           placeholder="e.g. PR #142 or JIRA-321"
-          className="w-full max-w-xs rounded-md border border-neutral-300 px-2 py-1 text-sm"
+          className="w-full max-w-xs rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-sm"
         />
       </div>
 
       {preview && (
         <div>
-          <span className="block text-[10px] uppercase tracking-wide text-neutral-500 mb-1">
+          <span className="block text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1">
             Saved as
           </span>
-          <pre className="whitespace-pre-wrap rounded-md bg-neutral-50 border border-neutral-200 px-3 py-2 text-xs text-neutral-700 font-sans">
+          <pre className="whitespace-pre-wrap rounded-md bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 px-3 py-2 text-xs text-neutral-700 dark:text-neutral-300 font-sans">
             {preview}
           </pre>
         </div>

@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: the `dark:` variant applies whenever a `.dark`
+   ancestor is present (toggled on <html> by the theme provider/script). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Let native controls (date/number pickers, scrollbars) follow the theme. */
+.dark {
+  color-scheme: dark;
+}
+
 @theme {
   --color-brand-primary: #3d234b;
   --color-brand-secondary: #281333;

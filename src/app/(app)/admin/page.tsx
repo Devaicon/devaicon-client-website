@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES, type Project, type TimeLog } from "@/lib/types";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 function todayLocal(): string {
   const d = new Date();
@@ -314,21 +315,22 @@ export default function AdminPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white print:hidden">
+    <main className="min-h-screen text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-950">
+      <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 print:hidden">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="font-semibold tracking-tight">Devaicon · Admin</div>
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-neutral-600">{me?.username}</span>
+            <ThemeToggle />
+            <span className="text-neutral-600 dark:text-neutral-400">{me?.username}</span>
             <a
               href="/dashboard"
-              className="text-neutral-700 hover:text-neutral-900"
+              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
             >
               My dashboard
             </a>
             <button
               onClick={logout}
-              className="text-neutral-700 hover:text-neutral-900"
+              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
             >
               Sign out
             </button>
@@ -338,37 +340,37 @@ export default function AdminPage() {
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         {/* Projects */}
-        <section className="rounded-xl border border-neutral-200 bg-white p-6 print:hidden">
+        <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 print:hidden">
           <h2 className="font-semibold mb-4">Projects</h2>
           <form onSubmit={addProject} className="flex gap-2 mb-4">
             <input
               value={newProject}
               onChange={(e) => setNewProject(e.target.value)}
               placeholder="New project name"
-              className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm"
+              className="flex-1 rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm"
             />
             <button
               type="submit"
-              className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600"
             >
               Add
             </button>
           </form>
-          {pMsg && <p className="text-sm text-red-600 mb-3">{pMsg}</p>}
+          {pMsg && <p className="text-sm text-red-600 dark:text-red-400 mb-3">{pMsg}</p>}
 
           {loading ? (
             <div className="space-y-2 animate-pulse mt-4">
               {[1, 2, 3].map((i) => (
                 <div
                   key={`pskel-${i}`}
-                  className="h-12 bg-neutral-100 border border-neutral-200 rounded-md"
+                  className="h-12 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-md"
                 ></div>
               ))}
             </div>
           ) : projects.length === 0 ? (
-            <p className="text-sm text-neutral-500 mt-4">No projects yet.</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-4">No projects yet.</p>
           ) : (
-            <ul className="divide-y divide-neutral-100 border border-neutral-200 rounded-md mt-4">
+            <ul className="divide-y divide-neutral-100 dark:divide-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-md mt-4">
               {projects.map((p) => (
                 <li
                   key={p.id}
@@ -376,14 +378,14 @@ export default function AdminPage() {
                 >
                   <div>
                     <div className="font-medium">{p.name}</div>
-                    <div className="text-xs text-neutral-500">
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400">
                       Added {new Date(p.addedAt).toLocaleDateString()} by{" "}
                       {p.addedBy}
                     </div>
                   </div>
                   <button
                     onClick={() => deleteProject(p.id)}
-                    className="text-xs text-red-600 hover:text-red-700"
+                    className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                   >
                     Delete
                   </button>
@@ -394,7 +396,7 @@ export default function AdminPage() {
         </section>
 
         {/* Filters */}
-        <section className="rounded-xl border border-neutral-200 bg-white p-4 print:hidden">
+        <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 print:hidden">
           {/* Date presets */}
           <div className="flex flex-wrap gap-2 mb-4">
             {presets.map((p) => (
@@ -403,8 +405,8 @@ export default function AdminPage() {
                 onClick={() => applyPreset(p.id)}
                 className={`text-xs rounded-md px-3 py-1.5 border ${
                   activePreset === p.id
-                    ? "bg-neutral-900 text-white border-neutral-900"
-                    : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50"
+                    ? "bg-neutral-900 dark:bg-neutral-700 text-white border-neutral-900 dark:border-neutral-700"
+                    : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 }`}
               >
                 {p.label}
@@ -416,7 +418,7 @@ export default function AdminPage() {
             <select
               value={fUser}
               onChange={(e) => setFUser(e.target.value)}
-              className="rounded-md border border-neutral-300 px-2 py-2 text-sm bg-white"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
             >
               <option value="">All users</option>
               {allUsers.map((u) => (
@@ -426,7 +428,7 @@ export default function AdminPage() {
             <select
               value={fProject}
               onChange={(e) => setFProject(e.target.value)}
-              className="rounded-md border border-neutral-300 px-2 py-2 text-sm bg-white"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
             >
               <option value="">All projects</option>
               {projects.map((p) => (
@@ -436,7 +438,7 @@ export default function AdminPage() {
             <select
               value={fCategory}
               onChange={(e) => setFCategory(e.target.value)}
-              className="rounded-md border border-neutral-300 px-2 py-2 text-sm bg-white"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
             >
               <option value="">All categories</option>
               {CATEGORIES.map((c) => (
@@ -446,7 +448,7 @@ export default function AdminPage() {
             <select
               value={fStatus}
               onChange={(e) => setFStatus(e.target.value as typeof fStatus)}
-              className="rounded-md border border-neutral-300 px-2 py-2 text-sm bg-white"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
             >
               <option value="all">All status</option>
               <option value="pending">Pending only</option>
@@ -459,7 +461,7 @@ export default function AdminPage() {
                 setFFrom(e.target.value);
                 setActivePreset("custom");
               }}
-              className="rounded-md border border-neutral-300 px-2 py-2 text-sm"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm"
             />
             <input
               type="date"
@@ -468,36 +470,36 @@ export default function AdminPage() {
                 setFTo(e.target.value);
                 setActivePreset("custom");
               }}
-              className="rounded-md border border-neutral-300 px-2 py-2 text-sm"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm"
             />
             <button
               onClick={clearFilters}
-              className="rounded-md border border-neutral-300 px-3 py-2 text-sm hover:bg-neutral-50"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800"
             >
               Clear
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-neutral-100 text-sm">
+          <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 text-sm">
             <button
               onClick={() => window.print()}
-              className="rounded-md bg-neutral-900 px-3 py-1.5 text-white hover:bg-neutral-800"
+              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-3 py-1.5 text-white hover:bg-neutral-800 dark:hover:bg-neutral-600"
             >
               Print / Save PDF
             </button>
             <button
               onClick={downloadFilteredCsv}
-              className="rounded-md border border-neutral-300 px-3 py-1.5 hover:bg-neutral-50"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             >
               Download filtered CSV
             </button>
             <a
               href="/api/admin/export"
-              className="rounded-md border border-neutral-300 px-3 py-1.5 hover:bg-neutral-50"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             >
               Download full .xlsx
             </a>
-            <span className="text-neutral-500 ml-auto">
+            <span className="text-neutral-500 dark:text-neutral-400 ml-auto">
               {filtered.length} entries · {totals.total.toFixed(1)} hours total
             </span>
           </div>
@@ -506,12 +508,12 @@ export default function AdminPage() {
         {/* Print header */}
         <div className="hidden print:block mb-4">
           <h1 className="text-xl font-bold">Devaicon — Time Log Report</h1>
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Generated {new Date().toLocaleString()} · {filtered.length} entries
             · {totals.total.toFixed(1)}h total
           </p>
           {(fUser || fProject || fCategory || fFrom || fTo) && (
-            <p className="text-xs text-neutral-600 mt-1">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
               Filters:
               {fUser && ` user=${fUser}`}
               {fProject && ` project=${fProject}`}
@@ -523,13 +525,13 @@ export default function AdminPage() {
         </div>
 
         {/* Logs table */}
-        <section className="rounded-xl border border-neutral-200 bg-white overflow-hidden print:border-0">
+        <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-hidden print:border-0">
           {/* Bulk action bar */}
           {(selected.size > 0 || pendingInView.length > 0) && (
-            <div className="flex flex-wrap items-center gap-3 px-4 py-3 border-b border-neutral-200 bg-neutral-50 text-sm print:hidden">
+            <div className="flex flex-wrap items-center gap-3 px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-sm print:hidden">
               {selected.size > 0 ? (
                 <>
-                  <span className="text-neutral-700">
+                  <span className="text-neutral-700 dark:text-neutral-300">
                     {selected.size} selected
                   </span>
                   {selectedPendingIds.length > 0 && (
@@ -545,21 +547,21 @@ export default function AdminPage() {
                     <button
                       disabled={approvalBusy}
                       onClick={() => setApproval(selectedApprovedIds, false)}
-                      className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs hover:bg-neutral-100 disabled:opacity-50"
+                      className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50"
                     >
                       Unapprove {selectedApprovedIds.length}
                     </button>
                   )}
                   <button
                     onClick={() => setSelected(new Set())}
-                    className="text-xs text-neutral-600 hover:text-neutral-900 ml-auto"
+                    className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 ml-auto"
                   >
                     Clear selection
                   </button>
                 </>
               ) : (
                 <>
-                  <span className="text-neutral-600">
+                  <span className="text-neutral-600 dark:text-neutral-400">
                     {pendingInView.length} pending entr
                     {pendingInView.length === 1 ? "y" : "ies"} in view
                   </span>
@@ -577,7 +579,7 @@ export default function AdminPage() {
 
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
-              <thead className="bg-neutral-50 text-neutral-600">
+              <thead className="bg-neutral-50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-400">
                 <tr>
                   <th className="px-3 py-2 print:hidden w-8">
                     <input
@@ -622,31 +624,31 @@ export default function AdminPage() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <tr
                         key={`skeleton-${i}`}
-                        className="border-t border-neutral-100 animate-pulse"
+                        className="border-t border-neutral-100 dark:border-neutral-800 animate-pulse"
                       >
                         <td className="px-3 py-3 w-8">
-                          <div className="h-4 bg-neutral-200 rounded w-4"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-4"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-20"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-16"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-16"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-32"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-32"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-24"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-24"></div>
                         </td>
                         <td className="px-4 py-3 text-right flex justify-end">
-                          <div className="h-4 bg-neutral-200 rounded w-8"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-8"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-48"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-48"></div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="h-4 bg-neutral-200 rounded w-16"></div>
+                          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-16"></div>
                         </td>
                         <td className="px-4 py-3"></td>
                       </tr>
@@ -656,7 +658,7 @@ export default function AdminPage() {
                   <tr>
                     <td
                       colSpan={9}
-                      className="px-4 py-8 text-center text-neutral-500"
+                      className="px-4 py-8 text-center text-neutral-500 dark:text-neutral-400"
                     >
                       No entries match these filters.
                     </td>
@@ -665,7 +667,7 @@ export default function AdminPage() {
                   filtered.map((l) => {
                     const isApproved = !!l.approvedAt;
                     return (
-                      <tr key={l.id} className="border-t border-neutral-100">
+                      <tr key={l.id} className="border-t border-neutral-100 dark:border-neutral-800">
                         <td className="px-3 py-2 print:hidden">
                           <input
                             type="checkbox"
@@ -684,7 +686,7 @@ export default function AdminPage() {
                         <td className="px-4 py-2 text-right tabular-nums">
                           {Number(l.hours).toFixed(2)}
                         </td>
-                        <td className="px-4 py-2 text-neutral-700">
+                        <td className="px-4 py-2 text-neutral-700 dark:text-neutral-300">
                           {l.description}
                         </td>
                         <td className="px-4 py-2">
@@ -694,7 +696,7 @@ export default function AdminPage() {
                               title={`Approved by ${l.approvedBy} on ${new Date(
                                 l.approvedAt,
                               ).toLocaleString()} — click to unapprove`}
-                              className="inline-flex items-center gap-1 rounded-full bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 text-xs font-medium hover:bg-green-100 print:hover:bg-green-50"
+                              className="inline-flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900 px-2 py-0.5 text-xs font-medium hover:bg-green-100 dark:hover:bg-green-900/40 print:hover:bg-green-50"
                             >
                               ✓ Approved
                             </button>
@@ -702,7 +704,7 @@ export default function AdminPage() {
                             <button
                               onClick={() => setApproval([l.id], true)}
                               title="Click to approve"
-                              className="inline-flex items-center gap-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 text-xs font-medium hover:bg-amber-100 print:hover:bg-amber-50"
+                              className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900 px-2 py-0.5 text-xs font-medium hover:bg-amber-100 dark:hover:bg-amber-900/40 print:hover:bg-amber-50"
                             >
                               Pending
                             </button>
@@ -711,7 +713,7 @@ export default function AdminPage() {
                         <td className="px-4 py-2 text-right print:hidden">
                           <button
                             onClick={() => deleteLog(l.id)}
-                            className="text-xs text-red-600 hover:text-red-700"
+                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                             title="Delete entry"
                           >
                             Delete
@@ -723,7 +725,7 @@ export default function AdminPage() {
                 )}
               </tbody>
               {filtered.length > 0 && (
-                <tfoot className="bg-neutral-50 font-medium">
+                <tfoot className="bg-neutral-50 dark:bg-neutral-950 font-medium">
                   <tr>
                     <td className="print:hidden" />
                     <td colSpan={4} className="px-4 py-2 text-right">
@@ -783,9 +785,9 @@ function SummaryCard({
   const sorted = [...entries].sort((a, b) => b[1] - a[1]);
   const total = sorted.reduce((s, [, v]) => s + v, 0);
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-5">
-      <h3 className="text-sm font-semibold text-neutral-700 mb-1">{title}</h3>
-      <p className="text-xs text-neutral-500 mb-3 print:hidden">
+    <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
+      <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">{title}</h3>
+      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3 print:hidden">
         Click a row to filter the table.
       </p>
       <ul className="space-y-2">
@@ -796,12 +798,12 @@ function SummaryCard({
               <button
                 onClick={() => onClick?.(k)}
                 className={`w-full text-left rounded-md px-2 py-1 -mx-2 transition ${
-                  isActive ? "bg-neutral-900/5" : "hover:bg-neutral-50"
+                  isActive ? "bg-neutral-900/5 dark:bg-neutral-100/10" : "hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 }`}
               >
                 <div className="flex justify-between text-sm">
                   <span
-                    className={isActive ? "font-semibold" : "text-neutral-700"}
+                    className={isActive ? "font-semibold" : "text-neutral-700 dark:text-neutral-300"}
                   >
                     {k}
                   </span>
@@ -809,10 +811,10 @@ function SummaryCard({
                     {v.toFixed(1)}h
                   </span>
                 </div>
-                <div className="mt-1 h-1.5 bg-neutral-100 rounded">
+                <div className="mt-1 h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded">
                   <div
                     className={`h-1.5 rounded ${
-                      isActive ? "bg-neutral-900" : "bg-neutral-700"
+                      isActive ? "bg-neutral-900 dark:bg-neutral-700" : "bg-neutral-700 dark:bg-neutral-600"
                     }`}
                     style={{ width: total ? `${(v / total) * 100}%` : "0%" }}
                   />
