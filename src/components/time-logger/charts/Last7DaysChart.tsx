@@ -57,7 +57,16 @@ export default function Last7DaysChart({ days }: { days: DayBucket[] }) {
           />
           <Bar dataKey="hours" radius={[4, 4, 0, 0]} isAnimationActive={false}>
             {days.map((d) => (
-              <Cell key={d.date} fill={d.isToday ? palette.barToday : palette.bar} />
+              <Cell
+                key={d.date}
+                fill={
+                  d.isToday
+                    ? palette.barToday
+                    : d.isOff
+                      ? palette.barOff
+                      : palette.bar
+                }
+              />
             ))}
           </Bar>
         </BarChart>

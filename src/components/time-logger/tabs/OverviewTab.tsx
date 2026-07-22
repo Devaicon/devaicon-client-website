@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, type ReactNode } from "react";
-import type { TimeLog } from "@/lib/types";
 import { computeMetrics } from "../metrics";
 import Last7DaysChart from "../charts/Last7DaysChart";
 import BreakdownBar from "../charts/BreakdownBar";
+import MonthCalendar from "../MonthCalendar";
+import type { LoggerData } from "../useLoggerData";
 
 function Card({
   title,
@@ -47,14 +48,14 @@ function formatDayLabel(iso: string): string {
   });
 }
 
-export default function OverviewTab({
-  logs,
-  loading,
-}: {
-  logs: TimeLog[];
-  loading: boolean;
-}) {
+export default function OverviewTab({ data }: { data: LoggerData }) {
+  const { logs, loading, projects, createLog, deleteLog } = data;
   const m = useMemo(() => computeMetrics(logs), [logs]);
+
+  const monthLabel = new Date().toLocaleDateString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
 
   if (loading) {
     return (
@@ -86,8 +87,13 @@ export default function OverviewTab({
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card title="Last 7 days" className="lg:col-span-2">
-          <Last7DaysChart days={m.last7Days} />
+        <Card title={monthLabel} className="lg:col-span-2">
+          <MonthCalendar
+            days={m.monthDays}
+            projects={projects}
+            createLog={createLog}
+            deleteLog={deleteLog}
+          />
         </Card>
 
         <Card title="Logging streak">
@@ -97,6 +103,12 @@ export default function OverviewTab({
               {m.streakWeekdays === 1 ? "weekday" : "weekdays"}
             </span>
           </div>
+          {m.offDaysThisMonth > 0 && (
+            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+              {m.offDaysThisMonth} day{m.offDaysThisMonth === 1 ? "" : "s"} off
+              this month
+            </p>
+          )}
           {m.missingWeekdays.length === 0 ? (
             <p className="mt-3 text-sm text-green-700 dark:text-green-400">
               You&rsquo;re fully caught up for the last two weeks.
@@ -117,17 +129,8 @@ export default function OverviewTab({
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card title="Hours by project · this month">
-          <BreakdownBar
-            items={m.byProject}
-            emptyLabel="No hours logged this month yet."
-          />
-        </Card>
-        <Card title="Hours by category · this month">
-          <BreakdownBar
-            items={m.byCategory}
-            emptyLabel="No hours logged this month yet."
-          />
+        <Card title="Last 7 days" className="lg:col-span-2">
+          <Last7DaysChart days={m.last7Days} />
         </Card>
         <Card title="Approval">
           <div className="flex items-baseline justify-between text-sm">
@@ -153,6 +156,21 @@ export default function OverviewTab({
               Nothing logged yet.
             </p>
           )}
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card title="Hours by project · this month">
+          <BreakdownBar
+            items={m.byProject}
+            emptyLabel="No hours logged this month yet."
+          />
+        </Card>
+        <Card title="Hours by category · this month">
+          <BreakdownBar
+            items={m.byCategory}
+            emptyLabel="No hours logged this month yet."
+          />
         </Card>
       </div>
     </div>

@@ -5,6 +5,8 @@ import type { ResolvedTheme } from "@/components/theme/theme";
 export type ChartPalette = {
   bar: string;
   barToday: string;
+  /** Weekends, leave and holidays — zero here is expected, not a gap. */
+  barOff: string;
   grid: string;
   axis: string;
   tooltipBg: string;
@@ -15,6 +17,7 @@ export type ChartPalette = {
 const LIGHT: ChartPalette = {
   bar: "#a3a3a3",
   barToday: "#3d234b",
+  barOff: "#e5e5e5",
   grid: "#e5e5e5",
   axis: "#737373",
   tooltipBg: "#ffffff",
@@ -25,6 +28,7 @@ const LIGHT: ChartPalette = {
 const DARK: ChartPalette = {
   bar: "#525252",
   barToday: "#a78bfa",
+  barOff: "#2e2e2e",
   grid: "#262626",
   axis: "#a3a3a3",
   tooltipBg: "#171717",

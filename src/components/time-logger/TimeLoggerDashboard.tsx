@@ -156,9 +156,7 @@ function DashboardInner({
         </div>
 
         <div role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`}>
-          {active === "overview" && (
-            <OverviewTab logs={data.logs} loading={data.loading} />
-          )}
+          {active === "overview" && <OverviewTab data={data} />}
           {active === "log" && <LogTimeTab data={data} sw={sw} />}
           {active === "entries" && <EntriesTab data={data} />}
         </div>

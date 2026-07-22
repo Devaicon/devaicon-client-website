@@ -10,9 +10,29 @@ export const CATEGORIES = [
   'Docs',
   'Research',
   'Other',
+  // Non-working days. Entries in these categories mark a date as "off" rather
+  // than as work: they're excluded from every hour total and chart, and they
+  // stop the dashboard reporting the day as a missed log.
+  // Keep in sync with server/src/constants.js.
+  'Leave',
+  'Holiday',
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
+
+/**
+ * Categories that mark a date as a non-working day rather than as work done.
+ * Such entries carry nominal hours only because the backends require
+ * `hours > 0`; they must be excluded from every hour total, average and chart,
+ * and they stop a day being reported as a missed log.
+ */
+export const NON_WORKING_CATEGORIES = ['Leave', 'Holiday'] as const;
+
+export type NonWorkingCategory = (typeof NON_WORKING_CATEGORIES)[number];
+
+export function isNonWorkingCategory(category: string): boolean {
+  return (NON_WORKING_CATEGORIES as readonly string[]).includes(category);
+}
 
 export type Role = 'dev' | 'admin';
 

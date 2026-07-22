@@ -14,15 +14,26 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.3.0";
+export const APP_VERSION = "1.4.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.0",
+    date: "2026-07-23",
+    title: "Leave, holidays and a month calendar",
+    tag: "feature",
+    items: [
+      "Mark any day as leave or a holiday, straight from the calendar",
+      "A month-at-a-glance calendar on the Overview tab",
+      "Days off no longer count as missed logs, and never affect your hour totals",
+    ],
+  },
+  {
     version: "1.3.0",
     date: "2026-07-23",
     title: "Quality of Life Changes",
-    tag: "improvement",
+    tag: "feature",
     items: [
       "Your dashboard is now organised into tabs",
       "New charts and weekly metrics on the Overview tab",

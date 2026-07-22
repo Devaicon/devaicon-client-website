@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CATEGORIES, type Project, type TimeLog } from "@/lib/types";
+import {
+  CATEGORIES,
+  isNonWorkingCategory,
+  type Project,
+  type TimeLog,
+} from "@/lib/types";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 
 function todayLocal(): string {
@@ -239,17 +244,24 @@ export default function AdminPage() {
   );
 
   const totals = useMemo(() => {
-    const total = filtered.reduce((s, l) => s + (Number(l.hours) || 0), 0);
+    // Leave and holiday entries carry nominal hours only because the backend
+    // requires hours > 0. They are days off, not worked time, so they stay out
+    // of every hour total and are counted separately.
+    const work = filtered.filter(
+      (l) => !isNonWorkingCategory(String(l.category)),
+    );
+    const total = work.reduce((s, l) => s + (Number(l.hours) || 0), 0);
+    const offDays = filtered.length - work.length;
     const byUser = new Map<string, number>();
     const byProject = new Map<string, number>();
     const byCategory = new Map<string, number>();
-    for (const l of filtered) {
+    for (const l of work) {
       const h = Number(l.hours) || 0;
       byUser.set(l.username, (byUser.get(l.username) ?? 0) + h);
       byProject.set(l.project, (byProject.get(l.project) ?? 0) + h);
       byCategory.set(l.category, (byCategory.get(l.category) ?? 0) + h);
     }
-    return { total, byUser, byProject, byCategory };
+    return { total, offDays, byUser, byProject, byCategory };
   }, [filtered]);
 
   function clearFilters() {
@@ -500,7 +512,9 @@ export default function AdminPage() {
               Download full .xlsx
             </a>
             <span className="text-neutral-500 dark:text-neutral-400 ml-auto">
-              {filtered.length} entries · {totals.total.toFixed(1)} hours total
+              {filtered.length} entries · {totals.total.toFixed(1)} hours worked
+              {totals.offDays > 0 &&
+                ` · ${totals.offDays} leave/holiday day${totals.offDays === 1 ? "" : "s"}`}
             </span>
           </div>
         </section>
