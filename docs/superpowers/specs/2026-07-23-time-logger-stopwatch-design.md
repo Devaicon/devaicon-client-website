@@ -107,9 +107,12 @@ export type LoggerConfig = {
   adminPath: string;                          // "/admin" | "/legacy/admin"
   bulkDelete: "post-body" | "delete-query";   // the one real API divergence
   storageScope: "new" | "legacy";             // separate stopwatch state per backend
-  banner?: ReactNode;                         // legacy's amber Google Sheets strip
 };
 ```
+
+`config.ts` stays a pure `.ts` module with no JSX, so the legacy amber "Google
+Sheets backend" strip is not part of `LoggerConfig`. It passes as a separate
+`banner?: ReactNode` prop from the legacy page.
 
 `app/(app)/dashboard/page.tsx` and `app/(app)/legacy/dashboard/page.tsx` each
 reduce to roughly ten lines rendering `<TimeLoggerDashboard config={...} />`.
@@ -283,9 +286,10 @@ bar, so they remain visible from every tab.
 5. **Hours by category** — same treatment.
 6. **Approval** — pending hours versus approved hours with a proportion bar.
 
-Recharts cannot take Tailwind classes for fills. Chart colours are declared once
-as CSS custom properties in `globals.css` and read through `charts/palette.ts`,
-which keeps light and dark themes working with the existing `ThemeProvider`.
+Recharts cannot take Tailwind classes for fills. The existing `useTheme()` hook
+already exposes `resolvedTheme` as `"light" | "dark"`, so `charts/palette.ts`
+exports a single `getPalette(resolvedTheme)` returning every colour the charts
+use. One module owns chart colour, and no component reads computed styles.
 
 Every card renders a purposeful empty state for a user with zero logs rather
 than an empty axis.

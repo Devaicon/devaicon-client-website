@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES, type Project, type TimeLog } from "@/lib/types";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { ArrowRightIcon } from "lucide-react";
 
 function todayLocal(): string {
   const d = new Date();
@@ -124,7 +125,9 @@ export default function AdminPage() {
 
   async function deleteLog(id: string) {
     if (!confirm("Delete this entry permanently?")) return;
-    await fetch(`/api/legacy/logs?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    await fetch(`/api/legacy/logs?id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    });
     load();
   }
 
@@ -316,12 +319,17 @@ export default function AdminPage() {
 
   return (
     <main className="min-h-screen text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-950">
-      <div className="bg-amber-50 dark:bg-amber-950/50 border-b border-amber-200 dark:border-amber-900 px-6 py-2 text-xs text-amber-900 dark:text-amber-300 flex items-center justify-between gap-4 print:hidden">
+      <div className="bg-grey-50 dark:bg-grey-950/50 border-b border-grey-200 dark:border-grey-900 px-6 py-2 text-xs text-grey-900 dark:text-grey-300 flex items-center justify-between gap-4 print:hidden">
         <span>
-          <strong>Legacy backend</strong> · Google Sheets · for data migration only.
+          <strong>Legacy backend</strong> · Google Sheets · for data migration
+          only.
         </span>
-        <a href="/admin" className="underline hover:text-amber-950 dark:hover:text-amber-200 whitespace-nowrap">
-          Go to new backend →
+        <a
+          href="/admin"
+          className="underline hover:text-grey-950 dark:hover:text-grey-200 whitespace-nowrap"
+        >
+          Go to new backend{" "}
+          <ArrowRightIcon className="inline-block w-3 h-3 ml-1" />
         </a>
       </div>
       <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 print:hidden">
@@ -329,7 +337,9 @@ export default function AdminPage() {
           <div className="font-semibold tracking-tight">Devaicon · Admin</div>
           <div className="flex items-center gap-4 text-sm">
             <ThemeToggle />
-            <span className="text-neutral-600 dark:text-neutral-400">{me?.username}</span>
+            <span className="text-neutral-600 dark:text-neutral-400">
+              {me?.username}
+            </span>
             <a
               href="/legacy/dashboard"
               className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
@@ -364,7 +374,11 @@ export default function AdminPage() {
               Add
             </button>
           </form>
-          {pMsg && <p className="text-sm text-red-600 dark:text-red-400 mb-3">{pMsg}</p>}
+          {pMsg && (
+            <p className="text-sm text-red-600 dark:text-red-400 mb-3">
+              {pMsg}
+            </p>
+          )}
 
           {loading ? (
             <div className="space-y-2 animate-pulse mt-4">
@@ -376,7 +390,9 @@ export default function AdminPage() {
               ))}
             </div>
           ) : projects.length === 0 ? (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-4">No projects yet.</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-4">
+              No projects yet.
+            </p>
           ) : (
             <ul className="divide-y divide-neutral-100 dark:divide-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-md mt-4">
               {projects.map((p) => (
@@ -675,7 +691,10 @@ export default function AdminPage() {
                   filtered.map((l) => {
                     const isApproved = !!l.approvedAt;
                     return (
-                      <tr key={l.id} className="border-t border-neutral-100 dark:border-neutral-800">
+                      <tr
+                        key={l.id}
+                        className="border-t border-neutral-100 dark:border-neutral-800"
+                      >
                         <td className="px-3 py-2 print:hidden">
                           <input
                             type="checkbox"
@@ -794,7 +813,9 @@ function SummaryCard({
   const total = sorted.reduce((s, [, v]) => s + v, 0);
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
-      <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">{title}</h3>
+      <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+        {title}
+      </h3>
       <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3 print:hidden">
         Click a row to filter the table.
       </p>
@@ -806,12 +827,18 @@ function SummaryCard({
               <button
                 onClick={() => onClick?.(k)}
                 className={`w-full text-left rounded-md px-2 py-1 -mx-2 transition ${
-                  isActive ? "bg-neutral-900/5 dark:bg-neutral-100/10" : "hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                  isActive
+                    ? "bg-neutral-900/5 dark:bg-neutral-100/10"
+                    : "hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 }`}
               >
                 <div className="flex justify-between text-sm">
                   <span
-                    className={isActive ? "font-semibold" : "text-neutral-700 dark:text-neutral-300"}
+                    className={
+                      isActive
+                        ? "font-semibold"
+                        : "text-neutral-700 dark:text-neutral-300"
+                    }
                   >
                     {k}
                   </span>
@@ -822,7 +849,9 @@ function SummaryCard({
                 <div className="mt-1 h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded">
                   <div
                     className={`h-1.5 rounded ${
-                      isActive ? "bg-neutral-900 dark:bg-neutral-700" : "bg-neutral-700 dark:bg-neutral-600"
+                      isActive
+                        ? "bg-neutral-900 dark:bg-neutral-700"
+                        : "bg-neutral-700 dark:bg-neutral-600"
                     }`}
                     style={{ width: total ? `${(v / total) * 100}%` : "0%" }}
                   />

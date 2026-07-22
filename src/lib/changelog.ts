@@ -1,0 +1,75 @@
+// Curated release notes shown in-app. Written for the people filling in time
+// logs, not for developers — these are deliberately not raw commit messages.
+// Add a new entry at the top and bump APP_VERSION and package.json together.
+
+export type ChangelogTag = "feature" | "improvement" | "fix";
+
+export type ChangelogEntry = {
+  /** Semver, matching package.json. */
+  version: string;
+  /** YYYY-MM-DD. */
+  date: string;
+  title: string;
+  tag: ChangelogTag;
+  items: string[];
+};
+
+export const APP_VERSION = "1.3.0";
+
+/** Newest first. */
+export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.3.0",
+    date: "2026-07-23",
+    title: "Quality of Life Changes",
+    tag: "improvement",
+    items: [
+      "Your dashboard is now organised into tabs",
+      "New charts and weekly metrics on the Overview tab",
+      "Faster ways to log your daily hours",
+    ],
+  },
+  {
+    version: "1.2.0",
+    date: "2026-06-26",
+    title: "Dark mode across the logger",
+    tag: "improvement",
+    items: [
+      "Every logger page now follows your light or dark preference",
+      "Date and number pickers match the theme too",
+    ],
+  },
+  {
+    version: "1.1.0",
+    date: "2026-06-21",
+    title: "Better entry descriptions",
+    tag: "improvement",
+    items: [
+      "Add tools, areas, status and a reference to any entry",
+      "Descriptions are formatted consistently for review",
+    ],
+  },
+  {
+    version: "1.0.0",
+    date: "2026-06-11",
+    title: "New backend, activity log and error handling",
+    tag: "feature",
+    items: [
+      "Moved off Google Sheets onto a faster backend",
+      "Clearer messages when something goes wrong",
+      "A new Logs page for viewing recent activity",
+    ],
+  },
+];
+
+/** Negative if a < b, positive if a > b, 0 if equal. */
+export function compareVersions(a: string, b: string): number {
+  const pa = a.split(".").map(Number);
+  const pb = b.split(".").map(Number);
+  for (let i = 0; i < 3; i += 1) {
+    const x = pa[i] ?? 0;
+    const y = pb[i] ?? 0;
+    if (x !== y) return x - y;
+  }
+  return 0;
+}

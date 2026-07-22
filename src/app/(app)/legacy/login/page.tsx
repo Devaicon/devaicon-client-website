@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense } from "react";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { ArrowRightIcon } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
@@ -69,12 +70,12 @@ function LoginForm() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-10 bg-amber-50 dark:bg-amber-950/50 border-b border-amber-200 dark:border-amber-900 px-6 py-2 text-xs text-amber-900 dark:text-amber-300 flex items-center justify-between gap-4">
+      <div className="fixed top-0 left-0 right-0 z-10 bg-grey-50 dark:bg-grey-950/50 border-b border-grey-200 dark:border-grey-900 px-6 py-2 text-xs text-grey-900 dark:text-grey-300 flex items-center justify-between gap-4">
         <span>
           <strong>Legacy backend</strong> · Google Sheets · for data migration only.
         </span>
-        <a href="/login" className="underline hover:text-amber-950 dark:hover:text-amber-200 whitespace-nowrap">
-          Go to new backend →
+        <a href="/login" className="underline hover:text-grey-950 dark:hover:text-grey-200 whitespace-nowrap">
+          Go to new backend <ArrowRightIcon className="inline-block w-3 h-3 ml-1" />
         </a>
       </div>
       <main className="min-h-screen text-neutral-900 dark:text-neutral-100 flex items-center justify-center bg-neutral-50 dark:bg-neutral-950 px-4">
