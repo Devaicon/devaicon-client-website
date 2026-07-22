@@ -60,6 +60,7 @@ All three ship to both the new client (`/dashboard`) and the legacy client
 | Widget scope | All four logger pages, via `app/(app)/layout.tsx` |
 | Versioning | Semver in `package.json`, bumped `0.1.0` -> `1.3.0` |
 | Tests | None. Verification is `next build` + `eslint` + manual |
+| Package manager | `npm`, matching the checked-in `package-lock.json` |
 
 ## Architecture
 
