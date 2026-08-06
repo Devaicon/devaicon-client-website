@@ -14,10 +14,20 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.4.0";
+export const APP_VERSION = "1.5.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.5.0",
+    date: "2026-08-06",
+    title: "Weeks start on Sunday",
+    tag: "improvement",
+    items: [
+      "The calendar and your This week hours now run Sunday to Saturday",
+      "A new Overview tile showing your total hours for last month",
+    ],
+  },
   {
     version: "1.4.0",
     date: "2026-07-23",

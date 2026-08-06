@@ -5,7 +5,7 @@ import type { NonWorkingCategory, Project } from "@/lib/types";
 import type { CalendarDay } from "./metrics";
 import type { MutationResult, NewLogInput } from "./useLoggerData";
 
-const WEEKDAY_HEADS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEKDAY_HEADS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 // Full-day defaults for a marked day. The server requires hours > 0 and a
 // summary of at least 10 characters, so these are not arbitrary.
@@ -32,11 +32,10 @@ const LEVEL_CLASS: Record<number, string> = {
   4: "bg-violet-600 dark:bg-violet-600 text-white",
 };
 
-/** Monday-start column index for the first cell of the month. */
+/** Sunday-start column index for the first cell of the month. */
 function leadingBlanks(firstIso: string): number {
   const [y, m, d] = firstIso.split("-").map(Number);
-  const day = new Date(y, m - 1, d).getDay(); // Sun = 0
-  return day === 0 ? 6 : day - 1;
+  return new Date(y, m - 1, d).getDay(); // Sun = 0, already the column index
 }
 
 function formatLong(iso: string): string {

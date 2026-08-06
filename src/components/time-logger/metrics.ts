@@ -20,8 +20,7 @@ export function todayLocal(): string {
 
 export function startOfWeek(d: Date): Date {
   const x = new Date(d);
-  const day = x.getDay(); // Sun = 0
-  x.setDate(x.getDate() + (day === 0 ? -6 : 1 - day)); // Monday start
+  x.setDate(x.getDate() - x.getDay()); // Sunday start (getDay: Sun = 0)
   x.setHours(0, 0, 0, 0);
   return x;
 }
@@ -89,6 +88,8 @@ export type LoggerMetrics = {
   todayHours: number;
   weekHours: number;
   monthHours: number;
+  /** Previous calendar month, work hours only. */
+  lastMonthHours: number;
   /** Month hours divided by the number of distinct days that have entries. */
   avgPerLoggedDay: number;
   last7Days: DayBucket[];
@@ -145,6 +146,11 @@ export function computeMetrics(
   const today = isoLocal(now);
   const weekStart = isoLocal(startOfWeek(now));
   const monthStart = isoLocal(new Date(now.getFullYear(), now.getMonth(), 1));
+  // Month -1 and day 0 both roll over correctly in January.
+  const lastMonthStart = isoLocal(
+    new Date(now.getFullYear(), now.getMonth() - 1, 1),
+  );
+  const lastMonthEnd = isoLocal(new Date(now.getFullYear(), now.getMonth(), 0));
 
   // Leave and holiday entries mark a day off. They are real log rows, so they
   // must be kept out of every hour total, average and chart — otherwise a
@@ -239,6 +245,9 @@ export function computeMetrics(
     todayHours: sum(workLogs.filter((l) => l.date === today)),
     weekHours: sum(workLogs.filter((l) => l.date >= weekStart)),
     monthHours,
+    lastMonthHours: sum(
+      workLogs.filter((l) => l.date >= lastMonthStart && l.date <= lastMonthEnd),
+    ),
     avgPerLoggedDay: distinctMonthDays === 0 ? 0 : monthHours / distinctMonthDays,
     last7Days,
     monthDays,

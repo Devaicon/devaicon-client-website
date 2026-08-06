@@ -52,15 +52,23 @@ export default function OverviewTab({ data }: { data: LoggerData }) {
   const { logs, loading, projects, createLog, deleteLog } = data;
   const m = useMemo(() => computeMetrics(logs), [logs]);
 
-  const monthLabel = new Date().toLocaleDateString(undefined, {
+  const now = new Date();
+  const monthLabel = now.toLocaleDateString(undefined, {
     month: "long",
     year: "numeric",
   });
+  // The tile holds a settled historical figure, so name the month outright
+  // rather than leaving the reader to work out which one "last" means.
+  const lastMonthLabel = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    1,
+  ).toLocaleDateString(undefined, { month: "long" });
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[0, 1, 2, 3].map((i) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {[0, 1, 2, 3, 4].map((i) => (
           <div
             key={i}
             className="h-24 animate-pulse rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900"
@@ -76,10 +84,14 @@ export default function OverviewTab({ data }: { data: LoggerData }) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Tile label="Today" value={`${m.todayHours.toFixed(1)} h`} />
         <Tile label="This week" value={`${m.weekHours.toFixed(1)} h`} />
         <Tile label="This month" value={`${m.monthHours.toFixed(1)} h`} />
+        <Tile
+          label={lastMonthLabel}
+          value={`${m.lastMonthHours.toFixed(1)} h`}
+        />
         <Tile
           label="Avg / logged day"
           value={`${m.avgPerLoggedDay.toFixed(1)} h`}
