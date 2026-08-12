@@ -386,9 +386,10 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
                 {pageItems.map((l) => {
                   const isApproved = !!l.approvedAt;
                   return (
+                    // No `layout` prop: transforms on <tr> reflow unreliably
+                    // across browsers, and a fade is all the row change needs.
                     <motion.tr
                       key={l.id}
-                      layout={!reduced}
                       variants={fadeRow(!!reduced)}
                       initial="initial"
                       animate="animate"
