@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { NonWorkingCategory, Project } from "@/lib/types";
+import { useTimeFormat } from "./TimeFormatProvider";
 import type { CalendarDay } from "./metrics";
 import type { MutationResult, NewLogInput } from "./useLoggerData";
 
@@ -47,10 +48,10 @@ function formatLong(iso: string): string {
   });
 }
 
-function cellTitle(day: CalendarDay): string {
+function cellTitle(day: CalendarDay, fmt: (hours: number) => string): string {
   const when = formatLong(day.date);
   if (day.offKind) return `${when} — ${day.offKind}`;
-  if (day.hours > 0) return `${when} — ${day.hours.toFixed(2)} h logged`;
+  if (day.hours > 0) return `${when} — ${fmt(day.hours)} logged`;
   if (day.isFuture) return `${when} — upcoming`;
   if (day.isWeekend) return `${when} — weekend`;
   return `${when} — nothing logged`;
@@ -69,6 +70,7 @@ export default function MonthCalendar({
 }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const { fmt } = useTimeFormat();
 
   if (days.length === 0) return null;
 
@@ -144,12 +146,14 @@ export default function MonthCalendar({
             tone = LEVEL_CLASS[levelOf(day.hours)];
           }
 
+          const label = cellTitle(day, (h) => fmt(h, { decimals: 2 }));
+
           return (
             <button
               key={day.date}
               type="button"
-              title={cellTitle(day)}
-              aria-label={cellTitle(day)}
+              title={label}
+              aria-label={label}
               aria-pressed={isSelected}
               onClick={() => setSelectedDate(isSelected ? null : day.date)}
               className={`${base} ${tone} hover:opacity-80 ${
@@ -191,7 +195,7 @@ export default function MonthCalendar({
           <span className="font-medium">{formatLong(selected.date)}</span>
           {selected.hours > 0 && (
             <span className="text-neutral-500 dark:text-neutral-400">
-              {selected.hours.toFixed(2)} h logged
+              {fmt(selected.hours, { decimals: 2 })} logged
             </span>
           )}
           {selected.isFuture && !selected.offKind && (

@@ -1,10 +1,14 @@
 "use client";
 
 import { useMemo, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { computeMetrics } from "../metrics";
 import Last7DaysChart from "../charts/Last7DaysChart";
 import BreakdownBar from "../charts/BreakdownBar";
 import MonthCalendar from "../MonthCalendar";
+import AnimatedNumber from "../AnimatedNumber";
+import { useTimeFormat } from "../TimeFormatProvider";
+import { staggerContainer, staggerItem } from "../motion";
 import type { LoggerData } from "../useLoggerData";
 
 function Card({
@@ -28,14 +32,21 @@ function Card({
   );
 }
 
-function Tile({ label, value }: { label: string; value: string }) {
+function Tile({ label, hours }: { label: string; hours: number }) {
+  const reduced = useReducedMotion();
+  const { fmt } = useTimeFormat();
   return (
-    <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
+    <motion.div
+      variants={staggerItem(!!reduced)}
+      className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5"
+    >
       <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
         {label}
       </div>
-      <div className="mt-1 text-2xl font-semibold">{value}</div>
-    </div>
+      <div className="mt-1 text-2xl font-semibold tabular-nums">
+        <AnimatedNumber value={hours} format={(n) => fmt(n)} />
+      </div>
+    </motion.div>
   );
 }
 
@@ -51,6 +62,8 @@ function formatDayLabel(iso: string): string {
 export default function OverviewTab({ data }: { data: LoggerData }) {
   const { logs, loading, projects, createLog, deleteLog } = data;
   const m = useMemo(() => computeMetrics(logs), [logs]);
+  const reduced = useReducedMotion();
+  const { fmt } = useTimeFormat();
 
   const now = new Date();
   const monthLabel = now.toLocaleDateString(undefined, {
@@ -84,19 +97,18 @@ export default function OverviewTab({ data }: { data: LoggerData }) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <Tile label="Today" value={`${m.todayHours.toFixed(1)} h`} />
-        <Tile label="This week" value={`${m.weekHours.toFixed(1)} h`} />
-        <Tile label="This month" value={`${m.monthHours.toFixed(1)} h`} />
-        <Tile
-          label={lastMonthLabel}
-          value={`${m.lastMonthHours.toFixed(1)} h`}
-        />
-        <Tile
-          label="Avg / logged day"
-          value={`${m.avgPerLoggedDay.toFixed(1)} h`}
-        />
-      </div>
+      <motion.div
+        variants={staggerContainer(!!reduced)}
+        initial="initial"
+        animate="animate"
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
+      >
+        <Tile label="Today" hours={m.todayHours} />
+        <Tile label="This week" hours={m.weekHours} />
+        <Tile label="This month" hours={m.monthHours} />
+        <Tile label={lastMonthLabel} hours={m.lastMonthHours} />
+        <Tile label="Avg / logged day" hours={m.avgPerLoggedDay} />
+      </motion.div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card title={monthLabel} className="lg:col-span-2">
@@ -148,19 +160,21 @@ export default function OverviewTab({ data }: { data: LoggerData }) {
           <div className="flex items-baseline justify-between text-sm">
             <span className="text-neutral-600 dark:text-neutral-400">Approved</span>
             <span className="tabular-nums font-medium">
-              {m.approvedHours.toFixed(1)} h
+              {fmt(m.approvedHours)}
             </span>
           </div>
           <div className="mt-1 flex items-baseline justify-between text-sm">
             <span className="text-neutral-600 dark:text-neutral-400">Pending</span>
             <span className="tabular-nums font-medium">
-              {m.pendingHours.toFixed(1)} h
+              {fmt(m.pendingHours)}
             </span>
           </div>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-amber-200 dark:bg-amber-900">
-            <div
+            <motion.div
               className="h-full rounded-full bg-green-600 dark:bg-green-500"
-              style={{ width: `${approvedPct}%` }}
+              initial={false}
+              animate={{ width: `${approvedPct}%` }}
+              transition={{ duration: reduced ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
             />
           </div>
           {totalForApproval === 0 && (

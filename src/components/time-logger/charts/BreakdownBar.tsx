@@ -1,5 +1,6 @@
 "use client";
 
+import { useTimeFormat } from "../TimeFormatProvider";
 import type { Breakdown } from "../metrics";
 
 // Deliberately CSS rather than Recharts: this is a labelled proportion list,
@@ -11,6 +12,7 @@ export default function BreakdownBar({
   items: Breakdown[];
   emptyLabel: string;
 }) {
+  const { fmt } = useTimeFormat();
   const max = items.reduce((m, i) => Math.max(m, i.hours), 0);
 
   if (items.length === 0 || max === 0) {
@@ -29,8 +31,8 @@ export default function BreakdownBar({
             <span className="truncate text-neutral-700 dark:text-neutral-300">
               {item.name}
             </span>
-            <span className="tabular-nums text-neutral-500 dark:text-neutral-400">
-              {item.hours.toFixed(1)} h
+            <span className="tabular-nums whitespace-nowrap text-neutral-500 dark:text-neutral-400">
+              {fmt(item.hours)}
             </span>
           </div>
           <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">

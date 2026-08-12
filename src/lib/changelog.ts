@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.5.0";
+export const APP_VERSION = "1.6.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.6.0",
+    date: "2026-08-12",
+    title: "Entry totals, readable times and CSV export",
+    tag: "feature",
+    items: [
+      "The Entries tab now summarises whatever your filters match — total hours, approved vs pending, average per day and your top project",
+      "Export CSV on the Entries tab downloads every entry matching your filters",
+      "A new switch in the header shows hours as 7h 30m instead of 7.5, everywhere in the tracker",
+      "Tabs, cards and entries now animate as they change",
+    ],
+  },
   {
     version: "1.5.0",
     date: "2026-08-06",

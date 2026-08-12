@@ -11,11 +11,13 @@ import {
   YAxis,
 } from "recharts";
 import { useTheme } from "@/components/theme/ThemeProvider";
+import { useTimeFormat } from "../TimeFormatProvider";
 import { getPalette } from "./palette";
 import type { DayBucket } from "../metrics";
 
 export default function Last7DaysChart({ days }: { days: DayBucket[] }) {
   const { resolvedTheme } = useTheme();
+  const { fmt } = useTimeFormat();
   const palette = getPalette(resolvedTheme);
   const hasData = days.some((d) => d.hours > 0);
 
@@ -53,7 +55,7 @@ export default function Last7DaysChart({ days }: { days: DayBucket[] }) {
               color: palette.tooltipText,
               fontSize: 12,
             }}
-            formatter={(value: number) => [`${value.toFixed(2)} h`, "Logged"]}
+            formatter={(value: number) => [fmt(value, { decimals: 2 }), "Logged"]}
           />
           <Bar dataKey="hours" radius={[4, 4, 0, 0]} isAnimationActive={false}>
             {days.map((d) => (

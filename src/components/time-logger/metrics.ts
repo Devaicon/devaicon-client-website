@@ -139,6 +139,73 @@ function topBreakdown(logs: TimeLog[], key: (l: TimeLog) => string): Breakdown[]
   return [...head, { name: "Other", hours: tail }];
 }
 
+/* ---------- entries-tab summary ---------- */
+
+export type EntriesSummary = {
+  /** Work hours only — leave and holiday rows never count. */
+  totalHours: number;
+  /** Every row in the filtered set, including any leave/holiday markers. */
+  entryCount: number;
+  /** Rows that actually carry work, i.e. the divisor for avgPerEntry. */
+  workEntryCount: number;
+  avgPerEntry: number;
+  /** Distinct dates carrying work hours. */
+  daysCovered: number;
+  avgPerDay: number;
+  approvedHours: number;
+  pendingHours: number;
+  /** Approved share of total hours, 0–100. */
+  approvedPct: number;
+  topProject: { name: string; hours: number; share: number } | null;
+  /** Leave/holiday rows present but excluded from the hour figures. */
+  nonWorkingCount: number;
+};
+
+/**
+ * Summarises whatever the Entries tab is currently showing.
+ *
+ * Hour figures exclude leave and holiday rows, exactly as computeMetrics does —
+ * a day marked off carries nominal hours only because the backends demand
+ * `hours > 0`, and letting those into a total would overstate the work done.
+ * The entry count deliberately does not exclude them: it describes the table,
+ * and those rows are visible in it.
+ */
+export function summariseEntries(logs: TimeLog[]): EntriesSummary {
+  const workLogs = logs.filter((l) => !isNonWorkingCategory(String(l.category)));
+  const totalHours = sum(workLogs);
+  const daysCovered = new Set(
+    workLogs.filter((l) => hoursOf(l) > 0).map((l) => l.date),
+  ).size;
+  const approvedHours = sum(workLogs.filter((l) => !!l.approvedAt));
+  const pendingHours = totalHours - approvedHours;
+
+  const byProject = topBreakdown(workLogs, (l) => l.project);
+  // topBreakdown sorts descending, but folds its tail into an "Other" bucket —
+  // which is a group, not a project, so it can never be the top one.
+  const leader = byProject.find((b) => b.name !== "Other") ?? null;
+
+  return {
+    totalHours,
+    entryCount: logs.length,
+    workEntryCount: workLogs.length,
+    avgPerEntry: workLogs.length === 0 ? 0 : totalHours / workLogs.length,
+    daysCovered,
+    avgPerDay: daysCovered === 0 ? 0 : totalHours / daysCovered,
+    approvedHours,
+    pendingHours,
+    approvedPct: totalHours === 0 ? 0 : (approvedHours / totalHours) * 100,
+    topProject:
+      leader && leader.hours > 0
+        ? {
+            name: leader.name,
+            hours: leader.hours,
+            share: totalHours === 0 ? 0 : (leader.hours / totalHours) * 100,
+          }
+        : null,
+    nonWorkingCount: logs.length - workLogs.length,
+  };
+}
+
 export function computeMetrics(
   logs: TimeLog[],
   now: Date = new Date(),

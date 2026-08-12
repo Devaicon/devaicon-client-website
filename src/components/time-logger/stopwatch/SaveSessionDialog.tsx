@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { CATEGORIES, type Project } from "@/lib/types";
 import DescriptionBuilder from "@/components/DescriptionBuilder";
 import { formatHuman, msToHours } from "../format";
+import { backdrop, dialogPanel } from "../motion";
 import { isoLocal, todayLocal } from "../metrics";
 import type { MutationResult, NewLogInput } from "../useLoggerData";
 import type { PendingSession } from "./storage";
@@ -22,6 +24,7 @@ export default function SaveSessionDialog({
   onSaved: () => void;
 }) {
   const measuredHours = msToHours(session.elapsedMs);
+  const reduced = useReducedMotion();
 
   const [form, setForm] = useState({
     // The entry belongs to the day the timer started, not the day it stopped.
@@ -83,16 +86,21 @@ export default function SaveSessionDialog({
   const edited = Number(form.hours) !== measuredHours;
 
   return (
-    <div
+    <motion.div
+      variants={backdrop()}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div
+      <motion.div
         role="dialog"
         aria-modal="true"
         aria-labelledby="save-session-title"
+        variants={dialogPanel(!!reduced)}
         className="w-full max-w-2xl rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 text-neutral-900 dark:text-neutral-100 shadow-xl"
       >
         <div className="flex items-start justify-between gap-4">
@@ -229,7 +237,7 @@ export default function SaveSessionDialog({
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

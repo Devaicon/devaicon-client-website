@@ -2,7 +2,10 @@
 
 import { Suspense, useCallback, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import TimeFormatToggle from "./TimeFormatToggle";
+import { fadeRise, slideDown } from "./motion";
 import type { LoggerConfig } from "./config";
 import { useLoggerData } from "./useLoggerData";
 import OverviewTab from "./tabs/OverviewTab";
@@ -36,6 +39,7 @@ function DashboardInner({
   const searchParams = useSearchParams();
   const data = useLoggerData(config);
   const sw = useStopwatch(config.storageScope);
+  const reduced = useReducedMotion();
 
   // Stopping the timer produces a pending session, and the dialog is simply
   // "there is a pending session the user hasn't dismissed". Deriving it beats
@@ -80,6 +84,7 @@ function DashboardInner({
             Devaicon · Time Tracker
           </div>
           <div className="flex items-center gap-4 text-sm">
+            <TimeFormatToggle />
             <ThemeToggle />
             <span className="text-neutral-600 dark:text-neutral-400">
               {data.me?.username}{" "}
@@ -118,13 +123,24 @@ function DashboardInner({
         )}
 
         <StopwatchBar sw={sw} />
-        {sw.pending && !dialogOpen && (
-          <PendingSessionStrip
-            session={sw.pending}
-            onSave={() => setDismissedPendingId(null)}
-            onDiscard={sw.clearPending}
-          />
-        )}
+        <AnimatePresence initial={false}>
+          {sw.pending && !dialogOpen && (
+            <motion.div
+              key={sw.pending.id}
+              variants={slideDown(!!reduced)}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="overflow-hidden"
+            >
+              <PendingSessionStrip
+                session={sw.pending}
+                onSave={() => setDismissedPendingId(null)}
+                onDiscard={sw.clearPending}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div
           role="tablist"
@@ -156,21 +172,35 @@ function DashboardInner({
         </div>
 
         <div role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`}>
-          {active === "overview" && <OverviewTab data={data} />}
-          {active === "log" && <LogTimeTab data={data} sw={sw} />}
-          {active === "entries" && <EntriesTab data={data} />}
+          {/* mode="wait" so the outgoing panel clears before the next arrives —
+              two full-width panels overlapping mid-transition looks broken. */}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={active}
+              variants={fadeRise(!!reduced)}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              {active === "overview" && <OverviewTab data={data} />}
+              {active === "log" && <LogTimeTab data={data} sw={sw} />}
+              {active === "entries" && <EntriesTab data={data} />}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
-      {dialogOpen && sw.pending && (
-        <SaveSessionDialog
-          session={sw.pending}
-          projects={data.projects}
-          createLog={data.createLog}
-          onClose={() => setDismissedPendingId(sw.pending!.id)}
-          onSaved={sw.clearPending}
-        />
-      )}
+      <AnimatePresence>
+        {dialogOpen && sw.pending && (
+          <SaveSessionDialog
+            session={sw.pending}
+            projects={data.projects}
+            createLog={data.createLog}
+            onClose={() => setDismissedPendingId(sw.pending!.id)}
+            onSaved={sw.clearPending}
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }
