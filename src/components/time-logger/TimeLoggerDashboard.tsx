@@ -182,7 +182,7 @@ function DashboardInner({
               animate="animate"
               exit="exit"
             >
-              {active === "overview" && <OverviewTab data={data} />}
+              {active === "overview" && <OverviewTab data={data} config={config} />}
               {active === "log" && <LogTimeTab data={data} sw={sw} />}
               {active === "entries" && <EntriesTab data={data} />}
             </motion.div>

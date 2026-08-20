@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.6.0";
+export const APP_VERSION = "1.7.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.7.0",
+    date: "2026-08-20",
+    title: "Choose your own Overview cards",
+    tag: "feature",
+    items: [
+      "A new Yesterday card, plus Last working day, Last week, This year, Pending approval, Top project and eight more",
+      "A new Cards button in the top right of the Overview lets you pick which cards appear, and which sit behind a Show more row",
+      "The grid reshapes itself to however many cards you have showing",
+      "Your choices are remembered — on your account in the new tracker, in your browser in the legacy one",
+    ],
+  },
   {
     version: "1.6.0",
     date: "2026-08-12",

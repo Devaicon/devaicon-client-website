@@ -2,13 +2,13 @@
 
 import { useMemo, type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { computeMetrics } from "../metrics";
+import { computeMetrics, formatDayLabel } from "../metrics";
 import Last7DaysChart from "../charts/Last7DaysChart";
 import BreakdownBar from "../charts/BreakdownBar";
 import MonthCalendar from "../MonthCalendar";
-import AnimatedNumber from "../AnimatedNumber";
+import StatSection from "../overview/StatSection";
 import { useTimeFormat } from "../TimeFormatProvider";
-import { staggerContainer, staggerItem } from "../motion";
+import type { LoggerConfig } from "../config";
 import type { LoggerData } from "../useLoggerData";
 
 function Card({
@@ -32,34 +32,13 @@ function Card({
   );
 }
 
-function Tile({ label, hours }: { label: string; hours: number }) {
-  const reduced = useReducedMotion();
-  const { fmt } = useTimeFormat();
-  return (
-    <motion.div
-      variants={staggerItem(!!reduced)}
-      className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5"
-    >
-      <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-        {label}
-      </div>
-      <div className="mt-1 text-2xl font-semibold tabular-nums">
-        <AnimatedNumber value={hours} format={(n) => fmt(n)} />
-      </div>
-    </motion.div>
-  );
-}
-
-function formatDayLabel(iso: string): string {
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
-}
-
-export default function OverviewTab({ data }: { data: LoggerData }) {
+export default function OverviewTab({
+  data,
+  config,
+}: {
+  data: LoggerData;
+  config: LoggerConfig;
+}) {
   const { logs, loading, projects, createLog, deleteLog } = data;
   const m = useMemo(() => computeMetrics(logs), [logs]);
   const reduced = useReducedMotion();
@@ -70,25 +49,11 @@ export default function OverviewTab({ data }: { data: LoggerData }) {
     month: "long",
     year: "numeric",
   });
-  // The tile holds a settled historical figure, so name the month outright
-  // rather than leaving the reader to work out which one "last" means.
-  const lastMonthLabel = new Date(
-    now.getFullYear(),
-    now.getMonth() - 1,
-    1,
-  ).toLocaleDateString(undefined, { month: "long" });
 
+  // The tile band renders its own skeleton, sized to the user's own layout, so
+  // the loading state can't jump to a different shape once the data lands.
   if (loading) {
-    return (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="h-24 animate-pulse rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900"
-          />
-        ))}
-      </div>
-    );
+    return <StatSection config={config} metrics={m} loading />;
   }
 
   const totalForApproval = m.pendingHours + m.approvedHours;
@@ -97,18 +62,7 @@ export default function OverviewTab({ data }: { data: LoggerData }) {
 
   return (
     <div className="space-y-4">
-      <motion.div
-        variants={staggerContainer(!!reduced)}
-        initial="initial"
-        animate="animate"
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
-      >
-        <Tile label="Today" hours={m.todayHours} />
-        <Tile label="This week" hours={m.weekHours} />
-        <Tile label="This month" hours={m.monthHours} />
-        <Tile label={lastMonthLabel} hours={m.lastMonthHours} />
-        <Tile label="Avg / logged day" hours={m.avgPerLoggedDay} />
-      </motion.div>
+      <StatSection config={config} metrics={m} loading={false} />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card title={monthLabel} className="lg:col-span-2">

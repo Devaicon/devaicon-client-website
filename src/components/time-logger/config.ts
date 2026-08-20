@@ -13,6 +13,14 @@ export type LoggerConfig = {
   bulkDelete: "post-body" | "delete-query";
   /** Namespaces localStorage so a legacy timer never leaks into the new client. */
   storageScope: "new" | "legacy";
+  /**
+   * Where overview card preferences live. "server" keeps them on the user
+   * account so they follow the person between devices; "local" keeps them in
+   * this browser only, which is all the Google Sheets backend can offer.
+   * Either way localStorage holds a mirror, so the first paint never waits
+   * on a fetch.
+   */
+  preferenceSync: "server" | "local";
 };
 
 export const NEW_CONFIG: LoggerConfig = {
@@ -21,6 +29,7 @@ export const NEW_CONFIG: LoggerConfig = {
   adminPath: "/admin",
   bulkDelete: "post-body",
   storageScope: "new",
+  preferenceSync: "server",
 };
 
 export const LEGACY_CONFIG: LoggerConfig = {
@@ -29,4 +38,5 @@ export const LEGACY_CONFIG: LoggerConfig = {
   adminPath: "/legacy/admin",
   bulkDelete: "delete-query",
   storageScope: "legacy",
+  preferenceSync: "local",
 };

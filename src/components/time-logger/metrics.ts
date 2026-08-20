@@ -37,6 +37,16 @@ export function isWeekend(d: Date): boolean {
   return day === 0 || day === 6;
 }
 
+/** "Fri 15 Aug" from a local YYYY-MM-DD, without the UTC drift of `new Date(iso)`. */
+export function formatDayLabel(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+}
+
 // A day carrying a leave or holiday entry neither breaks a streak nor counts
 // as a missed log, exactly like a weekend.
 function isOffDay(d: Date, offDates: Set<string>): boolean {
@@ -68,6 +78,9 @@ export type DayBucket = {
 
 export type Breakdown = { name: string; hours: number };
 
+/** The leading entry of a breakdown, with its share of the total, 0–100. */
+export type Highlight = { name: string; hours: number; share: number };
+
 /** One cell of the month calendar heatmap. */
 export type CalendarDay = {
   /** Local YYYY-MM-DD. */
@@ -86,12 +99,44 @@ export type CalendarDay = {
 
 export type LoggerMetrics = {
   todayHours: number;
+  /** The previous calendar day, whether or not it was a working one. */
+  yesterdayHours: number;
+  /** The most recent day work was expected: skips weekends, leave and holidays. */
+  lastWorkingDayHours: number;
+  /** Local YYYY-MM-DD of that day, so a tile can name it. */
+  lastWorkingDayISO: string;
   weekHours: number;
+  /** The previous Sunday–Saturday week, work hours only. */
+  lastWeekHours: number;
+  /** weekHours - lastWeekHours. Signed: negative means this week is behind. */
+  weekDeltaHours: number;
   monthHours: number;
   /** Previous calendar month, work hours only. */
   lastMonthHours: number;
+  /** Calendar year to date, work hours only. */
+  yearHours: number;
   /** Month hours divided by the number of distinct days that have entries. */
   avgPerLoggedDay: number;
+  /**
+   * Month hours divided by the working days elapsed so far this month. Unlike
+   * avgPerLoggedDay this counts days that were expected but never logged, so
+   * gaps drag it down instead of hiding.
+   */
+  avgPerWorkingDay: number;
+  /** Highest single-day work total in the current month. */
+  longestDayHours: number;
+  /** Local YYYY-MM-DD of that day; null when the month has no work yet. */
+  longestDayISO: string | null;
+  /** Work rows dated in the current month. Leave and holiday rows never count. */
+  entriesThisMonth: number;
+  /** Most recent date carrying work hours; null when nothing is logged at all. */
+  lastLoggedISO: string | null;
+  /** Whole days from that date to today; null when nothing is logged at all. */
+  daysSinceLastLog: number | null;
+  /** Leading project this month, or null when the month has no work yet. */
+  topProject: Highlight | null;
+  /** Leading category this month, or null when the month has no work yet. */
+  topCategory: Highlight | null;
   last7Days: DayBucket[];
   /** Every day of the current month, for the calendar heatmap. */
   monthDays: CalendarDay[];
@@ -139,6 +184,31 @@ function topBreakdown(logs: TimeLog[], key: (l: TimeLog) => string): Breakdown[]
   return [...head, { name: "Other", hours: tail }];
 }
 
+/**
+ * The leading row of a breakdown, as a share of `total`.
+ *
+ * topBreakdown sorts descending but folds its tail into an "Other" bucket —
+ * which is a group, not a real name, so it can never lead.
+ */
+function leaderOf(items: Breakdown[], total: number): Highlight | null {
+  const leader = items.find((b) => b.name !== "Other");
+  if (!leader || leader.hours <= 0) return null;
+  return {
+    name: leader.name,
+    hours: leader.hours,
+    share: total === 0 ? 0 : (leader.hours / total) * 100,
+  };
+}
+
+/** Whole days from `fromISO` to `toISO`. Rounded, so DST shifts can't skew it. */
+function daysBetween(fromISO: string, toISO: string): number {
+  const [fy, fm, fd] = fromISO.split("-").map(Number);
+  const [ty, tm, td] = toISO.split("-").map(Number);
+  const from = new Date(fy, fm - 1, fd).getTime();
+  const to = new Date(ty, tm - 1, td).getTime();
+  return Math.round((to - from) / 86_400_000);
+}
+
 /* ---------- entries-tab summary ---------- */
 
 export type EntriesSummary = {
@@ -156,7 +226,7 @@ export type EntriesSummary = {
   pendingHours: number;
   /** Approved share of total hours, 0–100. */
   approvedPct: number;
-  topProject: { name: string; hours: number; share: number } | null;
+  topProject: Highlight | null;
   /** Leave/holiday rows present but excluded from the hour figures. */
   nonWorkingCount: number;
 };
@@ -180,9 +250,6 @@ export function summariseEntries(logs: TimeLog[]): EntriesSummary {
   const pendingHours = totalHours - approvedHours;
 
   const byProject = topBreakdown(workLogs, (l) => l.project);
-  // topBreakdown sorts descending, but folds its tail into an "Other" bucket —
-  // which is a group, not a project, so it can never be the top one.
-  const leader = byProject.find((b) => b.name !== "Other") ?? null;
 
   return {
     totalHours,
@@ -194,14 +261,7 @@ export function summariseEntries(logs: TimeLog[]): EntriesSummary {
     approvedHours,
     pendingHours,
     approvedPct: totalHours === 0 ? 0 : (approvedHours / totalHours) * 100,
-    topProject:
-      leader && leader.hours > 0
-        ? {
-            name: leader.name,
-            hours: leader.hours,
-            share: totalHours === 0 ? 0 : (leader.hours / totalHours) * 100,
-          }
-        : null,
+    topProject: leaderOf(byProject, totalHours),
     nonWorkingCount: logs.length - workLogs.length,
   };
 }
@@ -218,6 +278,10 @@ export function computeMetrics(
     new Date(now.getFullYear(), now.getMonth() - 1, 1),
   );
   const lastMonthEnd = isoLocal(new Date(now.getFullYear(), now.getMonth(), 0));
+  const yesterday = isoLocal(addDays(now, -1));
+  const lastWeekStart = isoLocal(addDays(startOfWeek(now), -7));
+  const lastWeekEnd = isoLocal(addDays(startOfWeek(now), -1));
+  const yearStart = isoLocal(new Date(now.getFullYear(), 0, 1));
 
   // Leave and holiday entries mark a day off. They are real log rows, so they
   // must be kept out of every hour total, average and chart — otherwise a
@@ -238,6 +302,14 @@ export function computeMetrics(
   const loggedDates = new Set(
     workLogs.filter((l) => hoursOf(l) > 0).map((l) => l.date),
   );
+
+  // One pass over the work rows, rather than re-filtering the whole list once
+  // per day. The daily figures below all read from here.
+  const hoursByDate = new Map<string, number>();
+  for (const l of workLogs) {
+    hoursByDate.set(l.date, (hoursByDate.get(l.date) ?? 0) + hoursOf(l));
+  }
+  const hoursOn = (iso: string): number => hoursByDate.get(iso) ?? 0;
 
   // Streak: walk back over working days, skipping weekends and days marked off.
   // Today not being logged yet does not break the streak — the day isn't over —
@@ -269,7 +341,7 @@ export function computeMetrics(
     last7Days.push({
       date: iso,
       label: d.toLocaleDateString(undefined, { weekday: "short", day: "numeric" }),
-      hours: sum(workLogs.filter((l) => l.date === iso)),
+      hours: hoursOn(iso),
       isToday: iso === today,
       isOff: isOffDay(d, offDates),
     });
@@ -289,7 +361,7 @@ export function computeMetrics(
     monthDays.push({
       date: iso,
       dayOfMonth,
-      hours: sum(workLogs.filter((l) => l.date === iso)),
+      hours: hoursOn(iso),
       isToday: iso === today,
       isWeekend: isWeekend(d),
       offKind: off?.kind ?? null,
@@ -308,18 +380,64 @@ export function computeMetrics(
     if (d >= monthStart) offDaysThisMonth += 1;
   });
 
+  // Working days elapsed this month, today included: the divisor that makes a
+  // missed day visible rather than simply absent from the average.
+  let workingDaysElapsed = 0;
+  for (let dayOfMonth = 1; dayOfMonth <= now.getDate(); dayOfMonth += 1) {
+    const d = new Date(now.getFullYear(), now.getMonth(), dayOfMonth);
+    if (!isOffDay(d, offDates)) workingDaysElapsed += 1;
+  }
+
+  // The month's busiest day. monthDays is already built and month-scoped, so
+  // the peak comes straight off it.
+  let longestDay: CalendarDay | null = null;
+  for (const d of monthDays) {
+    if (d.hours > 0 && (!longestDay || d.hours > longestDay.hours)) longestDay = d;
+  }
+
+  // loggedDates holds only dates carrying work hours, and ISO dates sort
+  // lexicographically, so the maximum is the most recent one.
+  const lastLoggedISO = [...loggedDates].reduce<string | null>(
+    (latest, d) => (latest === null || d > latest ? d : latest),
+    null,
+  );
+
+  const weekHours = sum(workLogs.filter((l) => l.date >= weekStart));
+  const lastWeekHours = sum(
+    workLogs.filter((l) => l.date >= lastWeekStart && l.date <= lastWeekEnd),
+  );
+  const lastWorkingDayISO = isoLocal(prevWorkday(now, offDates));
+  const byProject = topBreakdown(monthLogs, (l) => l.project);
+  const byCategory = topBreakdown(monthLogs, (l) => String(l.category));
+
   return {
-    todayHours: sum(workLogs.filter((l) => l.date === today)),
-    weekHours: sum(workLogs.filter((l) => l.date >= weekStart)),
+    todayHours: hoursOn(today),
+    yesterdayHours: hoursOn(yesterday),
+    lastWorkingDayHours: hoursOn(lastWorkingDayISO),
+    lastWorkingDayISO,
+    weekHours,
+    lastWeekHours,
+    weekDeltaHours: weekHours - lastWeekHours,
     monthHours,
     lastMonthHours: sum(
       workLogs.filter((l) => l.date >= lastMonthStart && l.date <= lastMonthEnd),
     ),
+    yearHours: sum(workLogs.filter((l) => l.date >= yearStart)),
     avgPerLoggedDay: distinctMonthDays === 0 ? 0 : monthHours / distinctMonthDays,
+    avgPerWorkingDay:
+      workingDaysElapsed === 0 ? 0 : monthHours / workingDaysElapsed,
+    longestDayHours: longestDay?.hours ?? 0,
+    longestDayISO: longestDay?.date ?? null,
+    entriesThisMonth: monthLogs.length,
+    lastLoggedISO,
+    daysSinceLastLog:
+      lastLoggedISO === null ? null : daysBetween(lastLoggedISO, today),
+    topProject: leaderOf(byProject, monthHours),
+    topCategory: leaderOf(byCategory, monthHours),
     last7Days,
     monthDays,
-    byProject: topBreakdown(monthLogs, (l) => l.project),
-    byCategory: topBreakdown(monthLogs, (l) => String(l.category)),
+    byProject,
+    byCategory,
     streakWeekdays,
     missingWeekdays,
     pendingHours: sum(workLogs.filter((l) => !l.approvedAt)),
