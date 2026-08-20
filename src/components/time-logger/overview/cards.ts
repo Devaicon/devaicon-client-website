@@ -1,4 +1,4 @@
-import { formatDayLabel, type LoggerMetrics } from "../metrics";
+import type { LoggerMetrics } from "../metrics";
 
 /**
  * The overview tile catalogue.
@@ -57,7 +57,7 @@ export type CardValue =
   /** Signed difference. The tile supplies the arrow and the colour. */
   | { kind: "delta"; hours: number }
   | { kind: "count"; count: number; noun: string; nounPlural: string }
-  | { kind: "highlight"; name: string; hours: number; share: number }
+  | { kind: "highlight"; name: string; hours: number }
   /** A figure that isn't a quantity, or a "nothing yet" stand-in. */
   | { kind: "text"; text: string };
 
@@ -71,9 +71,11 @@ export type CardDef = {
   id: CardId;
   group: CardGroupId;
   label: (ctx: CardContext) => string;
+  /**
+   * Renders as a single line under the label. Every tile is exactly two rows
+   * — label, figure — so a row of them lines up whatever mix it holds.
+   */
   value: (m: LoggerMetrics, ctx: CardContext) => CardValue;
-  /** Optional line under the figure, giving it something to sit against. */
-  hint?: (m: LoggerMetrics, ctx: CardContext) => string | null;
 };
 
 function hours(h: number): CardValue {
@@ -100,21 +102,12 @@ export const CARDS: readonly CardDef[] = [
     group: "periods",
     label: () => "Yesterday",
     value: (m) => hours(m.yesterdayHours),
-    // The calendar day before today, weekend or not — so a Monday morning
-    // reads 0h. "Last working day" is the card that skips those.
-    hint: (_m, ctx) => {
-      const d = new Date(ctx.now);
-      d.setDate(d.getDate() - 1);
-      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      return formatDayLabel(iso);
-    },
   },
   {
     id: "lastWorkingDay",
     group: "periods",
     label: () => "Last working day",
     value: (m) => hours(m.lastWorkingDayHours),
-    hint: (m) => formatDayLabel(m.lastWorkingDayISO),
   },
   {
     id: "thisWeek",
@@ -159,7 +152,6 @@ export const CARDS: readonly CardDef[] = [
     group: "consistency",
     label: () => "vs last week",
     value: (m) => ({ kind: "delta", hours: m.weekDeltaHours }),
-    hint: (m, ctx) => `${ctx.fmt(m.lastWeekHours)} last week`,
   },
   {
     id: "avgLoggedDay",
@@ -172,7 +164,6 @@ export const CARDS: readonly CardDef[] = [
     group: "consistency",
     label: () => "Avg / working day",
     value: (m) => hours(m.avgPerWorkingDay),
-    hint: () => "Counts days you didn't log",
   },
   {
     id: "streak",
@@ -204,7 +195,6 @@ export const CARDS: readonly CardDef[] = [
       kind: "text",
       text: m.daysSinceLastLog === null ? "Never" : agoLabel(m.daysSinceLastLog),
     }),
-    hint: (m) => (m.lastLoggedISO ? formatDayLabel(m.lastLoggedISO) : null),
   },
 
   /* ---------- approval & volume ---------- */
@@ -230,7 +220,6 @@ export const CARDS: readonly CardDef[] = [
     group: "volume",
     label: () => "Longest day",
     value: (m) => hours(m.longestDayHours),
-    hint: (m) => (m.longestDayISO ? formatDayLabel(m.longestDayISO) : null),
   },
 
   /* ---------- highlights ---------- */
@@ -240,7 +229,7 @@ export const CARDS: readonly CardDef[] = [
     label: () => "Top project",
     value: (m) =>
       m.topProject
-        ? { kind: "highlight", ...m.topProject }
+        ? { kind: "highlight", name: m.topProject.name, hours: m.topProject.hours }
         : { kind: "text", text: "No hours yet" },
   },
   {
@@ -249,7 +238,7 @@ export const CARDS: readonly CardDef[] = [
     label: () => "Top category",
     value: (m) =>
       m.topCategory
-        ? { kind: "highlight", ...m.topCategory }
+        ? { kind: "highlight", name: m.topCategory.name, hours: m.topCategory.hours }
         : { kind: "text", text: "No hours yet" },
   },
 ];

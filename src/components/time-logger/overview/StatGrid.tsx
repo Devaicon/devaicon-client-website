@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { staggerContainer } from "../motion";
-import StatTile from "./StatTile";
+import StatTile, { type TileEdit } from "./StatTile";
 import type { LoggerMetrics } from "../metrics";
 import type { CardContext, CardDef } from "./cards";
 
@@ -53,11 +53,14 @@ export default function StatGrid({
   metrics,
   ctx,
   className = "",
+  editFor,
 }: {
   cards: CardDef[];
   metrics: LoggerMetrics;
   ctx: CardContext;
   className?: string;
+  /** Supplies per-tile controls while the section is being customised. */
+  editFor?: (card: CardDef) => TileEdit;
 }) {
   const reduced = useReducedMotion();
   if (cards.length === 0) return null;
@@ -70,7 +73,13 @@ export default function StatGrid({
       className={`${gridClassFor(cards.length)} ${className}`.trim()}
     >
       {cards.map((card) => (
-        <StatTile key={card.id} card={card} metrics={metrics} ctx={ctx} />
+        <StatTile
+          key={card.id}
+          card={card}
+          metrics={metrics}
+          ctx={ctx}
+          edit={editFor?.(card)}
+        />
       ))}
     </motion.div>
   );

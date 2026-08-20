@@ -25,7 +25,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     tag: "feature",
     items: [
       "A new Yesterday card, plus Last working day, Last week, This year, Pending approval, Top project and eight more",
-      "A new Cards button in the top right of the Overview lets you pick which cards appear, and which sit behind a Show more row",
+      "Customise in the top right lets you rearrange the cards in place — remove one from the tile itself, send it behind Show more, or tap a hidden card to add it back",
       "The grid reshapes itself to however many cards you have showing",
       "Your choices are remembered — on your account in the new tracker, in your browser in the legacy one",
     ],
