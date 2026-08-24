@@ -9,6 +9,9 @@ export const CATEGORIES = [
   'Bug Fix',
   'Docs',
   'Research',
+  'Testing',
+  'Deployment',
+  'Project Management',
   'Other',
   // Non-working days. Entries in these categories mark a date as "off" rather
   // than as work: they're excluded from every hour total and chart, and they
