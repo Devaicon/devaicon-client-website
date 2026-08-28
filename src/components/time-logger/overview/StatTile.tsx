@@ -12,7 +12,7 @@ import AnimatedNumber from "../AnimatedNumber";
 import { staggerItem } from "../motion";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { LoggerMetrics } from "../metrics";
-import type { CardContext, CardDef, CardValue } from "./cards";
+import { formatPercent, type CardContext, type CardDef, type CardValue } from "./cards";
 import type { Lane } from "./preferences";
 
 /** Controls shown on the tile itself while the section is being customised. */
@@ -57,6 +57,40 @@ function Figure({ value, fmt }: { value: CardValue; fmt: (h: number) => string }
               formatted and the icon carries the direction. */}
           <AnimatedNumber value={Math.abs(value.hours)} format={fmt} />
           <span className="sr-only">{up ? "more than" : "less than"} last week</span>
+        </div>
+      );
+    }
+
+    case "percent": {
+      // Below 100 the two tones diverge: falling behind the pace you should
+      // already be at is worth flagging, whereas a part-finished month is
+      // simply a part-finished month. See PercentTone in cards.ts.
+      const pace = value.tone === "pace";
+      const p = value.pct;
+      const tone =
+        p === null
+          ? "text-neutral-500 dark:text-neutral-400"
+          : p >= 100
+            ? "text-green-700 dark:text-green-400"
+            : !pace
+              ? ""
+              : p >= 90
+                ? ""
+                : p >= 70
+                  ? "text-amber-700 dark:text-amber-400"
+                  : "text-red-700 dark:text-red-400";
+      return (
+        <div
+          className={`flex items-baseline gap-1.5 text-2xl font-semibold tabular-nums ${tone}`}
+        >
+          {p === null ? (
+            <span>—</span>
+          ) : (
+            <AnimatedNumber value={p} format={(n) => formatPercent(n)} />
+          )}
+          <span className={`shrink-0 truncate ${muted}`}>
+            {p === null ? "nothing expected" : `of ${fmt(value.of)}`}
+          </span>
         </div>
       );
     }

@@ -14,10 +14,23 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.7.0";
+export const APP_VERSION = "1.8.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.8.0",
+    date: "2026-08-28",
+    title: "Targets: what you owe the month, and whether you are keeping up",
+    tag: "feature",
+    items: [
+      "Expected · this month and Expected · this week count your working days at eight hours each, so you can see the target itself",
+      "Month complete and Week complete show how much of that target is done — a progress figure that fills up as the period runs",
+      "Month pace and Week pace compare your hours against what was expected by today, so being behind shows up in amber or red while you can still do something about it",
+      "Days you mark as Leave or Holiday come off the target rather than counting against you",
+      "The card picker under Customise now groups every card by what it measures, shows each one's current value before you add it, and lets you filter by name",
+    ],
+  },
   {
     version: "1.7.0",
     date: "2026-08-20",

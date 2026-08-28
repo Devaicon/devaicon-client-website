@@ -5,12 +5,12 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   CheckIcon,
   ChevronDownIcon,
-  PlusIcon,
   RotateCcwIcon,
   SlidersHorizontalIcon,
 } from "lucide-react";
 import { slideDown } from "../motion";
 import { useTimeFormat } from "../TimeFormatProvider";
+import CardPicker from "./CardPicker";
 import StatGrid, { gridClassFor } from "./StatGrid";
 import {
   CARDS,
@@ -186,23 +186,16 @@ export default function StatSection({
           />
         )}
 
-        {hiddenCards.length > 0 && (
-          <>
-            <LaneHeading>Hidden — tap to add</LaneHeading>
-            <div className="flex flex-wrap gap-2">
-              {hiddenCards.map((card) => (
-                <button
-                  key={card.id}
-                  type="button"
-                  onClick={() => setPlacement(card.id, "pinned")}
-                  className="flex items-center gap-1 rounded-full border border-dashed border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-xs text-neutral-600 dark:text-neutral-400 hover:border-solid hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-                >
-                  <PlusIcon className="h-3 w-3" />
-                  {card.label(ctx)}
-                </button>
-              ))}
-            </div>
-          </>
+        <LaneHeading>Not shown</LaneHeading>
+        {hiddenCards.length === 0 ? (
+          <EmptyLane>Every card is already on the dashboard.</EmptyLane>
+        ) : (
+          <CardPicker
+            cards={hiddenCards}
+            metrics={metrics}
+            ctx={ctx}
+            onAdd={setPlacement}
+          />
         )}
 
         <p

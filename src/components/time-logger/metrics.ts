@@ -63,6 +63,13 @@ function prevWorkday(d: Date, offDates: Set<string>): Date {
   return x;
 }
 
+/**
+ * The nominal working day. Every "expected hours" figure is a count of
+ * working days multiplied by this, so a day marked leave or holiday costs the
+ * target its full eight hours rather than quietly counting as a shortfall.
+ */
+export const HOURS_PER_WORKING_DAY = 8;
+
 /* ---------- types ---------- */
 
 export type DayBucket = {
@@ -123,6 +130,33 @@ export type LoggerMetrics = {
    * gaps drag it down instead of hiding.
    */
   avgPerWorkingDay: number;
+  /**
+   * Every working day in the current month x HOURS_PER_WORKING_DAY, weekends,
+   * leave and holidays excluded. The month's whole commitment, not its
+   * elapsed part.
+   */
+  expectedMonthHours: number;
+  /** The same figure over the working days elapsed so far, today included. */
+  expectedMonthToDateHours: number;
+  /** Sunday-Saturday equivalents of the two figures above. */
+  expectedWeekHours: number;
+  expectedWeekToDateHours: number;
+  /**
+   * monthHours as a percentage of expectedMonthHours: how much of the month's
+   * commitment is done. Climbs all month and only reaches 100 at the end, so a
+   * low reading early is expected rather than a warning.
+   *
+   * null when nothing is expected at all - a month entirely on leave - since
+   * "0% of 0h" is a division, not a fact about the work.
+   */
+  monthCompletionPct: number | null;
+  /**
+   * monthHours as a percentage of expectedMonthToDateHours: whether the work
+   * is keeping up right now. Sits near 100 when on track whatever the date.
+   */
+  monthPacePct: number | null;
+  weekCompletionPct: number | null;
+  weekPacePct: number | null;
   /** Highest single-day work total in the current month. */
   longestDayHours: number;
   /** Local YYYY-MM-DD of that day; null when the month has no work yet. */
@@ -380,13 +414,38 @@ export function computeMetrics(
     if (d >= monthStart) offDaysThisMonth += 1;
   });
 
-  // Working days elapsed this month, today included: the divisor that makes a
-  // missed day visible rather than simply absent from the average.
+  // Working days this month, counted twice over: elapsed-so-far (today
+  // included) is the divisor that makes a missed day visible rather than
+  // simply absent from the average, and the whole-month count is the month's
+  // full commitment.
   let workingDaysElapsed = 0;
-  for (let dayOfMonth = 1; dayOfMonth <= now.getDate(); dayOfMonth += 1) {
+  let workingDaysInMonth = 0;
+  for (let dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth += 1) {
     const d = new Date(now.getFullYear(), now.getMonth(), dayOfMonth);
-    if (!isOffDay(d, offDates)) workingDaysElapsed += 1;
+    if (isOffDay(d, offDates)) continue;
+    workingDaysInMonth += 1;
+    if (dayOfMonth <= now.getDate()) workingDaysElapsed += 1;
   }
+
+  // The same pair over the current Sunday-Saturday week.
+  let workingDaysInWeek = 0;
+  let workingDaysElapsedInWeek = 0;
+  for (let i = 0; i < 7; i += 1) {
+    const d = addDays(startOfWeek(now), i);
+    if (isOffDay(d, offDates)) continue;
+    workingDaysInWeek += 1;
+    if (isoLocal(d) <= today) workingDaysElapsedInWeek += 1;
+  }
+
+  const expectedMonthHours = workingDaysInMonth * HOURS_PER_WORKING_DAY;
+  const expectedMonthToDateHours = workingDaysElapsed * HOURS_PER_WORKING_DAY;
+  const expectedWeekHours = workingDaysInWeek * HOURS_PER_WORKING_DAY;
+  const expectedWeekToDateHours =
+    workingDaysElapsedInWeek * HOURS_PER_WORKING_DAY;
+
+  /** Null rather than zero when nothing was expected, so the tile can say so. */
+  const pctOf = (done: number, expected: number): number | null =>
+    expected <= 0 ? null : (done / expected) * 100;
 
   // The month's busiest day. monthDays is already built and month-scoped, so
   // the peak comes straight off it.
@@ -426,6 +485,14 @@ export function computeMetrics(
     avgPerLoggedDay: distinctMonthDays === 0 ? 0 : monthHours / distinctMonthDays,
     avgPerWorkingDay:
       workingDaysElapsed === 0 ? 0 : monthHours / workingDaysElapsed,
+    expectedMonthHours,
+    expectedMonthToDateHours,
+    expectedWeekHours,
+    expectedWeekToDateHours,
+    monthCompletionPct: pctOf(monthHours, expectedMonthHours),
+    monthPacePct: pctOf(monthHours, expectedMonthToDateHours),
+    weekCompletionPct: pctOf(weekHours, expectedWeekHours),
+    weekPacePct: pctOf(weekHours, expectedWeekToDateHours),
     longestDayHours: longestDay?.hours ?? 0,
     longestDayISO: longestDay?.date ?? null,
     entriesThisMonth: monthLogs.length,
