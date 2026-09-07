@@ -70,10 +70,16 @@ export default function StatSection({
   config,
   metrics,
   loading,
+  actions,
 }: {
   config: LoggerConfig;
   metrics: LoggerMetrics;
   loading: boolean;
+  /**
+   * Rendered at the left of the header row. The Overview's own controls live
+   * here rather than in a second row of their own above the tiles.
+   */
+  actions?: ReactNode;
 }) {
   const { prefs, expanded, setExpanded, setPlacement, reset, sync } =
     useOverviewPrefs(config);
@@ -106,6 +112,7 @@ export default function StatSection({
   const header = (
     <div className="flex items-center justify-end gap-1">
       <h2 className="sr-only">Overview cards</h2>
+      {actions && <div className="mr-auto">{actions}</div>}
       {editing && (
         <button type="button" onClick={reset} className={ghostButton}>
           <RotateCcwIcon className="h-3.5 w-3.5" />

@@ -1,36 +1,18 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { PlusIcon } from "lucide-react";
 import { computeMetrics, formatDayLabel } from "../metrics";
 import Last7DaysChart from "../charts/Last7DaysChart";
 import BreakdownBar from "../charts/BreakdownBar";
-import MonthCalendar from "../MonthCalendar";
+import CalendarPanel from "../CalendarPanel";
+import Card from "../overview/Card";
+import QuickLogDialog from "../overview/QuickLogDialog";
 import StatSection from "../overview/StatSection";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { LoggerConfig } from "../config";
 import type { LoggerData } from "../useLoggerData";
-
-function Card({
-  title,
-  children,
-  className = "",
-}: {
-  title: string;
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <section
-      className={`rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 ${className}`}
-    >
-      <h3 className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-        {title}
-      </h3>
-      <div className="mt-3">{children}</div>
-    </section>
-  );
-}
 
 export default function OverviewTab({
   data,
@@ -43,17 +25,28 @@ export default function OverviewTab({
   const m = useMemo(() => computeMetrics(logs), [logs]);
   const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
+  const [quickLogOpen, setQuickLogOpen] = useState(false);
 
-  const now = new Date();
-  const monthLabel = now.toLocaleDateString(undefined, {
-    month: "long",
-    year: "numeric",
-  });
+  // Sits in the tile band's header, so logging an entry never costs you the
+  // view of the figures it moves.
+  const quickLogButton = (
+    <button
+      type="button"
+      onClick={() => setQuickLogOpen(true)}
+      disabled={loading}
+      className="flex items-center gap-1.5 rounded-md bg-neutral-900 dark:bg-neutral-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
+    >
+      <PlusIcon className="h-3.5 w-3.5" />
+      Log time
+    </button>
+  );
 
   // The tile band renders its own skeleton, sized to the user's own layout, so
   // the loading state can't jump to a different shape once the data lands.
   if (loading) {
-    return <StatSection config={config} metrics={m} loading />;
+    return (
+      <StatSection config={config} metrics={m} loading actions={quickLogButton} />
+    );
   }
 
   const totalForApproval = m.pendingHours + m.approvedHours;
@@ -62,17 +55,21 @@ export default function OverviewTab({
 
   return (
     <div className="space-y-4">
-      <StatSection config={config} metrics={m} loading={false} />
+      <StatSection
+        config={config}
+        metrics={m}
+        loading={false}
+        actions={quickLogButton}
+      />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card title={monthLabel} className="lg:col-span-2">
-          <MonthCalendar
-            days={m.monthDays}
-            projects={projects}
-            createLog={createLog}
-            deleteLog={deleteLog}
-          />
-        </Card>
+        <CalendarPanel
+          logs={logs}
+          projects={projects}
+          createLog={createLog}
+          deleteLog={deleteLog}
+          className="lg:col-span-2"
+        />
 
         <Card title="Logging streak">
           <div className="text-3xl font-semibold tabular-nums">
@@ -153,6 +150,16 @@ export default function OverviewTab({
           />
         </Card>
       </div>
+
+      <AnimatePresence>
+        {quickLogOpen && (
+          <QuickLogDialog
+            projects={projects}
+            createLog={createLog}
+            onClose={() => setQuickLogOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

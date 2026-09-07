@@ -300,6 +300,89 @@ export function summariseEntries(logs: TimeLog[]): EntriesSummary {
   };
 }
 
+/* ---------- calendar ---------- */
+
+/**
+ * Day-off markers keyed by local date. First entry wins if a day somehow
+ * carries two.
+ */
+function offEntriesOf(
+  logs: TimeLog[],
+): Map<string, { kind: NonWorkingCategory; id: string }> {
+  const out = new Map<string, { kind: NonWorkingCategory; id: string }>();
+  for (const l of logs) {
+    const category = String(l.category);
+    if (!isNonWorkingCategory(category)) continue;
+    if (!out.has(l.date)) {
+      out.set(l.date, { kind: category as NonWorkingCategory, id: l.id });
+    }
+  }
+  return out;
+}
+
+/**
+ * Work hours summed per local date, in one pass rather than re-filtering the
+ * whole list once per day. Leave and holiday rows never contribute.
+ */
+function hoursByDateOf(logs: TimeLog[]): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const l of logs) {
+    if (isNonWorkingCategory(String(l.category))) continue;
+    out.set(l.date, (out.get(l.date) ?? 0) + hoursOf(l));
+  }
+  return out;
+}
+
+/** The cells of one month, given tables computeMetrics has already built. */
+function calendarDaysFrom(
+  year: number,
+  monthIndex: number,
+  today: string,
+  hoursByDate: Map<string, number>,
+  offEntries: Map<string, { kind: NonWorkingCategory; id: string }>,
+): CalendarDay[] {
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const days: CalendarDay[] = [];
+  for (let dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth += 1) {
+    const d = new Date(year, monthIndex, dayOfMonth);
+    const iso = isoLocal(d);
+    const off = offEntries.get(iso) ?? null;
+    days.push({
+      date: iso,
+      dayOfMonth,
+      hours: hoursByDate.get(iso) ?? 0,
+      isToday: iso === today,
+      isWeekend: isWeekend(d),
+      offKind: off?.kind ?? null,
+      offLogId: off?.id ?? null,
+      isFuture: iso > today,
+    });
+  }
+  return days;
+}
+
+/**
+ * The calendar cells for any month, not just the current one.
+ *
+ * computeMetrics exposes the current month as `monthDays`; the calendar panel
+ * uses this to render whichever month the user has scrolled to, off the same
+ * log list and with identical day semantics.
+ */
+export function buildCalendarDays(
+  logs: TimeLog[],
+  year: number,
+  monthIndex: number,
+  now: Date = new Date(),
+): CalendarDay[] {
+  return calendarDaysFrom(
+    year,
+    monthIndex,
+    isoLocal(now),
+    hoursByDateOf(logs),
+    offEntriesOf(logs),
+  );
+}
+
 export function computeMetrics(
   logs: TimeLog[],
   now: Date = new Date(),
@@ -320,15 +403,7 @@ export function computeMetrics(
   // Leave and holiday entries mark a day off. They are real log rows, so they
   // must be kept out of every hour total, average and chart — otherwise a
   // single 8h leave entry inflates the month and skews the breakdowns.
-  const offEntries = new Map<string, { kind: NonWorkingCategory; id: string }>();
-  for (const l of logs) {
-    const category = String(l.category);
-    if (!isNonWorkingCategory(category)) continue;
-    // First entry wins if a day somehow carries two markers.
-    if (!offEntries.has(l.date)) {
-      offEntries.set(l.date, { kind: category as NonWorkingCategory, id: l.id });
-    }
-  }
+  const offEntries = offEntriesOf(logs);
   const offDates = new Set(offEntries.keys());
   const workLogs = logs.filter((l) => !isNonWorkingCategory(String(l.category)));
 
@@ -337,12 +412,8 @@ export function computeMetrics(
     workLogs.filter((l) => hoursOf(l) > 0).map((l) => l.date),
   );
 
-  // One pass over the work rows, rather than re-filtering the whole list once
-  // per day. The daily figures below all read from here.
-  const hoursByDate = new Map<string, number>();
-  for (const l of workLogs) {
-    hoursByDate.set(l.date, (hoursByDate.get(l.date) ?? 0) + hoursOf(l));
-  }
+  // Every daily figure below reads from here.
+  const hoursByDate = hoursByDateOf(logs);
   const hoursOn = (iso: string): number => hoursByDate.get(iso) ?? 0;
 
   // Streak: walk back over working days, skipping weekends and days marked off.
@@ -387,22 +458,13 @@ export function computeMetrics(
     now.getMonth() + 1,
     0,
   ).getDate();
-  const monthDays: CalendarDay[] = [];
-  for (let dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth += 1) {
-    const d = new Date(now.getFullYear(), now.getMonth(), dayOfMonth);
-    const iso = isoLocal(d);
-    const off = offEntries.get(iso) ?? null;
-    monthDays.push({
-      date: iso,
-      dayOfMonth,
-      hours: hoursOn(iso),
-      isToday: iso === today,
-      isWeekend: isWeekend(d),
-      offKind: off?.kind ?? null,
-      offLogId: off?.id ?? null,
-      isFuture: iso > today,
-    });
-  }
+  const monthDays = calendarDaysFrom(
+    now.getFullYear(),
+    now.getMonth(),
+    today,
+    hoursByDate,
+    offEntries,
+  );
 
   const distinctMonthDays = new Set(
     monthLogs.filter((l) => hoursOf(l) > 0).map((l) => l.date),

@@ -12,7 +12,13 @@ import AnimatedNumber from "../AnimatedNumber";
 import { staggerItem } from "../motion";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { LoggerMetrics } from "../metrics";
-import { formatPercent, type CardContext, type CardDef, type CardValue } from "./cards";
+import {
+  formatPercent,
+  type CardContext,
+  type CardDef,
+  type CardValue,
+  type PercentTone,
+} from "./cards";
 import type { Lane } from "./preferences";
 
 /** Controls shown on the tile itself while the section is being customised. */
@@ -21,6 +27,41 @@ export type TileEdit = {
   onHide: () => void;
   onMove: () => void;
 };
+
+/**
+ * Text and bar colours for a percentage, in one place so a tile's figure and
+ * its bar can never disagree.
+ *
+ * Below 100 the two tones diverge: falling behind the pace you should already
+ * be at is worth flagging, whereas a part-finished month is simply a
+ * part-finished month. See PercentTone in cards.ts.
+ */
+function percentTone(
+  pct: number | null,
+  tone: PercentTone,
+): { text: string; bar: string } {
+  const neutralBar = "bg-neutral-900 dark:bg-neutral-100";
+  if (pct === null) {
+    return { text: "text-neutral-500 dark:text-neutral-400", bar: neutralBar };
+  }
+  if (pct >= 100) {
+    return {
+      text: "text-green-700 dark:text-green-400",
+      bar: "bg-green-600 dark:bg-green-500",
+    };
+  }
+  if (tone === "progress" || pct >= 90) return { text: "", bar: neutralBar };
+  if (pct >= 70) {
+    return {
+      text: "text-amber-700 dark:text-amber-400",
+      bar: "bg-amber-500 dark:bg-amber-400",
+    };
+  }
+  return {
+    text: "text-red-700 dark:text-red-400",
+    bar: "bg-red-600 dark:bg-red-500",
+  };
+}
 
 /**
  * Every branch renders exactly one line, so a row of tiles lines up whatever
@@ -62,23 +103,8 @@ function Figure({ value, fmt }: { value: CardValue; fmt: (h: number) => string }
     }
 
     case "percent": {
-      // Below 100 the two tones diverge: falling behind the pace you should
-      // already be at is worth flagging, whereas a part-finished month is
-      // simply a part-finished month. See PercentTone in cards.ts.
-      const pace = value.tone === "pace";
       const p = value.pct;
-      const tone =
-        p === null
-          ? "text-neutral-500 dark:text-neutral-400"
-          : p >= 100
-            ? "text-green-700 dark:text-green-400"
-            : !pace
-              ? ""
-              : p >= 90
-                ? ""
-                : p >= 70
-                  ? "text-amber-700 dark:text-amber-400"
-                  : "text-red-700 dark:text-red-400";
+      const tone = percentTone(p, value.tone).text;
       return (
         <div
           className={`flex items-baseline gap-1.5 text-2xl font-semibold tabular-nums ${tone}`}
@@ -134,6 +160,7 @@ export default function StatTile({
   const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
   const label = card.label(ctx);
+  const value = card.value(metrics, ctx);
   const toTop = edit?.lane === "extra";
   const MoveIcon = toTop ? ArrowUpIcon : ArrowDownIcon;
   const moveLabel = toTop
@@ -176,8 +203,24 @@ export default function StatTile({
         {label}
       </div>
       <div className="mt-1 min-w-0">
-        <Figure value={card.value(metrics, ctx)} fmt={fmt} />
+        <Figure value={value} fmt={fmt} />
       </div>
+      {/* Pinned to the foot of the tile rather than tucked under the figure,
+          so the bars line up across a row whatever height the row settles at.
+          A null percentage has no bar to draw — the "—" already says so. */}
+      {value.kind === "percent" && value.pct !== null && (
+        <div className="mt-auto pt-3">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
+            <motion.div
+              className={`h-full rounded-full ${percentTone(value.pct, value.tone).bar}`}
+              initial={false}
+              // The figure may read past 100; the bar simply fills.
+              animate={{ width: `${Math.min(100, Math.max(0, value.pct))}%` }}
+              transition={{ duration: reduced ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }

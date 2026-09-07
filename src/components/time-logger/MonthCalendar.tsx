@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type Ref } from "react";
 import type { NonWorkingCategory, Project } from "@/lib/types";
 import { useTimeFormat } from "./TimeFormatProvider";
 import type { CalendarDay } from "./metrics";
@@ -62,11 +62,14 @@ export default function MonthCalendar({
   projects,
   createLog,
   deleteLog,
+  gridRef,
 }: {
   days: CalendarDay[];
   projects: Project[];
   createLog: (input: NewLogInput) => Promise<MutationResult>;
   deleteLog: (id: string) => Promise<MutationResult>;
+  /** The grid itself, so a parent can attach month-stepping gestures to it. */
+  gridRef?: Ref<HTMLDivElement>;
 }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -114,7 +117,7 @@ export default function MonthCalendar({
 
   return (
     <div>
-      <div className="grid grid-cols-7 gap-1">
+      <div ref={gridRef} className="grid grid-cols-7 gap-1">
         {WEEKDAY_HEADS.map((w) => (
           <div
             key={w}
