@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { PlusIcon } from "lucide-react";
-import { computeMetrics, formatDayLabel } from "../metrics";
+import { computeMetrics } from "../metrics";
 import Last7DaysChart from "../charts/Last7DaysChart";
 import BreakdownBar from "../charts/BreakdownBar";
 import CalendarPanel from "../CalendarPanel";
 import Card from "../overview/Card";
 import QuickLogDialog from "../overview/QuickLogDialog";
 import StatSection from "../overview/StatSection";
+import StreakStrip from "../overview/StreakStrip";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { LoggerConfig } from "../config";
 import type { LoggerData } from "../useLoggerData";
@@ -62,46 +63,19 @@ export default function OverviewTab({
         actions={quickLogButton}
       />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <CalendarPanel
-          logs={logs}
-          projects={projects}
-          createLog={createLog}
-          deleteLog={deleteLog}
-          className="lg:col-span-2"
-        />
+      <CalendarPanel
+        logs={logs}
+        projects={projects}
+        createLog={createLog}
+        deleteLog={deleteLog}
+      />
 
-        <Card title="Logging streak">
-          <div className="text-3xl font-semibold tabular-nums">
-            {m.streakWeekdays}
-            <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
-              {m.streakWeekdays === 1 ? "weekday" : "weekdays"}
-            </span>
-          </div>
-          {m.offDaysThisMonth > 0 && (
-            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-              {m.offDaysThisMonth} day{m.offDaysThisMonth === 1 ? "" : "s"} off
-              this month
-            </p>
-          )}
-          {m.missingWeekdays.length === 0 ? (
-            <p className="mt-3 text-sm text-green-700 dark:text-green-400">
-              You&rsquo;re fully caught up for the last two weeks.
-            </p>
-          ) : (
-            <div className="mt-3">
-              <p className="text-sm text-amber-700 dark:text-amber-400">
-                Not logged:
-              </p>
-              <ul className="mt-1 space-y-0.5 text-sm text-neutral-600 dark:text-neutral-400">
-                {m.missingWeekdays.map((d) => (
-                  <li key={d}>{formatDayLabel(d)}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Card>
-      </div>
+      <StreakStrip
+        streakWeekdays={m.streakWeekdays}
+        recentWeekdays={m.recentWeekdays}
+        missingWeekdays={m.missingWeekdays}
+        offDaysThisMonth={m.offDaysThisMonth}
+      />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card title="Last 7 days" className="lg:col-span-2">

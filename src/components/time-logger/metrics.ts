@@ -104,6 +104,19 @@ export type CalendarDay = {
   isFuture: boolean;
 };
 
+/**
+ * One square of the streak rail.
+ *
+ * "pending" is today before anything is logged. The streak walk deliberately
+ * does not treat that as a break — the day isn't over — so the rail must not
+ * paint it as a miss either.
+ */
+export type StreakDay = {
+  /** Local YYYY-MM-DD. */
+  date: string;
+  state: "logged" | "missing" | "off" | "pending";
+};
+
 export type LoggerMetrics = {
   todayHours: number;
   /** The previous calendar day, whether or not it was a working one. */
@@ -183,6 +196,12 @@ export type LoggerMetrics = {
    * nor a leave/holiday marker.
    */
   missingWeekdays: string[];
+  /**
+   * The last 10 working days including today, oldest first, for the streak
+   * rail. Weekends are skipped entirely; leave and holiday days are kept as
+   * "off" squares so a gap the user is entitled to still reads as deliberate.
+   */
+  recentWeekdays: StreakDay[];
   pendingHours: number;
   approvedHours: number;
   /** Leave and holiday days marked in the current month. */
@@ -438,6 +457,25 @@ export function computeMetrics(
     if (!loggedDates.has(iso)) missingWeekdays.push(iso);
   }
 
+  // Streak rail: the last 10 working days including today, oldest first.
+  // Weekends are dropped rather than drawn, so ten squares always span ten
+  // days the user was actually expected to log.
+  const todayISO = isoLocal(now);
+  const recentWeekdays: StreakDay[] = [];
+  for (let i = 0; recentWeekdays.length < 10 && i < 40; i += 1) {
+    const d = addDays(now, -i);
+    if (isWeekend(d)) continue;
+    const iso = isoLocal(d);
+    const state: StreakDay["state"] = offDates.has(iso)
+      ? "off"
+      : loggedDates.has(iso)
+        ? "logged"
+        : iso === todayISO
+          ? "pending"
+          : "missing";
+    recentWeekdays.unshift({ date: iso, state });
+  }
+
   // Last 7 days, oldest first, zero-filled.
   const last7Days: DayBucket[] = [];
   for (let i = 6; i >= 0; i -= 1) {
@@ -568,6 +606,7 @@ export function computeMetrics(
     byProject,
     byCategory,
     streakWeekdays,
+    recentWeekdays,
     missingWeekdays,
     pendingHours: sum(workLogs.filter((l) => !l.approvedAt)),
     approvedHours: sum(workLogs.filter((l) => !!l.approvedAt)),

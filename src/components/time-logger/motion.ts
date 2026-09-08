@@ -83,3 +83,39 @@ export function slideDown(reduced: boolean): Variants {
     exit: { opacity: 0, height: reduced ? "auto" : 0, y: reduced ? 0 : -6, transition: transition(DURATION.row) },
   };
 }
+
+/**
+ * The streak flame's flicker.
+ *
+ * Each layer of the flame gets its own call with a different `layer` index, and
+ * the mismatched durations are the whole trick: three loops of the same length
+ * read as one synchronised pulse, three of different lengths read as fire.
+ * Amplitude scales with `tier` so a one-day streak barely moves and a ten-day
+ * one is visibly burning.
+ *
+ * Returns null when motion is reduced, or at tier 0 where the flame is a dead
+ * ember — callers render the layer static in both cases.
+ */
+export function flicker(
+  reduced: boolean,
+  tier: number,
+  layer: 0 | 1 | 2,
+): { animate: Record<string, number[]>; transition: Transition } | null {
+  if (reduced || tier <= 0) return null;
+  const durations = [1.15, 0.85, 0.62] as const;
+  const amp = 0.03 + tier * 0.022;
+  return {
+    animate: {
+      scaleY: [1, 1 + amp, 1 - amp * 0.6, 1 + amp * 0.4, 1],
+      scaleX: [1, 1 - amp * 0.5, 1 + amp * 0.4, 1 - amp * 0.3, 1],
+      y: [0, -amp * 5, amp * 2, -amp * 3, 0],
+      opacity: [1, 0.92, 1, 0.95, 1],
+    },
+    transition: {
+      duration: durations[layer],
+      ease: "easeInOut",
+      repeat: Infinity,
+      repeatType: "loop",
+    },
+  };
+}
