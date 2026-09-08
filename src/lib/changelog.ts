@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.8.0";
+export const APP_VERSION = "1.9.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.9.0",
+    date: "2026-09-08",
+    title: "Your logging streak, rebuilt",
+    tag: "improvement",
+    items: [
+      "The streak now sits in its own strip under the calendar, so the calendar gets the full width of the page",
+      "A flame that grows and burns hotter the longer your streak runs, and goes out when it breaks",
+      "Your last ten working days are shown as a row of squares — logged, missed, or a day off — so you can see the shape of the fortnight at a glance",
+      "Days you have not logged are named on one line instead of stacked in a list",
+    ],
+  },
   {
     version: "1.8.0",
     date: "2026-08-28",
