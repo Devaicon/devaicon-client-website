@@ -19,7 +19,7 @@ import StatSection from "../overview/StatSection";
 import StreakStrip from "../overview/StreakStrip";
 import { useOverviewPrefs } from "../overview/useOverviewPrefs";
 import { useSectionLayout } from "../overview/useSectionLayout";
-import type { SectionId } from "../overview/sections";
+import { sectionById, type SectionId } from "../overview/sections";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { LoggerConfig } from "../config";
 import type { LoggerData } from "../useLoggerData";
@@ -122,6 +122,13 @@ export default function OverviewTab({
   const approvedPct =
     totalForApproval === 0 ? 0 : (m.approvedHours / totalForApproval) * 100;
 
+  // A block that lays itself out differently in a tall slot than a wide one
+  // has to be told which it got; the canvas only positions, it does not render.
+  const sizeOf = (id: SectionId) =>
+    sections.layout.find((p) => p.id === id)?.size ??
+    sectionById(id)?.defaultSize ??
+    "max";
+
   // Each block, keyed by the id the layout stores. Building them here rather
   // than inside the canvas keeps the canvas ignorant of what a section is.
   const content: Partial<Record<SectionId, ReactNode>> = {
@@ -148,6 +155,7 @@ export default function OverviewTab({
         recentWeekdays={m.recentWeekdays}
         missingWeekdays={m.missingWeekdays}
         offDaysThisMonth={m.offDaysThisMonth}
+        size={sizeOf("streak")}
       />
     ),
     last7: (

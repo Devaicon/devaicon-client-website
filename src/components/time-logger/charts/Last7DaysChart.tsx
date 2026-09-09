@@ -23,14 +23,17 @@ export default function Last7DaysChart({ days }: { days: DayBucket[] }) {
 
   if (!hasData) {
     return (
-      <div className="flex h-48 items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="flex h-full min-h-[12rem] items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
         No hours logged in the last 7 days.
       </div>
     );
   }
 
+  // Fills the card rather than standing at a fixed 12rem: a maximised card is
+  // more than twice that tall, and a chart that ignored the extra space left
+  // its bars stranded at the top of it.
   return (
-    <div className="h-48 w-full">
+    <div className="h-full min-h-[12rem] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={days} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
           <CartesianGrid stroke={palette.grid} vertical={false} />

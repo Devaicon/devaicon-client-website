@@ -7,6 +7,7 @@ import FlameIcon from "./FlameIcon";
 import StreakBackdrop from "./StreakBackdrop";
 import { formatDayLabel, type StreakDay } from "../metrics";
 import { staggerContainer, staggerItem } from "../motion";
+import type { SectionSize } from "./sections";
 
 /**
  * The streak, as a strip rather than a column.
@@ -15,6 +16,10 @@ import { staggerContainer, staggerItem } from "../motion";
  * and a short bullet list. Laid out horizontally it says more in a third of
  * the height: the flame carries the magnitude, the rail carries the shape of
  * the last two weeks, and the misses collapse to one line of chips.
+ *
+ * Minimised it is not that strip in a narrower box but a column, and everything
+ * in it grows: a card two rows tall has the room, and a strip's worth of small
+ * parts floating in it would look like a mistake rather than a choice.
  */
 
 /** How many missed days are named before the rest become a "+N more". */
@@ -42,16 +47,20 @@ export default function StreakStrip({
   missingWeekdays,
   offDaysThisMonth,
   className = "",
+  size = "max",
 }: {
   streakWeekdays: number;
   recentWeekdays: StreakDay[];
   missingWeekdays: string[];
   offDaysThisMonth: number;
   className?: string;
+  /** The slot the layout has given this card. */
+  size?: SectionSize;
 }) {
   const reduced = useReducedMotion();
   const named = missingWeekdays.slice(-NAMED_MISSES);
   const overflow = missingWeekdays.length - named.length;
+  const tall = size === "min";
 
   return (
     <Card
@@ -59,12 +68,25 @@ export default function StreakStrip({
       className={className}
       backdrop={<StreakBackdrop streakWeekdays={streakWeekdays} />}
     >
-      <div className="flex h-full flex-wrap content-center items-center gap-x-8 gap-y-5">
+      <div
+        className={
+          tall
+            ? "flex h-full flex-col justify-center gap-7"
+            : "flex h-full flex-wrap content-center items-center gap-x-8 gap-y-5"
+        }
+      >
         {/* ---------- flame + count ---------- */}
         <div className="flex items-center gap-3">
-          <FlameIcon streakWeekdays={streakWeekdays} />
+          <FlameIcon
+            streakWeekdays={streakWeekdays}
+            sizeClass={tall ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}
+          />
           <div className="flex items-baseline">
-            <span className="text-4xl sm:text-5xl font-semibold tabular-nums leading-none">
+            <span
+              className={`font-semibold tabular-nums leading-none ${
+                tall ? "text-6xl sm:text-7xl" : "text-5xl sm:text-6xl"
+              }`}
+            >
               <AnimatedNumber
                 value={streakWeekdays}
                 format={(n) => String(Math.round(n))}
@@ -81,7 +103,7 @@ export default function StreakStrip({
           variants={staggerContainer(!!reduced)}
           initial="initial"
           animate="animate"
-          className="flex items-center gap-1.5"
+          className={`flex flex-wrap items-center ${tall ? "gap-2" : "gap-1.5"}`}
           aria-label="The last ten working days"
         >
           {recentWeekdays.map((d) => (
@@ -89,7 +111,9 @@ export default function StreakStrip({
               key={d.date}
               variants={staggerItem(!!reduced)}
               title={`${formatDayLabel(d.date)} — ${STATE_LABEL[d.state]}`}
-              className={`h-7 w-7 rounded-md ${SQUARE[d.state]}`}
+              className={`${
+                tall ? "h-9 w-9 rounded-lg sm:h-10 sm:w-10" : "h-7 w-7 rounded-md"
+              } ${SQUARE[d.state]}`}
             >
               <span className="sr-only">
                 {formatDayLabel(d.date)}: {STATE_LABEL[d.state]}
@@ -99,7 +123,7 @@ export default function StreakStrip({
         </motion.ul>
 
         {/* ---------- gaps, and the month's days off ---------- */}
-        <div className="ml-auto text-right text-sm">
+        <div className={tall ? "text-sm" : "ml-auto text-right text-sm"}>
           {missingWeekdays.length === 0 ? (
             <p className="text-green-700 dark:text-green-400">
               Fully caught up for the last two weeks.

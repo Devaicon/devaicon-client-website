@@ -31,7 +31,10 @@ export default function Card({
       <h3 className="relative text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
         {title}
       </h3>
-      <div className="relative mt-3 min-h-0 flex-1 overflow-y-auto">
+      {/* A flex column so a short child can centre itself with `my-auto` and a
+          tall one can fill with `h-full`, rather than every card's content
+          hugging the top of a slot it was given. */}
+      <div className="relative mt-3 flex min-h-0 flex-1 flex-col overflow-y-auto">
         {children}
       </div>
     </section>

@@ -35,13 +35,13 @@ export function tierOf(streakWeekdays: number): FlameTier {
  */
 const PALETTE: Record<
   FlameTier,
-  { from: string; to: string; inner: string; core: string; glow: string }
+  { from: string; to: string; inner: string; core: string }
 > = {
-  0: { from: "#a3a3a3", to: "#737373", inner: "#8a8a8a", core: "#9ca3af", glow: "transparent" },
-  1: { from: "#fbbf24", to: "#d97706", inner: "#fcd34d", core: "#fef3c7", glow: "#f59e0b" },
-  2: { from: "#fb923c", to: "#ea580c", inner: "#fbbf24", core: "#fef3c7", glow: "#f97316" },
-  3: { from: "#f97316", to: "#dc2626", inner: "#fb923c", core: "#fde68a", glow: "#f97316" },
-  4: { from: "#ef4444", to: "#b91c1c", inner: "#f97316", core: "#fde047", glow: "#ef4444" },
+  0: { from: "#a3a3a3", to: "#737373", inner: "#8a8a8a", core: "#9ca3af" },
+  1: { from: "#fbbf24", to: "#d97706", inner: "#fcd34d", core: "#fef3c7" },
+  2: { from: "#fb923c", to: "#ea580c", inner: "#fbbf24", core: "#fef3c7" },
+  3: { from: "#f97316", to: "#dc2626", inner: "#fb923c", core: "#fde68a" },
+  4: { from: "#ef4444", to: "#b91c1c", inner: "#f97316", core: "#fde047" },
 };
 
 /** Lucide's flame silhouette, in a 24x24 box with its base around (12, 22). */
@@ -56,9 +56,12 @@ function about(scale: number): string {
 export default function FlameIcon({
   streakWeekdays,
   className = "",
+  sizeClass = "h-11 w-11 sm:h-12 sm:w-12",
 }: {
   streakWeekdays: number;
   className?: string;
+  /** The svg's own size, so a taller card can carry a bigger flame. */
+  sizeClass?: string;
 }) {
   const reduced = useReducedMotion();
   const gradientId = useId();
@@ -74,18 +77,13 @@ export default function FlameIcon({
 
   return (
     <span className={`relative inline-flex items-center justify-center ${className}`}>
-      {/* Heat haze. Sits behind the flame and grows with the tier. */}
-      {tier > 0 && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full blur-lg"
-          style={{ backgroundColor: c.glow, opacity: 0.12 + tier * 0.06 }}
-        />
-      )}
-
+      {/* No heat haze here any more. The icon used to carry its own blurred
+          disc of glow, which now reads as a second light source with a visible
+          circular edge sitting on top of the card's fire. The card owns the
+          glow; the icon owns the flame. */}
       <svg
         viewBox="0 0 24 24"
-        className="relative h-11 w-11 sm:h-12 sm:w-12 overflow-visible"
+        className={`relative overflow-visible ${sizeClass}`}
         role="img"
         aria-label={
           tier === 0
