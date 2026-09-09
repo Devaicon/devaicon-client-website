@@ -36,6 +36,8 @@ export type SectionId =
  * directions. The streak is the one exception: maximised it takes a single
  * row, because it is a strip of ten small squares and a number, and stretched
  * to a square it would be mostly empty.
+ *
+ * "Rows" here are a unit of height, not grid tracks — see `gridClassOf`.
  */
 export type SectionSize = "min" | "max";
 
@@ -146,17 +148,23 @@ export const DEFAULT_LAYOUT: SectionLayout = SECTIONS.map((s) => ({
 /**
  * The grid classes one placement resolves to.
  *
- * Tailwind scans for whole class names, so every span has to appear literally
- * here rather than being built from the numbers.
+ * Height is a minimum on the block itself rather than a row span over a sized
+ * track. Both express the same two-row geometry, but a shared row track imposes
+ * its minimum on every block in the row — including the tile band, which has no
+ * fixed height and was left sitting above a strip of empty grid whenever its
+ * cards did not reach the minimum. A per-block minimum lets that one size to
+ * its content while the rest keep their slots.
  *
- * A block that cannot be resized gets no row span at all: the row is sized
- * `minmax(13rem, auto)` by the canvas, so an unspanned block grows to whatever
- * its content needs while a spanned one gets a predictable two rows.
+ * The numbers are one row of 13rem and two of them plus the 1rem gap between,
+ * written out because Tailwind scans for whole class names and would never
+ * generate a size built at runtime.
  */
 export function gridClassOf(def: SectionDef, size: SectionSize): string {
   if (!def.resizable) return "lg:col-span-2";
-  if (size === "min") return "lg:col-span-1 lg:row-span-2";
-  return def.maxRows === 1 ? "lg:col-span-2 lg:row-span-1" : "lg:col-span-2 lg:row-span-2";
+  if (size === "min") return "lg:col-span-1 lg:min-h-[27rem]";
+  return def.maxRows === 1
+    ? "lg:col-span-2 lg:min-h-[13rem]"
+    : "lg:col-span-2 lg:min-h-[27rem]";
 }
 
 /* ---------------------------------------------------------------------------

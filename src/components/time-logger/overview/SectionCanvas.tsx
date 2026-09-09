@@ -140,10 +140,10 @@ export default function SectionCanvas({
         variants={staggerContainer(!!reduced)}
         initial="initial"
         animate="animate"
-        // minmax rather than a fixed row height: a two-row block gets a
-        // predictable slot, and the tile band, which spans no rows, still
-        // grows to however many cards are in it.
-        className="grid grid-cols-1 gap-4 lg:auto-rows-[minmax(13rem,auto)] lg:grid-cols-2"
+        // Rows size themselves. Each block carries its own minimum height
+        // instead (see `gridClassOf`), so a block with nothing to fill a slot
+        // with — the tile band — takes only the height its cards need.
+        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
       >
         {layout.map((placement, index) => {
           const def = sectionById(placement.id);
