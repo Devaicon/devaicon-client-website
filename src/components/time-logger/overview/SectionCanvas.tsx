@@ -13,10 +13,12 @@ import {
 } from "lucide-react";
 import { DURATION, EASE, fadeRise, staggerContainer, staggerItem } from "../motion";
 import {
+  gridClassOf,
   hiddenSections,
   sectionById,
   type SectionId,
   type SectionLayout,
+  type SectionSize,
 } from "./sections";
 import type { SectionLayoutApi } from "./useSectionLayout";
 
@@ -37,19 +39,19 @@ function ArrangeBar({
   title,
   index,
   count,
-  width,
+  size,
   resizable,
   onMove,
-  onWidth,
+  onSize,
   onHide,
 }: {
   title: string;
   index: number;
   count: number;
-  width: "full" | "half";
+  size: SectionSize;
   resizable: boolean;
   onMove: (to: number) => void;
-  onWidth: (next: "full" | "half") => void;
+  onSize: (next: SectionSize) => void;
   onHide: () => void;
 }) {
   return (
@@ -84,16 +86,12 @@ function ArrangeBar({
       {resizable && (
         <button
           type="button"
-          onClick={() => onWidth(width === "full" ? "half" : "full")}
-          title={width === "full" ? "Make half width" : "Make full width"}
-          aria-label={
-            width === "full"
-              ? `Make ${title} half width`
-              : `Make ${title} full width`
-          }
+          onClick={() => onSize(size === "max" ? "min" : "max")}
+          title={size === "max" ? "Minimise" : "Maximise"}
+          aria-label={size === "max" ? `Minimise ${title}` : `Maximise ${title}`}
           className={HANDLE_BUTTON}
         >
-          {width === "full" ? (
+          {size === "max" ? (
             <MinimizeIcon className="h-4 w-4" />
           ) : (
             <MaximizeIcon className="h-4 w-4" />
@@ -142,7 +140,10 @@ export default function SectionCanvas({
         variants={staggerContainer(!!reduced)}
         initial="initial"
         animate="animate"
-        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+        // minmax rather than a fixed row height: a two-row block gets a
+        // predictable slot, and the tile band, which spans no rows, still
+        // grows to however many cards are in it.
+        className="grid grid-cols-1 gap-4 lg:auto-rows-[minmax(13rem,auto)] lg:grid-cols-2"
       >
         {layout.map((placement, index) => {
           const def = sectionById(placement.id);
@@ -175,7 +176,7 @@ export default function SectionCanvas({
                 endDrag();
               }}
               onDragEnd={endDrag}
-              className={`${placement.width === "full" ? "lg:col-span-2" : ""} ${
+              className={`${gridClassOf(def, placement.size)} ${
                 arranging ? "cursor-grab active:cursor-grabbing" : ""
               } ${isDragging ? "opacity-40" : ""}`}
             >
@@ -186,32 +187,37 @@ export default function SectionCanvas({
                 variants={staggerItem(!!reduced)}
                 layout={!reduced}
                 transition={{ duration: reduced ? 0 : DURATION.card, ease: EASE }}
-                className={
+                className={`flex h-full flex-col ${
                   isTarget
                     ? "rounded-xl ring-2 ring-violet-500 ring-offset-2 ring-offset-neutral-50 dark:ring-offset-neutral-950"
                     : ""
-                }
+                }`}
               >
                 {arranging && (
                   <ArrangeBar
                     title={def.title}
                     index={index}
                     count={layout.length}
-                    width={placement.width}
+                    size={placement.size}
                     resizable={def.resizable}
                     onMove={(to) => api.moveSection(index, to)}
-                    onWidth={(next) => api.setSectionWidth(placement.id, next)}
+                    onSize={(next) => api.setSectionSize(placement.id, next)}
                     onHide={() => api.hideSection(placement.id)}
                   />
                 )}
-                {/* While arranging, the block is a thing being moved, not a
-                    thing being used — so its own controls stop responding. */}
+                {/* While arranging, a block is a thing being moved rather than
+                    a thing being used, so its controls stop responding and a
+                    drag can start anywhere on it. The exception is a block
+                    whose own editing lives inside it — the tile band — which
+                    is dragged by its handle bar instead. */}
                 <div
-                  className={
+                  className={`min-h-0 flex-1 ${
                     arranging
-                      ? "pointer-events-none select-none overflow-hidden rounded-b-xl border border-t-0 border-dashed border-violet-300 dark:border-violet-800 p-2"
+                      ? `select-none overflow-hidden rounded-b-xl border border-t-0 border-dashed border-violet-300 dark:border-violet-800 p-2 ${
+                          def.keepsInteractive ? "" : "pointer-events-none"
+                        }`
                       : ""
-                  }
+                  }`}
                 >
                   {node}
                 </div>

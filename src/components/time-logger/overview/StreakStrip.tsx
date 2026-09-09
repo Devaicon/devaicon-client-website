@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import AnimatedNumber from "../AnimatedNumber";
 import Card from "./Card";
 import FlameIcon from "./FlameIcon";
+import StreakBackdrop from "./StreakBackdrop";
 import { formatDayLabel, type StreakDay } from "../metrics";
 import { staggerContainer, staggerItem } from "../motion";
 
@@ -53,8 +54,12 @@ export default function StreakStrip({
   const overflow = missingWeekdays.length - named.length;
 
   return (
-    <Card title="Logging streak" className={className}>
-      <div className="flex flex-wrap items-center gap-x-8 gap-y-5">
+    <Card
+      title="Logging streak"
+      className={className}
+      backdrop={<StreakBackdrop streakWeekdays={streakWeekdays} />}
+    >
+      <div className="flex h-full flex-wrap content-center items-center gap-x-8 gap-y-5">
         {/* ---------- flame + count ---------- */}
         <div className="flex items-center gap-3">
           <FlameIcon streakWeekdays={streakWeekdays} />

@@ -2,7 +2,12 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { CheckIcon, LayoutGridIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
+import {
+  CheckIcon,
+  PlusIcon,
+  RotateCcwIcon,
+  SlidersHorizontalIcon,
+} from "lucide-react";
 import { computeMetrics } from "../metrics";
 import Last7DaysChart from "../charts/Last7DaysChart";
 import BreakdownBar from "../charts/BreakdownBar";
@@ -12,6 +17,7 @@ import QuickLogDialog from "../overview/QuickLogDialog";
 import SectionCanvas from "../overview/SectionCanvas";
 import StatSection from "../overview/StatSection";
 import StreakStrip from "../overview/StreakStrip";
+import { useOverviewPrefs } from "../overview/useOverviewPrefs";
 import { useSectionLayout } from "../overview/useSectionLayout";
 import type { SectionId } from "../overview/sections";
 import { useTimeFormat } from "../TimeFormatProvider";
@@ -33,8 +39,15 @@ export default function OverviewTab({
   const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
   const [quickLogOpen, setQuickLogOpen] = useState(false);
-  const [arranging, setArranging] = useState(false);
+  // One mode, not two. Choosing which figures you see and choosing where they
+  // sit are the same act of customising the page, and a pair of near-identical
+  // buttons that turned on near-identical modes only invited the question of
+  // which one you wanted.
+  const [customising, setCustomising] = useState(false);
   const sections = useSectionLayout(config.storageScope);
+  // Held here rather than inside the tile band so the Reset below can undo the
+  // cards and the layout together, and the band still gets a single instance.
+  const prefs = useOverviewPrefs(config);
 
   const ghostButton =
     "flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 text-xs text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors";
@@ -51,37 +64,44 @@ export default function OverviewTab({
     </button>
   );
 
-  // The page's own controls, above everything the layout can move — a bar that
-  // rearranged itself along with the sections would be unusable.
+  function resetEverything() {
+    prefs.reset();
+    sections.reset();
+  }
+
+  // The page's own controls, in one row above everything the layout can move —
+  // a bar that rearranged itself along with the sections would be unusable.
   const actionBar = (
     <div className="flex items-center gap-1">
       {quickLogButton}
       <span className="ml-auto flex items-center gap-1">
-        {arranging && sections.customised && (
-          <button type="button" onClick={sections.reset} className={ghostButton}>
+        {/* Resets the cards and the layout together: two Reset buttons for one
+            Customise mode would put the ambiguity straight back. */}
+        {customising && (
+          <button type="button" onClick={resetEverything} className={ghostButton}>
             <RotateCcwIcon className="h-3.5 w-3.5" />
-            Reset layout
+            Reset
           </button>
         )}
         <button
           type="button"
-          onClick={() => setArranging((v) => !v)}
-          aria-pressed={arranging}
+          onClick={() => setCustomising((v) => !v)}
+          aria-pressed={customising}
           className={
-            arranging
+            customising
               ? "flex cursor-pointer items-center gap-1.5 rounded-md bg-neutral-900 dark:bg-neutral-100 px-2 py-1 text-xs text-white dark:text-neutral-900 transition-colors"
               : ghostButton
           }
         >
-          {arranging ? (
+          {customising ? (
             <>
               <CheckIcon className="h-3.5 w-3.5" />
               Done
             </>
           ) : (
             <>
-              <LayoutGridIcon className="h-3.5 w-3.5" />
-              Arrange page
+              <SlidersHorizontalIcon className="h-3.5 w-3.5" />
+              Customise
             </>
           )}
         </button>
@@ -93,7 +113,7 @@ export default function OverviewTab({
     return (
       <div className="space-y-4">
         {actionBar}
-        <StatSection config={config} metrics={m} loading />
+        <StatSection config={config} metrics={m} loading prefsApi={prefs} />
       </div>
     );
   }
@@ -105,7 +125,15 @@ export default function OverviewTab({
   // Each block, keyed by the id the layout stores. Building them here rather
   // than inside the canvas keeps the canvas ignorant of what a section is.
   const content: Partial<Record<SectionId, ReactNode>> = {
-    stats: <StatSection config={config} metrics={m} loading={false} />,
+    stats: (
+      <StatSection
+        config={config}
+        metrics={m}
+        loading={false}
+        editing={customising}
+        prefsApi={prefs}
+      />
+    ),
     calendar: (
       <CalendarPanel
         logs={logs}
@@ -174,18 +202,19 @@ export default function OverviewTab({
     <div className="space-y-4">
       {actionBar}
 
-      {arranging && (
+      {customising && (
         <p className="rounded-lg border border-dashed border-violet-300 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/40 px-3 py-2 text-xs text-violet-900 dark:text-violet-200">
-          Drag a section by its handle to move it, or use the arrows. Sections
-          can be widened, narrowed and hidden — your page is saved in this
-          browser.
+          Drag a section by its handle to move it, or use the arrows. Each one
+          can be maximised to the full width or minimised to a square, and
+          hidden altogether. Your cards are saved with your preferences; where
+          they sit is saved in this browser.
         </p>
       )}
 
       <SectionCanvas
         layout={sections.layout}
         api={sections}
-        arranging={arranging}
+        arranging={customising}
         content={content}
       />
 

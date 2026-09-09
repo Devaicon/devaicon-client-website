@@ -121,6 +121,41 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
 
   const summary = useMemo(() => summariseEntries(filtered), [filtered]);
 
+  // Whether the table is showing a subset, which is the difference between the
+  // export being "all your entries" and "the ones you have narrowed down to".
+  const filtersActive =
+    !!filterCategory ||
+    !!filterProject ||
+    !!filterStatus ||
+    !!filterDateFrom ||
+    !!filterDateTo ||
+    filterHoursMin !== "" ||
+    filterHoursMax !== "";
+
+  const exportCount = filtered.length;
+  const exportNoun = exportCount === 1 ? "entry" : "entries";
+
+  /**
+   * What the button promises, in full and in shorthand.
+   *
+   * Both spell out the two things a reader would otherwise have to guess: the
+   * export follows the filters rather than the page, and it ignores whatever is
+   * ticked. Every row matching the filters goes out, on every page.
+   */
+  const exportTitle =
+    exportCount === 0
+      ? "Nothing matches your filters, so there is nothing to export"
+      : filtersActive
+        ? `Downloads the ${exportCount} ${exportNoun} matching your filters, from every page — not just the rows shown here, and not only the ones you have ticked`
+        : `Downloads all ${exportCount} of your ${exportNoun}, from every page — not just the rows shown here, and not only the ones you have ticked`;
+
+  const exportHint =
+    exportCount === 0
+      ? "Nothing to export"
+      : filtersActive
+        ? `${exportCount} filtered ${exportNoun}, all pages`
+        : `All ${exportCount} ${exportNoun}, all pages`;
+
   /**
    * Exports every row matching the current filters, not just the visible page,
    * so the file always agrees with the summary cards above the table. Hours go
@@ -184,23 +219,26 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
       <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 space-y-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="font-semibold">Your entries</h2>
-          {/* The matched count lives in the summary cards below, so the header
-              carries the action instead of repeating the number. */}
-          <button
-            type="button"
-            onClick={exportCsv}
-            disabled={filtered.length === 0}
-            title={
-              filtered.length === 0
-                ? "Nothing to export"
-                : `Export all ${filtered.length} matching ${
-                    filtered.length === 1 ? "entry" : "entries"
-                  }`
-            }
-            className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1 text-xs font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:hover:bg-transparent transition-colors"
-          >
-            Export CSV
-          </button>
+          <div className="flex flex-col items-end gap-1">
+            <button
+              type="button"
+              onClick={exportCsv}
+              disabled={exportCount === 0}
+              title={exportTitle}
+              aria-describedby="export-csv-hint"
+              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1 text-xs font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:hover:bg-transparent transition-colors"
+            >
+              Export CSV
+            </button>
+            {/* The tooltip is the full explanation; this is the part a reader
+                needs without hovering — what is in the file, and how much. */}
+            <p
+              id="export-csv-hint"
+              className="text-[11px] text-neutral-500 dark:text-neutral-400"
+            >
+              {exportHint}
+            </p>
+          </div>
         </div>
         <div className="flex flex-wrap items-end gap-2">
           <select

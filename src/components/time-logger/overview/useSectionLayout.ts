@@ -8,14 +8,14 @@ import {
   hide,
   layoutsEqual,
   move,
-  setWidth,
+  setSize,
   show,
   subscribeLayout,
   writeLayout,
   type Scope,
   type SectionId,
   type SectionLayout,
-  type SectionWidth,
+  type SectionSize,
 } from "./sections";
 
 export type SectionLayoutApi = {
@@ -23,7 +23,7 @@ export type SectionLayoutApi = {
   moveSection: (from: number, to: number) => void;
   hideSection: (id: SectionId) => void;
   showSection: (id: SectionId) => void;
-  setSectionWidth: (id: SectionId, width: SectionWidth) => void;
+  setSectionSize: (id: SectionId, size: SectionSize) => void;
   reset: () => void;
   /** True once the layout differs from the one the page ships with. */
   customised: boolean;
@@ -53,7 +53,7 @@ export function useSectionLayout(scope: Scope): SectionLayoutApi {
     moveSection: (from, to) => apply((l) => move(l, from, to)),
     hideSection: (id) => apply((l) => hide(l, id)),
     showSection: (id) => apply((l) => show(l, id)),
-    setSectionWidth: (id, width) => apply((l) => setWidth(l, id, width)),
+    setSectionSize: (id, size) => apply((l) => setSize(l, id, size)),
     reset: () => writeLayout(scope, DEFAULT_LAYOUT),
     customised: !layoutsEqual(layout, DEFAULT_LAYOUT),
   };

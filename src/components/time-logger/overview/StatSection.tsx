@@ -1,13 +1,8 @@
 "use client";
 
-import { useId, useMemo, useState, type ReactNode } from "react";
+import { useId, useMemo, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  RotateCcwIcon,
-  SlidersHorizontalIcon,
-} from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { slideDown } from "../motion";
 import { useTimeFormat } from "../TimeFormatProvider";
 import CardPicker from "./CardPicker";
@@ -20,7 +15,7 @@ import {
   type CardId,
 } from "./cards";
 import { placementOf, type Lane } from "./preferences";
-import { useOverviewPrefs, type SyncState } from "./useOverviewPrefs";
+import { type OverviewPrefsApi, type SyncState } from "./useOverviewPrefs";
 import type { LoggerConfig } from "../config";
 import type { LoggerMetrics } from "../metrics";
 
@@ -31,6 +26,10 @@ import type { LoggerMetrics } from "../metrics";
  * switches: you remove the card you are looking at, and drop a hidden one back
  * in from the tray. Both lanes stay on screen throughout, so the layout being
  * built is the layout being previewed.
+ *
+ * The mode is not this component's to own. Editing tiles and rearranging the
+ * page are one act as far as a user is concerned, so the Overview holds a
+ * single "customising" flag and both this and the section canvas obey it.
  */
 
 function syncMessage(sync: SyncState, serverBacked: boolean): string {
@@ -70,20 +69,17 @@ export default function StatSection({
   config,
   metrics,
   loading,
-  actions,
+  editing = false,
+  prefsApi,
 }: {
   config: LoggerConfig;
   metrics: LoggerMetrics;
   loading: boolean;
-  /**
-   * Rendered at the left of the header row. The Overview's own controls live
-   * here rather than in a second row of their own above the tiles.
-   */
-  actions?: ReactNode;
+  /** Driven by the Overview's single Customise toggle. */
+  editing?: boolean;
+  prefsApi: OverviewPrefsApi;
 }) {
-  const { prefs, expanded, setExpanded, setPlacement, reset, sync } =
-    useOverviewPrefs(config);
-  const [editing, setEditing] = useState(false);
+  const { prefs, expanded, setExpanded, setPlacement, sync } = prefsApi;
   const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
   const extraId = useId();
@@ -106,43 +102,7 @@ export default function StatSection({
     onMove: () => setPlacement(card.id, lane === "pinned" ? "extra" : "pinned"),
   });
 
-  const ghostButton =
-    "flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors";
-
-  const header = (
-    <div className="flex items-center justify-end gap-1">
-      <h2 className="sr-only">Overview cards</h2>
-      {actions && <div className="mr-auto">{actions}</div>}
-      {editing && (
-        <button type="button" onClick={reset} className={ghostButton}>
-          <RotateCcwIcon className="h-3.5 w-3.5" />
-          Reset
-        </button>
-      )}
-      <button
-        type="button"
-        onClick={() => setEditing((v) => !v)}
-        aria-pressed={editing}
-        className={
-          editing
-            ? "flex items-center gap-1.5 rounded-md bg-neutral-900 dark:bg-neutral-100 px-2 py-1 text-xs text-white dark:text-neutral-900 transition-colors"
-            : ghostButton
-        }
-      >
-        {editing ? (
-          <>
-            <CheckIcon className="h-3.5 w-3.5" />
-            Done
-          </>
-        ) : (
-          <>
-            <SlidersHorizontalIcon className="h-3.5 w-3.5" />
-            Customise
-          </>
-        )}
-      </button>
-    </div>
-  );
+  const header = <h2 className="sr-only">Overview cards</h2>;
 
   if (loading) {
     const n = Math.max(1, pinnedCards.length);

@@ -14,30 +14,21 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-/**
- * Versioning pace, until further notice: stay inside 1.9.x.
- *
- * 2.0.0 is reserved for the release that moves everyone onto the new backend
- * client, and 1.10.0 would read as a step towards it that has not happened. So
- * releases are cut as 1.9.1, 1.9.2 and so on regardless of whether they add a
- * capability or fix one — the `tag` on each entry, not the version, is what
- * tells a reader which it was.
- */
-export const APP_VERSION = "1.9.1";
+export const APP_VERSION = "2.0.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
     version: "2.0.0",
     date: "2026-09-09",
-    title: "Settings of your own, and an Overview you can rearrange",
+    title: "Settings of your own, and an Overview you can make yours",
     tag: "feature",
     items: [
       "A new Settings tab gathers the theme and time format that used to sit unlabelled in the top corner, each with a name and a line saying what it does",
-      "You can now have the stopwatch start on its own the moment you save an entry, so the next stretch of work is already being counted",
-      "Scrolling over the calendar to change month can be turned off, for when you would rather the page moved instead",
-      "Arrange page on the Overview lets you drag its sections into any order, widen or narrow them, and hide the ones you never look at",
-      "The calendar now slides between months instead of jumping, and buttons show a pointer when you hover them",
+      "Two new options there: have the stopwatch start on its own the moment you save an entry, and turn off scrolling over the calendar to change month",
+      "Customise on the Overview is now a single button — pick which cards you see, drag the sections into any order, and hide the ones you never look at",
+      "Every section has two sizes: maximised across the full width, or minimised to a square that sits two to a row",
+      "The streak card is lit by its own fire, climbing higher and burning hotter the longer you keep going, with no top level to reach",
     ],
   },
   {

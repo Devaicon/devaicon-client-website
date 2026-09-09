@@ -27,11 +27,21 @@ export type SectionId =
   | "byProject"
   | "byCategory";
 
-export type SectionWidth = "full" | "half";
+/**
+ * Two sizes, and only two.
+ *
+ * "min" is half the columns and two rows deep — near enough a square at the
+ * widths this page is read at. "max" is every column, at the same two rows,
+ * which is why maximising a block widens it rather than growing it in both
+ * directions. The streak is the one exception: maximised it takes a single
+ * row, because it is a strip of ten small squares and a number, and stretched
+ * to a square it would be mostly empty.
+ */
+export type SectionSize = "min" | "max";
 
 export type SectionPlacement = {
   id: SectionId;
-  width: SectionWidth;
+  size: SectionSize;
 };
 
 export type SectionLayout = SectionPlacement[];
@@ -40,35 +50,80 @@ export type SectionDef = {
   id: SectionId;
   /** Shown on the drag handle and in the hidden tray. */
   title: string;
-  defaultWidth: SectionWidth;
-  /** False where the block only reads well at full width. */
+  defaultSize: SectionSize;
+  /** False where the block lays itself out and must not be boxed. */
   resizable: boolean;
+  /** Row depth when maximised. One row is the short strip; two is the norm. */
+  maxRows: 1 | 2;
+  /**
+   * True for a block with editing controls of its own, which must keep
+   * responding while the page is being customised. Everything else goes inert
+   * so that a drag can start anywhere on it.
+   */
+  keepsInteractive: boolean;
 };
 
 export const SECTIONS: SectionDef[] = [
   {
     id: "stats",
     title: "Your cards",
-    defaultWidth: "full",
-    // The tile band lays itself out across the page and picks its own column
-    // count; boxing it into half the width would fight that.
+    defaultSize: "max",
+    // The tile band picks its own column count and grows to however many cards
+    // are showing. Boxing it into a fixed two rows would fight that, so it is
+    // the one block that always spans the page and always sizes to itself.
     resizable: false,
+    maxRows: 2,
+    // The tile band's own hide, move and add controls live inside it, and
+    // Customise is exactly when they are wanted.
+    keepsInteractive: true,
   },
-  { id: "calendar", title: "Calendar", defaultWidth: "full", resizable: true },
-  { id: "streak", title: "Streak", defaultWidth: "full", resizable: false },
-  { id: "last7", title: "Last 7 days", defaultWidth: "half", resizable: true },
-  { id: "approval", title: "Approval", defaultWidth: "half", resizable: true },
+  {
+    id: "calendar",
+    title: "Calendar",
+    defaultSize: "max",
+    resizable: true,
+    maxRows: 2,
+    keepsInteractive: false,
+  },
+  {
+    id: "streak",
+    title: "Streak",
+    defaultSize: "max",
+    resizable: true,
+    maxRows: 1,
+    keepsInteractive: false,
+  },
+  {
+    id: "last7",
+    title: "Last 7 days",
+    defaultSize: "min",
+    resizable: true,
+    maxRows: 2,
+    keepsInteractive: false,
+  },
+  {
+    id: "approval",
+    title: "Approval",
+    defaultSize: "min",
+    resizable: true,
+    maxRows: 2,
+    keepsInteractive: false,
+  },
   {
     id: "byProject",
     title: "Hours by project",
-    defaultWidth: "half",
+    defaultSize: "min",
     resizable: true,
+    maxRows: 2,
+    keepsInteractive: false,
   },
   {
     id: "byCategory",
     title: "Hours by category",
-    defaultWidth: "half",
+    defaultSize: "min",
     resizable: true,
+    maxRows: 2,
+    keepsInteractive: false,
   },
 ];
 
@@ -85,8 +140,24 @@ export function isSectionId(v: unknown): v is SectionId {
 /** The page as it shipped, before anybody moved anything. */
 export const DEFAULT_LAYOUT: SectionLayout = SECTIONS.map((s) => ({
   id: s.id,
-  width: s.defaultWidth,
+  size: s.defaultSize,
 }));
+
+/**
+ * The grid classes one placement resolves to.
+ *
+ * Tailwind scans for whole class names, so every span has to appear literally
+ * here rather than being built from the numbers.
+ *
+ * A block that cannot be resized gets no row span at all: the row is sized
+ * `minmax(13rem, auto)` by the canvas, so an unspanned block grows to whatever
+ * its content needs while a spanned one gets a predictable two rows.
+ */
+export function gridClassOf(def: SectionDef, size: SectionSize): string {
+  if (!def.resizable) return "lg:col-span-2";
+  if (size === "min") return "lg:col-span-1 lg:row-span-2";
+  return def.maxRows === 1 ? "lg:col-span-2 lg:row-span-1" : "lg:col-span-2 lg:row-span-2";
+}
 
 /* ---------------------------------------------------------------------------
  * Pure operations. Every one returns a new layout, so a caller can hand the
@@ -110,18 +181,18 @@ export function show(layout: SectionLayout, id: SectionId): SectionLayout {
   if (layout.some((p) => p.id === id)) return layout;
   const def = sectionById(id);
   if (!def) return layout;
-  return [...layout, { id, width: def.defaultWidth }];
+  return [...layout, { id, size: def.defaultSize }];
 }
 
-export function setWidth(
+export function setSize(
   layout: SectionLayout,
   id: SectionId,
-  width: SectionWidth,
+  size: SectionSize,
 ): SectionLayout {
   return layout.map((p) => {
     if (p.id !== id) return p;
     const def = sectionById(id);
-    return { ...p, width: def?.resizable ? width : def?.defaultWidth ?? p.width };
+    return { ...p, size: def?.resizable ? size : def?.defaultSize ?? p.size };
   });
 }
 
@@ -133,7 +204,7 @@ export function hiddenSections(layout: SectionLayout): SectionDef[] {
 export function layoutsEqual(a: SectionLayout, b: SectionLayout): boolean {
   return (
     a.length === b.length &&
-    a.every((p, i) => p.id === b[i].id && p.width === b[i].width)
+    a.every((p, i) => p.id === b[i].id && p.size === b[i].size)
   );
 }
 
@@ -148,16 +219,16 @@ export function sanitizeLayout(raw: unknown): SectionLayout | null {
   const out: SectionLayout = [];
   for (const entry of raw.slice(0, SECTIONS.length * 2)) {
     if (typeof entry !== "object" || entry === null) continue;
-    const { id, width } = entry as { id?: unknown; width?: unknown };
+    const { id, size } = entry as { id?: unknown; size?: unknown };
     if (!isSectionId(id) || seen.has(id)) continue;
     const def = sectionById(id)!;
     seen.add(id);
     out.push({
       id,
-      width:
-        def.resizable && (width === "full" || width === "half")
-          ? width
-          : def.defaultWidth,
+      size:
+        def.resizable && (size === "min" || size === "max")
+          ? size
+          : def.defaultSize,
     });
   }
   return out.length > 0 ? out : null;
