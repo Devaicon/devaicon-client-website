@@ -3,14 +3,14 @@
 import { Suspense, useCallback, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import ThemeToggle from "@/components/theme/ThemeToggle";
-import TimeFormatToggle from "./TimeFormatToggle";
 import { fadeRise, slideDown } from "./motion";
 import type { LoggerConfig } from "./config";
+import { SettingsProvider, useLoggerSettings } from "./SettingsProvider";
 import { useLoggerData } from "./useLoggerData";
 import OverviewTab from "./tabs/OverviewTab";
 import LogTimeTab from "./tabs/LogTimeTab";
 import EntriesTab from "./tabs/EntriesTab";
+import SettingsTab from "./tabs/SettingsTab";
 import { useStopwatch } from "./stopwatch/useStopwatch";
 import StopwatchBar from "./stopwatch/StopwatchBar";
 import PendingSessionStrip from "./stopwatch/PendingSessionStrip";
@@ -20,12 +20,13 @@ const TABS = [
   { key: "overview", label: "Overview" },
   { key: "log", label: "Log time" },
   { key: "entries", label: "Entries" },
+  { key: "settings", label: "Settings" },
 ] as const;
 
 export type TabKey = (typeof TABS)[number]["key"];
 
 function isTabKey(v: string | null): v is TabKey {
-  return v === "overview" || v === "log" || v === "entries";
+  return TABS.some((t) => t.key === v);
 }
 
 function DashboardInner({
@@ -40,6 +41,19 @@ function DashboardInner({
   const data = useLoggerData(config);
   const sw = useStopwatch(config.storageScope);
   const reduced = useReducedMotion();
+  const { settings } = useLoggerSettings();
+
+  // Saving an entry can roll straight into timing the next stretch of work.
+  // Guarded on the timer being idle: a running or stopped-but-unsaved session
+  // is work the user has not dealt with yet, and overwriting it would lose it.
+  const onLogged = useCallback(
+    (project: string) => {
+      if (!settings.autoStartStopwatch) return;
+      if (sw.status !== "idle" || sw.pending) return;
+      sw.start(project);
+    },
+    [settings.autoStartStopwatch, sw],
+  );
 
   // Stopping the timer produces a pending session, and the dialog is simply
   // "there is a pending session the user hasn't dismissed". Deriving it beats
@@ -84,8 +98,6 @@ function DashboardInner({
             Devaicon · Time Tracker
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <TimeFormatToggle />
-            <ThemeToggle />
             <span className="text-neutral-600 dark:text-neutral-400">
               {data.me?.username}{" "}
               {data.me?.role === "admin" && (
@@ -159,7 +171,7 @@ function DashboardInner({
                 aria-controls={`panel-${t.key}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => selectTab(t.key)}
-                className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
+                className={`-mb-px cursor-pointer border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
                   selected
                     ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
                     : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
@@ -182,9 +194,14 @@ function DashboardInner({
               animate="animate"
               exit="exit"
             >
-              {active === "overview" && <OverviewTab data={data} config={config} />}
-              {active === "log" && <LogTimeTab data={data} sw={sw} />}
+              {active === "overview" && (
+                <OverviewTab data={data} config={config} onLogged={onLogged} />
+              )}
+              {active === "log" && (
+                <LogTimeTab data={data} sw={sw} onLogged={onLogged} />
+              )}
               {active === "entries" && <EntriesTab data={data} />}
+              {active === "settings" && <SettingsTab />}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -210,9 +227,13 @@ export default function TimeLoggerDashboard(props: {
   banner?: ReactNode;
 }) {
   // useSearchParams needs a Suspense boundary in the App Router.
+  // The settings provider wraps it rather than the app layout, because these
+  // preferences are namespaced per client and only the config knows the scope.
   return (
-    <Suspense fallback={null}>
-      <DashboardInner {...props} />
-    </Suspense>
+    <SettingsProvider scope={props.config.storageScope}>
+      <Suspense fallback={null}>
+        <DashboardInner {...props} />
+      </Suspense>
+    </SettingsProvider>
   );
 }

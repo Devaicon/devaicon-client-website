@@ -44,9 +44,12 @@ function FormSkeleton() {
 export default function LogTimeTab({
   data,
   sw,
+  onLogged,
 }: {
   data: LoggerData;
   sw: UseStopwatch;
+  /** Called with the project name after an entry is saved from this form. */
+  onLogged?: (project: string) => void;
 }) {
   const { projects, loading, createLog } = data;
   const [mode, setMode] = useState<Mode>("manual");
@@ -91,6 +94,7 @@ export default function LogTimeTab({
         return;
       }
       setSubmitMsg({ kind: "ok", text: "Logged." });
+      onLogged?.(form.project);
       setForm({
         ...form,
         hours: "",

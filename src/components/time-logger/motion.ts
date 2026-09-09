@@ -119,3 +119,37 @@ export function flicker(
     },
   };
 }
+
+/** A dropdown list unfurling from its button. */
+export function dropdownPanel(reduced: boolean): Variants {
+  return {
+    initial: { opacity: 0, scaleY: reduced ? 1 : 0.94, y: reduced ? 0 : -4 },
+    animate: { opacity: 1, scaleY: 1, y: 0, transition: transition(DURATION.row) },
+    exit: { opacity: 0, scaleY: reduced ? 1 : 0.96, transition: transition(DURATION.row) },
+  };
+}
+
+/**
+ * The calendar swapping one month for the next.
+ *
+ * Direction-aware, via framer-motion's `custom`: stepping forward slides the
+ * outgoing month left and brings the new one in from the right, so the gesture
+ * and the movement agree. Distance is deliberately small — this is a hint that
+ * the grid changed, not a carousel.
+ */
+export function monthSwap(reduced: boolean): Variants {
+  const shift = (direction: number) => (reduced ? 0 : direction * 16);
+  return {
+    initial: (direction: number) => ({ opacity: 0, x: shift(direction) }),
+    animate: {
+      opacity: 1,
+      x: 0,
+      transition: transition(DURATION.base),
+    },
+    exit: (direction: number) => ({
+      opacity: 0,
+      x: shift(-direction),
+      transition: transition(DURATION.row),
+    }),
+  };
+}

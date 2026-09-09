@@ -14,10 +14,32 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "1.9.0";
+/**
+ * Versioning pace, until further notice: stay inside 1.9.x.
+ *
+ * 2.0.0 is reserved for the release that moves everyone onto the new backend
+ * client, and 1.10.0 would read as a step towards it that has not happened. So
+ * releases are cut as 1.9.1, 1.9.2 and so on regardless of whether they add a
+ * capability or fix one — the `tag` on each entry, not the version, is what
+ * tells a reader which it was.
+ */
+export const APP_VERSION = "1.9.1";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.0.0",
+    date: "2026-09-09",
+    title: "Settings of your own, and an Overview you can rearrange",
+    tag: "feature",
+    items: [
+      "A new Settings tab gathers the theme and time format that used to sit unlabelled in the top corner, each with a name and a line saying what it does",
+      "You can now have the stopwatch start on its own the moment you save an entry, so the next stretch of work is already being counted",
+      "Scrolling over the calendar to change month can be turned off, for when you would rather the page moved instead",
+      "Arrange page on the Overview lets you drag its sections into any order, widen or narrow them, and hide the ones you never look at",
+      "The calendar now slides between months instead of jumping, and buttons show a pointer when you hover them",
+    ],
+  },
   {
     version: "1.9.0",
     date: "2026-09-08",

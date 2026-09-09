@@ -19,10 +19,13 @@ import type { MutationResult, NewLogInput } from "../useLoggerData";
 export default function QuickLogDialog({
   projects,
   createLog,
+  onLogged,
   onClose,
 }: {
   projects: Project[];
   createLog: (input: NewLogInput) => Promise<MutationResult>;
+  /** Called with the project name once the entry is saved. */
+  onLogged?: (project: string) => void;
   onClose: () => void;
 }) {
   const reduced = useReducedMotion();
@@ -81,6 +84,7 @@ export default function QuickLogDialog({
         setError(result.message ?? "Could not save this entry.");
         return;
       }
+      onLogged?.(form.project);
       // createLog reloads, so the tiles and calendar behind the dialog are
       // already showing this entry by the time it closes.
       onClose();

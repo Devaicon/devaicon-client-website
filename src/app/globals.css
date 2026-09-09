@@ -689,3 +689,25 @@ h6 {
     height: 1.25rem !important;
   }
 }
+
+/* Pointer cursor on anything clickable.
+   Tailwind v4 dropped the Preflight rule that gave buttons `cursor: pointer`,
+   which left every button in the app showing a plain arrow. Restoring it here
+   rather than adding a class to each call site means a button added tomorrow is
+   right by default. Disabled controls are excluded — the arrow is the signal
+   that pressing does nothing. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[role="tab"]:not([aria-disabled="true"]),
+[role="switch"]:not(:disabled),
+[role="option"],
+label[for],
+summary,
+select:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
