@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.0.0";
+export const APP_VERSION = "2.1.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.1.0",
+    date: "2026-09-09",
+    title: "A fiercer fire behind your streak",
+    tag: "improvement",
+    items: [
+      "The fire behind the streak card now fills far more of the card instead of pooling in one corner",
+      "Its colour is deeper and stronger, so a long streak is obvious at a glance",
+      "Embers now drift across most of the card's width, while the text on the right stays easy to read",
+      "The streak number and its flame are both noticeably bigger, so the count carries the card",
+    ],
+  },
   {
     version: "2.0.0",
     date: "2026-09-09",

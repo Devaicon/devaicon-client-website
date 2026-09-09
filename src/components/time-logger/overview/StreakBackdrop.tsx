@@ -91,8 +91,8 @@ export default function StreakBackdrop({
   // How far up the card the glow reaches, and how strongly it prints. Reach is
   // unbounded; opacity is not, because the card still has to be readable at a
   // thousand-day streak.
-  const reach = 34 + 62 * heat;
-  const washOpacity = Math.min(0.9, 0.34 + 0.3 * heat);
+  const reach = 62 + 104 * heat;
+  const washOpacity = Math.min(0.98, 0.54 + 0.32 * heat);
 
   return (
     <div
@@ -105,7 +105,7 @@ export default function StreakBackdrop({
         className="absolute inset-0"
         style={{
           opacity: washOpacity,
-          background: `radial-gradient(125% ${reach}% at 15% 116%, ${glow} 0%, ${body}55 30%, transparent 72%)`,
+          background: `radial-gradient(165% ${reach}% at 18% 118%, ${glow} 0%, ${glow}cc 18%, ${body}aa 44%, ${body}44 68%, transparent 94%)`,
         }}
       />
       {/* A tighter core under the flame itself, so the hottest part of the card
@@ -114,16 +114,28 @@ export default function StreakBackdrop({
         <div
           className="absolute inset-0"
           style={{
-            opacity: Math.min(0.75, 0.28 + 0.3 * heat),
-            background: `radial-gradient(48% ${reach * 0.72}% at 8% 106%, ${core} 0%, transparent 68%)`,
+            opacity: Math.min(0.9, 0.44 + 0.32 * heat),
+            background: `radial-gradient(78% ${reach * 0.82}% at 10% 110%, ${core} 0%, ${core}99 26%, transparent 82%)`,
+          }}
+        />
+      )}
+
+      {/* A flat smoulder over the whole card, so the fire reads as something
+          the card is sitting in rather than a glow pooled at one corner. */}
+      {heat > 0 && (
+        <div
+          className="absolute inset-0"
+          style={{
+            opacity: Math.min(0.5, 0.18 + 0.26 * heat),
+            background: `linear-gradient(to top, ${body}dd 0%, ${body}88 38%, ${glow}33 70%, transparent 100%)`,
           }}
         />
       )}
 
       {Array.from({ length: embers }, (_, i) => {
-        // Spread across the left two thirds, where the flame is; the right of
-        // the card carries text and stays legible.
-        const left = scatter(i, 1) * 66;
+        // Spread across most of the card's width, the flame's own corner
+        // densest; only the far right stays clear so the text there reads.
+        const left = scatter(i, 1) * 82;
         const size = 3 + scatter(i, 2) * 4 + heat * 1.6;
         // A hotter fire throws its embers further and faster.
         const rise = 90 + scatter(i, 3) * 70 + heat * 70;

@@ -79,12 +79,12 @@ export default function StreakStrip({
         <div className="flex items-center gap-3">
           <FlameIcon
             streakWeekdays={streakWeekdays}
-            sizeClass={tall ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}
+            sizeClass={tall ? "h-24 w-24 sm:h-28 sm:w-28" : "h-16 w-16 sm:h-20 sm:w-20"}
           />
           <div className="flex items-baseline">
             <span
               className={`font-semibold tabular-nums leading-none ${
-                tall ? "text-6xl sm:text-7xl" : "text-5xl sm:text-6xl"
+                tall ? "text-7xl sm:text-8xl" : "text-6xl sm:text-7xl"
               }`}
             >
               <AnimatedNumber
@@ -92,7 +92,7 @@ export default function StreakStrip({
                 format={(n) => String(Math.round(n))}
               />
             </span>
-            <span className="ml-2 text-sm font-normal text-neutral-500 dark:text-neutral-400">
+            <span className="ml-2 text-base font-normal text-neutral-500 dark:text-neutral-400">
               {streakWeekdays === 1 ? "weekday" : "weekdays"}
             </span>
           </div>
