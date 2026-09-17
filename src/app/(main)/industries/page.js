@@ -5,6 +5,15 @@ import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import { Building2 } from "lucide-react";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Industries We Serve",
+  description:
+    "Specialised technology solutions for banking, public sector, retail, manufacturing, hospitality, professional services, non-profits and education.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Main Industries Page
  * Displays all industry solutions with scroll navigation

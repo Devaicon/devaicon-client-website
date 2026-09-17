@@ -96,9 +96,9 @@ const ResourcesHub = () => {
               Software & Microsoft Services
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
             How can we help you today?
-          </h1>
+          </h2>
 
           {/* Search Box */}
           <div className="max-w-4xl mx-auto mb-6">

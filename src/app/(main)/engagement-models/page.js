@@ -4,6 +4,15 @@ import EngagementModelComparison from "@/components/EngagementModelComparison";
 import EngagementDecisionMatrix from "@/components/EngagementDecisionMatrix";
 import { Handshake } from "lucide-react";
 
+export const metadata = {
+  title: "Engagement Models",
+  description:
+    "Compare outsourcing, dedicated teams and staff augmentation to find the engagement model that cuts cost and gets your project delivered on time.",
+  alternates: {
+    canonical: "/engagement-models",
+  },
+};
+
 export default function EngagementModelsPage() {
   const engagementModelsData = [
     {

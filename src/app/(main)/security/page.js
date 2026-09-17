@@ -1,5 +1,3 @@
-"use client";
-
 import PageHero from "@/components/PageHero";
 import TalkTabbedSection from "@/components/TalkTabbedSection";
 import {
@@ -12,6 +10,15 @@ import {
   Clock,
   Activity,
 } from "lucide-react";
+
+export const metadata = {
+  title: "Security Policy",
+  description:
+    "Devaicon's approach to securing systems and customer data: the controls, practices and safeguards we apply across our platforms and engagements.",
+  alternates: {
+    canonical: "/security",
+  },
+};
 
 const SecurityPolicy = () => {
   return (

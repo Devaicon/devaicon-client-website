@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import JobDetailPage from "@/components/careers/JobDetailPage";
 import { getJobBySlug, getAllJobSlugs } from "@/lib/jobs-data";
+import { brandedTitle, metaDescription } from "@/lib/seo";
 
 /**
  * Generate static params for all job detail pages
@@ -21,13 +22,17 @@ export async function generateMetadata({ params }) {
 
   if (!job) {
     return {
-      title: "Job Not Found | Devaicon Careers",
+      title: brandedTitle("Job Not Found"),
+      robots: { index: false, follow: true },
     };
   }
 
   return {
-    title: `${job.title} - ${job.location} | Devaicon Careers`,
-    description: job.description,
+    title: brandedTitle(`${job.title} Careers`),
+    description: metaDescription(job.description || job.shortDescription),
+    alternates: {
+      canonical: `/careers/${slug}`,
+    },
     keywords: [
       job.title,
       job.department,
@@ -38,7 +43,7 @@ export async function generateMetadata({ params }) {
     ],
     openGraph: {
       title: `${job.title} at Devaicon`,
-      description: job.shortDescription,
+      description: metaDescription(job.shortDescription),
       type: "website",
     },
   };

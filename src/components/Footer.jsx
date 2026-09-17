@@ -84,12 +84,12 @@ const Footer = () => {
             {/* Logo */}
 
             <div className="flex items-center gap-3 mb-2 sm:mb-2">
-              <h1
+              <span
                 className="text-3xl sm:text-4xl font-extralight"
                 style={{ fontWeight: "300" }}
               >
                 With
-              </h1>
+              </span>
               <Image
                 src="/logo_dark.svg"
                 alt="Devaicon Logo"

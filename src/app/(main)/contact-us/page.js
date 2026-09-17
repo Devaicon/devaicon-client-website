@@ -1,9 +1,16 @@
-"use client";
-
 import PageHero from "@/components/PageHero";
 import ContactPageLayout from "@/components/ContactPageLayout";
 import FinancialBacking from "@/components/FinancialBacking";
 import { Phone } from "lucide-react";
+
+export const metadata = {
+  title: "Contact Us",
+  description:
+    "Talk to Devaicon about a new build or an ongoing project. Reach our Sharjah team by phone or email and we'll get back to you quickly.",
+  alternates: {
+    canonical: "/contact-us",
+  },
+};
 
 const ContactUs = () => {
   return (

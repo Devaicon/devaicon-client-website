@@ -5,6 +5,15 @@ import { WHATWEDO_CONFIG } from "@/lib/whatwedo-data";
 import { Briefcase } from "lucide-react";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "What We Do",
+  description:
+    "We guide your business through every step of technology growth, from strategy and build to enterprise systems, AI and ongoing support.",
+  alternates: {
+    canonical: "/whatwedo",
+  },
+};
+
 /**
  * Main What We Do Page
  * Displays all what we do services with scroll navigation

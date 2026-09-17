@@ -10,7 +10,7 @@ import { Briefcase } from "lucide-react";
 export const metadata = {
   title: "Careers at Devaicon - Join Our Innovation Team",
   description:
-    "Explore exciting career opportunities at Devaicon. Join our team of innovators and help transform businesses through AI, automation, and digital solutions.",
+    "Explore career opportunities at Devaicon and help transform businesses through AI, automation and digital solutions. See our open roles.",
   keywords: [
     "careers",
     "jobs",
@@ -21,6 +21,9 @@ export const metadata = {
     "Devaicon careers",
     "tech jobs",
   ],
+  alternates: {
+    canonical: "/careers",
+  },
 };
 
 export default function CareersPage() {

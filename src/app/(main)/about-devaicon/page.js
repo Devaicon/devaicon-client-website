@@ -5,7 +5,10 @@ import { Info } from "lucide-react";
 export const metadata = {
   title: "About Devaicon - Our Mission, Vision & Values",
   description:
-    "Learn about Devaicon's mission to transform enterprises through AI, data innovation, and digital transformation. Discover our vision, purpose, and core values.",
+    "Learn about Devaicon's mission, vision, purpose and values, and how we transform enterprises through AI, data and digital transformation.",
+  alternates: {
+    canonical: "/about-devaicon",
+  },
 };
 
 export default function AboutDevaiconPage() {

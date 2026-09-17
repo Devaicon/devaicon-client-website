@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Tourism & Hospitality Technology",
+  description:
+    "Technology for hotels, resorts and travel companies competing on experience — smooth booking, personalised service and fast response on every channel.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Hospitality Industry Page
  * Hotels, restaurants, and tourism solutions

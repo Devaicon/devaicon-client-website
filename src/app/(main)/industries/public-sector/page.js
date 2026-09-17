@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Public Sector Technology Solutions",
+  description:
+    "Digital transformation for government agencies: better transparency, faster citizen service delivery and clear cross-departmental accountability.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Public Sector Industry Page
  * Government and public service solutions

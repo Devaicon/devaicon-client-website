@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Professional Services Technology",
+  description:
+    "Technology for consulting firms, legal practices and service providers juggling client projects, billing cycles and compliance requirements.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Professional Services Industry Page
  * Consulting, legal, accounting, and advisory solutions

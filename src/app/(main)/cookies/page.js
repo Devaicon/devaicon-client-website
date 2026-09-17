@@ -1,5 +1,3 @@
-"use client";
-
 import PageHero from "@/components/PageHero";
 import TalkTabbedSection from "@/components/TalkTabbedSection";
 import {
@@ -11,6 +9,15 @@ import {
   Clock,
   CheckCircle,
 } from "lucide-react";
+
+export const metadata = {
+  title: "Cookie Policy",
+  description:
+    "What cookies Devaicon uses, what each type does, and how you can control or disable them in your browser.",
+  alternates: {
+    canonical: "/cookies",
+  },
+};
 
 const CookiePolicy = () => {
   return (

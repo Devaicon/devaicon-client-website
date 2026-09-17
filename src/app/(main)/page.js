@@ -10,6 +10,12 @@ import ResourcesHub from "@/components/ResourcesHub";
 import EnterpriseExcellence from "@/components/EnterpriseExcellence";
 import Capabilities from "@/components/Capabilities";
 
+export const metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
 export default function HomePage() {
   return (
     <main>

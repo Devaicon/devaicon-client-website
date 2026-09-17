@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Trading & Manufacturing Technology",
+  description:
+    "Systems for manufacturers and trading companies where supply chain disruption, production delays and inventory mismatches hit revenue directly.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Manufacturing Industry Page
  * Production, operations, and supply chain solutions

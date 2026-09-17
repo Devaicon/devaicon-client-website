@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Education & Training Technology",
+  description:
+    "Technology for education and training providers, delivered alongside Devaicon's Open edX learning platform services.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Education Industry Page
  * Schools, universities, and learning management solutions

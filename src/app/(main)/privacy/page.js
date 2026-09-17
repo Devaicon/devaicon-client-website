@@ -1,5 +1,3 @@
-"use client";
-
 import PageHero from "@/components/PageHero";
 import TalkTabbedSection from "@/components/TalkTabbedSection";
 import {
@@ -12,6 +10,15 @@ import {
   Clock,
   Mail,
 } from "lucide-react";
+
+export const metadata = {
+  title: "Privacy Policy",
+  description:
+    "How Devaicon collects, uses, stores and protects your personal data, and the rights you have over the information we hold.",
+  alternates: {
+    canonical: "/privacy",
+  },
+};
 
 const PrivacyPolicy = () => {
   return (

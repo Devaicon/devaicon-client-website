@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Non-Profit Technology Solutions",
+  description:
+    "Technology for non-profits balancing programme delivery, donor relationships, regulatory requirements and clear impact measurement.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * Non-Profit Industry Page
  * NGO, charity, and social organization solutions

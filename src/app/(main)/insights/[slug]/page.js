@@ -4,6 +4,9 @@ import Link from "next/link";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { getInsightBySlug } from "@/lib/insights-content";
 import PageHero from "@/components/PageHero";
+import JsonLd from "@/components/seo/JsonLd";
+import { brandedTitle, metaDescription } from "@/lib/seo";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 
 // Get blog post from content files
 const getBlogPost = (slug) => {
@@ -21,6 +24,33 @@ export function generateStaticParams() {
     { slug: "autonomous-ai-customer-service" },
     { slug: "value-driven-innovation-automation" },
   ];
+}
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = getBlogPost(slug);
+
+  if (!post) {
+    return {
+      title: brandedTitle("Insight Not Found"),
+      robots: { index: false, follow: true },
+    };
+  }
+
+  return {
+    title: brandedTitle(post.title),
+    description: metaDescription(post.subtitle),
+    alternates: {
+      canonical: `/insights/${slug}`,
+    },
+    keywords: post.tags,
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: metaDescription(post.subtitle),
+      images: post.heroImage ? [{ url: post.heroImage }] : undefined,
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }) {
@@ -52,6 +82,17 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLd
+        schema={[
+          articleSchema({ post, path: `/insights/${slug}` }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+            { name: post.title, path: `/insights/${slug}` },
+          ]),
+        ]}
+      />
+
       {/* Hero Section */}
       <PageHero
         title={post.title}

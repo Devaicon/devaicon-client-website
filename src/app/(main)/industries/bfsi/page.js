@@ -4,6 +4,15 @@ import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
 import React, { Suspense } from "react";
 
+export const metadata = {
+  title: "Banking & Financial Services Technology",
+  description:
+    "Secure, compliant data management and transaction systems for banks, insurers and financial institutions working under strict regulation.",
+  alternates: {
+    canonical: "/industries",
+  },
+};
+
 /**
  * BFSI Industry Page
  * Banking, Financial Services, and Insurance solutions

@@ -1,5 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  organizationSchema,
+  webSiteSchema,
+} from "@/lib/seo/structured-data";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -15,7 +20,7 @@ export const metadata = {
     template: "%s | Devaicon",
   },
   description:
-    "Transform your business with Devaicon's cutting-edge solutions in AI, automation, cloud services, and business applications. Trusted by industry leaders for 18+ years with 550+ successful projects.",
+    "Transform your business with Devaicon's AI, automation, cloud and enterprise application services. 18+ years of delivery, 550+ projects.",
   keywords: [
     "AI solutions",
     "business automation",
@@ -64,7 +69,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://withdevaicon.cloud",
+    url: "https://devaicon.com",
     siteName: "Devaicon",
     title: "Devaicon - Value Driven Innovation Through Automation & AI",
     description:
@@ -97,10 +102,6 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
-  },
 };
 
 export default function RootLayout({ children }) {
@@ -116,7 +117,10 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://maps.googleapis.com" />
         <link rel="dns-prefetch" href="https://maps.gstatic.com" />
       </head>
-      <body className={`${inter.variable} antialiased`}>{children}</body>
+      <body className={`${inter.variable} antialiased`}>
+        <JsonLd schema={[organizationSchema(), webSiteSchema()]} />
+        {children}
+      </body>
     </html>
   );
 }

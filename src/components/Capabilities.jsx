@@ -291,9 +291,9 @@ export default function Capabilities() {
             priority
             className="w-15 h-auto sm:w-20 sm:h-auto md:w-25 md:h-auto"
           />
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.75rem] font-bold text-center my-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.75rem] font-bold text-center my-2">
             Devaicon Capabilities
-          </h1>
+          </h2>
           <p className="text-xs sm:text-sm md:text-base font-normal text-[#f2f2f2] text-center mb-4 px-2">
             Enterprise platforms, AI, and integration services
           </p>
