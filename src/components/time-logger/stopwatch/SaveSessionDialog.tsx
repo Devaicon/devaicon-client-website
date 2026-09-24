@@ -21,7 +21,8 @@ export default function SaveSessionDialog({
   projects: Project[];
   createLog: (input: NewLogInput) => Promise<MutationResult>;
   onClose: () => void;
-  onSaved: () => void;
+  /** Called with the project the session was saved against. */
+  onSaved: (project: string) => void;
 }) {
   const measuredHours = msToHours(session.elapsedMs);
   const reduced = useReducedMotion();
@@ -77,7 +78,7 @@ export default function SaveSessionDialog({
         setError(result.message ?? "Could not save this entry.");
         return;
       }
-      onSaved();
+      onSaved(form.project);
     } finally {
       setSaving(false);
     }

@@ -25,9 +25,10 @@ export const CHANGELOG: ChangelogEntry[] = [
     tag: "feature",
     items: [
       "New sound options in Settings: a ticking clock, a chime on every hour, and short cues when you save or delete an entry or start and stop the timer. All of them start off",
+      "A new option keeps the stopwatch running after you save a timed session, starting it again on the same project so back-to-back work has no gaps",
       "Export your whole dashboard set-up to a file, and import it in another browser to get the same cards, layout and options straight away",
       "The Overview clock is now set in the same bold type as the rest of the site",
-      "Every card now catches the light when you hover over it, and the row of extra figures under your cards is gone. Click your cards to see them instead",
+      "Cards now catch a faint glint of light when you hover over them, and the row of extra figures under your cards is gone. Click your cards to see them instead",
     ],
   },
   {

@@ -12,8 +12,10 @@
  */
 
 export type LoggerSettings = {
-  /** Start the stopwatch the moment an entry is saved. */
+  /** Start the stopwatch the moment an entry is saved by hand. */
   autoStartStopwatch: boolean;
+  /** Start the stopwatch again the moment a timed session is saved. */
+  restartAfterTimedEntry: boolean;
   /** Let a mouse wheel over the calendar step between months. */
   calendarWheelScroll: boolean;
   /** A soft tick each second while the Overview clock is on screen. */
@@ -27,6 +29,9 @@ export type LoggerSettings = {
 export const DEFAULT_SETTINGS: LoggerSettings = {
   // Off by default: a timer nobody asked for is a timer that runs all night.
   autoStartStopwatch: false,
+  // Off for the same reason, and separate from the switch above: someone who
+  // times back-to-back work wants a chain, someone who logs by hand may not.
+  restartAfterTimedEntry: false,
   // On by default, which is how the calendar has always behaved.
   calendarWheelScroll: true,
   // Every sound is off until asked for: a page that starts making noise on its
@@ -90,6 +95,10 @@ export function sanitizeSettings(raw: unknown): LoggerSettings {
     autoStartStopwatch: bool(
       r.autoStartStopwatch,
       DEFAULT_SETTINGS.autoStartStopwatch,
+    ),
+    restartAfterTimedEntry: bool(
+      r.restartAfterTimedEntry,
+      DEFAULT_SETTINGS.restartAfterTimedEntry,
     ),
     calendarWheelScroll: bool(
       r.calendarWheelScroll,

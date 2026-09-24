@@ -267,15 +267,29 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
           footnote="Saved on this device only."
         >
           <SettingRow
-            title="Start the timer after logging"
-            description="Saving an entry starts the stopwatch on the same project, so the next stretch of work is already being counted."
+            title="Start the timer after logging by hand"
+            description="Saving an entry you typed in starts the stopwatch on the same project, so the next stretch of work is already being counted."
           >
             {(describedBy) => (
               <Toggle
-                label="Start the timer after logging"
+                label="Start the timer after logging by hand"
                 describedBy={describedBy}
                 checked={settings.autoStartStopwatch}
                 onChange={(v) => setSetting("autoStartStopwatch", v)}
+              />
+            )}
+          </SettingRow>
+
+          <SettingRow
+            title="Keep timing after a timed entry"
+            description="Saving a stopwatch session starts the stopwatch again on the same project, so back-to-back work is timed without a gap."
+          >
+            {(describedBy) => (
+              <Toggle
+                label="Keep timing after a timed entry"
+                describedBy={describedBy}
+                checked={settings.restartAfterTimedEntry}
+                onChange={(v) => setSetting("restartAfterTimedEntry", v)}
               />
             )}
           </SettingRow>

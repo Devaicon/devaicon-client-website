@@ -713,8 +713,9 @@ button:disabled,
 }
 
 /* ---------------------------------------------------------------------------
- * Dashboard card hover: a soft lift and a sheen of light that sweeps across
- * once. Applied by the card primitives (Card, StatTile) so every card on the
+ * Dashboard card hover: a faint lift and a thin sheen of light that sweeps
+ * across once. Kept deliberately quiet — it acknowledges the pointer, it does
+ * not compete with the figures. Applied by the card primitives (Card, StatTile) so every card on the
  * time logger picks it up from one place.
  *
  * The sheen is a pseudo-element, so it needs no markup and never catches the
@@ -735,10 +736,10 @@ button:disabled,
   pointer-events: none;
   background: linear-gradient(
     115deg,
-    transparent 35%,
-    rgb(255 255 255 / 0.55) 46%,
-    rgb(167 139 250 / 0.18) 52%,
-    transparent 64%
+    transparent 40%,
+    rgb(255 255 255 / 0.28) 48%,
+    rgb(167 139 250 / 0.07) 52%,
+    transparent 60%
   );
   background-size: 250% 100%;
   background-position: 130% 0;
@@ -749,10 +750,8 @@ button:disabled,
 }
 
 .card-shine:hover {
-  border-color: rgb(196 181 253 / 0.9);
-  box-shadow:
-    0 10px 30px -14px rgb(76 29 149 / 0.25),
-    0 2px 6px -2px rgb(0 0 0 / 0.06);
+  border-color: rgb(221 214 254);
+  box-shadow: 0 6px 18px -12px rgb(76 29 149 / 0.14);
 }
 
 .card-shine:hover::after {
@@ -763,18 +762,18 @@ button:disabled,
 .dark .card-shine::after {
   background: linear-gradient(
     115deg,
-    transparent 35%,
-    rgb(255 255 255 / 0.07) 46%,
-    rgb(167 139 250 / 0.14) 52%,
-    transparent 64%
+    transparent 40%,
+    rgb(255 255 255 / 0.035) 48%,
+    rgb(167 139 250 / 0.05) 52%,
+    transparent 60%
   );
   background-size: 250% 100%;
   background-position: 130% 0;
 }
 
 .dark .card-shine:hover {
-  border-color: rgb(109 40 217 / 0.6);
-  box-shadow: 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  border-color: rgb(109 40 217 / 0.35);
+  box-shadow: 0 6px 18px -12px rgb(0 0 0 / 0.5);
 }
 
 .dark .card-shine:hover::after {

@@ -100,6 +100,21 @@ function DashboardInner({
     [settings.autoStartStopwatch, rawSw],
   );
 
+  // The timed counterpart of onLogged: once a stopped session is saved, the
+  // timer can pick straight back up on the same project. Checked against the
+  // raw status because the session being saved is already stopped — only a
+  // timer started since then would be overwritten — and silent for the same
+  // reason as onLogged.
+  const onSessionSaved = useCallback(
+    (project: string) => {
+      rawSw.clearPending();
+      if (settings.restartAfterTimedEntry && rawSw.status === "idle") {
+        rawSw.start(project);
+      }
+    },
+    [settings.restartAfterTimedEntry, rawSw],
+  );
+
   // Stopping the timer produces a pending session, and the dialog is simply
   // "there is a pending session the user hasn't dismissed". Deriving it beats
   // an effect that pushes state: a brand-new session id is never dismissed, so
@@ -261,7 +276,7 @@ function DashboardInner({
             projects={data.projects}
             createLog={data.createLog}
             onClose={() => setDismissedPendingId(sw.pending!.id)}
-            onSaved={sw.clearPending}
+            onSaved={onSessionSaved}
           />
         )}
       </AnimatePresence>
