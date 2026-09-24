@@ -1,11 +1,11 @@
 "use client";
 
-import { useId, useMemo, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronDownIcon } from "lucide-react";
-import { slideDown } from "../motion";
+import { useMemo, useState, type ReactNode } from "react";
+import { AnimatePresence } from "framer-motion";
+import { LayoutGridIcon } from "lucide-react";
 import { useTimeFormat } from "../TimeFormatProvider";
 import CardPicker from "./CardPicker";
+import MoreCardsDialog from "./MoreCardsDialog";
 import StatGrid, { gridClassFor } from "./StatGrid";
 import {
   CARDS,
@@ -30,6 +30,10 @@ import type { LoggerMetrics } from "../metrics";
  * The mode is not this component's to own. Editing tiles and rearranging the
  * page are one act as far as a user is concerned, so the Overview holds a
  * single "customising" flag and both this and the section canvas obey it.
+ *
+ * Only the top row is ever on the page. The second lane opens in a window over
+ * it — from the "more figures" button, or by clicking anywhere on the band —
+ * so the dashboard keeps one height however it was last left.
  */
 
 function syncMessage(sync: SyncState, serverBacked: boolean): string {
@@ -70,6 +74,8 @@ export default function StatSection({
   metrics,
   loading,
   editing = false,
+  compact = false,
+  onCustomise,
   prefsApi,
 }: {
   config: LoggerConfig;
@@ -77,12 +83,15 @@ export default function StatSection({
   loading: boolean;
   /** Driven by the Overview's single Customise toggle. */
   editing?: boolean;
+  /** The band is minimised into a half-width square: two cards to a row. */
+  compact?: boolean;
+  /** Offered from the More figures window, for changing what is in it. */
+  onCustomise?: () => void;
   prefsApi: OverviewPrefsApi;
 }) {
-  const { prefs, expanded, setExpanded, setPlacement, sync } = prefsApi;
-  const reduced = useReducedMotion();
+  const { prefs, setPlacement, sync } = prefsApi;
   const { fmt } = useTimeFormat();
-  const extraId = useId();
+  const [moreOpen, setMoreOpen] = useState(false);
 
   // `now` is captured once per format change rather than per render, so the
   // month and year labels cannot shift underneath a re-render.
@@ -127,7 +136,7 @@ export default function StatSection({
       <div className="space-y-3">
         {header}
 
-        <LaneHeading>Always shown</LaneHeading>
+        <LaneHeading>On the dashboard</LaneHeading>
         {pinnedCards.length === 0 ? (
           <EmptyLane>Nothing in the top row yet — add a card below.</EmptyLane>
         ) : (
@@ -135,11 +144,12 @@ export default function StatSection({
             cards={pinnedCards}
             metrics={metrics}
             ctx={ctx}
+            compact={compact}
             editFor={editFor("pinned")}
           />
         )}
 
-        <LaneHeading>Behind Show more</LaneHeading>
+        <LaneHeading>In More figures</LaneHeading>
         {extraCards.length === 0 ? (
           <EmptyLane>
             Nothing here yet — send a card down with its arrow button.
@@ -149,6 +159,7 @@ export default function StatSection({
             cards={extraCards}
             metrics={metrics}
             ctx={ctx}
+            compact={compact}
             editFor={editFor("extra")}
           />
         )}
@@ -180,8 +191,10 @@ export default function StatSection({
   }
 
   /* ---------- normal ---------- */
+  const openMore = extraCards.length > 0 ? () => setMoreOpen(true) : undefined;
+
   return (
-    <div className="space-y-3">
+    <div className="flex h-full flex-col gap-3">
       {header}
 
       {pinnedCards.length === 0 && extraCards.length === 0 ? (
@@ -189,46 +202,55 @@ export default function StatSection({
           Every card is hidden. Use Customise above to bring some back.
         </EmptyLane>
       ) : (
-        <StatGrid cards={pinnedCards} metrics={metrics} ctx={ctx} />
-      )}
-
-      {extraCards.length > 0 && (
-        <>
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={() => setExpanded(!expanded)}
-              aria-expanded={expanded}
-              aria-controls={extraId}
-              className="flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-            >
-              <ChevronDownIcon
-                aria-hidden
-                className={`h-4 w-4 transition-transform motion-reduce:transition-none ${
-                  expanded ? "rotate-180" : ""
-                }`}
-              />
-              {expanded ? "Show less" : `Show ${extraCards.length} more`}
-            </button>
+        pinnedCards.length > 0 && (
+          // The whole band is a way into the window, for a pointer. The
+          // button beneath is the same thing for a keyboard or screen reader,
+          // which is why this one is not focusable itself.
+          <div
+            onClick={openMore}
+            title={openMore ? "Show more figures" : undefined}
+            className={`${compact ? "min-h-0 flex-1" : ""} ${
+              openMore ? "cursor-pointer" : ""
+            }`}
+          >
+            <StatGrid
+              cards={pinnedCards}
+              metrics={metrics}
+              ctx={ctx}
+              compact={compact}
+            />
           </div>
-
-          <AnimatePresence initial={false}>
-            {expanded && (
-              <motion.div
-                key="extra"
-                id={extraId}
-                variants={slideDown(!!reduced)}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="overflow-hidden"
-              >
-                <StatGrid cards={extraCards} metrics={metrics} ctx={ctx} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </>
+        )
       )}
+
+      {openMore && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={openMore}
+            aria-haspopup="dialog"
+            className="flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            <LayoutGridIcon aria-hidden className="h-3.5 w-3.5" />
+            {extraCards.length} more {extraCards.length === 1 ? "figure" : "figures"}
+          </button>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {moreOpen && (
+          <MoreCardsDialog
+            cards={extraCards}
+            metrics={metrics}
+            ctx={ctx}
+            onCustomise={() => {
+              setMoreOpen(false);
+              onCustomise?.();
+            }}
+            onClose={() => setMoreOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

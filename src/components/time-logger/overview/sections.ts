@@ -13,13 +13,16 @@
  * same list simply stacks.
  *
  * A section absent from the list is hidden, which makes hiding the absence of
- * a record. A section added in a later release is therefore never dropped into
- * the middle of a layout somebody has already settled on — it appears at the
- * end, where it can be found and moved.
+ * a record. That alone would hide every section added in a later release from
+ * anyone with a saved layout, so the stored layout also records which sections
+ * existed when it was written (see `getLayout`). One it has never heard of is
+ * appended at the end rather than dropped into the middle of a layout somebody
+ * has already settled on — where it can be found and moved.
  */
 
 export type SectionId =
   | "stats"
+  | "timeline"
   | "calendar"
   | "streak"
   | "last7"
@@ -58,6 +61,11 @@ export type SectionDef = {
   /** Row depth when maximised. One row is the short strip; two is the norm. */
   maxRows: 1 | 2;
   /**
+   * True when, maximised, the block takes only the height its content needs
+   * rather than a fixed number of rows. Minimised it keeps the usual square.
+   */
+  sizesToContent?: boolean;
+  /**
    * True for a block with editing controls of its own, which must keep
    * responding while the page is being customised. Everything else goes inert
    * so that a drag can start anywhere on it.
@@ -70,14 +78,25 @@ export const SECTIONS: SectionDef[] = [
     id: "stats",
     title: "Your cards",
     defaultSize: "max",
-    // The tile band picks its own column count and grows to however many cards
-    // are showing. Boxing it into a fixed two rows would fight that, so it is
-    // the one block that always spans the page and always sizes to itself.
-    resizable: false,
+    // Maximised, the tile band picks its own column count and grows to however
+    // many cards are showing, so it sizes to itself rather than to two rows.
+    // Minimised it folds into two columns and sits in a square like the rest.
+    resizable: true,
     maxRows: 2,
+    sizesToContent: true,
     // The tile band's own hide, move and add controls live inside it, and
     // Customise is exactly when they are wanted.
     keepsInteractive: true,
+  },
+  {
+    id: "timeline",
+    title: "Day timeline",
+    defaultSize: "max",
+    resizable: true,
+    maxRows: 1,
+    // The session buttons and project filters are the block's reason to exist,
+    // but none of them edits anything, so it goes inert like the rest.
+    keepsInteractive: false,
   },
   {
     id: "calendar",
@@ -162,6 +181,7 @@ export const DEFAULT_LAYOUT: SectionLayout = SECTIONS.map((s) => ({
 export function gridClassOf(def: SectionDef, size: SectionSize): string {
   if (!def.resizable) return "lg:col-span-2";
   if (size === "min") return "lg:col-span-1 lg:min-h-[27rem]";
+  if (def.sizesToContent) return "lg:col-span-2";
   return def.maxRows === 1
     ? "lg:col-span-2 lg:min-h-[13rem]"
     : "lg:col-span-2 lg:min-h-[27rem]";
@@ -283,14 +303,48 @@ function rawOf(key: string): string | null {
   }
 }
 
-function parse(raw: string | null): unknown {
+/**
+ * Every section that existed before the envelope began recording `known`. A
+ * layout saved then has seen these and only these, so anything else is new to
+ * it — including the timeline, the first section added after that.
+ */
+const KNOWN_BEFORE_TRACKING: readonly SectionId[] = [
+  "stats",
+  "calendar",
+  "streak",
+  "last7",
+  "approval",
+  "byProject",
+  "byCategory",
+];
+
+type Envelope = { data: unknown; known: Set<string> };
+
+function parse(raw: string | null): Envelope | null {
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as { schema?: number; data?: unknown };
-    return parsed?.schema === SCHEMA ? parsed.data : null;
+    const parsed = JSON.parse(raw) as {
+      schema?: number;
+      data?: unknown;
+      known?: unknown;
+    };
+    if (parsed?.schema !== SCHEMA) return null;
+    const known = Array.isArray(parsed.known)
+      ? parsed.known.filter((k): k is string => typeof k === "string")
+      : KNOWN_BEFORE_TRACKING;
+    return { data: parsed.data, known: new Set(known) };
   } catch {
     return null;
   }
+}
+
+/** Appends every section the saved layout has never heard of, at the end. */
+function withNewSections(layout: SectionLayout, known: Set<string>): SectionLayout {
+  const unseen = SECTIONS.filter(
+    (s) => !known.has(s.id) && !layout.some((p) => p.id === s.id),
+  );
+  if (unseen.length === 0) return layout;
+  return [...layout, ...unseen.map((s) => ({ id: s.id, size: s.defaultSize }))];
 }
 
 const memory = new Map<Scope, SectionLayout>();
@@ -305,7 +359,10 @@ export function getLayout(scope: Scope): SectionLayout {
   const raw = rawOf(layoutKey(scope));
   const cached = cache.get(scope);
   if (cached && cached.raw === raw) return cached.value;
-  const value = sanitizeLayout(parse(raw)) ?? DEFAULT_LAYOUT;
+  const envelope = parse(raw);
+  const saved = sanitizeLayout(envelope?.data);
+  const value =
+    saved && envelope ? withNewSections(saved, envelope.known) : DEFAULT_LAYOUT;
   cache.set(scope, { raw, value });
   return value;
 }
@@ -322,7 +379,11 @@ export function writeLayout(scope: Scope, layout: SectionLayout): void {
     try {
       window.localStorage.setItem(
         layoutKey(scope),
-        JSON.stringify({ schema: SCHEMA, data: layout }),
+        JSON.stringify({
+          schema: SCHEMA,
+          data: layout,
+          known: SECTIONS.map((s) => s.id),
+        }),
       );
     } catch {
       memory.set(scope, layout);

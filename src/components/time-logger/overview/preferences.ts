@@ -96,10 +96,6 @@ export type Scope = "new" | "legacy";
 function prefsKey(scope: Scope) {
   return `devaicon.overview.${scope}.v1`;
 }
-/** Disclosure state is this-browser-only, never worth a network round trip. */
-function expandedKey(scope: Scope) {
-  return `devaicon.overview.${scope}.expanded.v1`;
-}
 
 let availability: boolean | null = null;
 
@@ -143,7 +139,6 @@ function parse(raw: string | null): unknown {
 }
 
 const memPrefs = new Map<Scope, OverviewPrefs>();
-const memExpanded = new Map<Scope, boolean>();
 
 /* getSnapshot must be referentially stable or React re-renders forever, so the
    parsed value is cached against the raw string that produced it. */
@@ -160,17 +155,9 @@ export function getPrefs(scope: Scope): OverviewPrefs {
   return value;
 }
 
-export function getExpanded(scope: Scope): boolean {
-  if (!storageAvailable()) return memExpanded.get(scope) ?? false;
-  return parse(rawOf(expandedKey(scope))) === true;
-}
-
-/** SSR has no localStorage; these keep the server render stable. */
+/** SSR has no localStorage; this keeps the server render stable. */
 export function getServerPrefs(): OverviewPrefs {
   return DEFAULT_PREFS;
-}
-export function getServerExpanded(): boolean {
-  return false;
 }
 
 const listeners = new Set<() => void>();
@@ -185,18 +172,12 @@ export function writePrefs(scope: Scope, prefs: OverviewPrefs): void {
   emit();
 }
 
-export function writeExpanded(scope: Scope, expanded: boolean): void {
-  if (storageAvailable()) write(expandedKey(scope), expanded);
-  else memExpanded.set(scope, expanded);
-  emit();
-}
-
 /** Fires on same-tab writes and on changes made by another tab. */
 export function subscribePrefs(scope: Scope, cb: () => void): () => void {
   listeners.add(cb);
-  const keys = new Set([prefsKey(scope), expandedKey(scope)]);
+  const key = prefsKey(scope);
   const onStorage = (e: StorageEvent) => {
-    if (e.key === null || keys.has(e.key)) cb();
+    if (e.key === null || e.key === key) cb();
   };
   window.addEventListener("storage", onStorage);
   return () => {

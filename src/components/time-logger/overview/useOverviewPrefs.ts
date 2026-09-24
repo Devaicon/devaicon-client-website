@@ -5,15 +5,12 @@ import type { LoggerConfig } from "../config";
 import type { CardId } from "./cards";
 import {
   DEFAULT_PREFS,
-  getExpanded,
   getPrefs,
-  getServerExpanded,
   getServerPrefs,
   prefsEqual,
   sanitizePrefs,
   subscribePrefs,
   withPlacement,
-  writeExpanded,
   writePrefs,
   type OverviewPrefs,
   type Placement,
@@ -28,8 +25,6 @@ export type SyncState = "idle" | "saving" | "local-only" | "rejected";
 
 export type OverviewPrefsApi = {
   prefs: OverviewPrefs;
-  expanded: boolean;
-  setExpanded: (next: boolean) => void;
   setPlacement: (id: CardId, to: Placement) => void;
   reset: () => void;
   /** Always "idle" when preferences are browser-only. */
@@ -52,11 +47,6 @@ export function useOverviewPrefs(config: LoggerConfig): OverviewPrefsApi {
     subscribe,
     useCallback(() => getPrefs(scope), [scope]),
     getServerPrefs,
-  );
-  const expanded = useSyncExternalStore(
-    subscribe,
-    useCallback(() => getExpanded(scope), [scope]),
-    getServerExpanded,
   );
 
   const [sync, setSync] = useState<SyncState>("idle");
@@ -157,15 +147,8 @@ export function useOverviewPrefs(config: LoggerConfig): OverviewPrefsApi {
 
   const reset = useCallback(() => persist(DEFAULT_PREFS), [persist]);
 
-  const setExpandedCb = useCallback(
-    (next: boolean) => writeExpanded(scope, next),
-    [scope],
-  );
-
   return {
     prefs,
-    expanded,
-    setExpanded: setExpandedCb,
     setPlacement,
     reset,
     sync: serverBacked ? sync : "idle",

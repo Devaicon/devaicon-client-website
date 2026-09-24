@@ -151,11 +151,13 @@ export default function StatTile({
   metrics,
   ctx,
   edit,
+  className = "",
 }: {
   card: CardDef;
   metrics: LoggerMetrics;
   ctx: CardContext;
   edit?: TileEdit;
+  className?: string;
 }) {
   const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
@@ -165,7 +167,7 @@ export default function StatTile({
   const MoveIcon = toTop ? ArrowUpIcon : ArrowDownIcon;
   const moveLabel = toTop
     ? `Move ${label} to the top row`
-    : `Move ${label} behind Show more`;
+    : `Move ${label} into More figures`;
 
   const control =
     "rounded-md p-1 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors";
@@ -177,7 +179,7 @@ export default function StatTile({
         edit
           ? "border-dashed border-neutral-300 dark:border-neutral-700"
           : "border-neutral-200 dark:border-neutral-800"
-      }`}
+      } ${className}`}
     >
       {edit && (
         <div className="absolute right-1.5 top-1.5 flex gap-0.5">

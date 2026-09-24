@@ -70,6 +70,13 @@ function prevWorkday(d: Date, offDates: Set<string>): Date {
  */
 export const HOURS_PER_WORKING_DAY = 8;
 
+/**
+ * The most a month can ever expect. A month with more than twenty working days
+ * would otherwise ask for more than the contracted 160 hours, so the monthly
+ * figures are capped here and the month-to-date one is scaled down with them.
+ */
+export const MAX_MONTH_HOURS = 160;
+
 /* ---------- types ---------- */
 
 export type DayBucket = {
@@ -145,11 +152,14 @@ export type LoggerMetrics = {
   avgPerWorkingDay: number;
   /**
    * Every working day in the current month x HOURS_PER_WORKING_DAY, weekends,
-   * leave and holidays excluded. The month's whole commitment, not its
-   * elapsed part.
+   * leave and holidays excluded, capped at MAX_MONTH_HOURS. The month's whole
+   * commitment, not its elapsed part.
    */
   expectedMonthHours: number;
-  /** The same figure over the working days elapsed so far, today included. */
+  /**
+   * The share of expectedMonthHours due by now: the working days elapsed so
+   * far, today included, over all of the month's working days.
+   */
   expectedMonthToDateHours: number;
   /** Sunday-Saturday equivalents of the two figures above. */
   expectedWeekHours: number;
@@ -537,8 +547,17 @@ export function computeMetrics(
     if (isoLocal(d) <= today) workingDaysElapsedInWeek += 1;
   }
 
-  const expectedMonthHours = workingDaysInMonth * HOURS_PER_WORKING_DAY;
-  const expectedMonthToDateHours = workingDaysElapsed * HOURS_PER_WORKING_DAY;
+  const expectedMonthHours = Math.min(
+    workingDaysInMonth * HOURS_PER_WORKING_DAY,
+    MAX_MONTH_HOURS,
+  );
+  // Scaled rather than capped: a capped month spreads its 160 hours evenly
+  // over every working day, so pace keeps agreeing with completion instead of
+  // expecting a full eight hours a day until the cap is hit and then nothing.
+  const expectedMonthToDateHours =
+    workingDaysInMonth === 0
+      ? 0
+      : expectedMonthHours * (workingDaysElapsed / workingDaysInMonth);
   const expectedWeekHours = workingDaysInWeek * HOURS_PER_WORKING_DAY;
   const expectedWeekToDateHours =
     workingDaysElapsedInWeek * HOURS_PER_WORKING_DAY;

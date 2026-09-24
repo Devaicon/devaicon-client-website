@@ -48,37 +48,51 @@ export function gridClassFor(n: number): string {
   return `grid grid-cols-1 gap-4 ${medium} ${wide}`.replace(/\s+/g, " ").trim();
 }
 
+/**
+ * Two columns whatever the count, for a band minimised into a half-width
+ * square. Rows share the height out evenly so four cards make a clean 2x2.
+ */
+const COMPACT_CLASS = "grid h-full grid-cols-1 auto-rows-fr gap-4 sm:grid-cols-2";
+
 export default function StatGrid({
   cards,
   metrics,
   ctx,
   className = "",
+  compact = false,
   editFor,
 }: {
   cards: CardDef[];
   metrics: LoggerMetrics;
   ctx: CardContext;
   className?: string;
+  /** Lays the cards out two to a row, for the band's minimised size. */
+  compact?: boolean;
   /** Supplies per-tile controls while the section is being customised. */
   editFor?: (card: CardDef) => TileEdit;
 }) {
   const reduced = useReducedMotion();
   if (cards.length === 0) return null;
 
+  // An odd card out at the end of a two-column grid takes the whole row rather
+  // than leaving a hole beside it.
+  const oddLast = compact && cards.length % 2 === 1;
+
   return (
     <motion.div
       variants={staggerContainer(!!reduced)}
       initial="initial"
       animate="animate"
-      className={`${gridClassFor(cards.length)} ${className}`.trim()}
+      className={`${compact ? COMPACT_CLASS : gridClassFor(cards.length)} ${className}`.trim()}
     >
-      {cards.map((card) => (
+      {cards.map((card, i) => (
         <StatTile
           key={card.id}
           card={card}
           metrics={metrics}
           ctx={ctx}
           edit={editFor?.(card)}
+          className={oddLast && i === cards.length - 1 ? "sm:col-span-2" : ""}
         />
       ))}
     </motion.div>

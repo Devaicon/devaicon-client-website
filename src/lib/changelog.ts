@@ -14,10 +14,33 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.1.0";
+export const APP_VERSION = "2.2.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.2.0",
+    date: "2026-09-24",
+    title: "See your whole day at a glance, on a cleaner Overview",
+    tag: "feature",
+    items: [
+      "A new day timeline shows all 24 hours: green where you logged work, red where time passed with nothing logged, and grey for the hours still to come",
+      "Pick a project above the timeline to pick out just its hours, and click any session to see what it was, when it ran and how long it took",
+      "The top of the Overview now shows a big clock and today's date, with this week laid out beside it",
+      "Your cards can now be minimised into a two-by-two square like every other section",
+      "Extra cards no longer fold open beneath the top row. Click your cards to see them in a window instead, so the page keeps its shape",
+    ],
+  },
+  {
+    version: "2.1.1",
+    date: "2026-09-24",
+    title: "Monthly targets never ask for more than 160 hours",
+    tag: "fix",
+    items: [
+      "Your expected hours for the month now stop at 160, even in months with more than twenty working days",
+      "Month complete and Month pace measure against that capped target, so a long month no longer reads as falling behind",
+    ],
+  },
   {
     version: "2.1.0",
     date: "2026-09-09",
