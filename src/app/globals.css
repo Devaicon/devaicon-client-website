@@ -711,3 +711,79 @@ button:disabled,
 [aria-disabled="true"] {
   cursor: not-allowed;
 }
+
+/* ---------------------------------------------------------------------------
+ * Dashboard card hover: a soft lift and a sheen of light that sweeps across
+ * once. Applied by the card primitives (Card, StatTile) so every card on the
+ * time logger picks it up from one place.
+ *
+ * The sheen is a pseudo-element, so it needs no markup and never catches the
+ * pointer. Its gradient is drawn at 250% width and slid across by background
+ * position, which the browser can animate without re-laying anything out.
+ * ------------------------------------------------------------------------- */
+.card-shine {
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.card-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgb(255 255 255 / 0.55) 46%,
+    rgb(167 139 250 / 0.18) 52%,
+    transparent 64%
+  );
+  background-size: 250% 100%;
+  background-position: 130% 0;
+  opacity: 0;
+  transition:
+    opacity 250ms ease,
+    background-position 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-shine:hover {
+  border-color: rgb(196 181 253 / 0.9);
+  box-shadow:
+    0 10px 30px -14px rgb(76 29 149 / 0.25),
+    0 2px 6px -2px rgb(0 0 0 / 0.06);
+}
+
+.card-shine:hover::after {
+  opacity: 1;
+  background-position: -30% 0;
+}
+
+.dark .card-shine::after {
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgb(255 255 255 / 0.07) 46%,
+    rgb(167 139 250 / 0.14) 52%,
+    transparent 64%
+  );
+  background-size: 250% 100%;
+  background-position: 130% 0;
+}
+
+.dark .card-shine:hover {
+  border-color: rgb(109 40 217 / 0.6);
+  box-shadow: 0 10px 30px -14px rgb(0 0 0 / 0.7);
+}
+
+.dark .card-shine:hover::after {
+  background-position: -30% 0;
+}
+
+/* No sweep for anyone who has asked for less motion: the glow stays, still. */
+@media (prefers-reduced-motion: reduce) {
+  .card-shine::after {
+    transition: opacity 250ms ease;
+  }
+}

@@ -26,6 +26,8 @@ export type SyncState = "idle" | "saving" | "local-only" | "rejected";
 export type OverviewPrefsApi = {
   prefs: OverviewPrefs;
   setPlacement: (id: CardId, to: Placement) => void;
+  /** Swaps in a whole card set at once — an imported one, say — and syncs it. */
+  replace: (prefs: OverviewPrefs) => void;
   reset: () => void;
   /** Always "idle" when preferences are browser-only. */
   sync: SyncState;
@@ -150,6 +152,7 @@ export function useOverviewPrefs(config: LoggerConfig): OverviewPrefsApi {
   return {
     prefs,
     setPlacement,
+    replace: persist,
     reset,
     sync: serverBacked ? sync : "idle",
   };

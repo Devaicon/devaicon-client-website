@@ -25,7 +25,7 @@ export default function Card({
 }) {
   return (
     <section
-      className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 ${className}`}
+      className={`card-shine relative flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 ${className}`}
     >
       {backdrop}
       <h3 className="relative text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">

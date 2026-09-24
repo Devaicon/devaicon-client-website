@@ -6,7 +6,9 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { fadeRise, slideDown } from "./motion";
 import type { LoggerConfig } from "./config";
 import { SettingsProvider, useLoggerSettings } from "./SettingsProvider";
-import { useLoggerData } from "./useLoggerData";
+import { useLoggerData, type LoggerData } from "./useLoggerData";
+import { useSound } from "./sounds";
+import ClockSounds from "./ClockSounds";
 import OverviewTab from "./tabs/OverviewTab";
 import LogTimeTab from "./tabs/LogTimeTab";
 import EntriesTab from "./tabs/EntriesTab";
@@ -38,10 +40,52 @@ function DashboardInner({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const data = useLoggerData(config);
-  const sw = useStopwatch(config.storageScope);
+  const rawData = useLoggerData(config);
+  const rawSw = useStopwatch(config.storageScope);
   const reduced = useReducedMotion();
   const { settings } = useLoggerSettings();
+  const play = useSound();
+
+  // Action sounds are attached here, once, rather than at every button that
+  // saves or deletes: each tab gets these wrapped versions, so a cue plays on
+  // success wherever the action came from, and never on a failure.
+  const cueOnSuccess =
+    <A extends unknown[]>(
+      fn: (...args: A) => Promise<{ ok: boolean }>,
+      cue: "save" | "delete",
+    ) =>
+    async (...args: A) => {
+      const result = await fn(...args);
+      if (result.ok) play(cue);
+      return result;
+    };
+  const data: LoggerData = {
+    ...rawData,
+    createLog: cueOnSuccess(rawData.createLog, "save"),
+    deleteLog: cueOnSuccess(rawData.deleteLog, "delete"),
+    bulkDeleteLogs: cueOnSuccess(rawData.bulkDeleteLogs, "delete"),
+  };
+  const sw: typeof rawSw = {
+    ...rawSw,
+    start: (...args) => {
+      play("start");
+      rawSw.start(...args);
+    },
+    // Each guard mirrors the stopwatch's own, so a press that does nothing
+    // makes no sound either.
+    resume: (...args) => {
+      if (rawSw.status === "paused") play("start");
+      rawSw.resume(...args);
+    },
+    pause: (...args) => {
+      if (rawSw.status === "running") play("stop");
+      rawSw.pause(...args);
+    },
+    stop: (...args) => {
+      if (rawSw.status !== "idle") play("stop");
+      return rawSw.stop(...args);
+    },
+  };
 
   // Saving an entry can roll straight into timing the next stretch of work.
   // Guarded on the timer being idle: a running or stopped-but-unsaved session
@@ -49,10 +93,11 @@ function DashboardInner({
   const onLogged = useCallback(
     (project: string) => {
       if (!settings.autoStartStopwatch) return;
-      if (sw.status !== "idle" || sw.pending) return;
-      sw.start(project);
+      if (rawSw.status !== "idle" || rawSw.pending) return;
+      // Silently: the save cue is already playing, and two at once is noise.
+      rawSw.start(project);
     },
-    [settings.autoStartStopwatch, sw],
+    [settings.autoStartStopwatch, rawSw],
   );
 
   // Stopping the timer produces a pending session, and the dialog is simply
@@ -201,11 +246,13 @@ function DashboardInner({
                 <LogTimeTab data={data} sw={sw} onLogged={onLogged} />
               )}
               {active === "entries" && <EntriesTab data={data} />}
-              {active === "settings" && <SettingsTab />}
+              {active === "settings" && <SettingsTab config={config} />}
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
+
+      <ClockSounds clockVisible={active === "overview"} />
 
       <AnimatePresence>
         {dialogOpen && sw.pending && (

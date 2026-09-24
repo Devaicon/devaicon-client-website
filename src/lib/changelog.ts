@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.2.0";
+export const APP_VERSION = "2.3.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.3.0",
+    date: "2026-09-24",
+    title: "Sounds you can switch on, and a set-up you can take with you",
+    tag: "feature",
+    items: [
+      "New sound options in Settings: a ticking clock, a chime on every hour, and short cues when you save or delete an entry or start and stop the timer. All of them start off",
+      "Export your whole dashboard set-up to a file, and import it in another browser to get the same cards, layout and options straight away",
+      "The Overview clock is now set in the same bold type as the rest of the site",
+      "Every card now catches the light when you hover over it, and the row of extra figures under your cards is gone. Click your cards to see them instead",
+    ],
+  },
   {
     version: "2.2.0",
     date: "2026-09-24",

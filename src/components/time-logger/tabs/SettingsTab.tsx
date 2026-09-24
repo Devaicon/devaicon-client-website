@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ClockIcon,
+  DownloadIcon,
   HourglassIcon,
   MonitorIcon,
   MoonIcon,
   MouseIcon,
   RotateCcwIcon,
   SunIcon,
+  UploadIcon,
 } from "lucide-react";
 import { useTheme } from "@/components/theme/ThemeProvider";
 import type { Theme } from "@/components/theme/theme";
@@ -17,6 +19,18 @@ import { staggerContainer, staggerItem } from "../motion";
 import { useLoggerSettings } from "../SettingsProvider";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { TimeFormat } from "../timeFormat";
+import type { LoggerConfig } from "../config";
+import type { LoggerSettings } from "../settings";
+import { playCue, type Cue } from "../sounds";
+import { useOverviewPrefs } from "../overview/useOverviewPrefs";
+import { useSectionLayout } from "../overview/useSectionLayout";
+import {
+  buildSetupFile,
+  listParts,
+  parseSetupFile,
+  setupFileName,
+  type ParsedSetup,
+} from "../transfer";
 import Dropdown, { type DropdownOption } from "../settings/Dropdown";
 import SettingRow from "../settings/SettingRow";
 import Toggle from "../settings/Toggle";
@@ -27,8 +41,8 @@ import Toggle from "../settings/Toggle";
  * Those controls worked only if you already knew what they did; here each one
  * gets a name and a sentence, which is the point of moving them. Grouping is by
  * what the setting affects, not by where it is stored — theme and time format
- * follow the account holder across both clients, the two behaviour switches are
- * this browser only, and the footnote under each group says so.
+ * follow the account holder across both clients, the behaviour and sound switches
+ * are this browser only, and the footnote under each group says so.
  */
 
 const THEME_OPTIONS: DropdownOption<Theme>[] = [
@@ -96,17 +110,111 @@ function Group({
   );
 }
 
-export default function SettingsTab() {
+/** The sound switches, each with the cue it previews when switched on. */
+const SOUND_ROWS: {
+  key: keyof LoggerSettings;
+  title: string;
+  description: string;
+  preview: Cue;
+}[] = [
+  {
+    key: "clockTickSound",
+    title: "Clock tick",
+    description: "A soft tick-tock every second while the Overview clock is on screen.",
+    preview: "tick",
+  },
+  {
+    key: "hourlyChime",
+    title: "Hourly chime",
+    description: "A bell as each hour begins, whichever tab you are on — a nudge to log what you just did.",
+    preview: "chime",
+  },
+  {
+    key: "actionSounds",
+    title: "Action sounds",
+    description: "A short cue when an entry is saved or deleted, and when the timer starts or stops.",
+    preview: "save",
+  },
+];
+
+const OUTLINE_BUTTON =
+  "flex cursor-pointer items-center gap-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100";
+
+export default function SettingsTab({ config }: { config: LoggerConfig }) {
   const { theme, setTheme } = useTheme();
   const { format, setFormat } = useTimeFormat();
-  const { settings, setSetting, reset } = useLoggerSettings();
+  const { settings, setSetting, replaceAll, reset } = useLoggerSettings();
+  const prefs = useOverviewPrefs(config);
+  const sections = useSectionLayout(config.storageScope);
   const reduced = useReducedMotion();
   const [justReset, setJustReset] = useState(false);
+
+  // Import is two steps: the file is read and checked first, and nothing is
+  // replaced until the reader has seen what it will replace.
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [staged, setStaged] = useState<ParsedSetup | null>(null);
+  const [transferNote, setTransferNote] = useState<{
+    tone: "ok" | "error";
+    text: string;
+  } | null>(null);
 
   function onReset() {
     reset();
     setJustReset(true);
     window.setTimeout(() => setJustReset(false), 2000);
+  }
+
+  function onExport() {
+    const now = new Date();
+    const json = buildSetupFile(
+      {
+        cards: prefs.prefs,
+        sections: sections.layout,
+        settings,
+        appearance: { theme, timeFormat: format },
+      },
+      config.storageScope,
+      now,
+    );
+    const url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = setupFileName(now);
+    a.click();
+    // Revoked on the next task: some browsers start the download after click()
+    // returns, and would find the URL already gone.
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    setStaged(null);
+    setTransferNote({ tone: "ok", text: "Exported. Keep the file, or import it in another browser." });
+  }
+
+  async function onPickFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    // Cleared so picking the same file again still fires a change.
+    e.target.value = "";
+    if (!file) return;
+    const result = parseSetupFile(await file.text());
+    if (!result.ok) {
+      setStaged(null);
+      setTransferNote({ tone: "error", text: result.message });
+      return;
+    }
+    setTransferNote(null);
+    setStaged(result.parsed);
+  }
+
+  function onApplyImport() {
+    if (!staged) return;
+    const { setup, parts } = staged;
+    if (setup.cards) prefs.replace(setup.cards);
+    if (setup.sections) sections.replace(setup.sections);
+    if (setup.settings) replaceAll(setup.settings);
+    if (setup.appearance) {
+      setTheme(setup.appearance.theme);
+      setFormat(setup.appearance.timeFormat);
+    }
+    setStaged(null);
+    setTransferNote({ tone: "ok", text: `Imported your ${listParts(parts)}.` });
   }
 
   return (
@@ -197,14 +305,99 @@ export default function SettingsTab() {
       </motion.div>
 
       <motion.div variants={staggerItem(!!reduced)}>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={onReset}
-            className="flex cursor-pointer items-center gap-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
+        <Group
+          title="Sounds"
+          description="Audio from the clock, and cues for the things you do most. Switching one on plays a sample."
+          footnote="Saved on this device only. Your browser plays nothing until you have clicked somewhere on the page."
+        >
+          {SOUND_ROWS.map((row) => (
+            <SettingRow key={row.key} title={row.title} description={row.description}>
+              {(describedBy) => (
+                <Toggle
+                  label={row.title}
+                  describedBy={describedBy}
+                  checked={settings[row.key]}
+                  onChange={(v) => {
+                    setSetting(row.key, v);
+                    // The switch is itself the click the browser needs, so
+                    // the sample always plays.
+                    if (v) playCue(row.preview);
+                  }}
+                />
+              )}
+            </SettingRow>
+          ))}
+        </Group>
+      </motion.div>
+
+      <motion.div variants={staggerItem(!!reduced)}>
+        <Group
+          title="Back up and move"
+          description="Save your whole dashboard set-up as a JSON file, or load one from another browser."
+          footnote="The file holds your cards, page layout, options, theme and time format. It never contains your entries."
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <button type="button" onClick={onExport} className={OUTLINE_BUTTON}>
+              <DownloadIcon className="h-3.5 w-3.5" />
+              Export set-up
+            </button>
+            <button type="button" onClick={() => fileRef.current?.click()} className={OUTLINE_BUTTON}>
+              <UploadIcon className="h-3.5 w-3.5" />
+              Import set-up
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json,.json"
+              onChange={onPickFile}
+              className="hidden"
+              aria-hidden
+              tabIndex={-1}
+            />
+          </div>
+
+          {staged && (
+            <div className="mt-3 flex flex-col gap-2 rounded-lg border border-violet-300 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/40 px-3 py-2 text-xs text-violet-900 dark:text-violet-200 sm:flex-row sm:items-center">
+              <p className="flex-1">
+                This replaces your {listParts(staged.parts)} with the ones in the file.
+              </p>
+              <span className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={onApplyImport}
+                  className="cursor-pointer rounded-md bg-violet-700 px-2.5 py-1 font-medium text-white hover:bg-violet-800 dark:bg-violet-500 dark:text-neutral-950 dark:hover:bg-violet-400"
+                >
+                  Replace
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStaged(null)}
+                  className="cursor-pointer rounded-md px-2.5 py-1 hover:bg-violet-100 dark:hover:bg-violet-900/60"
+                >
+                  Cancel
+                </button>
+              </span>
+            </div>
+          )}
+
+          <p
+            aria-live="polite"
+            className={`mt-3 text-xs empty:hidden ${
+              transferNote?.tone === "error"
+                ? "text-red-700 dark:text-red-400"
+                : "text-neutral-500 dark:text-neutral-400"
+            }`}
           >
+            {transferNote?.text ?? ""}
+          </p>
+        </Group>
+      </motion.div>
+
+      <motion.div variants={staggerItem(!!reduced)}>
+        <div className="flex items-center gap-3">
+          <button type="button" onClick={onReset} className={OUTLINE_BUTTON}>
             <RotateCcwIcon className="h-3.5 w-3.5" />
-            Reset logging and calendar options
+            Reset logging, calendar and sound options
           </button>
           <span
             aria-live="polite"
@@ -220,7 +413,7 @@ export default function SettingsTab() {
           <MouseIcon aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>
             The Overview page&rsquo;s own layout is set on that page — use
-            Arrange page there to move, resize or hide its sections.
+            Customise there to move, resize or hide its sections.
           </span>
         </p>
       </motion.div>

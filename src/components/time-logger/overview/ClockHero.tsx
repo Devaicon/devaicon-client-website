@@ -67,7 +67,7 @@ export default function ClockHero({
   return (
     <section
       aria-label="Clock and calendar"
-      className="relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 sm:p-7"
+      className="card-shine relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 sm:p-7"
     >
       {/* A wash of the brand violet from the corner, so the hero reads as the
           page's head without shouting over the figures beneath it. */}
@@ -92,7 +92,7 @@ export default function ClockHero({
             // Announcing every second would drown a screen reader; the date
             // and time are read once, on arrival.
             aria-live="off"
-            className="flex items-baseline font-extralight leading-none tracking-tighter tabular-nums text-neutral-900 dark:text-neutral-50"
+            className="flex items-baseline font-bold leading-none tracking-tight tabular-nums text-neutral-900 dark:text-neutral-50"
           >
             <span className="text-7xl sm:text-8xl lg:text-9xl">{clock.hour}</span>
             <span
@@ -110,7 +110,7 @@ export default function ClockHero({
                   {clock.period}
                 </span>
               )}
-              <span className="text-2xl text-neutral-400 dark:text-neutral-500">
+              <span className="text-2xl font-semibold text-neutral-400 dark:text-neutral-500">
                 {seconds}
               </span>
             </span>

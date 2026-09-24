@@ -16,6 +16,12 @@ export type LoggerSettings = {
   autoStartStopwatch: boolean;
   /** Let a mouse wheel over the calendar step between months. */
   calendarWheelScroll: boolean;
+  /** A soft tick each second while the Overview clock is on screen. */
+  clockTickSound: boolean;
+  /** A chime as each hour begins, on any tab. */
+  hourlyChime: boolean;
+  /** Short cues when an entry is saved or deleted and the timer starts or stops. */
+  actionSounds: boolean;
 };
 
 export const DEFAULT_SETTINGS: LoggerSettings = {
@@ -23,6 +29,11 @@ export const DEFAULT_SETTINGS: LoggerSettings = {
   autoStartStopwatch: false,
   // On by default, which is how the calendar has always behaved.
   calendarWheelScroll: true,
+  // Every sound is off until asked for: a page that starts making noise on its
+  // own, in an office, is a page that gets muted for good.
+  clockTickSound: false,
+  hourlyChime: false,
+  actionSounds: false,
 };
 
 export type Scope = "new" | "legacy";
@@ -84,6 +95,9 @@ export function sanitizeSettings(raw: unknown): LoggerSettings {
       r.calendarWheelScroll,
       DEFAULT_SETTINGS.calendarWheelScroll,
     ),
+    clockTickSound: bool(r.clockTickSound, DEFAULT_SETTINGS.clockTickSound),
+    hourlyChime: bool(r.hourlyChime, DEFAULT_SETTINGS.hourlyChime),
+    actionSounds: bool(r.actionSounds, DEFAULT_SETTINGS.actionSounds),
   };
 }
 

@@ -175,7 +175,7 @@ export default function StatTile({
   return (
     <motion.div
       variants={staggerItem(!!reduced)}
-      className={`relative flex h-full flex-col rounded-xl border bg-white dark:bg-neutral-900 p-5 ${
+      className={`card-shine relative flex h-full flex-col rounded-xl border bg-white dark:bg-neutral-900 p-5 ${
         edit
           ? "border-dashed border-neutral-300 dark:border-neutral-700"
           : "border-neutral-200 dark:border-neutral-800"

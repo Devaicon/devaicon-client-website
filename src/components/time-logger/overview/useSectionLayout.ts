@@ -24,6 +24,8 @@ export type SectionLayoutApi = {
   hideSection: (id: SectionId) => void;
   showSection: (id: SectionId) => void;
   setSectionSize: (id: SectionId, size: SectionSize) => void;
+  /** Swaps in a whole layout at once — an imported one, say. */
+  replace: (layout: SectionLayout) => void;
   reset: () => void;
   /** True once the layout differs from the one the page ships with. */
   customised: boolean;
@@ -54,6 +56,7 @@ export function useSectionLayout(scope: Scope): SectionLayoutApi {
     hideSection: (id) => apply((l) => hide(l, id)),
     showSection: (id) => apply((l) => show(l, id)),
     setSectionSize: (id, size) => apply((l) => setSize(l, id, size)),
+    replace: (next) => writeLayout(scope, next),
     reset: () => writeLayout(scope, DEFAULT_LAYOUT),
     customised: !layoutsEqual(layout, DEFAULT_LAYOUT),
   };

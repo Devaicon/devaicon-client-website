@@ -25,6 +25,8 @@ type SettingsContextValue = {
     key: K,
     value: LoggerSettings[K],
   ) => void;
+  /** Writes the whole record at once — an imported one, say. */
+  replaceAll: (settings: LoggerSettings) => void;
   reset: () => void;
 };
 
@@ -59,6 +61,7 @@ export function SettingsProvider({
       // writes in the same tick cannot drop the first one's change.
       setSetting: (key, next) =>
         writeSettings(scope, { ...getSettings(scope), [key]: next }),
+      replaceAll: (next) => writeSettings(scope, next),
       reset: () => writeSettings(scope, DEFAULT_SETTINGS),
     }),
     [settings, scope],

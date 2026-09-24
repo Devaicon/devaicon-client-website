@@ -2,7 +2,6 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { AnimatePresence } from "framer-motion";
-import { LayoutGridIcon } from "lucide-react";
 import { useTimeFormat } from "../TimeFormatProvider";
 import CardPicker from "./CardPicker";
 import MoreCardsDialog from "./MoreCardsDialog";
@@ -32,8 +31,9 @@ import type { LoggerMetrics } from "../metrics";
  * single "customising" flag and both this and the section canvas obey it.
  *
  * Only the top row is ever on the page. The second lane opens in a window over
- * it — from the "more figures" button, or by clicking anywhere on the band —
- * so the dashboard keeps one height however it was last left.
+ * it when the band is clicked, so the dashboard keeps one height however it
+ * was last left. There is deliberately no button row for it beneath the band:
+ * one sat there once and knocked the band out of line with its neighbours.
  */
 
 function syncMessage(sync: SyncState, serverBacked: boolean): string {
@@ -197,43 +197,44 @@ export default function StatSection({
     <div className="flex h-full flex-col gap-3">
       {header}
 
-      {pinnedCards.length === 0 && extraCards.length === 0 ? (
+      {pinnedCards.length === 0 ? (
         <EmptyLane>
-          Every card is hidden. Use Customise above to bring some back.
+          {extraCards.length === 0
+            ? "Every card is hidden. Use Customise above to bring some back."
+            : "Your top row is empty. Use Customise above to move cards up from More figures."}
         </EmptyLane>
       ) : (
-        pinnedCards.length > 0 && (
-          // The whole band is a way into the window, for a pointer. The
-          // button beneath is the same thing for a keyboard or screen reader,
-          // which is why this one is not focusable itself.
-          <div
-            onClick={openMore}
-            title={openMore ? "Show more figures" : undefined}
-            className={`${compact ? "min-h-0 flex-1" : ""} ${
-              openMore ? "cursor-pointer" : ""
-            }`}
-          >
-            <StatGrid
-              cards={pinnedCards}
-              metrics={metrics}
-              ctx={ctx}
-              compact={compact}
-            />
-          </div>
-        )
-      )}
-
-      {openMore && (
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={openMore}
-            aria-haspopup="dialog"
-            className="flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-          >
-            <LayoutGridIcon aria-hidden className="h-3.5 w-3.5" />
-            {extraCards.length} more {extraCards.length === 1 ? "figure" : "figures"}
-          </button>
+        // A click anywhere on the band opens the window. The band stays a
+        // plain region so screen readers still read every figure in it; the
+        // keyboard way in is the button below, which only appears on focus
+        // and so never pushes the band out of line with its neighbours.
+        <div
+          onClick={openMore}
+          title={openMore ? "Click for more figures" : undefined}
+          className={`relative ${compact ? "min-h-0 flex-1" : ""} ${
+            openMore ? "cursor-pointer" : ""
+          }`}
+        >
+          <StatGrid
+            cards={pinnedCards}
+            metrics={metrics}
+            ctx={ctx}
+            compact={compact}
+          />
+          {openMore && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                openMore();
+              }}
+              aria-haspopup="dialog"
+              className="sr-only focus:not-sr-only focus:absolute focus:bottom-2 focus:right-2 focus:z-10 focus:rounded-md focus:bg-neutral-900 focus:px-3 focus:py-1.5 focus:text-xs focus:font-medium focus:text-white dark:focus:bg-neutral-100 dark:focus:text-neutral-900"
+            >
+              Show {extraCards.length} more{" "}
+              {extraCards.length === 1 ? "figure" : "figures"}
+            </button>
+          )}
         </div>
       )}
 
