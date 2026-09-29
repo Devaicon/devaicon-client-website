@@ -14,10 +14,23 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.3.0";
+export const APP_VERSION = "2.4.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.4.0",
+    date: "2026-09-29",
+    title: "One tracker, and a proper admin area to run it",
+    tag: "feature",
+    items: [
+      "You'll be asked to sign in again once after this update",
+      "The old Google Sheets version of the tracker has been retired, so everything now lives here",
+      "A new Profile section in Settings lets you set the name shown for you, change your password, sign out your other devices and see exactly what your access allows",
+      "Admins now have their own area for time logs, projects, the team and roles, where access is set per role with on/off switches and can be fine-tuned for any one person",
+      "Entries can now be flagged for a closer look, with a short note saying why",
+    ],
+  },
   {
     version: "2.3.0",
     date: "2026-09-24",

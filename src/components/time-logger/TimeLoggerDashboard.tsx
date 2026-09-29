@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { fadeRise, slideDown } from "./motion";
 import type { LoggerConfig } from "./config";
+import { canUseAdmin, nameOf } from "@/lib/types";
 import { SettingsProvider, useLoggerSettings } from "./SettingsProvider";
 import { useLoggerData, type LoggerData } from "./useLoggerData";
 import { useSound } from "./sounds";
@@ -159,14 +160,14 @@ function DashboardInner({
           </div>
           <div className="flex items-center gap-4 text-sm">
             <span className="text-neutral-600 dark:text-neutral-400">
-              {data.me?.username}{" "}
-              {data.me?.role === "admin" && (
+              {nameOf(data.me)}{" "}
+              {data.me && (
                 <span className="text-neutral-400 dark:text-neutral-500">
-                  (admin)
+                  ({data.me.role.name})
                 </span>
               )}
             </span>
-            {data.me?.role === "admin" && (
+            {canUseAdmin(data.me) && (
               <a
                 href={config.adminPath}
                 className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
@@ -261,7 +262,9 @@ function DashboardInner({
                 <LogTimeTab data={data} sw={sw} onLogged={onLogged} />
               )}
               {active === "entries" && <EntriesTab data={data} />}
-              {active === "settings" && <SettingsTab config={config} />}
+              {active === "settings" && (
+                <SettingsTab config={config} onMeChange={data.updateMe} />
+              )}
             </motion.div>
           </AnimatePresence>
         </div>

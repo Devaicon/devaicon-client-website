@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { Flag } from "lucide-react";
 import {
   CATEGORIES,
+  can,
   isNonWorkingCategory,
   type Project,
   type TimeLog,
 } from "@/lib/types";
-import ThemeToggle from "@/components/theme/ThemeToggle";
-import { ArrowRightIcon } from "lucide-react";
+import { SectionGate } from "@/components/admin/AdminShell";
+import { useAdminSession } from "@/components/admin/AdminSession";
+import { api } from "@/components/admin/api";
+import { useApi } from "@/components/admin/useApi";
 
 function todayLocal(): string {
   const d = new Date();
@@ -46,14 +49,25 @@ function startOfMonthIso(): string {
   return isoLocal(d);
 }
 
-export default function AdminPage() {
-  const router = useRouter();
-  const [me, setMe] = useState<{ username: string; role: string } | null>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [logs, setLogs] = useState<TimeLog[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [newProject, setNewProject] = useState("");
-  const [pMsg, setPMsg] = useState<string | null>(null);
+export default function TimeLogsPage() {
+  return (
+    <SectionGate anyOf={["timelogs.review"]}>
+      <TimeLogsReview />
+    </SectionGate>
+  );
+}
+
+function TimeLogsReview() {
+  const { me } = useAdminSession();
+  const canDelete = can(me, "timelogs.delete_any");
+  const canExport = can(me, "timelogs.export");
+  const projectsRes = useApi<{ projects: Project[] }>("/projects");
+  const logsRes = useApi<{ logs: TimeLog[] }>("/logs?all=1");
+  const projects = useMemo(() => projectsRes.data?.projects ?? [], [projectsRes.data]);
+  const logs = useMemo(() => logsRes.data?.logs ?? [], [logsRes.data]);
+  const loading = logsRes.loading;
+  const loadError = logsRes.error;
+  const load = logsRes.reload;
 
   // filters
   const [fUser, setFUser] = useState("");
@@ -61,100 +75,56 @@ export default function AdminPage() {
   const [fCategory, setFCategory] = useState("");
   const [fFrom, setFFrom] = useState("");
   const [fTo, setFTo] = useState("");
-  const [fStatus, setFStatus] = useState<"all" | "pending" | "approved">("all");
+  const [fStatus, setFStatus] = useState<
+    "all" | "pending" | "approved" | "flagged"
+  >("all");
   const [activePreset, setActivePreset] = useState<string>("all");
 
-  // selection (for bulk approve)
+  // selection (for bulk approve / flag)
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [approvalBusy, setApprovalBusy] = useState(false);
 
-  async function load() {
-    setLoading(true);
-    try {
-      const [meRes, pRes, lRes] = await Promise.all([
-        fetch("/api/legacy/auth/me"),
-        fetch("/api/legacy/projects"),
-        fetch("/api/legacy/logs?all=1"),
-      ]);
-      if (meRes.status === 401) {
-        router.push("/legacy/login");
-        return;
-      }
-      const meData = await meRes.json();
-      if (meData.user.role !== "admin") {
-        router.push("/legacy/dashboard");
-        return;
-      }
-      setMe(meData.user);
-      if (pRes.ok) setProjects((await pRes.json()).projects ?? []);
-      if (lRes.ok) setLogs((await lRes.json()).logs ?? []);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    load();
-  }, []);
-
-  async function addProject(e: React.FormEvent) {
-    e.preventDefault();
-    setPMsg(null);
-    const name = newProject.trim();
-    if (!name) return;
-    const res = await fetch("/api/legacy/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      setPMsg(
-        data.error === "duplicate_project"
-          ? "Project already exists."
-          : "Failed to add project.",
-      );
-      return;
-    }
-    setNewProject("");
-    load();
-  }
-
-  async function deleteProject(id: string) {
-    if (!confirm("Delete this project? Existing logs are not removed.")) return;
-    await fetch(`/api/legacy/projects?id=${encodeURIComponent(id)}`, {
-      method: "DELETE",
-    });
-    load();
-  }
-
   async function deleteLog(id: string) {
     if (!confirm("Delete this entry permanently?")) return;
-    await fetch(`/api/legacy/logs?id=${encodeURIComponent(id)}`, {
-      method: "DELETE",
-    });
+    const res = await api(`/logs?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    if (!res.ok) alert(res.message);
     load();
   }
 
   async function setApproval(ids: string[], approved: boolean) {
     if (ids.length === 0) return;
     setApprovalBusy(true);
-    try {
-      const res = await fetch("/api/legacy/admin/approve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids, approved }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        alert(data.message ?? "Approval update failed.");
-        return;
-      }
-      setSelected(new Set());
-      load();
-    } finally {
-      setApprovalBusy(false);
+    const res = await api("/admin/approve", { method: "POST", body: { ids, approved } });
+    setApprovalBusy(false);
+    if (!res.ok) {
+      alert(res.message ?? "Approval update failed.");
+      return;
     }
+    setSelected(new Set());
+    load();
+  }
+
+  // Flagging marks an entry for a closer look. It is independent of approval:
+  // an entry can be both approved and flagged.
+  async function setFlag(ids: string[], flagged: boolean) {
+    if (ids.length === 0) return;
+    let reason = "";
+    if (flagged) {
+      const answer = prompt(
+        `Why ${ids.length === 1 ? "is this entry" : `are these ${ids.length} entries`} being flagged? (optional)`,
+      );
+      if (answer === null) return;
+      reason = answer.trim().slice(0, 500);
+    }
+    setApprovalBusy(true);
+    const res = await api("/admin/flag", { method: "POST", body: { ids, flagged, reason } });
+    setApprovalBusy(false);
+    if (!res.ok) {
+      alert(res.message ?? "Flag update failed.");
+      return;
+    }
+    setSelected(new Set());
+    load();
   }
 
   function toggleSelect(id: string) {
@@ -164,11 +134,6 @@ export default function AdminPage() {
       else next.add(id);
       return next;
     });
-  }
-
-  async function logout() {
-    await fetch("/api/legacy/auth/logout", { method: "POST" });
-    router.push("/legacy/login");
   }
 
   /* ---------------- presets ---------------- */
@@ -220,6 +185,7 @@ export default function AdminPage() {
         if (fTo && l.date > fTo) return false;
         if (fStatus === "pending" && l.approvedAt) return false;
         if (fStatus === "approved" && !l.approvedAt) return false;
+        if (fStatus === "flagged" && !l.flagged) return false;
         return true;
       })
       .sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -243,6 +209,18 @@ export default function AdminPage() {
       filtered
         .filter((l) => selected.has(l.id) && l.approvedAt)
         .map((l) => l.id),
+    [filtered, selected],
+  );
+
+  const selectedUnflaggedIds = useMemo(
+    () =>
+      filtered.filter((l) => selected.has(l.id) && !l.flagged).map((l) => l.id),
+    [filtered, selected],
+  );
+
+  const selectedFlaggedIds = useMemo(
+    () =>
+      filtered.filter((l) => selected.has(l.id) && l.flagged).map((l) => l.id),
     [filtered, selected],
   );
 
@@ -289,6 +267,8 @@ export default function AdminPage() {
       "Status",
       "Approved By",
       "Approved At",
+      "Flagged",
+      "Flag Reason",
     ];
     const rows = filtered.map((l) => [
       l.date,
@@ -300,6 +280,8 @@ export default function AdminPage() {
       l.approvedAt ? "Approved" : "Pending",
       l.approvedBy,
       l.approvedAt,
+      l.flagged ? "Yes" : "",
+      l.flagReason ?? "",
     ]);
     const csv = [headers, ...rows]
       .map((r) =>
@@ -330,106 +312,19 @@ export default function AdminPage() {
   ];
 
   return (
-    <main className="min-h-screen text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-950">
-      <div className="bg-grey-50 dark:bg-grey-950/50 border-b border-grey-200 dark:border-grey-900 px-6 py-2 text-xs text-grey-900 dark:text-grey-300 flex items-center justify-between gap-4 print:hidden">
-        <span>
-          <strong>Legacy backend</strong> · Google Sheets · for data migration
-          only.
-        </span>
-        <a
-          href="/admin"
-          className="underline hover:text-grey-950 dark:hover:text-grey-200 whitespace-nowrap"
-        >
-          Go to new backend{" "}
-          <ArrowRightIcon className="inline-block w-3 h-3 ml-1" />
-        </a>
+    <div className="space-y-6">
+      <div className="print:hidden">
+        <h1 className="text-xl font-semibold tracking-tight">Time logs</h1>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          Review, approve and flag everyone&apos;s entries.
+        </p>
       </div>
-      <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 print:hidden">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="font-semibold tracking-tight">Devaicon · Admin</div>
-          <div className="flex items-center gap-4 text-sm">
-            <ThemeToggle />
-            <span className="text-neutral-600 dark:text-neutral-400">
-              {me?.username}
-            </span>
-            <a
-              href="/legacy/dashboard"
-              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
-            >
-              My dashboard
-            </a>
-            <button
-              onClick={logout}
-              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
-            >
-              Sign out
-            </button>
-          </div>
+
+      {loadError && (
+        <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 rounded-md px-3 py-2 print:hidden">
+          {loadError}
         </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        {/* Projects */}
-        <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 print:hidden">
-          <h2 className="font-semibold mb-4">Projects</h2>
-          <form onSubmit={addProject} className="flex gap-2 mb-4">
-            <input
-              value={newProject}
-              onChange={(e) => setNewProject(e.target.value)}
-              placeholder="New project name"
-              className="flex-1 rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm"
-            />
-            <button
-              type="submit"
-              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600"
-            >
-              Add
-            </button>
-          </form>
-          {pMsg && (
-            <p className="text-sm text-red-600 dark:text-red-400 mb-3">
-              {pMsg}
-            </p>
-          )}
-
-          {loading ? (
-            <div className="space-y-2 animate-pulse mt-4">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={`pskel-${i}`}
-                  className="h-12 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-md"
-                ></div>
-              ))}
-            </div>
-          ) : projects.length === 0 ? (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-4">
-              No projects yet.
-            </p>
-          ) : (
-            <ul className="divide-y divide-neutral-100 dark:divide-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-md mt-4">
-              {projects.map((p) => (
-                <li
-                  key={p.id}
-                  className="flex items-center justify-between px-4 py-2 text-sm"
-                >
-                  <div>
-                    <div className="font-medium">{p.name}</div>
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                      Added {new Date(p.addedAt).toLocaleDateString()} by{" "}
-                      {p.addedBy}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => deleteProject(p.id)}
-                    className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+      )}
 
         {/* Filters */}
         <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 print:hidden">
@@ -489,6 +384,7 @@ export default function AdminPage() {
               <option value="all">All status</option>
               <option value="pending">Pending only</option>
               <option value="approved">Approved only</option>
+              <option value="flagged">Flagged only</option>
             </select>
             <input
               type="date"
@@ -517,24 +413,28 @@ export default function AdminPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 text-sm">
-            <button
-              onClick={() => window.print()}
-              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-3 py-1.5 text-white hover:bg-neutral-800 dark:hover:bg-neutral-600"
-            >
-              Print / Save PDF
-            </button>
-            <button
-              onClick={downloadFilteredCsv}
-              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-            >
-              Download filtered CSV
-            </button>
-            <a
-              href="/api/legacy/admin/export"
-              className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-            >
-              Download full .xlsx
-            </a>
+            {canExport && (
+              <>
+                <button
+                  onClick={() => window.print()}
+                  className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-3 py-1.5 text-white hover:bg-neutral-800 dark:hover:bg-neutral-600"
+                >
+                  Print / Save PDF
+                </button>
+                <button
+                  onClick={downloadFilteredCsv}
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                >
+                  Download filtered CSV
+                </button>
+                <a
+                  href="/api/admin/export"
+                  className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                >
+                  Download full CSV
+                </a>
+              </>
+            )}
             <span className="text-neutral-500 dark:text-neutral-400 ml-auto">
               {filtered.length} entries · {totals.total.toFixed(1)} hours worked
               {totals.offDays > 0 &&
@@ -588,6 +488,25 @@ export default function AdminPage() {
                       className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50"
                     >
                       Unapprove {selectedApprovedIds.length}
+                    </button>
+                  )}
+                  {selectedUnflaggedIds.length > 0 && (
+                    <button
+                      disabled={approvalBusy}
+                      onClick={() => setFlag(selectedUnflaggedIds, true)}
+                      className="inline-flex items-center gap-1 rounded-md border border-red-300 dark:border-red-900 text-red-700 dark:text-red-400 px-3 py-1.5 text-xs hover:bg-red-50 dark:hover:bg-red-950/50 disabled:opacity-50"
+                    >
+                      <Flag className="w-3 h-3" aria-hidden />
+                      Flag {selectedUnflaggedIds.length}
+                    </button>
+                  )}
+                  {selectedFlaggedIds.length > 0 && (
+                    <button
+                      disabled={approvalBusy}
+                      onClick={() => setFlag(selectedFlaggedIds, false)}
+                      className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-50"
+                    >
+                      Unflag {selectedFlaggedIds.length}
                     </button>
                   )}
                   <button
@@ -705,10 +624,7 @@ export default function AdminPage() {
                   filtered.map((l) => {
                     const isApproved = !!l.approvedAt;
                     return (
-                      <tr
-                        key={l.id}
-                        className="border-t border-neutral-100 dark:border-neutral-800"
-                      >
+                      <tr key={l.id} className="border-t border-neutral-100 dark:border-neutral-800">
                         <td className="px-3 py-2 print:hidden">
                           <input
                             type="checkbox"
@@ -750,15 +666,43 @@ export default function AdminPage() {
                               Pending
                             </button>
                           )}
+                          {l.flagged && (
+                            <button
+                              onClick={() => setFlag([l.id], false)}
+                              title={`Flagged by ${l.flaggedBy}${
+                                l.flagReason ? `: ${l.flagReason}` : ""
+                              } — click to unflag`}
+                              className="mt-1 inline-flex items-center gap-1 rounded-full bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900 px-2 py-0.5 text-xs font-medium hover:bg-red-100 dark:hover:bg-red-900/40 print:hover:bg-red-50"
+                            >
+                              <Flag className="w-3 h-3" aria-hidden />
+                              Flagged
+                            </button>
+                          )}
+                          {l.flagged && l.flagReason && (
+                            <div className="mt-1 text-xs text-red-700/80 dark:text-red-400/80 max-w-[14rem]">
+                              {l.flagReason}
+                            </div>
+                          )}
                         </td>
-                        <td className="px-4 py-2 text-right print:hidden">
-                          <button
-                            onClick={() => deleteLog(l.id)}
-                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-                            title="Delete entry"
-                          >
-                            Delete
-                          </button>
+                        <td className="px-4 py-2 text-right print:hidden whitespace-nowrap">
+                          {!l.flagged && (
+                            <button
+                              onClick={() => setFlag([l.id], true)}
+                              className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-red-700 dark:hover:text-red-400"
+                              title="Flag this entry for a closer look"
+                            >
+                              Flag
+                            </button>
+                          )}
+                          {canDelete && (
+                            <button
+                              onClick={() => deleteLog(l.id)}
+                              className="ml-3 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                              title="Delete entry"
+                            >
+                              Delete
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );
@@ -807,8 +751,7 @@ export default function AdminPage() {
             />
           </section>
         )}
-      </div>
-    </main>
+    </div>
   );
 }
 
@@ -827,9 +770,7 @@ function SummaryCard({
   const total = sorted.reduce((s, [, v]) => s + v, 0);
   return (
     <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
-      <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
-        {title}
-      </h3>
+      <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">{title}</h3>
       <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3 print:hidden">
         Click a row to filter the table.
       </p>
@@ -841,18 +782,12 @@ function SummaryCard({
               <button
                 onClick={() => onClick?.(k)}
                 className={`w-full text-left rounded-md px-2 py-1 -mx-2 transition ${
-                  isActive
-                    ? "bg-neutral-900/5 dark:bg-neutral-100/10"
-                    : "hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                  isActive ? "bg-neutral-900/5 dark:bg-neutral-100/10" : "hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 }`}
               >
                 <div className="flex justify-between text-sm">
                   <span
-                    className={
-                      isActive
-                        ? "font-semibold"
-                        : "text-neutral-700 dark:text-neutral-300"
-                    }
+                    className={isActive ? "font-semibold" : "text-neutral-700 dark:text-neutral-300"}
                   >
                     {k}
                   </span>
@@ -863,9 +798,7 @@ function SummaryCard({
                 <div className="mt-1 h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded">
                   <div
                     className={`h-1.5 rounded ${
-                      isActive
-                        ? "bg-neutral-900 dark:bg-neutral-700"
-                        : "bg-neutral-700 dark:bg-neutral-600"
+                      isActive ? "bg-neutral-900 dark:bg-neutral-700" : "bg-neutral-700 dark:bg-neutral-600"
                     }`}
                     style={{ width: total ? `${(v / total) * 100}%` : "0%" }}
                   />

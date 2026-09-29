@@ -1,5 +1,6 @@
-// Every difference between the new and legacy time-logger clients lives here.
-// Adding a feature to TimeLoggerDashboard ships it to both automatically.
+// Where the time logger talks to and keeps its state. It once also described
+// the Google Sheets client, which is why these are options at all; that client
+// is gone, and NEW_CONFIG is the only one left.
 export type LoggerConfig = {
   /** API prefix: "/api" (Express backend) or "/api/legacy" (Google Sheets). */
   apiBase: string;
@@ -30,13 +31,4 @@ export const NEW_CONFIG: LoggerConfig = {
   bulkDelete: "post-body",
   storageScope: "new",
   preferenceSync: "server",
-};
-
-export const LEGACY_CONFIG: LoggerConfig = {
-  apiBase: "/api/legacy",
-  loginPath: "/legacy/login",
-  adminPath: "/legacy/admin",
-  bulkDelete: "delete-query",
-  storageScope: "legacy",
-  preferenceSync: "local",
 };

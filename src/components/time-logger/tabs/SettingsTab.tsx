@@ -34,6 +34,9 @@ import {
 import Dropdown, { type DropdownOption } from "../settings/Dropdown";
 import SettingRow from "../settings/SettingRow";
 import Toggle from "../settings/Toggle";
+import Group from "../settings/Group";
+import ProfileSettings from "../settings/ProfileSettings";
+import type { Me } from "@/lib/types";
 
 /**
  * Everything that used to be a pair of unlabelled icon groups in the header.
@@ -83,33 +86,6 @@ const FORMAT_OPTIONS: DropdownOption<TimeFormat>[] = [
   },
 ];
 
-function Group({
-  title,
-  description,
-  footnote,
-  children,
-}: {
-  title: string;
-  description: string;
-  footnote?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
-      <h2 className="text-sm font-semibold">{title}</h2>
-      <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-        {description}
-      </p>
-      <div className="mt-4">{children}</div>
-      {footnote && (
-        <p className="mt-4 border-t border-neutral-100 dark:border-neutral-800 pt-3 text-[11px] text-neutral-400 dark:text-neutral-500">
-          {footnote}
-        </p>
-      )}
-    </section>
-  );
-}
-
 /** The sound switches, each with the cue it previews when switched on. */
 const SOUND_ROWS: {
   key: keyof LoggerSettings;
@@ -140,7 +116,14 @@ const SOUND_ROWS: {
 const OUTLINE_BUTTON =
   "flex cursor-pointer items-center gap-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100";
 
-export default function SettingsTab({ config }: { config: LoggerConfig }) {
+export default function SettingsTab({
+  config,
+  onMeChange,
+}: {
+  config: LoggerConfig;
+  /** Called with the account after the profile is edited, so the header can follow. */
+  onMeChange: (me: Me) => void;
+}) {
   const { theme, setTheme } = useTheme();
   const { format, setFormat } = useTimeFormat();
   const { settings, setSetting, replaceAll, reset } = useLoggerSettings();
@@ -224,11 +207,13 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
       animate="animate"
       className="max-w-2xl space-y-4"
     >
+      <ProfileSettings apiBase={config.apiBase} onMeChange={onMeChange} />
+
       <motion.div variants={staggerItem(!!reduced)}>
         <Group
           title="Appearance"
           description="How the tracker looks, and how hours are written."
-          footnote="Saved in this browser, and shared with the legacy tracker."
+          footnote="Saved in this browser."
         >
           <SettingRow
             title="Theme"

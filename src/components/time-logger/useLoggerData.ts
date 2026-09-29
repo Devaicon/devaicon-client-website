@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { Project, TimeLog } from "@/lib/types";
+import type { Me, Project, TimeLog } from "@/lib/types";
 import type { LoggerConfig } from "./config";
 
 export type NewLogInput = {
@@ -23,12 +23,14 @@ export type NewLogInput = {
 export type MutationResult = { ok: boolean; message?: string };
 
 export type LoggerData = {
-  me: { username: string; role: string } | null;
+  me: Me | null;
   projects: Project[];
   logs: TimeLog[];
   loading: boolean;
   loadError: string | null;
   reload: () => Promise<void>;
+  /** Replace the signed-in user, e.g. after they edit their profile. */
+  updateMe: (me: Me) => void;
   createLog: (input: NewLogInput) => Promise<MutationResult>;
   deleteLog: (id: string) => Promise<MutationResult>;
   bulkDeleteLogs: (ids: string[]) => Promise<MutationResult>;
@@ -43,7 +45,7 @@ async function messageFrom(res: Response, fallback: string): Promise<string> {
 
 export function useLoggerData(config: LoggerConfig): LoggerData {
   const router = useRouter();
-  const [me, setMe] = useState<{ username: string; role: string } | null>(null);
+  const [me, setMe] = useState<Me | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [logs, setLogs] = useState<TimeLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -162,6 +164,7 @@ export function useLoggerData(config: LoggerConfig): LoggerData {
     loading,
     loadError,
     reload,
+    updateMe: setMe,
     createLog,
     deleteLog,
     bulkDeleteLogs,
