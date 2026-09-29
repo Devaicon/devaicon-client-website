@@ -29,6 +29,11 @@ const BFSIIndustryPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Industries", path: "/industries" },
+          { name: "Banking & Financial Services", path: "/industries/bfsi" },
+        ]}
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}

@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense } from "react";
 import ThemeToggle from "@/components/theme/ThemeToggle";
-import { canUseAdmin } from "@/lib/types";
 
 function LoginForm() {
   const router = useRouter();
@@ -58,8 +57,6 @@ function LoginForm() {
       const next = params.get("next");
       if (next && next.startsWith("/")) {
         router.push(next);
-      } else if (canUseAdmin(data.user)) {
-        router.push("/admin");
       } else {
         router.push("/dashboard");
       }

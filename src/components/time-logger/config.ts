@@ -5,7 +5,8 @@ export type LoggerConfig = {
   /** API prefix: "/api" (Express backend) or "/api/legacy" (Google Sheets). */
   apiBase: string;
   loginPath: string;
-  adminPath: string;
+  /** The personal dashboard this app lives in. */
+  dashboardPath: string;
   /**
    * The one genuine API divergence: the new backend takes
    * `POST /logs/bulk-delete` with an {ids} body, legacy takes
@@ -27,7 +28,7 @@ export type LoggerConfig = {
 export const NEW_CONFIG: LoggerConfig = {
   apiBase: "/api",
   loginPath: "/login",
-  adminPath: "/admin",
+  dashboardPath: "/dashboard",
   bulkDelete: "post-body",
   storageScope: "new",
   preferenceSync: "server",

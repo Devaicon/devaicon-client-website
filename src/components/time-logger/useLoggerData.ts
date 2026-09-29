@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { startProgress } from "@/lib/progress";
 import { useRouter } from "next/navigation";
 import type { Me, Project, TimeLog } from "@/lib/types";
 import type { LoggerConfig } from "./config";
@@ -29,8 +30,6 @@ export type LoggerData = {
   loading: boolean;
   loadError: string | null;
   reload: () => Promise<void>;
-  /** Replace the signed-in user, e.g. after they edit their profile. */
-  updateMe: (me: Me) => void;
   createLog: (input: NewLogInput) => Promise<MutationResult>;
   deleteLog: (id: string) => Promise<MutationResult>;
   bulkDeleteLogs: (ids: string[]) => Promise<MutationResult>;
@@ -56,6 +55,7 @@ export function useLoggerData(config: LoggerConfig): LoggerData {
   const reload = useCallback(async () => {
     setLoading(true);
     setLoadError(null);
+    const done = startProgress();
     try {
       const [meRes, pRes, lRes] = await Promise.all([
         fetch(`${apiBase}/auth/me`),
@@ -74,6 +74,7 @@ export function useLoggerData(config: LoggerConfig): LoggerData {
       setLoadError("Could not reach the server. Check your connection.");
     } finally {
       setLoading(false);
+      done();
     }
   }, [apiBase, loginPath, router]);
 
@@ -164,7 +165,6 @@ export function useLoggerData(config: LoggerConfig): LoggerData {
     loading,
     loadError,
     reload,
-    updateMe: setMe,
     createLog,
     deleteLog,
     bulkDeleteLogs,

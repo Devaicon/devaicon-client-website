@@ -16,6 +16,10 @@ export default function AboutDevaiconPage() {
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "About Devaicon", path: "/about-devaicon" },
+        ]}
         title="About Devaicon"
         subtitle="Empowering enterprises to lead with clarity, intelligence, and confidence through AI, data, and digital transformation."
         icon={<Info className="w-7 h-7 text-white" />}

@@ -47,6 +47,10 @@ export type Permission =
   | 'timelogs.delete_any'
   | 'timelogs.export'
   | 'projects.manage'
+  | 'posts.write'
+  | 'posts.publish'
+  | 'posts.delete'
+  | 'blog.library'
   | 'users.manage'
   | 'roles.manage';
 
@@ -73,18 +77,6 @@ export function nameOf(user: { username: string; displayName?: string } | null):
 
 export function can(me: Me | null, permission: Permission): boolean {
   return Boolean(me?.permissions.includes(permission));
-}
-
-/** Permissions that open some part of the admin panel. */
-export const ADMIN_PANEL_PERMISSIONS: Permission[] = [
-  'timelogs.review',
-  'projects.manage',
-  'users.manage',
-  'roles.manage',
-];
-
-export function canUseAdmin(me: Me | null): boolean {
-  return ADMIN_PANEL_PERMISSIONS.some((p) => can(me, p));
 }
 
 export type TimeLog = {

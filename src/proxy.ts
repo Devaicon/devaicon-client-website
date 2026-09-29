@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readSessionFromToken, SESSION_COOKIE_NAME } from "./lib/session";
 
-// Signed in or not is all this decides. Which admin sections someone may open
-// depends on their role's permissions, which only Express knows; the admin
-// pages ask it, and Express refuses anything the role doesn't allow.
+// Signed in or not is all this decides. Which dashboard sections someone may
+// open depends on their permissions, which only Express knows; the dashboard
+// asks it, and Express refuses anything they aren't allowed.
 
 // All matcher paths in `config.matcher` below run through this function.
 export default async function proxy(req: NextRequest) {
@@ -37,7 +37,6 @@ export const config = {
   matcher: [
     "/login",
     "/dashboard/:path*",
-    "/admin/:path*",
     // Express-backed routes (rewritten to the Express server). Login is left
     // out on purpose: it must be reachable while signed out.
     "/api/logs/:path*",
@@ -47,6 +46,10 @@ export const config = {
     "/api/users/:path*",
     "/api/roles/:path*",
     "/api/profile/:path*",
+    "/api/posts/:path*",
+    "/api/authors/:path*",
+    "/api/ctas/:path*",
+    "/api/categories/:path*",
     "/api/auth/me",
     "/api/auth/logout",
   ],

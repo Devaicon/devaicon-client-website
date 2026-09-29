@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { fadeRise, slideDown } from "./motion";
 import type { LoggerConfig } from "./config";
-import { canUseAdmin, nameOf } from "@/lib/types";
+import { can, nameOf } from "@/lib/types";
+import { ArrowLeftIcon } from "lucide-react";
 import { SettingsProvider, useLoggerSettings } from "./SettingsProvider";
 import { useLoggerData, type LoggerData } from "./useLoggerData";
 import { useSound } from "./sounds";
@@ -23,7 +24,7 @@ const TABS = [
   { key: "overview", label: "Overview" },
   { key: "log", label: "Log time" },
   { key: "entries", label: "Entries" },
-  { key: "settings", label: "Settings" },
+  { key: "settings", label: "App Settings" },
 ] as const;
 
 export type TabKey = (typeof TABS)[number]["key"];
@@ -150,16 +151,48 @@ function DashboardInner({
     }
   }
 
+  // Reachable by URL even without the permission; say so rather than render
+  // a tracker whose every request would be refused.
+  if (data.me && !can(data.me, "timelogs.log")) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4 text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-950">
+        <div className="max-w-sm text-center rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-8">
+          <h1 className="font-semibold">The Time Logger isn&apos;t part of your access</h1>
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+            Ask an admin if you need to log time.
+          </p>
+          <a
+            href={config.dashboardPath}
+            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600"
+          >
+            <ArrowLeftIcon className="h-4 w-4" aria-hidden />
+            Back to your dashboard
+          </a>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-950">
       {banner}
       <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="font-semibold tracking-tight">
-            Devaicon · Time Tracker
+          <div className="flex items-center gap-3 min-w-0">
+            <a
+              href={config.dashboardPath}
+              className="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 px-2 py-1.5 -ml-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              <ArrowLeftIcon className="h-4 w-4" aria-hidden />
+              Dashboard
+            </a>
+            <span className="text-neutral-300 dark:text-neutral-700" aria-hidden>
+              /
+            </span>
+            <span className="font-semibold tracking-tight truncate">Time Logger</span>
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-neutral-600 dark:text-neutral-400">
+            <span className="hidden sm:inline text-neutral-600 dark:text-neutral-400">
               {nameOf(data.me)}{" "}
               {data.me && (
                 <span className="text-neutral-400 dark:text-neutral-500">
@@ -167,14 +200,6 @@ function DashboardInner({
                 </span>
               )}
             </span>
-            {canUseAdmin(data.me) && (
-              <a
-                href={config.adminPath}
-                className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              >
-                Admin
-              </a>
-            )}
             <button
               onClick={data.logout}
               className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors shadow-sm ml-2"
@@ -263,7 +288,7 @@ function DashboardInner({
               )}
               {active === "entries" && <EntriesTab data={data} />}
               {active === "settings" && (
-                <SettingsTab config={config} onMeChange={data.updateMe} />
+                <SettingsTab config={config} />
               )}
             </motion.div>
           </AnimatePresence>

@@ -29,6 +29,11 @@ const HospitalityIndustryPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Industries", path: "/industries" },
+          { name: "Tourism & Hospitality", path: "/industries/hospitality" },
+        ]}
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}

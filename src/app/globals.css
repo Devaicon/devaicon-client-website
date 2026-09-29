@@ -786,3 +786,148 @@ button:disabled,
     transition: opacity 250ms ease;
   }
 }
+
+/* ---- Blog post editor (dashboard) ----------------------------------------
+   Styles for the editable document only. Published posts are drawn by
+   components/blog/RichText.tsx with their own classes; these roughly mirror
+   them so writing feels close to the result, in both themes. */
+.post-editor {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-neutral-800);
+}
+.dark .post-editor { color: var(--color-neutral-200); }
+.post-editor > * + *,
+.post-editor .post-editor-callout > * + * { margin-top: 0.85em; }
+.post-editor h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.3; margin-top: 1.6em; }
+.post-editor h3 { font-size: 1.25rem; font-weight: 700; line-height: 1.35; margin-top: 1.3em; }
+.post-editor h4 { font-size: 1.075rem; font-weight: 600; margin-top: 1.1em; }
+.post-editor ul { list-style: disc; padding-left: 1.5rem; }
+.post-editor ol { list-style: decimal; padding-left: 1.5rem; }
+.post-editor li > p { margin: 0; }
+.post-editor a { color: #37469e; text-decoration: underline; text-underline-offset: 2px; }
+.dark .post-editor a { color: #a5b4fc; }
+.post-editor blockquote {
+  border-left: 4px solid #4555a7;
+  padding: 0.5rem 1rem;
+  font-style: italic;
+  background: var(--color-neutral-50);
+}
+.dark .post-editor blockquote { background: var(--color-neutral-800); }
+.post-editor code { background: var(--color-neutral-100); border-radius: 0.25rem; padding: 0.1em 0.35em; font-size: 0.9em; }
+.dark .post-editor code { background: var(--color-neutral-800); }
+.post-editor pre { background: var(--color-neutral-900); color: var(--color-neutral-100); border-radius: 0.5rem; padding: 0.75rem 1rem; overflow-x: auto; }
+.post-editor pre code { background: none; padding: 0; }
+.post-editor hr { border-color: var(--color-neutral-200); margin: 1.5rem 0; }
+.post-editor img { max-width: 100%; border-radius: 0.5rem; }
+.post-editor img.ProseMirror-selectednode { outline: 3px solid #8b5cf6; }
+.post-editor .post-editor-callout {
+  border: 1px solid var(--color-neutral-300);
+  background: var(--color-neutral-100);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+}
+.dark .post-editor .post-editor-callout { background: var(--color-neutral-800); border-color: var(--color-neutral-700); }
+.post-editor .post-editor-callout > :first-child { margin-top: 0; }
+.post-editor table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+.post-editor th, .post-editor td { border: 1px solid var(--color-neutral-300); padding: 0.4rem 0.6rem; vertical-align: top; }
+.dark .post-editor th, .dark .post-editor td { border-color: var(--color-neutral-700); }
+.post-editor th { background: var(--color-neutral-50); font-weight: 600; text-align: left; }
+.dark .post-editor th { background: var(--color-neutral-800); }
+.post-editor .selectedCell { background: rgb(139 92 246 / 0.12); }
+.post-editor p.is-empty::before,
+.post-editor h2.is-empty::before,
+.post-editor h3.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--color-neutral-400);
+}
+
+/* ------------------------------------------------------------------------
+   Dashboard motion. Short entrance animations, all under a quarter second.
+
+   Fill mode is `backwards`, never `both`/`forwards`: an animation that keeps
+   filling a transform turns its element into the containing block for
+   position:fixed children, which would pin the dashboard's dialogs to the
+   page instead of the window once the entrance had finished.
+   ------------------------------------------------------------------------ */
+@keyframes dash-fade {
+  from { opacity: 0; }
+}
+@keyframes dash-rise {
+  from { opacity: 0; transform: translateY(6px); }
+}
+@keyframes dash-drop {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+@keyframes dash-pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+}
+
+.anim-fade { animation: dash-fade 0.15s ease-out backwards; }
+.anim-rise { animation: dash-rise 0.22s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.anim-drop { animation: dash-drop 0.16s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.anim-pop { animation: dash-pop 0.18s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+
+/* Children arrive one after another, 30ms apart, capped so long lists
+   don't keep the last item waiting. */
+.anim-stagger > * { animation: dash-rise 0.22s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.anim-stagger > :nth-child(2) { animation-delay: 30ms; }
+.anim-stagger > :nth-child(3) { animation-delay: 60ms; }
+.anim-stagger > :nth-child(4) { animation-delay: 90ms; }
+.anim-stagger > :nth-child(5) { animation-delay: 120ms; }
+.anim-stagger > :nth-child(6) { animation-delay: 150ms; }
+.anim-stagger > :nth-child(n + 7) { animation-delay: 180ms; }
+
+/* A <details> body slides in each time it opens. */
+.anim-details[open] > :not(summary) {
+  animation: dash-drop 0.16s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* Hover lift for clickable cards. */
+.lift {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out;
+}
+.lift:hover { transform: translateY(-2px); box-shadow: 0 6px 18px -8px rgb(0 0 0 / 0.18); }
+.lift:active { transform: translateY(0); }
+
+/* Reduced motion keeps the fades and drops all movement. */
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise, .anim-drop, .anim-pop, .anim-stagger > *,
+  .anim-details[open] > :not(summary) { animation-name: dash-fade; }
+  .lift:hover { transform: none; }
+}
+
+/* The page-load bar across the top of every page. */
+.page-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  height: 2px;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #7c3aed);
+  background-size: 200% 100%;
+  box-shadow: 0 0 8px rgb(139 92 246 / 0.6);
+  animation: page-progress-shimmer 1.2s linear infinite;
+  transition: width 0.2s ease-out, opacity 0.2s ease-out;
+}
+@keyframes page-progress-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-progress { animation: none; }
+}
+
+/* The dashboard always keeps room for the window's scrollbar. Without it,
+   moving between a short page and a long one (Settings) makes the scrollbar
+   come and go, the centred layout shifts sideways by its width, and the
+   sidebar's gliding highlight animates that shift too. */
+html:has(.dashboard-shell) {
+  scrollbar-gutter: stable;
+}
