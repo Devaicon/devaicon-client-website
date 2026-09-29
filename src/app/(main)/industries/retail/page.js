@@ -29,6 +29,11 @@ const RetailIndustryPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Industries", path: "/industries" },
+          { name: "Retail", path: "/industries/retail" },
+        ]}
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         showButton={false}

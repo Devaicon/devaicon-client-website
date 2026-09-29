@@ -1,14 +1,15 @@
 import { SITE_URL } from "@/lib/seo";
 import { getAllJobSlugs } from "@/lib/jobs-data";
-import { insightsContent } from "@/lib/insights-content";
+import { getPublicPosts } from "@/lib/blog/api";
 
 /**
  * Public, indexable pages only. The industry sub-pages are left out on
  * purpose: they render the /industries hub and canonicalise to it, and a
  * sitemap should list canonical URLs alone.
  *
- * No lastModified: the content files carry no dates, and a build timestamp
- * would tell search engines every page changed on every deploy.
+ * Static pages carry no lastModified: their content files have no dates, and
+ * a build timestamp would claim every page changed on every deploy. Insight
+ * posts do have real dates, so theirs is sent.
  */
 const STATIC_ROUTES = [
   { path: "/", priority: 1.0, changeFrequency: "weekly" },
@@ -49,12 +50,21 @@ const STATIC_ROUTES = [
   { path: "/cookies", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-export default function sitemap() {
-  const insights = Object.keys(insightsContent).map((slug) => ({
-    path: `/insights/${slug}`,
-    priority: 0.7,
-    changeFrequency: "monthly",
-  }));
+// Rebuilt when a post is published or changed; see /api/revalidate.
+export const revalidate = 300;
+
+export default async function sitemap() {
+  // A content API outage leaves the posts out of this one build rather than
+  // failing the sitemap for every other page.
+  const posts = await getPublicPosts({ limit: 200 }).catch(() => []);
+  const insights = posts
+    .filter((p) => !p.noindex)
+    .map((p) => ({
+      path: `/insights/${p.slug}`,
+      priority: 0.7,
+      changeFrequency: "monthly",
+      lastModified: p.updatedAt || p.publishedAt || undefined,
+    }));
 
   const jobs = getAllJobSlugs().map((slug) => ({
     path: `/careers/${slug}`,
@@ -63,10 +73,11 @@ export default function sitemap() {
   }));
 
   return [...STATIC_ROUTES, ...insights, ...jobs].map(
-    ({ path, priority, changeFrequency }) => ({
+    ({ path, priority, changeFrequency, lastModified }) => ({
       url: new URL(path, SITE_URL).toString(),
       changeFrequency,
       priority,
+      ...(lastModified ? { lastModified } : {}),
     })
   );
 }

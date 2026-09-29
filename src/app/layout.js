@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import JsonLd from "@/components/seo/JsonLd";
+import PageProgress from "@/components/PageProgress";
 import {
   organizationSchema,
   webSiteSchema,
@@ -118,6 +119,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://maps.gstatic.com" />
       </head>
       <body className={`${inter.variable} antialiased`}>
+        <PageProgress />
         <JsonLd schema={[organizationSchema(), webSiteSchema()]} />
         {children}
       </body>

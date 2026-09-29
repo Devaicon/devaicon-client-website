@@ -2,96 +2,52 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-const FEATURED_BLOG_POSTS = [
-  {
-    image: "/upcoming-blog.webp",
-    category: "Cloud",
-    title: "Building Scalable Cloud Foundations for Growth",
-    description:
-      "Discover best practices for designing secure, scalable cloud architectures that support enterprise workloads.",
-    slug: "powering-enterprise-transformation-ai",
-    comingSoon: true,
-  },
-  {
-    image: "/upcoming-blog.webp",
-    category: "Cloud",
-    title: "Building Scalable Cloud Foundations for Growth",
-    description:
-      "Discover best practices for designing secure, scalable cloud architectures that support enterprise workloads.",
-    slug: "powering-enterprise-transformation-ai",
-    comingSoon: true,
-  },
-  {
-    image: "/upcoming-blog.webp",
-    category: "Cloud",
-    title: "Building Scalable Cloud Foundations for Growth",
-    description:
-      "Discover best practices for designing secure, scalable cloud architectures that support enterprise workloads.",
-    slug: "powering-enterprise-transformation-ai",
-    comingSoon: true,
-  },
-];
-
 const FeaturedBlogCard = ({ post }) => {
   return (
     <div className=" flex flex-col sm:flex-row items-stretch pb-3">
-      {/* Image Section */}
       <div className="relative w-full sm:w-[45%] h-64 sm:h-auto min-h-[280px] shrink-0 overflow-hidden">
-        <Image
-          src={post.image}
-          alt={post.title}
-          fill
-          className="object-cover hover:scale-105 transition-transform duration-500"
-          unoptimized
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={post.heroImage?.url || "/icon.webp"}
+          alt={post.heroImage?.alt || ""}
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover hover:scale-105 transition-transform duration-500"
         />
-        {post.comingSoon && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-            <span className="text-gray-700 text-xs sm:text-sm font-semibold px-6 py-2 bg-white/90 backdrop-blur-md rounded-full uppercase shadow-lg">
-              Coming Soon
-            </span>
-          </div>
-        )}
       </div>
 
-      {/* Content Section */}
       <div className="p-5 sm:p-6 flex flex-col justify-center flex-1">
         <div className="flex items-center gap-3 mb-3">
-          <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-md text-gray-700 text-xs font-semibold rounded shadow-sm">
-            {post.category}
-          </span>
-
-          <span className="text-xs text-gray-200">5 min read</span>
+          {post.category && (
+            <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-md text-gray-700 text-xs font-semibold rounded shadow-sm">
+              {post.category.name}
+            </span>
+          )}
+          <span className="text-xs text-gray-200">{post.readingMinutes} min read</span>
         </div>
 
         <h3 className="text-lg sm:text-xl font-semiBold  text-white mb-3 leading-snug">
           {post.title}
         </h3>
 
-        <p className="text-gray-200 text-sm mb-4 leading-relaxed">
-          {post.description}
+        <p className="text-gray-200 text-sm mb-4 leading-relaxed line-clamp-3">
+          {post.subtitle}
         </p>
 
-        {post.comingSoon ? (
-          <button
-            disabled
-            className="px-4 py-2 bg-white/90 backdrop-blur-md text-gray-600 rounded text-sm font-semibold cursor-not-allowed self-start inline-flex items-center gap-1 opacity-70 shadow-sm"
-          >
-            Read more <ArrowRight size={16} />
-          </button>
-        ) : (
-          <Link
-            href={`/insights/${post.slug}`}
-            className="px-4 py-2 rounded-[8px] font-semibold text-gray-700 bg-white/90 backdrop-blur-md hover:bg-white hover:shadow-lg transition-all duration-300 self-start inline-flex items-center gap-1"
-          >
-            Read more <ArrowRight size={16} />
-          </Link>
-        )}
+        <Link
+          href={`/insights/${post.slug}`}
+          className="px-4 py-2 rounded-[8px] font-semibold text-gray-700 bg-white/90 backdrop-blur-md hover:bg-white hover:shadow-lg transition-all duration-300 self-start inline-flex items-center gap-1"
+        >
+          Read more <ArrowRight size={16} />
+        </Link>
       </div>
     </div>
   );
 };
 
-const FeaturedInsights = () => {
+// Posts an editor has marked "Feature this post" (at most three). With none
+// marked, the section is left out rather than filled with placeholders.
+const FeaturedInsights = ({ posts = [] }) => {
+  if (posts.length === 0) return null;
   return (
     <section
       style={{ background: "#FEF9F3" }}
@@ -108,13 +64,6 @@ const FeaturedInsights = () => {
           <div className="w-full lg:w-[35%] flex flex-col justify-between">
             {/* Top Content */}
             <div>
-              <div className="flex items-center gap-3 mb-4 ">
-                <span className="text-white text-sm px-3 py-1 rounded bg-gradient-to-b from-[#3d234b] to-[#2a1834]">
-                  Trending: <span className="font-semibold ">Growth</span>
-                </span>
-                <span className="text-gray-300 text-sm">5 min read</span>
-              </div>
-
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-Bold text-white mb-5 leading-tight">
                 Featured blogs
               </h2>
@@ -152,8 +101,8 @@ const FeaturedInsights = () => {
 
           {/* Right Section - Blog Cards */}
           <div className="w-full lg:w-[65%] flex flex-col gap-6">
-            {FEATURED_BLOG_POSTS.map((post, index) => (
-              <FeaturedBlogCard key={index} post={post} />
+            {posts.map((post) => (
+              <FeaturedBlogCard key={post.id} post={post} />
             ))}
           </div>
         </div>

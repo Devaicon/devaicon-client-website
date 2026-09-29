@@ -1,10 +1,7 @@
 import CapabilitesContainer from "@/components/capabilities/CapabilitesContainer";
 import PageHero from "@/components/PageHero";
 import JsonLd from "@/components/seo/JsonLd";
-import {
-  breadcrumbSchema,
-  serviceSchema,
-} from "@/lib/seo/structured-data";
+import { serviceSchema } from "@/lib/seo/structured-data";
 import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { CAPABILITIES_CONFIG } from "@/lib/capabilities-data";
 import { Code } from "lucide-react";
@@ -35,11 +32,6 @@ const ApplicationSoftwareDevelopmentPage = () => {
             description: config.subtitle,
             path: "/capabilities/application-software-development",
           }),
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Capabilities", path: "/whatwedo" },
-            { name: config.title, path: "/capabilities/application-software-development" },
-          ]),
         ]}
       />
 
@@ -50,6 +42,11 @@ const ApplicationSoftwareDevelopmentPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Capabilities", path: "/whatwedo" },
+          { name: config.title, path: "/capabilities/application-software-development" },
+        ]}
         title="Devaicon Capabilities"
         subtitle="Enterprise platforms, AI, and integration services"
         icon={<Code className="w-7 h-7 text-white" />}

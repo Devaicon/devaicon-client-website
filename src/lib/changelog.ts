@@ -14,10 +14,61 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.3.0";
+export const APP_VERSION = "2.7.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.7.0",
+    date: "2026-09-29",
+    title: "A smoother dashboard that shows when a page is loading",
+    tag: "improvement",
+    items: [
+      "A thin bar runs across the top of the window while a page or its data is loading",
+      "Pages, dialogs, panels and messages now ease into place instead of appearing all at once",
+      "The highlight in the sidebar glides to the section you pick, and the phone menu slides in and out",
+      "If your device is set to reduce motion, everything fades instead of moving",
+    ],
+  },
+  {
+    version: "2.6.0",
+    date: "2026-09-29",
+    title: "One theme for the whole dashboard, and a clearer view of your access",
+    tag: "improvement",
+    items: [
+      "Light, dark or match-your-device is now chosen once in the dashboard's Settings, and every app in it follows your choice",
+      "The Time Logger's settings tab is now called App Settings and holds only the Time Logger's own options",
+      "Your access in Settings now shows every permission in areas you can open and close, with what you have, what you don't, and anything added or removed just for you",
+      "The dashboard's sidebar now stays in view while you scroll, and on phones it opens from a menu button instead of a sideways-scrolling strip",
+      "Pages across the website now show where you are, with a trail of links back to the sections above",
+    ],
+  },
+  {
+    version: "2.5.0",
+    date: "2026-09-29",
+    title: "Your own dashboard, with the Time Logger as an app inside it",
+    tag: "feature",
+    items: [
+      "Signing in now takes you to your dashboard, which shows only what your access includes",
+      "The Time Logger has its own page inside the dashboard: open it from the Time Logger card on Home, and use Dashboard at the top to come back",
+      "Your name, password and signed-in devices are now under Settings in the dashboard's sidebar",
+      "People who write for the site get a new Insights editor for drafting, scheduling and publishing articles, with search settings, FAQs, calls to action and a table of contents built in",
+      "Setting access is simpler: each person in Team has clear icon actions, and roles are edited one at a time with a switch for each whole area",
+    ],
+  },
+  {
+    version: "2.4.0",
+    date: "2026-09-29",
+    title: "One tracker, and a proper admin area to run it",
+    tag: "feature",
+    items: [
+      "You'll be asked to sign in again once after this update",
+      "The old Google Sheets version of the tracker has been retired, so everything now lives here",
+      "A new Profile section in Settings lets you set the name shown for you, change your password, sign out your other devices and see exactly what your access allows",
+      "Admins now have their own area for time logs, projects, the team and roles, where access is set per role with on/off switches and can be fine-tuned for any one person",
+      "Entries can now be flagged for a closer look, with a short note saying why",
+    ],
+  },
   {
     version: "2.3.0",
     date: "2026-09-24",

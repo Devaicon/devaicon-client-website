@@ -25,6 +25,10 @@ const SecurityPolicy = () => {
     <div className="bg-white">
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Security Policy", path: "/security" },
+        ]}
         title="Security Policy"
         icon={<Lock className="w-7 h-7 text-white" />}
         label="Legal Information"

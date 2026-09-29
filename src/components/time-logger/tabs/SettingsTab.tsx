@@ -1,20 +1,17 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ClockIcon,
   DownloadIcon,
   HourglassIcon,
-  MonitorIcon,
-  MoonIcon,
   MouseIcon,
+  PaletteIcon,
   RotateCcwIcon,
-  SunIcon,
   UploadIcon,
 } from "lucide-react";
-import { useTheme } from "@/components/theme/ThemeProvider";
-import type { Theme } from "@/components/theme/theme";
 import { staggerContainer, staggerItem } from "../motion";
 import { useLoggerSettings } from "../SettingsProvider";
 import { useTimeFormat } from "../TimeFormatProvider";
@@ -34,37 +31,18 @@ import {
 import Dropdown, { type DropdownOption } from "../settings/Dropdown";
 import SettingRow from "../settings/SettingRow";
 import Toggle from "../settings/Toggle";
+import Group from "../settings/Group";
 
 /**
- * Everything that used to be a pair of unlabelled icon groups in the header.
+ * The Time Logger's own settings: how it writes hours, and how it behaves.
  *
- * Those controls worked only if you already knew what they did; here each one
- * gets a name and a sentence, which is the point of moving them. Grouping is by
- * what the setting affects, not by where it is stored — theme and time format
- * follow the account holder across both clients, the behaviour and sound switches
- * are this browser only, and the footnote under each group says so.
+ * Each control gets a name and a sentence, because each one changes behaviour
+ * the user would otherwise discover by accident. Grouping is by what the
+ * setting affects, and the footnote under each group says where it is kept.
+ *
+ * The colour theme is not here: it belongs to the whole dashboard and is set
+ * once, in its Settings page, for every app.
  */
-
-const THEME_OPTIONS: DropdownOption<Theme>[] = [
-  {
-    value: "light",
-    label: "Light",
-    hint: "Always the light palette",
-    icon: <SunIcon className="h-4 w-4" />,
-  },
-  {
-    value: "dark",
-    label: "Dark",
-    hint: "Always the dark palette",
-    icon: <MoonIcon className="h-4 w-4" />,
-  },
-  {
-    value: "system",
-    label: "Match my device",
-    hint: "Follows your operating system",
-    icon: <MonitorIcon className="h-4 w-4" />,
-  },
-];
 
 // The hints are worked examples rather than definitions: "7h 30m" shows exactly
 // what the option does, which no amount of naming would.
@@ -82,33 +60,6 @@ const FORMAT_OPTIONS: DropdownOption<TimeFormat>[] = [
     icon: <HourglassIcon className="h-4 w-4" />,
   },
 ];
-
-function Group({
-  title,
-  description,
-  footnote,
-  children,
-}: {
-  title: string;
-  description: string;
-  footnote?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5">
-      <h2 className="text-sm font-semibold">{title}</h2>
-      <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-        {description}
-      </p>
-      <div className="mt-4">{children}</div>
-      {footnote && (
-        <p className="mt-4 border-t border-neutral-100 dark:border-neutral-800 pt-3 text-[11px] text-neutral-400 dark:text-neutral-500">
-          {footnote}
-        </p>
-      )}
-    </section>
-  );
-}
 
 /** The sound switches, each with the cue it previews when switched on. */
 const SOUND_ROWS: {
@@ -141,7 +92,6 @@ const OUTLINE_BUTTON =
   "flex cursor-pointer items-center gap-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100";
 
 export default function SettingsTab({ config }: { config: LoggerConfig }) {
-  const { theme, setTheme } = useTheme();
   const { format, setFormat } = useTimeFormat();
   const { settings, setSetting, replaceAll, reset } = useLoggerSettings();
   const prefs = useOverviewPrefs(config);
@@ -171,7 +121,7 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
         cards: prefs.prefs,
         sections: sections.layout,
         settings,
-        appearance: { theme, timeFormat: format },
+        appearance: { timeFormat: format },
       },
       config.storageScope,
       now,
@@ -209,10 +159,7 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
     if (setup.cards) prefs.replace(setup.cards);
     if (setup.sections) sections.replace(setup.sections);
     if (setup.settings) replaceAll(setup.settings);
-    if (setup.appearance) {
-      setTheme(setup.appearance.theme);
-      setFormat(setup.appearance.timeFormat);
-    }
+    if (setup.appearance) setFormat(setup.appearance.timeFormat);
     setStaged(null);
     setTransferNote({ tone: "ok", text: `Imported your ${listParts(parts)}.` });
   }
@@ -226,24 +173,10 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
     >
       <motion.div variants={staggerItem(!!reduced)}>
         <Group
-          title="Appearance"
-          description="How the tracker looks, and how hours are written."
-          footnote="Saved in this browser, and shared with the legacy tracker."
+          title="Display"
+          description="How hours are written across the Time Logger."
+          footnote="Saved in this browser."
         >
-          <SettingRow
-            title="Theme"
-            description="Light, dark, or whatever your device is set to."
-          >
-            {() => (
-              <Dropdown
-                label="Theme"
-                value={theme}
-                options={THEME_OPTIONS}
-                onChange={setTheme}
-              />
-            )}
-          </SettingRow>
-
           <SettingRow
             title="Time format"
             description="Whether half an hour reads as 0.5h or 30m, everywhere in the app."
@@ -348,7 +281,7 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
         <Group
           title="Back up and move"
           description="Save your whole dashboard set-up as a JSON file, or load one from another browser."
-          footnote="The file holds your cards, page layout, options, theme and time format. It never contains your entries."
+          footnote="The file holds your cards, page layout, options and time format. It never contains your entries."
         >
           <div className="flex flex-wrap items-center gap-2">
             <button type="button" onClick={onExport} className={OUTLINE_BUTTON}>
@@ -422,7 +355,21 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
         </div>
       </motion.div>
 
-      <motion.div variants={staggerItem(!!reduced)}>
+      <motion.div variants={staggerItem(!!reduced)} className="space-y-2">
+        <p className="flex items-start gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+          <PaletteIcon aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>
+            Looking for light or dark mode? The theme is set for the whole
+            dashboard in{" "}
+            <Link
+              href="/dashboard/settings"
+              className="font-medium text-neutral-700 underline underline-offset-2 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
+            >
+              Settings
+            </Link>
+            .
+          </span>
+        </p>
         <p className="flex items-start gap-2 text-xs text-neutral-500 dark:text-neutral-400">
           <MouseIcon aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>

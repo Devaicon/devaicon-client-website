@@ -47,6 +47,8 @@ function LoginForm() {
           setUsernameError("Username not found.");
         } else if (data?.error === "invalid_password") {
           setPasswordError("Incorrect password.");
+        } else if (data?.error === "account_disabled") {
+          setError(data.message ?? "This account has been deactivated.");
         } else {
           setError("Login failed. Try again.");
         }
@@ -55,8 +57,6 @@ function LoginForm() {
       const next = params.get("next");
       if (next && next.startsWith("/")) {
         router.push(next);
-      } else if (data.user.role === "admin") {
-        router.push("/admin");
       } else {
         router.push("/dashboard");
       }

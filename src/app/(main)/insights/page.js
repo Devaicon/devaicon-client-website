@@ -1,6 +1,7 @@
 import InsightHero from "@/components/insight-page/InsightHero";
 import BlogInsights from "@/components/insight-page/BlogInsights";
 import FeaturedInsights from "@/components/insight-page/FeaturedInsights";
+import { getPublicPosts } from "@/lib/blog/api";
 
 export const metadata = {
   title: "Insights & Resources",
@@ -11,12 +12,20 @@ export const metadata = {
   },
 };
 
-const page = () => {
+// Rebuilt when a post is published or changed; see /api/revalidate.
+export const revalidate = 300;
+
+const page = async () => {
+  const [posts, featured] = await Promise.all([
+    getPublicPosts({ limit: 200 }),
+    getPublicPosts({ featured: true, limit: 3 }),
+  ]);
+
   return (
     <main>
       <InsightHero />
-      <BlogInsights />
-      <FeaturedInsights />
+      <BlogInsights posts={posts} />
+      <FeaturedInsights posts={featured} />
     </main>
   );
 };

@@ -342,6 +342,10 @@ export default function EngagementModelsPage() {
   return (
     <main>
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Engagement Models", path: "/engagement-models" },
+        ]}
         title="Outsourcing, Dedicated Teams, or Augmentation – Choose What Brings You the Most Value at Lower Costs"
         subtitle="Choosing the right engagement model can reduce your costs, increase your confidence, and ensure timely project completion."
         icon={<Handshake className="w-7 h-7 text-white" />}

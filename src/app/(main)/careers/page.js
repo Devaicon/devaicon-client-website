@@ -31,6 +31,10 @@ export default function CareersPage() {
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Careers", path: "/careers" },
+        ]}
         title="Build Your Career with Devaicon"
         subtitle="Join a team of passionate innovators driving digital transformation across industries. Unlock your potential and shape the future of technology."
         icon={<Briefcase className="w-7 h-7 text-white" />}

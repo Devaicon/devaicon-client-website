@@ -30,6 +30,10 @@ const WhatWeDoPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "What We Do", path: "/whatwedo" },
+        ]}
         title="What We Do"
         subtitle="We guide your business through every step of technology growth to ensure you stay ahead of competitors."
         icon={<Briefcase className="w-7 h-7 text-white" />}

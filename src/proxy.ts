@@ -1,63 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readSessionFromToken, SESSION_COOKIE_NAME } from "./lib/session";
 
-const PUBLIC_PATHS = [
-  "/login",
-  "/legacy/login",
-  "/api/auth/login",
-  "/api/legacy/auth/login",
-];
+// Signed in or not is all this decides. Which dashboard sections someone may
+// open depends on their permissions, which only Express knows; the dashboard
+// asks it, and Express refuses anything they aren't allowed.
 
 // All matcher paths in `config.matcher` below run through this function.
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const isLegacy =
-    pathname === "/legacy/login" ||
-    pathname.startsWith("/legacy/dashboard") ||
-    pathname.startsWith("/legacy/admin") ||
-    pathname.startsWith("/api/legacy/");
-  const loginPath = isLegacy ? "/legacy/login" : "/login";
-  const dashboardPath = isLegacy ? "/legacy/dashboard" : "/dashboard";
 
   const token = req.cookies.get(SESSION_COOKIE_NAME)?.value;
-  const user = await readSessionFromToken(token);
+  const session = await readSessionFromToken(token);
 
-  if (pathname === "/login" || pathname === "/legacy/login") {
-    if (user) {
+  if (pathname === "/login") {
+    if (session) {
       // Authenticated users shouldn't access login page, redirect to dashboard
-      return NextResponse.redirect(new URL(dashboardPath, req.url));
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     return NextResponse.next();
   }
 
-  if (PUBLIC_PATHS.includes(pathname)) {
-    return NextResponse.next();
-  }
-
-  if (!user) {
+  if (!session) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
     const url = req.nextUrl.clone();
-    url.pathname = loginPath;
+    url.pathname = "/login";
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
 
-  // Admin-only paths
-  const adminOnly =
-    pathname.startsWith("/admin") ||
-    pathname.startsWith("/legacy/admin") ||
-    pathname.startsWith("/api/admin") ||
-    pathname.startsWith("/api/legacy/admin");
-  if (adminOnly && user.role !== "admin") {
-    if (pathname.startsWith("/api/")) {
-      return NextResponse.json({ error: "forbidden" }, { status: 403 });
-    }
-    return NextResponse.redirect(new URL(dashboardPath, req.url));
-  }
-
-  // Devs landing on /admin already handled above; admins on /dashboard is fine.
   return NextResponse.next();
 }
 
@@ -65,22 +37,20 @@ export const config = {
   matcher: [
     "/login",
     "/dashboard/:path*",
-    "/admin/:path*",
-    // New Express-backed routes (rewritten to the Express server)
+    // Express-backed routes (rewritten to the Express server). Login is left
+    // out on purpose: it must be reachable while signed out.
     "/api/logs/:path*",
     "/api/projects/:path*",
     "/api/admin/:path*",
+    "/api/preferences/:path*",
+    "/api/users/:path*",
+    "/api/roles/:path*",
+    "/api/profile/:path*",
+    "/api/posts/:path*",
+    "/api/authors/:path*",
+    "/api/ctas/:path*",
+    "/api/categories/:path*",
     "/api/auth/me",
     "/api/auth/logout",
-    // Legacy Sheets-backed UI pages
-    "/legacy/login",
-    "/legacy/dashboard/:path*",
-    "/legacy/admin/:path*",
-    // Legacy Google-Sheets-backed API routes
-    "/api/legacy/logs/:path*",
-    "/api/legacy/projects/:path*",
-    "/api/legacy/admin/:path*",
-    "/api/legacy/auth/me",
-    "/api/legacy/auth/logout",
   ],
 };

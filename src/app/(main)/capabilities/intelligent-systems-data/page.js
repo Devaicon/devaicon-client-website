@@ -1,10 +1,7 @@
 import CapabilitesContainer from "@/components/capabilities/CapabilitesContainer";
 import PageHero from "@/components/PageHero";
 import JsonLd from "@/components/seo/JsonLd";
-import {
-  breadcrumbSchema,
-  serviceSchema,
-} from "@/lib/seo/structured-data";
+import { serviceSchema } from "@/lib/seo/structured-data";
 import ScrollToHash from "@/components/capabilities/ScrollToHash";
 import { CAPABILITIES_CONFIG } from "@/lib/capabilities-data";
 import { Sparkles } from "lucide-react";
@@ -35,11 +32,6 @@ const IntelligentSystemsDataPage = () => {
             description: config.subtitle,
             path: "/capabilities/intelligent-systems-data",
           }),
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Capabilities", path: "/whatwedo" },
-            { name: config.title, path: "/capabilities/intelligent-systems-data" },
-          ]),
         ]}
       />
 
@@ -50,6 +42,11 @@ const IntelligentSystemsDataPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Capabilities", path: "/whatwedo" },
+          { name: config.title, path: "/capabilities/intelligent-systems-data" },
+        ]}
         title="Devaicon Capabilities"
         subtitle="Enterprise platforms, AI, and integration services"
         icon={<Sparkles className="w-7 h-7 text-white" />}
