@@ -2,6 +2,7 @@
 
 import { createContext, useContext } from "react";
 import { Node, mergeAttributes } from "@tiptap/core";
+import type { DOMOutputSpec } from "@tiptap/pm/model";
 import {
   NodeViewWrapper,
   ReactNodeViewRenderer,
@@ -12,6 +13,7 @@ import Image from "@tiptap/extension-image";
 import { TableKit } from "@tiptap/extension-table";
 import { Placeholder } from "@tiptap/extensions";
 import { Megaphone, X } from "lucide-react";
+import { imageSize } from "@/lib/blog/images";
 import type { Cta } from "@/lib/blog/types";
 
 // Everything the editor can produce. The site's renderer (components/blog/
@@ -111,6 +113,55 @@ export const CtaBlock = Node.create({
   },
 });
 
+/**
+ * A body image, drawn as a figure: the picture, and its title as the caption
+ * underneath. `size` is how wide it shows in the column.
+ *
+ * Besides a bare <img>, a <figure> holding an <img> and a <figcaption> reads
+ * as one image, which is how exported and imported post files write them.
+ */
+export const BodyImage = Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      size: {
+        default: 100,
+        parseHTML: (el: HTMLElement) => {
+          const v = el.getAttribute("data-size") ?? el.querySelector("img")?.getAttribute("data-size");
+          return v == null ? null : imageSize(v);
+        },
+      },
+    };
+  },
+  parseHTML() {
+    return [
+      {
+        tag: "figure",
+        // Ahead of the plain <img> rule, so the figure's image isn't read twice.
+        priority: 60,
+        getAttrs: (el) => {
+          const img = (el as HTMLElement).querySelector("img");
+          const src = img?.getAttribute("src")?.trim();
+          if (!img || !src || src.startsWith("data:")) return false;
+          return {
+            src,
+            alt: img.getAttribute("alt"),
+            title: el.querySelector("figcaption")?.textContent?.trim() || img.getAttribute("title"),
+          };
+        },
+      },
+      ...(this.parent?.() ?? []),
+    ];
+  },
+  renderHTML({ node }) {
+    const { src, alt, title } = node.attrs;
+    const size = imageSize(node.attrs.size);
+    const figure: Record<string, string> = size === 100 ? {} : { "data-size": String(size) };
+    const caption: DOMOutputSpec[] = title ? [["figcaption", {}, String(title)]] : [];
+    return ["figure", figure, ["img", { src, alt: alt ?? "" }], ...caption];
+  },
+});
+
 export const editorExtensions = [
   StarterKit.configure({
     heading: { levels: [2, 3, 4] },
@@ -122,7 +173,7 @@ export const editorExtensions = [
       HTMLAttributes: { rel: "noopener noreferrer", target: null },
     },
   }),
-  Image.configure({ inline: false, allowBase64: false }),
+  BodyImage.configure({ inline: false, allowBase64: false }),
   TableKit.configure({ table: { resizable: false } }),
   Placeholder.configure({
     placeholder: ({ node }) =>

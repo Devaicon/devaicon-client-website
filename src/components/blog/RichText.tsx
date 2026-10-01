@@ -1,8 +1,10 @@
 import { Fragment, type ReactNode } from "react";
 import type { Cta, DocNode } from "@/lib/blog/types";
 import { collectHeadings, nodeText } from "@/lib/blog/toc";
+import { imageSize, type ImageSize } from "@/lib/blog/images";
 import CtaCard from "./CtaCard";
 import { safeHref, safeSrc } from "./safeUrl";
+import ZoomableImage from "./ZoomableImage";
 
 /**
  * Renders an editor document as React elements — never as an HTML string.
@@ -33,6 +35,14 @@ function renderChildren(node: DocNode, ctx: Ctx): ReactNode {
 }
 
 const P = "text-gray-700 leading-relaxed mb-6 text-lg";
+// Narrow images still take the full width on phones, where a quarter of the
+// column would be too small to read.
+const FIGURE_WIDTH: Record<ImageSize, string> = {
+  25: "sm:w-1/4",
+  50: "sm:w-1/2",
+  75: "sm:w-3/4",
+  100: "",
+};
 const HEADING: Record<number, string> = {
   2: "text-2xl md:text-3xl font-bold text-gray-900 mt-12 mb-6 scroll-mt-28",
   3: "text-xl md:text-2xl font-bold text-gray-900 mt-8 mb-4 scroll-mt-28",
@@ -113,11 +123,8 @@ function renderNode(node: DocNode, ctx: Ctx): ReactNode {
       const alt = typeof node.attrs?.alt === "string" ? node.attrs.alt : "";
       const caption = typeof node.attrs?.title === "string" ? node.attrs.title : "";
       return (
-        <figure className="my-10">
-          {/* Body images come from anywhere an editor chose, so a plain img
-              avoids next/image's per-host allow-list. They load lazily. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={src} alt={alt} loading="lazy" className="w-full rounded-lg shadow-md" />
+        <figure className={`mx-auto my-10 ${FIGURE_WIDTH[imageSize(node.attrs?.size)]}`}>
+          <ZoomableImage src={src} alt={alt} />
           {caption && (
             <figcaption className="mt-3 text-center text-sm italic text-gray-500">{caption}</figcaption>
           )}

@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.7.0";
+export const APP_VERSION = "2.8.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.8.0",
+    date: "2026-10-01",
+    title: "Bring posts in and out as files, and zoom into images",
+    tag: "feature",
+    items: [
+      "You can export any post as a file, and import post files as new drafts, several at a time",
+      "Imported posts find their author, category and calls to action by name, and tell you about anything they couldn't match",
+      "Select an image in the editor to set its width or change its alt text and caption",
+      "Readers can open any image in a post full screen and zoom in to see the detail",
+    ],
+  },
   {
     version: "2.7.0",
     date: "2026-09-29",

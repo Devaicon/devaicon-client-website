@@ -148,17 +148,25 @@ export function ImageSourceInput({
   );
 }
 
-/** The editor's "Insert image" dialog: source, alt text and optional caption. */
+export type ImageDetails = { src: string; alt: string; title: string };
+
+/**
+ * The editor's image dialog: source, alt text and optional caption. Given
+ * `initial`, it edits an image already in the post instead of inserting one.
+ */
 export function ImageDialog({
+  initial,
   onInsert,
   onClose,
 }: {
-  onInsert: (image: { src: string; alt: string; title: string }) => void;
+  initial?: ImageDetails;
+  onInsert: (image: ImageDetails) => void;
   onClose: () => void;
 }) {
-  const [src, setSrc] = useState("");
-  const [alt, setAlt] = useState("");
-  const [caption, setCaption] = useState("");
+  const [src, setSrc] = useState(initial?.src ?? "");
+  const [alt, setAlt] = useState(initial?.alt ?? "");
+  const [caption, setCaption] = useState(initial?.title ?? "");
+  const editing = Boolean(initial);
 
   return (
     <div
@@ -170,14 +178,14 @@ export function ImageDialog({
     >
       <div className="anim-pop w-full max-w-md space-y-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-lg">
         <h2 id="image-dialog-title" className="font-semibold">
-          Insert an image
+          {editing ? "Image details" : "Insert an image"}
         </h2>
         <ImageSourceInput value={src} onChange={setSrc} />
         <div>
           <label htmlFor="image-alt" className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
             Alt text <span className="font-normal">(what the image shows, for screen readers and search)</span>
           </label>
-          <input id="image-alt" value={alt} onChange={(e) => setAlt(e.target.value)} maxLength={200} className={INPUT} />
+          <input id="image-alt" autoFocus={editing} value={alt} onChange={(e) => setAlt(e.target.value)} maxLength={200} className={INPUT} />
         </div>
         <div>
           <label htmlFor="image-caption" className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
@@ -196,7 +204,7 @@ export function ImageDialog({
             onClick={() => onInsert({ src, alt: alt.trim(), title: caption.trim() })}
             className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50"
           >
-            Insert
+            {editing ? "Save" : "Insert"}
           </button>
         </div>
       </div>

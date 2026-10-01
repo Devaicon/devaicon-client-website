@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CalendarClock, Eye, Lock, Send, Trash2, Undo2 } from "lucide-react";
+import { ArrowLeft, CalendarClock, Download, Eye, Lock, Send, Trash2, Undo2 } from "lucide-react";
 import { can } from "@/lib/types";
 import type { AdminPost, Author, Category, Cta, Seo, TocSettings } from "@/lib/blog/types";
 import { useDashboardSession } from "@/components/dashboard/DashboardSession";
@@ -11,6 +11,7 @@ import { api } from "@/components/dashboard/api";
 import { useApi } from "@/components/dashboard/useApi";
 import RichEditor from "./RichEditor";
 import StatusPill from "./StatusPill";
+import { buildPostFile, downloadJson, postFileName } from "./postFile";
 import { CtaPanel, DetailsPanel, FaqPanel, HeroPanel, INPUT, Panel, SeoPanel, SocialPanel, TocPanel } from "./panels";
 
 // The fields the editor owns and sends on save.
@@ -151,6 +152,16 @@ export default function PostEditor({ id }: { id: string }) {
     if (win) win.location.href = `/insights/preview/${draft.id}`;
   }
 
+  // What's on screen, unsaved edits included.
+  function exportFile() {
+    if (!draft) return;
+    try {
+      downloadJson(postFileName(draft), buildPostFile(draft, { authors, categories, ctas }));
+    } catch {
+      setNote({ kind: "error", text: "This post couldn't be written to a file." });
+    }
+  }
+
   // Ctrl/Cmd+S saves; leaving with unsaved changes asks first.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -201,6 +212,15 @@ export default function PostEditor({ id }: { id: string }) {
           {busy === "save" ? "Saving…" : dirty ? "Unsaved changes" : note?.kind === "ok" ? note.text : ""}
         </span>
         <div className="ml-auto flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={exportFile}
+            title="Download this post as a JSON file, unsaved changes included"
+            className="inline-flex items-center gap-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800"
+          >
+            <Download className="h-4 w-4" aria-hidden />
+            Export
+          </button>
           <button type="button" onClick={preview} className="inline-flex items-center gap-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800">
             <Eye className="h-4 w-4" aria-hidden />
             Preview

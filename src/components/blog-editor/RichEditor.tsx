@@ -21,9 +21,10 @@ import {
   Underline,
   Undo2,
 } from "lucide-react";
+import { IMAGE_SIZES, imageSize } from "@/lib/blog/images";
 import type { Cta, DocNode } from "@/lib/blog/types";
 import { CtaLibraryContext, editorExtensions } from "./extensions";
-import { ImageDialog, uploadImage } from "./ImagePicker";
+import { ImageDialog, uploadImage, type ImageDetails } from "./ImagePicker";
 
 function ToolButton({
   label,
@@ -77,6 +78,8 @@ function safeLink(input: string): string | null {
 
 function Toolbar({ editor, ctas }: { editor: Editor; ctas: Cta[] }) {
   const [imageOpen, setImageOpen] = useState(false);
+  // The image being edited, by its position in the document.
+  const [imageEdit, setImageEdit] = useState<{ pos: number; details: ImageDetails } | null>(null);
   const [ctaOpen, setCtaOpen] = useState(false);
   const s = useEditorState({
     editor,
@@ -100,6 +103,8 @@ function Toolbar({ editor, ctas }: { editor: Editor; ctas: Cta[] }) {
       callout: e.isActive("callout"),
       codeBlock: e.isActive("codeBlock"),
       table: e.isActive("table"),
+      image: e.isActive("image"),
+      imageSize: imageSize(e.getAttributes("image").size),
       canUndo: e.can().undo(),
       canRedo: e.can().redo(),
     }),
@@ -110,6 +115,21 @@ function Toolbar({ editor, ctas }: { editor: Editor; ctas: Cta[] }) {
   function setBlock(value: string) {
     if (value === "p") chain().setParagraph().run();
     else chain().setHeading({ level: Number(value.slice(1)) as 2 | 3 | 4 }).run();
+  }
+
+  // Changing an image replaces its node, which would drop the selection and
+  // with it these controls; selecting it again keeps them up.
+  function resizeImage(size: number) {
+    const pos = editor.state.selection.from;
+    chain().updateAttributes("image", { size }).setNodeSelection(pos).run();
+  }
+
+  function editImage() {
+    const a = editor.getAttributes("image");
+    setImageEdit({
+      pos: editor.state.selection.from,
+      details: { src: String(a.src ?? ""), alt: String(a.alt ?? ""), title: String(a.title ?? "") },
+    });
   }
 
   function toggleLink() {
@@ -261,6 +281,61 @@ function Toolbar({ editor, ctas }: { editor: Editor; ctas: Cta[] }) {
             </button>
           ))}
         </div>
+      )}
+
+      {s.image && (
+        <div className="flex w-full flex-wrap items-center gap-1 border-t border-neutral-100 dark:border-neutral-800 pt-1.5 mt-1 text-xs">
+          <span className="px-1 text-neutral-500">Image width:</span>
+          <div role="group" aria-label="Image width" className="inline-flex rounded-md border border-neutral-200 dark:border-neutral-700 p-0.5">
+            {IMAGE_SIZES.map((size) => (
+              <button
+                key={size}
+                type="button"
+                aria-pressed={s.imageSize === size}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => resizeImage(size)}
+                className={`rounded px-2 py-0.5 tabular-nums transition-colors ${
+                  s.imageSize === size
+                    ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                    : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                }`}
+              >
+                {size === 100 ? "Full" : `${size}%`}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={editImage}
+            className="rounded px-2 py-1 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          >
+            Alt text &amp; caption
+          </button>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => chain().deleteSelection().run()}
+            className="rounded px-2 py-1 text-red-600 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          >
+            Remove image
+          </button>
+        </div>
+      )}
+
+      {imageEdit && (
+        <ImageDialog
+          initial={imageEdit.details}
+          onClose={() => setImageEdit(null)}
+          onInsert={({ src, alt, title }) => {
+            chain()
+              .setNodeSelection(imageEdit.pos)
+              .updateAttributes("image", { src, alt, title: title || null })
+              .setNodeSelection(imageEdit.pos)
+              .run();
+            setImageEdit(null);
+          }}
+        />
       )}
 
       {imageOpen && (
