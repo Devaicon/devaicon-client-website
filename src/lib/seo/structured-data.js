@@ -57,13 +57,14 @@ export function webSiteSchema() {
 /**
  * A capability offering.
  *
- * @param {{ name: string, description: string, path: string }} service
+ * @param {{ name: string, description: string, path: string, serviceType?: string }} service
  */
-export function serviceSchema({ name, description, path }) {
+export function serviceSchema({ name, description, path, serviceType }) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     name,
+    ...(serviceType ? { serviceType } : {}),
     description: metaDescription(description, 300),
     url: absoluteUrl(path),
     provider: { "@id": ORGANIZATION_ID },

@@ -39,6 +39,16 @@ const STATIC_ROUTES = [
     priority: 0.9,
     changeFrequency: "monthly",
   },
+  {
+    path: "/capabilities/open-edx-services/open-edx-hosting",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/capabilities/open-edx-services/open-edx-development",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
   { path: "/industries", priority: 0.8, changeFrequency: "monthly" },
   { path: "/engagement-models", priority: 0.8, changeFrequency: "monthly" },
   { path: "/insights", priority: 0.8, changeFrequency: "weekly" },

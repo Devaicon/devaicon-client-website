@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
+  ArrowRight,
   ChevronDown,
   DollarSign,
   Building2,
@@ -264,6 +266,17 @@ const CapabilityDetailCard = ({ card, index, hideBadge = false }) => {
                   <p className="text-gray-600 text-base leading-relaxed">
                     {card.additionalContent}
                   </p>
+                )}
+
+                {/* Dedicated service page, when the card has one */}
+                {card.link && (
+                  <Link
+                    href={card.link.href}
+                    className="mt-5 inline-flex items-center gap-2 self-start font-semibold text-[#3d234b] hover:text-[#281333] transition-colors group"
+                  >
+                    {card.link.label}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
                 )}
               </div>
             </div>

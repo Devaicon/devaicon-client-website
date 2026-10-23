@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.8.0";
+export const APP_VERSION = "2.9.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.9.0",
+    date: "2026-10-23",
+    title: "Two new Open edX pages on the website",
+    tag: "feature",
+    items: [
+      "The website now has a full page on managed Open edX hosting, covering where it can run, upgrades, backups and what affects the cost",
+      "A second new page covers Open edX development and customization, from branded themes and XBlocks to single sign-on and analytics",
+      "Both pages answer common questions in a section of FAQs and end with a way to get in touch",
+      "The Open edX Services page now links straight to each of them from the matching services",
+    ],
+  },
   {
     version: "2.8.0",
     date: "2026-10-01",

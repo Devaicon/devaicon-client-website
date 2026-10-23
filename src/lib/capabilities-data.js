@@ -271,6 +271,10 @@ export const CAPABILITIES_CONFIG = {
       // Fixed this image
       {
         id: "open-edx-hosting",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-hosting",
+          label: "Explore managed Open edX hosting",
+        },
         title: "Open edX Hosting",
         icon: "Server",
         iconAlt: "Open edX Hosting Icon",
@@ -288,6 +292,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "customization-feature-development",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-development",
+          label: "Explore Open edX development",
+        },
         title: "Customization & Feature Development",
         icon: "Puzzle",
         iconAlt: "Customization Icon",
@@ -305,6 +313,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "branding-ui-ux",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-development",
+          label: "Explore Open edX development",
+        },
         title: "Branding & UI/UX",
         icon: "PenTool",
         iconAlt: "Branding Icon",
@@ -340,6 +352,10 @@ export const CAPABILITIES_CONFIG = {
       // Fixed this image
       {
         id: "integrations-sso",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-development",
+          label: "Explore Open edX development",
+        },
         title: "Integrations & SSO",
         icon: "Lock",
         iconAlt: "Integration Icon",
@@ -357,6 +373,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "deployment-environment-setup",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-hosting",
+          label: "Explore managed Open edX hosting",
+        },
         title: "Deployment & Environment Setup",
         icon: "GitBranch",
         iconAlt: "Deployment Icon",
@@ -374,6 +394,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "release-upgrades-version-management",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-hosting",
+          label: "Explore managed Open edX hosting",
+        },
         title: "Release Upgrades & Version Management",
         icon: "RefreshCw",
         iconAlt: "Upgrade Icon",
@@ -391,6 +415,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "open-edx-maintenance-support",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-hosting",
+          label: "Explore managed Open edX hosting",
+        },
         title: "Maintenance & Support",
         icon: "Wrench",
         iconAlt: "Maintenance Icon",
@@ -408,6 +436,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "analytics-reporting",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-development",
+          label: "Explore Open edX development",
+        },
         title: "Analytics & Reporting",
         icon: "BarChart3",
         iconAlt: "Analytics Icon",
@@ -425,6 +457,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "multi-tenant-regional-deployments",
+        link: {
+          href: "/capabilities/open-edx-services/open-edx-hosting",
+          label: "Explore managed Open edX hosting",
+        },
         title: "Multi-Tenant & Regional Deployments",
         icon: "Users",
         iconAlt: "Multi-Tenant Icon",
