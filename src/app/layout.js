@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import JsonLd from "@/components/seo/JsonLd";
 import PageProgress from "@/components/PageProgress";
@@ -13,6 +14,8 @@ const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
+
+const GA_MEASUREMENT_ID = "G-T4HYQTZV3B";
 
 export const metadata = {
   metadataBase: new URL("https://devaicon.com"),
@@ -122,6 +125,20 @@ export default function RootLayout({ children }) {
         <PageProgress />
         <JsonLd schema={[organizationSchema(), webSiteSchema()]} />
         {children}
+        {/* Google tag (gtag.js) */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
