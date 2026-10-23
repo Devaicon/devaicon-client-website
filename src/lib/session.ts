@@ -1,11 +1,15 @@
 // Edge-runtime safe: this module only uses `jose`, no Node-only or
-// `next/headers` imports. Safe to import from `middleware.ts`.
+// `next/headers` imports. Safe to import from `proxy.ts`.
+//
+// Express issues and owns the session. This only checks the signature so the
+// proxy can send signed-out visitors to /login without a round trip; whether
+// the account is still active, and what it may do, is Express's call on every
+// request. Express clears a cookie it rejects, so a revoked session can't
+// leave the proxy believing someone is signed in.
 
-import { SignJWT, jwtVerify } from 'jose';
-import type { SessionUser } from './types';
+import { jwtVerify } from 'jose';
 
-const COOKIE_NAME = 'devaicon_session';
-const SESSION_TTL_HOURS = 12;
+export const SESSION_COOKIE_NAME = 'devaicon_session';
 
 function getSecret(): Uint8Array {
   const raw = process.env.SESSION_SECRET;
@@ -17,32 +21,18 @@ function getSecret(): Uint8Array {
   return new TextEncoder().encode(raw);
 }
 
-export async function createSessionCookie(user: SessionUser): Promise<string> {
-  const token = await new SignJWT({ username: user.username, role: user.role })
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime(`${SESSION_TTL_HOURS}h`)
-    .sign(getSecret());
-  return token;
-}
-
+/** The signed-in user's id, or null for a missing, bad or old-format token. */
 export async function readSessionFromToken(
   token: string | undefined,
-): Promise<SessionUser | null> {
+): Promise<{ userId: string } | null> {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, getSecret());
-    if (
-      typeof payload.username === 'string' &&
-      (payload.role === 'dev' || payload.role === 'admin')
-    ) {
-      return { username: payload.username, role: payload.role };
+    if (typeof payload.sub === 'string' && typeof payload.v === 'number') {
+      return { userId: payload.sub };
     }
     return null;
   } catch {
     return null;
   }
 }
-
-export const SESSION_COOKIE_NAME = COOKIE_NAME;
-export const SESSION_TTL_SECONDS = SESSION_TTL_HOURS * 60 * 60;

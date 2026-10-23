@@ -17,6 +17,10 @@ const ContactUs = () => {
     <>
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Contact Us", path: "/contact-us" },
+        ]}
         title="Let's Talk Business"
         subtitle="Whether you're looking to build something new and exciting or need our help with an ongoing project, we've got you covered."
         icon={<Phone className="w-7 h-7 text-white" />}

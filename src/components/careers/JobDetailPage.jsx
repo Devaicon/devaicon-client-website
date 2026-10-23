@@ -20,6 +20,7 @@ import {
   Check,
 } from "lucide-react";
 import JobApplicationModal from "./JobApplicationModal";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 // Icon mapping
 const iconMap = {
@@ -71,6 +72,14 @@ const JobDetailPage = ({ job }) => {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15 mt-30">
+          <Breadcrumbs
+            trail={[
+              { name: "Home", path: "/" },
+              { name: "Careers", path: "/careers" },
+              { name: job.title, path: `/careers/${job.slug}` },
+            ]}
+            className="mb-6"
+          />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

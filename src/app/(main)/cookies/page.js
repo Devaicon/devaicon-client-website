@@ -24,6 +24,10 @@ const CookiePolicy = () => {
     <div className="bg-white">
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Cookie Policy", path: "/cookies" },
+        ]}
         title="Cookie Policy"
         icon={<Cookie className="w-7 h-7 text-white" />}
         label="Legal Information"

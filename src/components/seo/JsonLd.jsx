@@ -13,8 +13,11 @@ const JsonLd = ({ schema }) => {
     <script
       key={index}
       type="application/ld+json"
-      // Values come from local content files, never from user input.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+      // Post content is written by editors, so "<" is escaped: a "</script>"
+      // inside a string must not be able to end this element.
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(graph).replace(/</g, "\\u003c"),
+      }}
     />
   ));
 };

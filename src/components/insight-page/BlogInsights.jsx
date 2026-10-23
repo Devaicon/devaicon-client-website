@@ -9,63 +9,42 @@ import {
   matchesSearchQuery,
 } from "./insightUtils";
 
-const FEATURED_POST = {
-  image: "/interaction-with-ai.webp",
-  category: "Digital Transformation",
-  title: "Value Driven Innovation through Automation",
-  description:
-    "Devaicon helps GCC enterprises move beyond the limits of traditional CRM & ERP software. Digital transformation is measured by quantifiable business impact.",
-  link: "/insights/value-driven-innovation-automation",
-  tags: ["Digital Transformation", "Automation", "ROI"],
-};
+/** A post summary from the content API, in the shape the cards expect. */
+const toCard = (p) => ({
+  image: p.heroImage?.url || "/icon.webp",
+  imageAlt: p.heroImage?.alt || "",
+  category: p.category?.name ?? "Insights",
+  title: p.title,
+  description: p.subtitle,
+  link: `/insights/${p.slug}`,
+  tags: p.tags ?? [],
+  minutes: p.readingMinutes,
+});
 
-const BLOG_POSTS = [
-  {
-    image: "/implementing-ai-automation.webp",
-    category: "AI",
-    title: "Agentic AI is Revolutionizing the Industries",
-    description:
-      "Stop struggling with disconnected data systems. We apply Agentic AI to banking, retail, and other GCC industries.",
-    link: "/insights/agentic-ai",
-    tags: ["AI", "Automation", "Enterprise AI"],
-  },
-  {
-    image: "/data-is-valuable.webp",
-    category: "Data",
-    title: "Data is Going to Be Your New Sovereign Asset",
-    description:
-      "Your company's data is your most valuable resource. We solve the problem of data silos by building a unified platform.",
-    link: "/insights/data-sovereign-asset",
-    tags: ["Data", "Analytics", "Business Intelligence"],
-  },
-  {
-    image: "/ai-doing-customer-support.webp",
-    category: "AI",
-    title:
-      "How Customer Service Teams Are Achieving a 20% to 45% Increase in Productivity with AI",
-    description:
-      "Companies using AI-driven tools like Microsoft Copilot see a 20% to 45% increase in the speed of resolving customer inquiries.",
-    link: "/insights/autonomous-ai-customer-service",
-    tags: ["AI", "Customer Service", "Productivity"],
-  },
-];
-
-const BlogInsights = () => {
+const BlogInsights = ({ posts = [] }) => {
   const [activeCategory, setActiveCategory] = useState("View all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Memoized filter logic using utility function
-  const filteredPosts = useMemo(
-    () => filterPosts(BLOG_POSTS, activeCategory, searchQuery),
-    [activeCategory, searchQuery],
+  // The newest post leads; the rest fill the grid. Categories are the ones
+  // that actually have posts, so no filter ever leads to an empty page.
+  const cards = useMemo(() => posts.map(toCard), [posts]);
+  const [lead, ...rest] = cards;
+  const categories = useMemo(
+    () => ["View all", ...new Set(cards.map((c) => c.category))],
+    [cards],
   );
 
-  // Check if featured post matches filters using utility functions
+  const filteredPosts = useMemo(
+    () => filterPosts(rest, activeCategory, searchQuery),
+    [rest, activeCategory, searchQuery],
+  );
+
   const displayFeaturedPost = useMemo(
     () =>
-      matchesCategoryFilter(FEATURED_POST, activeCategory) &&
-      matchesSearchQuery(FEATURED_POST, searchQuery),
-    [activeCategory, searchQuery],
+      Boolean(lead) &&
+      matchesCategoryFilter(lead, activeCategory) &&
+      matchesSearchQuery(lead, searchQuery),
+    [lead, activeCategory, searchQuery],
   );
 
   return (
@@ -97,7 +76,8 @@ const BlogInsights = () => {
           <InsightCard
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
-            featuredPost={FEATURED_POST}
+            categories={categories}
+            featuredPost={lead}
             posts={filteredPosts}
             showFeatured={displayFeaturedPost}
           />

@@ -72,28 +72,61 @@ export function serviceSchema({ name, description, path }) {
 }
 
 /**
- * An insight article. `datePublished` is omitted deliberately: the insight
- * content files carry a reading time, not a publication date, so there is
- * nothing truthful to put here yet.
+ * A published insight post. Dates, author and image come from the post
+ * itself, so every field is something a reader can see on the page. A team
+ * byline is an Organization, never dressed up as a Person.
  *
- * @param {{ post: object, path: string }} args
+ * @param {{ post: import("@/lib/blog/types").PublicPost, path: string }} args
  */
-export function articleSchema({ post, path }) {
+export function blogPostingSchema({ post, path }) {
+  const url = absoluteUrl(path);
+  const author = post.author
+    ? {
+        "@type": post.author.type === "Organization" ? "Organization" : "Person",
+        name: post.author.name,
+        ...(post.author.jobTitle && post.author.type !== "Organization"
+          ? { jobTitle: post.author.jobTitle }
+          : {}),
+        ...(post.author.links?.length ? { sameAs: post.author.links } : {}),
+      }
+    : { "@id": ORGANIZATION_ID };
+  const image = post.seo?.ogImage || post.heroImage?.url;
+
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
     headline: post.title,
-    description: metaDescription(post.subtitle, 300),
-    url: absoluteUrl(path),
-    image: post.heroImage ? absoluteUrl(post.heroImage) : undefined,
-    articleSection: post.category,
-    keywords: post.tags?.join(", "),
-    author: {
-      "@type": "Organization",
-      name: post.author?.name ?? SITE_NAME,
-    },
+    description: metaDescription(post.seo?.metaDescription || post.subtitle, 300),
+    url,
+    mainEntityOfPage: url,
+    image: image ? absoluteUrl(image) : undefined,
+    datePublished: post.publishedAt || undefined,
+    dateModified: post.updatedAt || post.publishedAt || undefined,
+    articleSection: post.category?.name,
+    keywords: post.tags?.length ? post.tags.join(", ") : undefined,
+    author,
     publisher: { "@id": ORGANIZATION_ID },
     isPartOf: { "@id": WEBSITE_ID },
+  };
+}
+
+/**
+ * The post's FAQs. Google only shows FAQ rich results for a few kinds of
+ * site now, but the markup is still valid and still read by AI answers.
+ *
+ * @param {Array<{ question: string, answer: string }>} faqs
+ */
+export function faqPageSchema(faqs) {
+  if (!faqs?.length) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
   };
 }
 

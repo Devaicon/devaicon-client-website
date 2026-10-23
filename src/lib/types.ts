@@ -37,12 +37,47 @@ export function isNonWorkingCategory(category: string): boolean {
   return (NON_WORKING_CATEGORIES as readonly string[]).includes(category);
 }
 
-export type Role = 'dev' | 'admin';
+/**
+ * A permission key. The catalogue itself lives on the server and arrives with
+ * GET /api/roles; these are only the keys the client checks by name.
+ */
+export type Permission =
+  | 'timelogs.log'
+  | 'timelogs.review'
+  | 'timelogs.delete_any'
+  | 'timelogs.export'
+  | 'projects.manage'
+  | 'posts.write'
+  | 'posts.publish'
+  | 'posts.delete'
+  | 'blog.library'
+  | 'users.manage'
+  | 'roles.manage';
 
-export type SessionUser = {
+export type RoleRef = { id: string; name: string; isOwner: boolean };
+
+/** The signed-in user, as GET /api/auth/me returns it. */
+export type Me = {
+  id: string;
   username: string;
-  role: Role;
+  /** Optional; '' when unset. Prefer `nameOf()` for display. */
+  displayName: string;
+  role: RoleRef;
+  /** Effective: the role's, plus personal grants, minus personal removals. */
+  permissions: Permission[];
 };
+
+/** Personal changes on top of a role's permissions. */
+export type PermissionOverrides = { granted: Permission[]; revoked: Permission[] };
+
+/** The name to show for a person: their display name, else their username. */
+export function nameOf(user: { username: string; displayName?: string } | null): string {
+  return user?.displayName?.trim() || user?.username || "";
+}
+
+export function can(me: Me | null, permission: Permission): boolean {
+  return Boolean(me?.permissions.includes(permission));
+}
 
 export type TimeLog = {
   id: string;
@@ -54,7 +89,11 @@ export type TimeLog = {
   description: string;
   loggedAt: string;    // ISO timestamp
   approvedAt: string;  // ISO timestamp; '' means pending
-  approvedBy: string;  // admin username; '' means pending
+  approvedBy: string;  // reviewer username; '' means pending
+  flagged?: boolean;
+  flaggedAt?: string;  // ISO timestamp; '' when not flagged
+  flaggedBy?: string;
+  flagReason?: string;
 };
 
 export type Project = {
@@ -63,25 +102,6 @@ export type Project = {
   addedAt: string;
   addedBy: string;
 };
-
-// Sheet tab names + header rows. If you change these, update the Google Sheet too.
-export const SHEET_LOGS = 'TimeLogs';
-export const SHEET_PROJECTS = 'Projects';
-
-export const HEADERS_LOGS = [
-  'ID',
-  'Date',
-  'Username',
-  'Project',
-  'Category',
-  'Hours',
-  'Description',
-  'LoggedAt',
-  'ApprovedAt',
-  'ApprovedBy',
-];
-
-export const HEADERS_PROJECTS = ['ID', 'Name', 'AddedAt', 'AddedBy'];
 
 // Listing / pagination defaults (shared by the logs listing endpoint).
 export const PAGE_SIZE_DEFAULT = 12;

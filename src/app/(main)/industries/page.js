@@ -30,6 +30,10 @@ const IndustriesPage = () => {
 
       {/* Hero Section */}
       <PageHero
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Industries", path: "/industries" },
+        ]}
         title="Industries We Serve"
         subtitle="Specialized solutions for your sector"
         icon={<Building2 className="w-7 h-7 text-white" />}

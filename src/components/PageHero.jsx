@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 /**
  * Reusable Hero Section Component
@@ -18,6 +19,8 @@ import { ChevronRight } from "lucide-react";
  * @param {boolean} props.showButton - Whether to show the CTA button (default: true)
  * @param {string} props.backgroundImage - Optional background image URL
  * @param {number} props.backgroundOpacity - Opacity for background image (default: 0.2)
+ * @param {Array<{ name: string, path: string }>} props.breadcrumbs - Trail from
+ *   Home to this page, shown above the title and emitted as structured data
  */
 const PageHero = ({
   title,
@@ -31,6 +34,7 @@ const PageHero = ({
   showButton = true,
   backgroundImage,
   backgroundOpacity = 0.5,
+  breadcrumbs,
 }) => {
   return (
     <div className="relative bg-gradient-to-br from-[#3d234b] via-[#4a2d5a] to-[#5a3464] text-white py-20 sm:py-16 lg:py-24 overflow-hidden">
@@ -53,6 +57,8 @@ const PageHero = ({
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-8 lg:px-6 xl:px-15 mt-20">
+        <Breadcrumbs trail={breadcrumbs} className="mb-6" />
+
         {/* Icon and Label */}
         {(icon || label) && (
           <div className="flex items-center gap-3 mb-6">

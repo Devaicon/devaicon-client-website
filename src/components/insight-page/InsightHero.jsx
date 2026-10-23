@@ -6,6 +6,10 @@ import { Newspaper } from "lucide-react";
 const InsightHero = () => {
   return (
     <PageHero
+      breadcrumbs={[
+        { name: "Home", path: "/" },
+        { name: "Insights", path: "/insights" },
+      ]}
       title="Insights & Resources"
       subtitle="Explore the latest trends, insights, and thought leadership in enterprise technology, AI adoption, digital transformation, and innovation strategies."
       icon={<Newspaper className="w-7 h-7 text-white" />}

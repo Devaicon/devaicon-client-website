@@ -1,4 +1,3 @@
-import { THEMES, type Theme } from "@/components/theme/theme";
 import { APP_VERSION } from "@/lib/changelog";
 import { sanitizePrefs, type OverviewPrefs } from "./overview/preferences";
 import { sanitizeLayout, type SectionLayout } from "./overview/sections";
@@ -10,9 +9,11 @@ import { TIME_FORMATS, type TimeFormat } from "./timeFormat";
  * JSON file.
  *
  * Only what the reader chose travels: the cards and where the sections sit,
- * the behaviour switches, and the theme and time format. No entries, no
- * account details, no stopwatch state — a set-up file is safe to hand to a
- * colleague who wants the same dashboard.
+ * the behaviour switches, and the time format. No entries, no account
+ * details, no stopwatch state — a set-up file is safe to hand to a colleague
+ * who wants the same dashboard. The colour theme belongs to the whole
+ * dashboard rather than this app, so it is not included, and one found in an
+ * older file is ignored.
  *
  * Reading is as defensive as every other store here. Each part goes through
  * the same sanitiser its own store uses, so a hand-edited or older file loses
@@ -27,7 +28,7 @@ export type DashboardSetup = {
   cards: OverviewPrefs;
   sections: SectionLayout;
   settings: LoggerSettings;
-  appearance: { theme: Theme; timeFormat: TimeFormat };
+  appearance: { timeFormat: TimeFormat };
 };
 
 type SetupFile = {
@@ -106,17 +107,10 @@ export function parseSetupFile(text: string): ParseResult {
     setup.settings = sanitizeSettings(r.settings);
     parts.push("options");
   }
-  const a = r.appearance as { theme?: unknown; timeFormat?: unknown } | undefined;
-  if (
-    a &&
-    THEMES.includes(a.theme as Theme) &&
-    TIME_FORMATS.includes(a.timeFormat as TimeFormat)
-  ) {
-    setup.appearance = {
-      theme: a.theme as Theme,
-      timeFormat: a.timeFormat as TimeFormat,
-    };
-    parts.push("appearance");
+  const a = r.appearance as { timeFormat?: unknown } | undefined;
+  if (a && TIME_FORMATS.includes(a.timeFormat as TimeFormat)) {
+    setup.appearance = { timeFormat: a.timeFormat as TimeFormat };
+    parts.push("time format");
   }
 
   if (parts.length === 0) {

@@ -1,15 +1,3 @@
-// Shared constants for blog components
-export const CATEGORIES = [
-  "View all",
-  "AI",
-  "Enterprise Platforms",
-  "Cloud",
-  "Data",
-  "Integration",
-  "Growth",
-  "Automation",
-];
-
 // Utility function to check if a post matches search query
 export const matchesSearchQuery = (post, query) => {
   if (!query.trim()) return true;
@@ -26,7 +14,7 @@ export const matchesSearchQuery = (post, query) => {
 // Utility function to check if a post matches category filter
 export const matchesCategoryFilter = (post, category) => {
   if (category === "View all") return true;
-  return post.tags?.includes(category);
+  return post.category === category;
 };
 
 // Combined filter function

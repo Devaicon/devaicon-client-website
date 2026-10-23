@@ -4,13 +4,12 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { TimeFormatProvider } from "@/components/time-logger/TimeFormatProvider";
 import ChangelogWidget from "@/components/changelog/ChangelogWidget";
 
-// Layout for the time-logger app pages (login / dashboard / admin, legacy and
-// new). Theming is scoped here so the marketing site is unaffected, and the
-// changelog widget mounts once for all four logger pages.
+// Layout for the signed-in app: login, the dashboard and the Time Logger
+// inside it. Theming is scoped here so the marketing site is unaffected, and
+// the changelog widget mounts once for all of them.
 //
 // The time-format preference sits alongside the theme: both are display-only
-// choices, both persist in localStorage, and both are shared by the new and
-// legacy clients.
+// choices and both persist in localStorage.
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <>
