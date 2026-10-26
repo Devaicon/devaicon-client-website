@@ -2,10 +2,16 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import JsonLd from "@/components/seo/JsonLd";
 import PostArticle from "@/components/blog/PostArticle";
+import StaticInsightArticle from "@/components/insight-page/StaticInsightArticle";
 import { safeSrc } from "@/components/blog/safeUrl";
-import { getPublicPost, getPublicPosts } from "@/lib/blog/api";
+import { findInsight, listInsights, type StaticInsight } from "@/lib/blog/source";
 import { brandedTitle, metaDescription } from "@/lib/seo";
-import { blogPostingSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import {
+  articleSchema,
+  blogPostingSchema,
+  breadcrumbSchema,
+  faqPageSchema,
+} from "@/lib/seo/structured-data";
 
 // Pages are cached and rebuilt when a post changes (see /api/revalidate);
 // this is only the fallback if that signal is missed.
@@ -17,7 +23,7 @@ type Params = { params: Promise<{ slug: string }> };
 // its first visit. An unreachable API at build time just means none prebuilt.
 export async function generateStaticParams() {
   try {
-    const posts = await getPublicPosts({ limit: 200 });
+    const posts = await listInsights({ limit: 200 });
     return posts.map((p) => ({ slug: p.slug }));
   } catch {
     return [];
@@ -26,7 +32,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const result = await getPublicPost(slug);
+  const result = await findInsight(slug);
+  if (result.kind === "static") return staticMetadata(result.post);
   if (result.kind !== "post") {
     return { title: brandedTitle("Insight Not Found"), robots: { index: false, follow: true } };
   }
@@ -61,9 +68,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function InsightPostPage({ params }: Params) {
   const { slug } = await params;
-  const result = await getPublicPost(slug);
+  const result = await findInsight(slug);
   if (result.kind === "redirect") permanentRedirect(`/insights/${result.slug}`);
   if (result.kind === "missing") notFound();
+  if (result.kind === "static") return <StaticInsightPage post={result.post} />;
   const { post, related } = result;
   const path = `/insights/${post.slug}`;
 
@@ -76,6 +84,42 @@ export default async function InsightPostPage({ params }: Params) {
         ]}
       />
       <PostArticle post={post} related={related} />
+    </>
+  );
+}
+
+// A bundled post standing in for the API's; see src/lib/blog/source.ts.
+function staticMetadata(post: StaticInsight): Metadata {
+  const description = metaDescription(post.subtitle);
+  return {
+    title: brandedTitle(post.title),
+    description,
+    alternates: { canonical: `/insights/${post.slug}` },
+    keywords: post.tags,
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description,
+      images: post.heroImage ? [{ url: post.heroImage }] : undefined,
+    },
+  };
+}
+
+function StaticInsightPage({ post }: { post: StaticInsight }) {
+  const path = `/insights/${post.slug}`;
+  return (
+    <>
+      <JsonLd
+        schema={[
+          articleSchema({ post, path }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+            { name: post.title, path },
+          ]),
+        ]}
+      />
+      <StaticInsightArticle post={post} />
     </>
   );
 }

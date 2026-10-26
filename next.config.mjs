@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
-const EXPRESS_API_URL =
-  process.env.EXPRESS_API_URL ?? 'http://localhost:4000';
+// The server's origin. A trailing "/" or "/api" is dropped: every path below
+// already starts with /api, and a doubled one matches no Express route.
+const EXPRESS_API_URL = (process.env.EXPRESS_API_URL || 'http://localhost:4000')
+  .trim()
+  .replace(/\/+$/, '')
+  .replace(/\/api$/, '');
 
 const nextConfig = {
   reactCompiler: true,
@@ -10,6 +14,8 @@ const nextConfig = {
     return [
       { source: '/admin', destination: '/dashboard', permanent: true },
       { source: '/admin/:path*', destination: '/dashboard/:path*', permanent: true },
+      // Temporary, like the legacy logger itself (LEGACY_TIME_LOGGER).
+      { source: '/legacy', destination: '/legacy/login', permanent: false },
     ];
   },
 

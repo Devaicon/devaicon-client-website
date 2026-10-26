@@ -1,7 +1,11 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse, type NextRequest } from "next/server";
 
-const EXPRESS_API_URL = process.env.EXPRESS_API_URL ?? "http://localhost:4000";
+// A trailing "/" or "/api" is dropped, as in next.config.mjs.
+const EXPRESS_API_URL = (process.env.EXPRESS_API_URL || "http://localhost:4000")
+  .trim()
+  .replace(/\/+$/, "")
+  .replace(/\/api$/, "");
 const UPLOAD_PERMISSIONS = ["posts.write", "blog.library"];
 
 /**

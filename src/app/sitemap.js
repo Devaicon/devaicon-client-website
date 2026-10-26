@@ -1,6 +1,6 @@
 import { SITE_URL } from "@/lib/seo";
 import { getAllJobSlugs } from "@/lib/jobs-data";
-import { getPublicPosts } from "@/lib/blog/api";
+import { listInsights } from "@/lib/blog/source";
 
 /**
  * Public, indexable pages only. The industry sub-pages are left out on
@@ -66,7 +66,7 @@ export const revalidate = 300;
 export default async function sitemap() {
   // A content API outage leaves the posts out of this one build rather than
   // failing the sitemap for every other page.
-  const posts = await getPublicPosts({ limit: 200 }).catch(() => []);
+  const posts = await listInsights({ limit: 200 }).catch(() => []);
   const insights = posts
     .filter((p) => !p.noindex)
     .map((p) => ({

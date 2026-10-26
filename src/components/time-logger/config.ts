@@ -1,6 +1,5 @@
-// Where the time logger talks to and keeps its state. It once also described
-// the Google Sheets client, which is why these are options at all; that client
-// is gone, and NEW_CONFIG is the only one left.
+// Where the time logger talks to and keeps its state: the Express backend, or
+// the Google Sheets one kept behind LEGACY_TIME_LOGGER while its users move.
 export type LoggerConfig = {
   /** API prefix: "/api" (Express backend) or "/api/legacy" (Google Sheets). */
   apiBase: string;
@@ -32,4 +31,13 @@ export const NEW_CONFIG: LoggerConfig = {
   bulkDelete: "post-body",
   storageScope: "new",
   preferenceSync: "server",
+};
+
+export const LEGACY_CONFIG: LoggerConfig = {
+  apiBase: "/api/legacy",
+  loginPath: "/legacy/login",
+  dashboardPath: "/legacy/dashboard",
+  bulkDelete: "delete-query",
+  storageScope: "legacy",
+  preferenceSync: "local",
 };

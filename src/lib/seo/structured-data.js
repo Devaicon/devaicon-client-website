@@ -113,6 +113,29 @@ export function blogPostingSchema({ post, path }) {
 }
 
 /**
+ * A post bundled with the site (src/lib/insights-content), shown while
+ * INSIGHTS_SOURCE lets those stand in for the content API's.
+ */
+export function articleSchema({ post, path }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: metaDescription(post.subtitle, 300),
+    url: absoluteUrl(path),
+    image: post.heroImage ? absoluteUrl(post.heroImage) : undefined,
+    articleSection: post.category,
+    keywords: post.tags?.join(", "),
+    author: {
+      "@type": "Organization",
+      name: post.author?.name ?? SITE_NAME,
+    },
+    publisher: { "@id": ORGANIZATION_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+  };
+}
+
+/**
  * The post's FAQs. Google only shows FAQ rich results for a few kinds of
  * site now, but the markup is still valid and still read by AI answers.
  *

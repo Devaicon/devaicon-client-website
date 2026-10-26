@@ -4,7 +4,11 @@ import type { Category, PostSummary, PublicPost } from "./types";
 // cached by Next and tagged "insights"; publishing a post expires the tag
 // (see /api/revalidate), and the 5-minute fallback covers a missed signal.
 
-const BASE = process.env.EXPRESS_API_URL ?? "http://localhost:4000";
+// A trailing "/" or "/api" is dropped, as in next.config.mjs.
+const BASE = (process.env.EXPRESS_API_URL || "http://localhost:4000")
+  .trim()
+  .replace(/\/+$/, "")
+  .replace(/\/api$/, "");
 const CACHE: RequestInit = { next: { revalidate: 300, tags: ["insights"] } };
 
 async function get<T>(path: string): Promise<{ status: number; data: T | null }> {

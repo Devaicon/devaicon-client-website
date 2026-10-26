@@ -14,10 +14,21 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.9.0";
+export const APP_VERSION = "2.9.1";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.9.1",
+    date: "2026-10-26",
+    title: "The old Google Sheets time logger and the insight articles are back",
+    tag: "fix",
+    items: [
+      "You can sign in to the old Google Sheets time logger again with your usual username and password",
+      "Admins can reach the old review and export page from the link in its top bar",
+      "The insight articles on the website open again at their usual addresses",
+    ],
+  },
   {
     version: "2.9.0",
     date: "2026-10-23",
