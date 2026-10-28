@@ -14,10 +14,23 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.9.2";
+export const APP_VERSION = "2.10.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.10.0",
+    date: "2026-10-28",
+    title: "Post jobs and review applications from the new Job portal",
+    tag: "feature",
+    items: [
+      "The dashboard has a new Job portal app for the roles on the careers page and the applications people send",
+      "With access to job postings, you can write a role, publish it, close it once it's filled, or take it off the site",
+      "With access to applications, you can read each one, download the résumé, mark where it stands and keep notes only the hiring team sees",
+      "Applying for a role or sending a résumé from the website now reaches the hiring team",
+      "The careers page puts open roles first and is shorter, easier to scan and no longer animates as you scroll",
+    ],
+  },
   {
     version: "2.9.2",
     date: "2026-10-28",

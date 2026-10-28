@@ -85,6 +85,10 @@ export const config = {
     "/api/authors/:path*",
     "/api/ctas/:path*",
     "/api/categories/:path*",
+    // The job portal. /api/public/applications is left out: applicants
+    // aren't signed in.
+    "/api/jobs/:path*",
+    "/api/applications/:path*",
     "/api/auth/me",
     "/api/auth/logout",
     "/legacy/:path*",

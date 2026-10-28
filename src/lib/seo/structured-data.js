@@ -176,6 +176,57 @@ export function faqPageSchema(faqs) {
   };
 }
 
+const EMPLOYMENT_TYPES = {
+  "Full-time": "FULL_TIME",
+  "Part-time": "PART_TIME",
+  Contract: "CONTRACTOR",
+  Internship: "INTERN",
+};
+
+/**
+ * An open role, for Google's job results. Only open roles get one: a closed
+ * role's page stays up, but listing it as a job would be untrue. Salary and
+ * a closing date are left out because postings don't state them.
+ *
+ * An on-site or hybrid role is placed at the office in the footer; a remote
+ * one is marked as telecommuting, limited to its stated location if it has
+ * one.
+ *
+ * @param {{ job: import("@/lib/careers/types").PublicJobDetail, path: string }} args
+ */
+export function jobPostingSchema({ job, path }) {
+  if (job.status !== "open") return null;
+  const remote = job.workplace === "Remote";
+  const description = [
+    job.description,
+    job.responsibilities.length ? `Responsibilities: ${job.responsibilities.join("; ")}` : "",
+    job.requirements.length ? `Requirements: ${job.requirements.join("; ")}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description,
+    datePosted: job.publishedAt,
+    employmentType: EMPLOYMENT_TYPES[job.employmentType] ?? "OTHER",
+    hiringOrganization: { "@id": ORGANIZATION_ID, "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL },
+    url: absoluteUrl(path),
+    directApply: true,
+    ...(job.department ? { occupationalCategory: job.department } : {}),
+    ...(job.experience ? { experienceRequirements: job.experience } : {}),
+    ...(remote
+      ? {
+          jobLocationType: "TELECOMMUTE",
+          ...(job.location
+            ? { applicantLocationRequirements: { "@type": "AdministrativeArea", name: job.location } }
+            : {}),
+        }
+      : { jobLocation: { "@type": "Place", address: ADDRESS } }),
+  };
+}
+
 /**
  * Breadcrumb trail.
  *

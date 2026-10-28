@@ -1,6 +1,6 @@
 import { SITE_URL, metaDescription } from "@/lib/seo";
-import { jobsData } from "@/lib/jobs-data";
 import { listInsights } from "@/lib/blog/source";
+import { getOpenJobs } from "@/lib/careers/api";
 import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 
@@ -115,7 +115,7 @@ const POLICIES = [
   },
 ];
 
-// Rebuilt alongside the sitemap when posts change.
+// Rebuilt alongside the sitemap when posts or roles change.
 export const revalidate = 300;
 
 const line = ({ title, path, description }) =>
@@ -126,7 +126,10 @@ const section = (heading, links) =>
 
 export async function GET() {
   // As in the sitemap, an API outage drops the posts rather than the file.
-  const posts = await listInsights({ limit: 200 }).catch(() => []);
+  const [posts, openJobs] = await Promise.all([
+    listInsights({ limit: 200 }).catch(() => []),
+    getOpenJobs().catch(() => []),
+  ]);
   const insights = [
     {
       title: "Insights & Resources",
@@ -143,10 +146,10 @@ export async function GET() {
       })),
   ];
 
-  const jobs = jobsData.map((job) => ({
+  const jobs = openJobs.map((job) => ({
     title: job.title,
     path: `/careers/${job.slug}`,
-    description: job.shortDescription,
+    description: job.summary,
   }));
 
   const body = [

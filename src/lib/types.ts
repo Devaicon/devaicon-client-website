@@ -51,6 +51,8 @@ export type Permission =
   | 'posts.publish'
   | 'posts.delete'
   | 'blog.library'
+  | 'careers.manage'
+  | 'careers.applications'
   | 'users.manage'
   | 'roles.manage';
 

@@ -1,24 +1,24 @@
 import { notFound } from "next/navigation";
 import JobDetailPage from "@/components/careers/JobDetailPage";
-import { getJobBySlug, getAllJobSlugs } from "@/lib/jobs-data";
+import { getJob, getOpenJobs } from "@/lib/careers/api";
 import { brandedTitle, metaDescription } from "@/lib/seo";
 
-/**
- * Generate static params for all job detail pages
- */
-export async function generateStaticParams() {
-  const slugs = getAllJobSlugs();
-  return slugs.map((slug) => ({
-    slug: slug,
-  }));
-}
+// Rebuilt when the role is changed or closed; see /api/revalidate. Roles
+// published after a build are rendered on their first visit.
+export const revalidate = 300;
 
 /**
- * Generate metadata for job detail pages
+ * Open roles are rendered at build time. An unreachable API builds none of
+ * them rather than failing the build; each is then rendered on first visit.
  */
+export async function generateStaticParams() {
+  const jobs = await getOpenJobs().catch(() => []);
+  return jobs.map((job) => ({ slug: job.slug }));
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const job = getJobBySlug(slug);
+  const job = await getJob(slug);
 
   if (!job) {
     return {
@@ -27,35 +27,35 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const description = metaDescription(job.summary || job.description);
   return {
     title: brandedTitle(`${job.title} Careers`),
-    description: metaDescription(job.description || job.shortDescription),
+    description,
     alternates: {
       canonical: `/careers/${slug}`,
     },
+    // A filled role stays reachable for anyone holding the link, but drops
+    // out of search.
+    ...(job.status === "closed" ? { robots: { index: false, follow: true } } : {}),
     keywords: [
       job.title,
       job.department,
-      job.location,
+      job.location || job.workplace,
       "careers",
       "Devaicon jobs",
       "technology careers",
-    ],
+    ].filter(Boolean),
     openGraph: {
       title: `${job.title} at Devaicon`,
-      description: metaDescription(job.shortDescription),
+      description,
       type: "website",
     },
   };
 }
 
-/**
- * Job Detail Page
- * Dynamic route for individual job postings
- */
 export default async function JobPage({ params }) {
   const { slug } = await params;
-  const job = getJobBySlug(slug);
+  const job = await getJob(slug);
 
   if (!job) {
     notFound();

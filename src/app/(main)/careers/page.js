@@ -1,10 +1,8 @@
 import PageHero from "@/components/PageHero";
-import CareersIntro from "@/components/careers/CareersIntro";
-import WhyJoinUs from "@/components/careers/WhyJoinUs";
-import CareerBenefits from "@/components/careers/CareerBenefits";
-import CareerGrowth from "@/components/careers/CareerGrowth";
-import JobOpenings from "@/components/careers/JobOpenings";
-import ApplicationProcess from "@/components/careers/ApplicationProcess";
+import OpenRoles from "@/components/careers/OpenRoles";
+import WhyDevaicon from "@/components/careers/WhyDevaicon";
+import HiringProcess from "@/components/careers/HiringProcess";
+import { getOpenJobsForPage } from "@/lib/careers/api";
 import { Briefcase } from "lucide-react";
 
 export const metadata = {
@@ -26,42 +24,38 @@ export const metadata = {
   },
 };
 
-export default function CareersPage() {
+// Rebuilt when a role is published, changed or closed; see /api/revalidate.
+export const revalidate = 300;
+
+/**
+ * The open roles come first, because they're what most visitors are here
+ * for; why to join, the benefits and how hiring works follow for anyone
+ * still deciding.
+ */
+export default async function CareersPage() {
+  const jobs = await getOpenJobsForPage();
+  const count = jobs?.length ?? 0;
+
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section */}
       <PageHero
         breadcrumbs={[
           { name: "Home", path: "/" },
           { name: "Careers", path: "/careers" },
         ]}
-        title="Build Your Career with Devaicon"
-        subtitle="Join a team of passionate innovators driving digital transformation across industries. Unlock your potential and shape the future of technology."
+        title="Build your career with Devaicon"
+        subtitle="Join the team building AI, cloud and enterprise software for organisations across the region. Find a role that fits, or send us your résumé."
         icon={<Briefcase className="w-7 h-7 text-white" />}
         label="Careers"
-        buttonText="View Open Positions"
-        buttonLink="#job-openings"
+        buttonText={count > 0 ? `See ${count} open ${count === 1 ? "role" : "roles"}` : "See open roles"}
+        buttonLink="#open-roles"
         showButton={true}
         backgroundImage="/professional-collaboration.webp"
       />
 
-      {/* Introduction */}
-      <CareersIntro />
-
-      {/* Why Join Us */}
-      <WhyJoinUs />
-
-      {/* Benefits */}
-      <CareerBenefits />
-
-      {/* Career Growth */}
-      <CareerGrowth />
-
-      {/* Job Openings */}
-      <JobOpenings />
-
-      {/* Application Process */}
-      <ApplicationProcess />
+      <OpenRoles jobs={jobs} />
+      <WhyDevaicon />
+      <HiringProcess />
     </main>
   );
 }

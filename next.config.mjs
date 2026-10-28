@@ -41,6 +41,8 @@ const nextConfig = {
       { source: '/api/authors/:path*', destination: `${EXPRESS_API_URL}/api/authors/:path*` },
       { source: '/api/ctas/:path*', destination: `${EXPRESS_API_URL}/api/ctas/:path*` },
       { source: '/api/categories/:path*', destination: `${EXPRESS_API_URL}/api/categories/:path*` },
+      { source: '/api/jobs/:path*', destination: `${EXPRESS_API_URL}/api/jobs/:path*` },
+      { source: '/api/applications/:path*', destination: `${EXPRESS_API_URL}/api/applications/:path*` },
       { source: '/api/auth', destination: `${EXPRESS_API_URL}/api/auth` },
       { source: '/api/logs', destination: `${EXPRESS_API_URL}/api/logs` },
       { source: '/api/projects', destination: `${EXPRESS_API_URL}/api/projects` },
@@ -53,6 +55,10 @@ const nextConfig = {
       { source: '/api/authors', destination: `${EXPRESS_API_URL}/api/authors` },
       { source: '/api/ctas', destination: `${EXPRESS_API_URL}/api/ctas` },
       { source: '/api/categories', destination: `${EXPRESS_API_URL}/api/categories` },
+      { source: '/api/jobs', destination: `${EXPRESS_API_URL}/api/jobs` },
+      { source: '/api/applications', destination: `${EXPRESS_API_URL}/api/applications` },
+      // The one public write: the careers page's application form.
+      { source: '/api/public/applications', destination: `${EXPRESS_API_URL}/api/public/applications` },
     ];
   },
 };

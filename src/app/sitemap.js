@@ -1,6 +1,6 @@
 import { SITE_URL } from "@/lib/seo";
-import { getAllJobSlugs } from "@/lib/jobs-data";
 import { listInsights } from "@/lib/blog/source";
+import { getOpenJobs } from "@/lib/careers/api";
 
 /**
  * Public, indexable pages only. The industry sub-pages are left out on
@@ -60,13 +60,16 @@ const STATIC_ROUTES = [
   { path: "/cookies", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-// Rebuilt when a post is published or changed; see /api/revalidate.
+// Rebuilt when a post or role is published or changed; see /api/revalidate.
 export const revalidate = 300;
 
 export default async function sitemap() {
   // A content API outage leaves the posts out of this one build rather than
   // failing the sitemap for every other page.
-  const posts = await listInsights({ limit: 200 }).catch(() => []);
+  const [posts, openJobs] = await Promise.all([
+    listInsights({ limit: 200 }).catch(() => []),
+    getOpenJobs().catch(() => []),
+  ]);
   const insights = posts
     .filter((p) => !p.noindex)
     .map((p) => ({
@@ -76,10 +79,12 @@ export default async function sitemap() {
       lastModified: p.updatedAt || p.publishedAt || undefined,
     }));
 
-  const jobs = getAllJobSlugs().map((slug) => ({
-    path: `/careers/${slug}`,
+  // Open roles only: a closed role's page is noindex.
+  const jobs = openJobs.map((job) => ({
+    path: `/careers/${job.slug}`,
     priority: 0.6,
     changeFrequency: "weekly",
+    lastModified: job.updatedAt || job.publishedAt || undefined,
   }));
 
   return [...STATIC_ROUTES, ...insights, ...jobs].map(

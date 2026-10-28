@@ -1,5 +1,7 @@
 import {
+  Briefcase,
   Clock,
+  Inbox,
   FileText,
   FolderKanban,
   Library,
@@ -66,6 +68,25 @@ export const SECTION_GROUPS: SectionGroup[] = [
         icon: Library,
         anyOf: ["blog.library"],
         blurb: "Authors, calls to action and categories that posts use.",
+      },
+    ],
+  },
+  {
+    label: "Job portal",
+    sections: [
+      {
+        href: "/dashboard/careers",
+        label: "Job postings",
+        icon: Briefcase,
+        anyOf: ["careers.manage"],
+        blurb: "Write, publish and close the roles on the careers page.",
+      },
+      {
+        href: "/dashboard/careers/applications",
+        label: "Applications",
+        icon: Inbox,
+        anyOf: ["careers.applications"],
+        blurb: "Read what candidates send, download résumés and track each one.",
       },
     ],
   },

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Timer } from "lucide-react";
+import { ArrowRight, Briefcase, Timer, type LucideIcon } from "lucide-react";
 import { can, nameOf } from "@/lib/types";
 import { PageHeader } from "@/components/dashboard/DashboardShell";
 import { useDashboardSession } from "@/components/dashboard/DashboardSession";
@@ -10,10 +10,35 @@ import { visibleGroups } from "@/components/dashboard/sections";
 const CARD =
   "rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900";
 
+type App = { href: string; name: string; description: string; open: string; icon: LucideIcon; tint: string };
+
+/** One app's card on the Home page. */
+function AppCard({ app }: { app: App }) {
+  const Icon = app.icon;
+  return (
+    <div className={`${CARD} anim-pop p-6 flex flex-col gap-4 sm:flex-row sm:items-center`}>
+      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${app.tint}`}>
+        <Icon className="h-6 w-6" aria-hidden />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h3 className="font-semibold">{app.name}</h3>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">{app.description}</p>
+      </div>
+      <Link
+        href={app.href}
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-neutral-900 dark:bg-neutral-100 px-4 py-2 text-sm font-medium text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200"
+      >
+        {app.open}
+        <ArrowRight className="h-4 w-4" aria-hidden />
+      </Link>
+    </div>
+  );
+}
+
 /**
  * Everyone's landing page. What it offers follows from their permissions:
- * the Time Logger for anyone who logs time, and a shortcut to every other
- * section their access opens.
+ * the Time Logger for anyone who logs time, the Job portal for anyone who
+ * works on hiring, and a shortcut to every other section their access opens.
  */
 export default function DashboardHome() {
   const { me } = useDashboardSession();
@@ -26,6 +51,31 @@ export default function DashboardHome() {
     .flatMap((g) => g.sections)
     .filter((s) => s.href !== "/dashboard" && s.href !== "/dashboard/settings");
   const logsTime = can(me, "timelogs.log");
+  const postsJobs = can(me, "careers.manage");
+  const reviewsApplications = can(me, "careers.applications");
+
+  const apps: App[] = [];
+  if (logsTime) {
+    apps.push({
+      href: "/dashboard/time-logger",
+      name: "Time Logger",
+      description: "Log your hours, run the stopwatch, and see your day, week and month at a glance.",
+      open: "Open Time Logger",
+      icon: Timer,
+      tint: "bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300",
+    });
+  }
+  if (postsJobs || reviewsApplications) {
+    apps.push({
+      // Someone who only reviews applications has no use for the postings list.
+      href: postsJobs ? "/dashboard/careers" : "/dashboard/careers/applications",
+      name: "Job portal",
+      description: "Publish roles on the careers page and review the applications people send.",
+      open: "Open Job portal",
+      icon: Briefcase,
+      tint: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300",
+    });
+  }
 
   return (
     <div className="space-y-8">
@@ -34,29 +84,14 @@ export default function DashboardHome() {
         description="Everything your access opens, in one place."
       />
 
-      {logsTime && (
+      {apps.length > 0 && (
         <section aria-labelledby="apps-heading" className="space-y-3">
           <h2 id="apps-heading" className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
             Apps
           </h2>
-          <div className={`${CARD} anim-pop p-6 flex flex-col gap-4 sm:flex-row sm:items-center`}>
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300">
-              <Timer className="h-6 w-6" aria-hidden />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold">Time Logger</h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Log your hours, run the stopwatch, and see your day, week and month at a glance.
-              </p>
-            </div>
-            <Link
-              href="/dashboard/time-logger"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-neutral-900 dark:bg-neutral-100 px-4 py-2 text-sm font-medium text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200"
-            >
-              Open Time Logger
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </div>
+          {apps.map((app) => (
+            <AppCard key={app.href} app={app} />
+          ))}
         </section>
       )}
 
@@ -93,7 +128,7 @@ export default function DashboardHome() {
         </section>
       )}
 
-      {!logsTime && shortcuts.length === 0 && (
+      {apps.length === 0 && shortcuts.length === 0 && (
         <div className={`${CARD} p-8 text-center`}>
           <p className="font-medium">Nothing is switched on for your account yet.</p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
