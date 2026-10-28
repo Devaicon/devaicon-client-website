@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { placeOf } from "@/lib/careers/types";
 import ApplyDialog from "./ApplyDialog";
+import Reveal from "./Reveal";
 
 const ALL = "All teams";
 
@@ -27,7 +28,7 @@ export default function OpenRoles({ jobs }) {
     <section id="open-roles" aria-labelledby="open-roles-heading" className="scroll-mt-24 bg-white py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-6 xl:px-15">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
+          <Reveal className="max-w-2xl">
             <h2 id="open-roles-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Open roles
             </h2>
@@ -38,10 +39,10 @@ export default function OpenRoles({ jobs }) {
                   ? "We aren't hiring for a specific role right now."
                   : `${roles.length} ${roles.length === 1 ? "role is" : "roles are"} open. Each one lists what the work involves and what we're looking for.`}
             </p>
-          </div>
+          </Reveal>
 
           {teams.length > 1 && (
-            <div role="group" aria-label="Filter roles by team" className="flex flex-wrap gap-2">
+            <Reveal delay={80} role="group" aria-label="Filter roles by team" className="flex flex-wrap gap-2">
               {[ALL, ...teams].map((t) => (
                 <button
                   key={t}
@@ -57,17 +58,17 @@ export default function OpenRoles({ jobs }) {
                   {t}
                 </button>
               ))}
-            </div>
+            </Reveal>
           )}
         </div>
 
         {shown.length > 0 && (
-          <ul className="mt-10 divide-y divide-gray-200 border-y border-gray-200">
-            {shown.map((job) => (
-              <li key={job.slug}>
+          <ul key={team} className="careers-fade mt-10 divide-y divide-gray-200 border-y border-gray-200">
+            {shown.map((job, i) => (
+              <Reveal as="li" key={job.slug} delay={Math.min(i, 5) * 60}>
                 <Link
                   href={`/careers/${job.slug}`}
-                  className="group grid gap-x-8 gap-y-2 py-6 focus:outline-none focus-visible:bg-gray-50 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto]"
+                  className="group -mx-4 grid gap-x-8 gap-y-2 rounded-xl px-4 py-6 transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-50 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto]"
                 >
                   <div className="min-w-0">
                     <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#3d234b] sm:text-xl">
@@ -99,12 +100,12 @@ export default function OpenRoles({ jobs }) {
                     <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
                   </span>
                 </Link>
-              </li>
+              </Reveal>
             ))}
           </ul>
         )}
 
-        <div className="mt-10 flex flex-col gap-4 rounded-2xl bg-gray-50 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <Reveal className="mt-10 flex flex-col gap-4 rounded-2xl bg-gray-50 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div className="max-w-2xl">
             <h3 className="text-lg font-semibold text-gray-900">
               {roles.length === 0 ? "Send us your résumé" : "Don't see a role that fits?"}
@@ -123,11 +124,11 @@ export default function OpenRoles({ jobs }) {
           <button
             type="button"
             onClick={() => setResumeOpen(true)}
-            className="shrink-0 rounded-lg bg-[#3d234b] px-6 py-3 font-semibold text-white hover:bg-[#2d1a3b] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3d234b] focus-visible:ring-offset-2"
+            className="shrink-0 rounded-lg bg-[#3d234b] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#2d1a3b] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3d234b] focus-visible:ring-offset-2"
           >
             Send your résumé
           </button>
-        </div>
+        </Reveal>
       </div>
 
       <ApplyDialog open={resumeOpen} onClose={() => setResumeOpen(false)} />

@@ -424,3 +424,60 @@ export function parsePostFile(json: string, library: Library): ParseResult {
     },
   };
 }
+
+// ---------------------------------------------------------------- sample
+
+/**
+ * A complete example post file, for anyone writing posts outside the
+ * editor. It names this site's own first author, category and call to
+ * action when the library has them, so the sample imports without a
+ * warning; otherwise it says what belongs there.
+ */
+export function samplePostFile(library?: Library, now = new Date()): string {
+  const author = library?.authors[0]?.name ?? "Name of an author in the Blog library";
+  const category = library?.categories[0]?.name ?? "Name of a category in the Blog library";
+  const cta = library?.ctas[0]?.name ?? "Name of a call to action in the Blog library";
+  const file: PostFile = {
+    format: POST_FILE_FORMAT,
+    version: POST_FILE_VERSION,
+    exportedAt: now.toISOString(),
+    title: "How to plan a cloud migration without downtime",
+    subtitle: "A one- or two-sentence summary. It shows under the title and in post listings.",
+    slug: "plan-a-cloud-migration-without-downtime",
+    author,
+    category,
+    tags: ["Cloud", "Migration"],
+    heroImage: { url: "/professional-collaboration.webp", alt: "Describe what the image shows, for people who can't see it" },
+    body: [
+      "<p>The body is HTML. Use the tags shown here; anything the editor doesn't know is dropped on import. The title is the page's only H1, so start headings at H2.</p>",
+      "<h2>Start with what can't go down</h2>",
+      '<p>Text can be <strong>bold</strong>, <em>italic</em> or a <a href="https://devaicon.com/contact-us">link</a>.</p>',
+      "<ul><li><p>Bulleted lists</p></li><li><p>Work like this</p></li></ul>",
+      "<h3>A smaller heading</h3>",
+      "<ol><li><p>Numbered lists</p></li><li><p>Work too</p></li></ol>",
+      "<blockquote><p>A quotation or a key point to call out.</p></blockquote>",
+      '<img src="/professional-collaboration.webp" alt="Images need an address starting with https:// or /, and alt text">',
+      `<div data-cta="${cta}"></div>`,
+      "<p>The empty div above places a call to action from the Blog library, by its name.</p>",
+    ].join("\n"),
+    faqs: [{ question: "Do posts need FAQs?", answer: "No. Leave this list empty, or add up to 30 questions." }],
+    closingCta: cta,
+    toc: {
+      enabled: true,
+      depth: 3,
+      title: "On this page",
+      labels: [{ heading: "Start with what can't go down", text: "What can't go down" }],
+    },
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      focusKeyphrase: "cloud migration",
+      canonicalUrl: "",
+      ogTitle: "",
+      ogDescription: "",
+      ogImage: "",
+      noindex: false,
+    },
+  };
+  return JSON.stringify(file, null, 2);
+}

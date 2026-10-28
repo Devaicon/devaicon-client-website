@@ -7,6 +7,7 @@ import { MobileCapabilitiesAccordion } from "./MobileCapabilitiesAccordion";
 import { MobileEngagementModelsAccordion } from "./MobileEngagementModelsAccordion";
 import { MobileWhyDevaiconAccordion } from "./MobileWhyDevaiconAccordion";
 import { ROUTES } from "@/constants/navigation";
+import Portal from "@/components/Portal";
 
 /**
  * Mobile navigation menu
@@ -20,8 +21,10 @@ export function MobileNav({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  // Portalled out of the header, whose z-50 would otherwise cap the menu's
+  // z-index and let the page's contact card paint over it.
   return (
-    <>
+    <Portal>
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] lg:hidden"
@@ -134,6 +137,6 @@ export function MobileNav({ isOpen, onClose }) {
           </div>
         </div>
       </div>
-    </>
+    </Portal>
   );
 }

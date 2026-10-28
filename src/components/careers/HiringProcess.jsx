@@ -1,3 +1,5 @@
+import Reveal from "./Reveal";
+
 const STEPS = [
   {
     title: "Apply",
@@ -30,20 +32,20 @@ export default function HiringProcess() {
   return (
     <section id="hiring-process" aria-labelledby="hiring-heading" className="scroll-mt-24 bg-gray-50 py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-6 xl:px-15">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <h2 id="hiring-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             How hiring works
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-gray-600">
             Most people hear back within two weeks and have an answer within six.
           </p>
-        </div>
+        </Reveal>
 
         {/* A rail runs through the step markers: down the side on phones,
             across the top from tablets up. */}
         <ol className="relative mt-12 grid gap-10 sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-4">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="relative pl-14 sm:pl-0 sm:pt-14">
+            <Reveal as="li" key={step.title} delay={i * 110} className="relative pl-14 sm:pl-0 sm:pt-14">
               <span
                 aria-hidden
                 className={`absolute left-[1.1875rem] top-10 -bottom-10 w-px bg-gray-300 sm:hidden ${i === STEPS.length - 1 ? "hidden" : ""}`}
@@ -55,7 +57,7 @@ export default function HiringProcess() {
               <h3 className="text-lg font-semibold text-gray-900">{step.title}</h3>
               <p className="mt-1 text-sm font-medium text-[#3d234b]">{step.when}</p>
               <p className="mt-3 leading-relaxed text-gray-600">{step.text}</p>
-            </li>
+            </Reveal>
           ))}
         </ol>
 

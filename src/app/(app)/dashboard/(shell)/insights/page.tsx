@@ -8,6 +8,7 @@ import {
   CircleX,
   Download,
   ExternalLink,
+  FileDown,
   Pencil,
   Plus,
   Search,
@@ -31,6 +32,7 @@ import {
   loadLibrary,
   parsePostFile,
   postFileName,
+  samplePostFile,
 } from "@/components/blog-editor/postFile";
 
 // Generous for one post: bodies are capped well below this on save.
@@ -141,6 +143,12 @@ function Posts() {
     reload();
   }
 
+  /** An example post file, naming this site's own library where it can. */
+  async function downloadSample() {
+    const lib = await loadLibrary();
+    downloadJson("post-sample.json", samplePostFile(lib.ok ? lib.library : undefined));
+  }
+
   async function exportPost(p: PostSummary) {
     const [res, lib] = await Promise.all([api<{ post: AdminPost }>(`/posts/${p.id}`), loadLibrary()]);
     if (!res.ok || !lib.ok) {
@@ -176,6 +184,14 @@ function Posts() {
         actions={
           can(me, "posts.write") && (
             <div className="flex flex-wrap gap-2">
+              <button
+                onClick={downloadSample}
+                title="An example post file, showing every field an import reads"
+                className="inline-flex items-center gap-2 rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800"
+              >
+                <FileDown className="h-4 w-4" aria-hidden />
+                Sample file
+              </button>
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={importing}

@@ -3,6 +3,7 @@
 import { useId, useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
 import { ImageIcon, Link2, Upload, X } from "lucide-react";
+import Portal from "@/components/Portal";
 
 const INPUT =
   "w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-2 text-sm";
@@ -169,45 +170,47 @@ export function ImageDialog({
   const editing = Boolean(initial);
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="image-dialog-title"
-      className="anim-fade fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onKeyDown={(e) => e.key === "Escape" && onClose()}
-    >
-      <div className="anim-pop w-full max-w-md space-y-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-lg">
-        <h2 id="image-dialog-title" className="font-semibold">
-          {editing ? "Image details" : "Insert an image"}
-        </h2>
-        <ImageSourceInput value={src} onChange={setSrc} />
-        <div>
-          <label htmlFor="image-alt" className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
-            Alt text <span className="font-normal">(what the image shows, for screen readers and search)</span>
-          </label>
-          <input id="image-alt" autoFocus={editing} value={alt} onChange={(e) => setAlt(e.target.value)} maxLength={200} className={INPUT} />
-        </div>
-        <div>
-          <label htmlFor="image-caption" className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
-            Caption (optional)
-          </label>
-          <input id="image-caption" value={caption} onChange={(e) => setCaption(e.target.value)} maxLength={200} className={INPUT} />
-        </div>
-        <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800">
-            Cancel
-          </button>
-          <button
-            type="button"
-            disabled={!src || !alt.trim()}
-            title={!alt.trim() ? "Describe the image first" : undefined}
-            onClick={() => onInsert({ src, alt: alt.trim(), title: caption.trim() })}
-            className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50"
-          >
-            {editing ? "Save" : "Insert"}
-          </button>
+    <Portal>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="image-dialog-title"
+        className="anim-fade fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4"
+        onKeyDown={(e) => e.key === "Escape" && onClose()}
+      >
+        <div className="anim-pop w-full max-w-md space-y-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-lg">
+          <h2 id="image-dialog-title" className="font-semibold">
+            {editing ? "Image details" : "Insert an image"}
+          </h2>
+          <ImageSourceInput value={src} onChange={setSrc} />
+          <div>
+            <label htmlFor="image-alt" className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
+              Alt text <span className="font-normal">(what the image shows, for screen readers and search)</span>
+            </label>
+            <input id="image-alt" autoFocus={editing} value={alt} onChange={(e) => setAlt(e.target.value)} maxLength={200} className={INPUT} />
+          </div>
+          <div>
+            <label htmlFor="image-caption" className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
+              Caption (optional)
+            </label>
+            <input id="image-caption" value={caption} onChange={(e) => setCaption(e.target.value)} maxLength={200} className={INPUT} />
+          </div>
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={onClose} className="rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm hover:bg-neutral-50 dark:hover:bg-neutral-800">
+              Cancel
+            </button>
+            <button
+              type="button"
+              disabled={!src || !alt.trim()}
+              title={!alt.trim() ? "Describe the image first" : undefined}
+              onClick={() => onInsert({ src, alt: alt.trim(), title: caption.trim() })}
+              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50"
+            >
+              {editing ? "Save" : "Insert"}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Portal>
   );
 }

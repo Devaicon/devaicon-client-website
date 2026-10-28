@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { XIcon } from "lucide-react";
 import { backdrop, dialogPanel } from "../motion";
+import Portal from "@/components/Portal";
 import StatGrid from "./StatGrid";
 import type { LoggerMetrics } from "../metrics";
 import type { CardContext, CardDef } from "./cards";
@@ -48,52 +49,54 @@ export default function MoreCardsDialog({
   }, [onClose]);
 
   return (
-    <motion.div
-      variants={backdrop()}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <Portal>
       <motion.div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="more-cards-title"
-        variants={dialogPanel(!!reduced)}
-        className="w-full max-w-4xl rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 p-6 text-neutral-900 dark:text-neutral-100 shadow-xl"
+        variants={backdrop()}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 id="more-cards-title" className="text-lg font-semibold">
-              More figures
-            </h2>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              Cards you keep off the dashboard.{" "}
-              <button
-                type="button"
-                onClick={onCustomise}
-                className="cursor-pointer underline underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100"
-              >
-                Choose which
-              </button>
-            </p>
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="more-cards-title"
+          variants={dialogPanel(!!reduced)}
+          className="w-full max-w-4xl rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 p-6 text-neutral-900 dark:text-neutral-100 shadow-xl"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 id="more-cards-title" className="text-lg font-semibold">
+                More figures
+              </h2>
+              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                Cards you keep off the dashboard.{" "}
+                <button
+                  type="button"
+                  onClick={onCustomise}
+                  className="cursor-pointer underline underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100"
+                >
+                  Choose which
+                </button>
+              </p>
+            </div>
+            <button
+              ref={closeRef}
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="rounded-md px-2 py-1 text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800"
+            >
+              <XIcon className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            ref={closeRef}
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="rounded-md px-2 py-1 text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800"
-          >
-            <XIcon className="h-4 w-4" />
-          </button>
-        </div>
 
-        <StatGrid cards={cards} metrics={metrics} ctx={ctx} className="mt-5" />
+          <StatGrid cards={cards} metrics={metrics} ctx={ctx} className="mt-5" />
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </Portal>
   );
 }

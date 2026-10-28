@@ -14,10 +14,23 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.10.0";
+export const APP_VERSION = "2.11.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.11.0",
+    date: "2026-10-28",
+    title: "Bring job postings in and out as files, and smoother careers pages",
+    tag: "feature",
+    items: [
+      "You can export job postings as a CSV or JSON file, and import files of roles as new drafts",
+      "Sample files for job postings and for blog posts show exactly what an import expects",
+      "Application forms and other pop-up windows now always open in front of the page instead of behind parts of it",
+      "Each job's page has Share and Copy URL buttons again; Share opens your device's own share options",
+      "The careers pages ease into view as you scroll, gently and only once",
+    ],
+  },
   {
     version: "2.10.0",
     date: "2026-10-28",

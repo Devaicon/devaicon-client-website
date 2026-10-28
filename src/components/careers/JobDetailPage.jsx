@@ -4,7 +4,8 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { jobPostingSchema } from "@/lib/seo/structured-data";
 import { placeOf } from "@/lib/careers/types";
-import { ApplyButton, CopyLink } from "./JobApply";
+import { ApplyButton, ShareButtons } from "./JobApply";
+import Reveal from "./Reveal";
 
 const posted = (iso) =>
   iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
@@ -12,7 +13,7 @@ const posted = (iso) =>
 function ListSection({ id, title, items, marker = "dot" }) {
   if (!items?.length) return null;
   return (
-    <section aria-labelledby={id}>
+    <Reveal as="section" aria-labelledby={id}>
       <h2 id={id} className="text-2xl font-bold tracking-tight text-gray-900">
         {title}
       </h2>
@@ -27,7 +28,7 @@ function ListSection({ id, title, items, marker = "dot" }) {
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
   );
 }
 
@@ -72,10 +73,12 @@ export default function JobDetailPage({ job }) {
             ]}
             className="mb-8"
           />
-          <h1 className="max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl">{job.title}</h1>
-          {job.summary && <p className="mt-4 max-w-3xl text-lg leading-relaxed text-white/90">{job.summary}</p>}
+          <div className="careers-rise">
+            <h1 className="max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl">{job.title}</h1>
+            {job.summary && <p className="mt-4 max-w-3xl text-lg leading-relaxed text-white/90">{job.summary}</p>}
+          </div>
 
-          <dl className="mt-8 grid max-w-4xl grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
+          <dl style={{ "--rise-delay": "120ms" }} className="careers-rise mt-8 grid max-w-4xl grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
             {facts.map(([label, value]) => (
               <div key={label}>
                 <dt className="text-sm text-white/70">{label}</dt>
@@ -84,7 +87,11 @@ export default function JobDetailPage({ job }) {
             ))}
           </dl>
 
-          {open && <ApplyButton job={applyFor} tone="light" className="mt-8 lg:hidden" />}
+          {open && (
+            <div style={{ "--rise-delay": "200ms" }} className="careers-rise mt-8 lg:hidden">
+              <ApplyButton job={applyFor} tone="light" />
+            </div>
+          )}
         </div>
       </section>
 
@@ -106,7 +113,7 @@ export default function JobDetailPage({ job }) {
         <div className="grid gap-12 lg:grid-cols-12">
           <article className="space-y-12 lg:col-span-8">
             {paragraphs.length > 0 && (
-              <section aria-labelledby="about-heading">
+              <Reveal as="section" aria-labelledby="about-heading">
                 <h2 id="about-heading" className="text-2xl font-bold tracking-tight text-gray-900">
                   About the role
                 </h2>
@@ -115,7 +122,7 @@ export default function JobDetailPage({ job }) {
                     <p key={i}>{p}</p>
                   ))}
                 </div>
-              </section>
+              </Reveal>
             )}
             <ListSection id="responsibilities-heading" title="What you'll do" items={job.responsibilities} />
             <ListSection id="requirements-heading" title="What you'll need" items={job.requirements} />
@@ -124,7 +131,7 @@ export default function JobDetailPage({ job }) {
           </article>
 
           <aside className="lg:col-span-4">
-            <div className="space-y-6 lg:sticky lg:top-28">
+            <div style={{ "--rise-delay": "200ms" }} className="careers-rise space-y-6 lg:sticky lg:top-28">
               {open ? (
                 <div className="rounded-2xl border border-gray-200 p-6">
                   <h2 className="text-lg font-semibold text-gray-900">Interested?</h2>
@@ -145,8 +152,8 @@ export default function JobDetailPage({ job }) {
                   </Link>
                 </div>
               )}
-              <div className="space-y-3 px-1">
-                <CopyLink />
+              <ShareButtons title={job.title} summary={job.summary} />
+              <div className="px-1">
                 <Link href="/careers#open-roles" className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-[#3d234b]">
                   <ArrowLeft className="h-4 w-4" aria-hidden />
                   All open roles
@@ -158,7 +165,7 @@ export default function JobDetailPage({ job }) {
       </div>
 
       <section aria-labelledby="next-heading" className="border-t border-gray-200 bg-gray-50 py-14">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-6 xl:px-15">
+        <Reveal className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-6 xl:px-15">
           <h2 id="next-heading" className="text-2xl font-bold tracking-tight text-gray-900">
             What happens after you apply
           </h2>
@@ -168,12 +175,12 @@ export default function JobDetailPage({ job }) {
           </p>
           <Link
             href="/careers#hiring-process"
-            className="mt-5 inline-flex items-center gap-1 font-semibold text-[#3d234b] hover:text-[#2d1a3b]"
+            className="group mt-5 inline-flex items-center gap-1 font-semibold text-[#3d234b] hover:text-[#2d1a3b]"
           >
             How hiring works
-            <ChevronRight className="h-4 w-4" aria-hidden />
+            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
           </Link>
-        </div>
+        </Reveal>
       </section>
     </main>
   );
