@@ -254,17 +254,17 @@ export const INDUSTRIES_CONFIG = {
         iconAlt: "Education & Training Icon",
         image: "/industries/education.webp",
         description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+          "Schools, universities, and training providers now teach in classrooms and online at the same time. Learners expect a smooth digital experience, and leaders need a clear view of enrollment, outcomes and cost.",
         industryContext:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+          "Schools, universities, and training providers now teach in classrooms and online at the same time. Learners expect a smooth digital experience, and leaders need a clear view of enrollment, outcomes and cost.",
         painPoints: [
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-          "Ut enim ad minim veniam, quis nostrud exercitation ullamco",
-          "Duis aute irure dolor in reprehenderit in voluptate velit esse",
+          "Student records, course content and finance data sit in separate systems",
+          "Admissions, enrollment and certification still rely on manual paperwork",
+          "Online learning platforms struggle to scale during peak enrollment",
+          "Tracking learner progress and program outcomes requires pulling reports from several tools",
         ],
         ourApproach:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+          "Devaicon builds and hosts learning platforms on Open edX and connects them to Dynamics 365 for student, finance and operations data. Admissions, enrollment and certification workflows run automatically. Educators get a single view of learner progress, and leadership sees how each program performs.",
         solutionText: [
           "Student management systems",
           "Learning management platforms",
@@ -273,12 +273,12 @@ export const INDUSTRIES_CONFIG = {
           "Performance analytics",
         ],
         additionalContent:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "Administrative work drops and learners get a consistent experience. Institutions scale their programs with confidence. Decisions rest on reliable learning data.",
         futureHeading: "Future of Education Technology",
         futurePoints: [
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          "Sed do eiusmod tempor incididunt ut labore",
-          "Ut enim ad minim veniam, quis nostrud exercitation",
+          "Blended and online learning keep growing across the GCC",
+          "Micro-credentials and skills-based training are gaining ground",
+          "Learning analytics are shaping how programs are designed",
         ],
       },
     ],

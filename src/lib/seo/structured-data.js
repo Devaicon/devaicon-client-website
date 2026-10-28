@@ -8,6 +8,16 @@ import { SITE_NAME, SITE_URL, absoluteUrl, metaDescription } from "./index";
 
 const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
+const BUSINESS_ID = `${SITE_URL}/#business`;
+
+// As printed in the footer and on the contact page; it must also match the
+// Google Business Profile.
+const ADDRESS = {
+  "@type": "PostalAddress",
+  streetAddress: "Business Center, Sharjah Publishing City Free Zone",
+  addressLocality: "Sharjah",
+  addressCountry: "AE",
+};
 
 /** Publisher identity, emitted once site-wide from the root layout. */
 export function organizationSchema() {
@@ -25,11 +35,7 @@ export function organizationSchema() {
       "Devaicon builds AI, automation, cloud and enterprise software solutions for organisations across banking, retail, manufacturing and the public sector.",
     email: "contact@devaicon.com",
     telephone: "+971507001805",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Sharjah",
-      addressCountry: "AE",
-    },
+    address: ADDRESS,
     sameAs: ["https://www.linkedin.com/company/devaicon"],
     contactPoint: {
       "@type": "ContactPoint",
@@ -51,6 +57,22 @@ export function webSiteSchema() {
     name: SITE_NAME,
     url: SITE_URL,
     publisher: { "@id": ORGANIZATION_ID },
+  };
+}
+
+/** The Sharjah office, emitted on the contact page where it is shown. */
+export function localBusinessSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": BUSINESS_ID,
+    name: SITE_NAME,
+    url: SITE_URL,
+    email: "contact@devaicon.com",
+    telephone: "+971507001805",
+    address: ADDRESS,
+    sameAs: ["https://www.linkedin.com/company/devaicon"],
+    parentOrganization: { "@id": ORGANIZATION_ID },
   };
 }
 

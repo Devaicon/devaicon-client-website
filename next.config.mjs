@@ -16,6 +16,14 @@ const nextConfig = {
       { source: '/admin/:path*', destination: '/dashboard/:path*', permanent: true },
       // Temporary, like the legacy logger itself (LEGACY_TIME_LOGGER).
       { source: '/legacy', destination: '/legacy/login', permanent: false },
+      // Retired public URLs Google still lists or posts still link to; each
+      // goes to the page that now covers its content.
+      { source: '/contact', destination: '/contact-us', permanent: true },
+      { source: '/capabilities', destination: '/whatwedo', permanent: true },
+      { source: '/capabilities/ai', destination: '/capabilities/intelligent-systems-data', permanent: true },
+      { source: '/capabilities/data', destination: '/capabilities/intelligent-systems-data', permanent: true },
+      { source: '/capabilities/business-applications', destination: '/capabilities/infrastructure-enterprise-systems', permanent: true },
+      { source: '/capabilities/cloud-services', destination: '/capabilities/infrastructure-enterprise-systems', permanent: true },
     ];
   },
 

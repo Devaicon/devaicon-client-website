@@ -120,7 +120,12 @@ const JobOpenings = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-gray-900 mb-1">
-                          {job.title}
+                          <Link
+                            href={`/careers/${job.slug}`}
+                            className="hover:text-[#3d234b] transition-colors"
+                          >
+                            {job.title}
+                          </Link>
                         </h3>
                         <span className="text-sm text-[#3d234b] font-medium">
                           {job.department}

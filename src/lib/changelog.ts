@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.9.1";
+export const APP_VERSION = "2.9.2";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.9.2",
+    date: "2026-10-28",
+    title: "Old website links lead somewhere useful again",
+    tag: "fix",
+    items: [
+      "Old addresses for our AI, data, cloud and business applications pages now take you to the pages that cover them today",
+      "The contact link inside one of the insight articles now opens the contact page instead of an error",
+      "The Education & Training section on the industries page now describes what we do instead of showing placeholder text",
+      "You can open a job from the careers page by clicking its title, not just View Details",
+    ],
+  },
   {
     version: "2.9.1",
     date: "2026-10-26",

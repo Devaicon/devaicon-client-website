@@ -1,6 +1,8 @@
 import PageHero from "@/components/PageHero";
 import ContactPageLayout from "@/components/ContactPageLayout";
 import FinancialBacking from "@/components/FinancialBacking";
+import JsonLd from "@/components/seo/JsonLd";
+import { localBusinessSchema } from "@/lib/seo/structured-data";
 import { Phone } from "lucide-react";
 
 export const metadata = {
@@ -15,6 +17,8 @@ export const metadata = {
 const ContactUs = () => {
   return (
     <>
+      <JsonLd schema={localBusinessSchema()} />
+
       {/* Hero Section */}
       <PageHero
         breadcrumbs={[
