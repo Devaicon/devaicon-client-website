@@ -1,3 +1,4 @@
+import { GraduationCap } from "lucide-react";
 import { callout, cta, doc, h2, h3, ol, p, table, ul } from "./doc";
 import { OPEN_EDX_CTAS, OPEN_EDX_PARENTS } from "./open-edx-shared";
 import type { ServicePage } from "./types";
@@ -8,7 +9,9 @@ export const OPEN_EDX_HOSTING: ServicePage = {
   subtitle:
     "Secure, monitored Open edX hosting on AWS, Azure or your own infrastructure — deployed with Tutor, upgraded with every named release, and supported by engineers who work on the platform every day.",
   label: "Open edX Services",
+  icon: GraduationCap,
   heroImage: "/hosting.webp",
+  heroButtonText: "Talk to an Open edX expert",
   parents: OPEN_EDX_PARENTS,
   seo: {
     title: "Managed Open edX Hosting & Support",
@@ -179,6 +182,7 @@ export const OPEN_EDX_HOSTING: ServicePage = {
         "Yes. Open edX supports right-to-left languages, and both the learner and authoring interfaces can be shown in Arabic. We configure languages per site, and can run Arabic and English side by side.",
     },
   ],
+  relatedHeading: "Related Open edX services",
   related: [
     {
       title: "Open edX Development & Customization",

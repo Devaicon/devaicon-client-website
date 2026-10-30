@@ -37,6 +37,11 @@ export const h3 = (text: string): DocNode => ({ type: "heading", attrs: { level:
 export const ul = (...items: string[]): DocNode => ({ type: "bulletList", content: items.map(item) });
 export const ol = (...items: string[]): DocNode => ({ type: "orderedList", content: items.map(item) });
 export const callout = (...content: DocNode[]): DocNode => ({ type: "callout", content });
+/** A full-width image, enlargeable on click; the caption shows beneath it. */
+export const img = (src: string, alt: string, caption = ""): DocNode => ({
+  type: "image",
+  attrs: { src, alt, title: caption },
+});
 /** A CTA card; the id is a key of the page's `ctas`. */
 export const cta = (ctaId: string): DocNode => ({ type: "ctaBlock", attrs: { ctaId } });
 

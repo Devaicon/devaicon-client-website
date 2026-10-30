@@ -12,6 +12,10 @@ export const CAPABILITIES_CONFIG = {
     cards: [
       {
         id: "artificial-intelligence-machine-learning",
+        link: {
+          href: "/ai-automation-services-pakistan",
+          label: "Explore AI automation services in Pakistan",
+        },
         title: "Artificial Intelligence & Machine Learning",
         icon: "Brain",
         iconAlt: "AI & ML Icon",
@@ -183,6 +187,10 @@ export const CAPABILITIES_CONFIG = {
       },
       {
         id: "erp-systems-business-automation",
+        link: {
+          href: "/ai-automation-services-pakistan",
+          label: "Explore AI automation services in Pakistan",
+        },
         title: "ERP Systems & Business Automation",
         icon: "Settings",
         iconAlt: "ERP Icon",

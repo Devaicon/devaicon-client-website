@@ -79,9 +79,9 @@ export function localBusinessSchema() {
 /**
  * A capability offering.
  *
- * @param {{ name: string, description: string, path: string, serviceType?: string }} service
+ * @param {{ name: string, description: string, path: string, serviceType?: string, areaServed?: string }} service
  */
-export function serviceSchema({ name, description, path, serviceType }) {
+export function serviceSchema({ name, description, path, serviceType, areaServed = "AE" }) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -90,7 +90,30 @@ export function serviceSchema({ name, description, path, serviceType }) {
     description: metaDescription(description, 300),
     url: absoluteUrl(path),
     provider: { "@id": ORGANIZATION_ID },
-    areaServed: "AE",
+    areaServed,
+  };
+}
+
+/**
+ * A page with a visible byline: who wrote it, when it last changed and who
+ * reviewed it. The site is the author, so it is the Organization, not a
+ * Person.
+ *
+ * @param {{ name: string, path: string, updated: string, reviewer?: string }} page
+ */
+export function reviewedPageSchema({ name, path, updated, reviewer }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    url: absoluteUrl(path),
+    author: { "@id": ORGANIZATION_ID },
+    publisher: { "@id": ORGANIZATION_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    dateModified: updated,
+    ...(reviewer
+      ? { lastReviewed: updated, reviewedBy: { "@type": "Person", name: reviewer } }
+      : {}),
   };
 }
 

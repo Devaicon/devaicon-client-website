@@ -3,6 +3,7 @@ import { listInsights } from "@/lib/blog/source";
 import { getOpenJobs } from "@/lib/careers/api";
 import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
+import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
 
 /**
  * Served at /llms.txt (llmstxt.org): a plain map of the site for AI tools.
@@ -25,6 +26,11 @@ const SECTIONS = [
         path: "/capabilities/intelligent-systems-data",
         description:
           "AI, machine learning, data analytics, NLP, computer vision and AR/VR — systems that think, learn and decide using your data, not gut feeling.",
+      },
+      {
+        title: AI_AUTOMATION_PAKISTAN.title,
+        path: AI_AUTOMATION_PAKISTAN.path,
+        description: AI_AUTOMATION_PAKISTAN.seo.description,
       },
       {
         title: "Application & Software Development",

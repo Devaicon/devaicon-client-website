@@ -1,16 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, GraduationCap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import JsonLd from "@/components/seo/JsonLd";
 import RichText from "@/components/blog/RichText";
 import CtaCard from "@/components/blog/CtaCard";
 import FaqList from "@/components/blog/FaqList";
+import { formatDate } from "@/components/blog/PostArticle";
 import { TocDisclosure, TocSidebar } from "@/components/blog/TableOfContents";
 import { collectHeadings } from "@/lib/blog/toc";
 import { brandedTitle, metaDescription } from "@/lib/seo";
-import { faqPageSchema, serviceSchema } from "@/lib/seo/structured-data";
+import { faqPageSchema, reviewedPageSchema, serviceSchema } from "@/lib/seo/structured-data";
 import type { ServicePage as ServicePageData } from "@/lib/service-pages/types";
 
 const TOC_TITLE = "On this page";
@@ -18,6 +19,7 @@ const TOC_TITLE = "On this page";
 /** Route metadata for a service page, from the same data the page renders. */
 export function servicePageMetadata(page: ServicePageData): Metadata {
   const description = metaDescription(page.seo.description || page.subtitle);
+  const image = page.ogImage ?? page.heroImage;
   return {
     title: brandedTitle(page.seo.title),
     description,
@@ -28,13 +30,13 @@ export function servicePageMetadata(page: ServicePageData): Metadata {
       url: page.path,
       title: page.seo.title,
       description,
-      images: [{ url: page.heroImage, alt: page.title }],
+      images: [{ url: image, alt: page.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: page.seo.title,
       description,
-      images: [page.heroImage],
+      images: [image],
     },
   };
 }
@@ -50,6 +52,7 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
     ...(page.faqs.length ? [{ id: "faq-heading", text: "FAQs", level: 2 }] : []),
   ];
   const closingCta = page.ctas[page.closingCtaId];
+  const { byline, icon: Icon } = page;
 
   return (
     <main className="min-h-screen bg-white">
@@ -60,7 +63,15 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
             description: page.seo.description || page.subtitle,
             path: page.path,
             serviceType: page.serviceType,
+            areaServed: page.areaServed,
           }),
+          byline &&
+            reviewedPageSchema({
+              name: page.title,
+              path: page.path,
+              updated: byline.updated,
+              reviewer: byline.reviewer,
+            }),
           faqPageSchema(page.faqs),
         ]}
       />
@@ -69,9 +80,9 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
         breadcrumbs={[...page.parents, { name: page.title, path: page.path }]}
         title={page.title}
         subtitle={page.subtitle}
-        icon={<GraduationCap className="w-7 h-7 text-white" />}
+        icon={<Icon className="w-7 h-7 text-white" />}
         label={page.label}
-        buttonText="Talk to an Open edX expert"
+        buttonText={page.heroButtonText}
         buttonLink="/contact-us"
         showButton={true}
         backgroundImage={page.heroImage}
@@ -81,6 +92,26 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
       />
 
       <article className="max-w-6xl mx-auto px-6 sm:px-12 py-12 md:py-16">
+        {byline && (
+          <header className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-500">
+            <span>
+              Written by{" "}
+              <Link href={byline.author.path} className="font-medium text-[#37469E] hover:underline">
+                {byline.author.name}
+              </Link>
+            </span>
+            <span aria-hidden>·</span>
+            <span>
+              Updated <time dateTime={byline.updated}>{formatDate(byline.updated)}</time>
+            </span>
+            {byline.reviewer && (
+              <>
+                <span aria-hidden>·</span>
+                <span>Reviewed by {byline.reviewer}</span>
+              </>
+            )}
+          </header>
+        )}
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-12">
           <div className="min-w-0 max-w-3xl">
             <TocDisclosure title={TOC_TITLE} entries={toc} />
@@ -96,7 +127,7 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
         <section className="bg-gradient-to-br from-purple-50 to-blue-50 py-16 md:py-20" aria-labelledby="related-heading">
           <div className="max-w-6xl mx-auto px-6 sm:px-12">
             <h2 id="related-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-              Related Open edX services
+              {page.relatedHeading}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {page.related.map((r) => (

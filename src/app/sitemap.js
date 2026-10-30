@@ -20,6 +20,11 @@ const STATIC_ROUTES = [
     changeFrequency: "monthly",
   },
   {
+    path: "/ai-automation-services-pakistan",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
+  {
     path: "/capabilities/application-software-development",
     priority: 0.9,
     changeFrequency: "monthly",

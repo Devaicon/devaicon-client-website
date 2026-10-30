@@ -1,3 +1,4 @@
+import { GraduationCap } from "lucide-react";
 import { callout, cta, doc, h2, h3, ol, p, table, ul } from "./doc";
 import { OPEN_EDX_CTAS, OPEN_EDX_PARENTS } from "./open-edx-shared";
 import type { ServicePage } from "./types";
@@ -8,7 +9,9 @@ export const OPEN_EDX_DEVELOPMENT: ServicePage = {
   subtitle:
     "Custom features, XBlocks, branded themes, integrations and SSO for Open edX — engineered through the platform's own extension points, so your platform keeps upgrading cleanly.",
   label: "Open edX Services",
+  icon: GraduationCap,
   heroImage: "/feature-development.webp",
+  heroButtonText: "Talk to an Open edX expert",
   parents: OPEN_EDX_PARENTS,
   seo: {
     title: "Open edX Development & Customization Services",
@@ -151,6 +154,7 @@ export const OPEN_EDX_DEVELOPMENT: ServicePage = {
         "Yes. We design and build XBlocks for interactive content, assessments and grading that the built-in components do not cover, and package them so your course teams can add them to courses in Studio.",
     },
   ],
+  relatedHeading: "Related Open edX services",
   related: [
     {
       title: "Managed Open edX Hosting",

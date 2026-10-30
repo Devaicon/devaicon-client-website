@@ -14,10 +14,21 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.11.0";
+export const APP_VERSION = "2.12.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.12.0",
+    date: "2026-10-30",
+    title: "A new page on our AI automation services in Pakistan",
+    tag: "feature",
+    items: [
+      "The website has a new page on AI automation for businesses in Pakistan, from WhatsApp support in Urdu and Roman Urdu to invoice and order handling",
+      "It helps you choose the first process to automate, plan each phase and compare the build and running costs",
+      "You can reach it from the AI & Machine Learning and Business Automation cards on the capabilities pages",
+    ],
+  },
   {
     version: "2.11.0",
     date: "2026-10-28",
