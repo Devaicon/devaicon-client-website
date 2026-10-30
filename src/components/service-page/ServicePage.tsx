@@ -7,11 +7,10 @@ import JsonLd from "@/components/seo/JsonLd";
 import RichText from "@/components/blog/RichText";
 import CtaCard from "@/components/blog/CtaCard";
 import FaqList from "@/components/blog/FaqList";
-import { formatDate } from "@/components/blog/PostArticle";
 import { TocDisclosure, TocSidebar } from "@/components/blog/TableOfContents";
 import { collectHeadings } from "@/lib/blog/toc";
 import { brandedTitle, metaDescription } from "@/lib/seo";
-import { faqPageSchema, reviewedPageSchema, serviceSchema } from "@/lib/seo/structured-data";
+import { faqPageSchema, serviceSchema } from "@/lib/seo/structured-data";
 import type { ServicePage as ServicePageData } from "@/lib/service-pages/types";
 
 const TOC_TITLE = "On this page";
@@ -52,7 +51,7 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
     ...(page.faqs.length ? [{ id: "faq-heading", text: "FAQs", level: 2 }] : []),
   ];
   const closingCta = page.ctas[page.closingCtaId];
-  const { byline, icon: Icon } = page;
+  const { icon: Icon } = page;
 
   return (
     <main className="min-h-screen bg-white">
@@ -65,13 +64,6 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
             serviceType: page.serviceType,
             areaServed: page.areaServed,
           }),
-          byline &&
-            reviewedPageSchema({
-              name: page.title,
-              path: page.path,
-              updated: byline.updated,
-              reviewer: byline.reviewer,
-            }),
           faqPageSchema(page.faqs),
         ]}
       />
@@ -92,26 +84,6 @@ export default function ServicePage({ page }: { page: ServicePageData }) {
       />
 
       <article className="max-w-6xl mx-auto px-6 sm:px-12 py-12 md:py-16">
-        {byline && (
-          <header className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-500">
-            <span>
-              Written by{" "}
-              <Link href={byline.author.path} className="font-medium text-[#37469E] hover:underline">
-                {byline.author.name}
-              </Link>
-            </span>
-            <span aria-hidden>·</span>
-            <span>
-              Updated <time dateTime={byline.updated}>{formatDate(byline.updated)}</time>
-            </span>
-            {byline.reviewer && (
-              <>
-                <span aria-hidden>·</span>
-                <span>Reviewed by {byline.reviewer}</span>
-              </>
-            )}
-          </header>
-        )}
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-12">
           <div className="min-w-0 max-w-3xl">
             <TocDisclosure title={TOC_TITLE} entries={toc} />

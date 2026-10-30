@@ -20,12 +20,6 @@ export type ServicePage = {
   heroButtonText: string;
   /** Trail from Home up to (not including) this page. */
   parents: { name: string; path: string }[];
-  /** Who wrote the page, when it last changed (YYYY-MM-DD) and who reviewed it. */
-  byline?: {
-    author: { name: string; path: string };
-    updated: string;
-    reviewer?: string;
-  };
   seo: {
     title: string;
     description: string;

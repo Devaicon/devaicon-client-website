@@ -95,29 +95,6 @@ export function serviceSchema({ name, description, path, serviceType, areaServed
 }
 
 /**
- * A page with a visible byline: who wrote it, when it last changed and who
- * reviewed it. The site is the author, so it is the Organization, not a
- * Person.
- *
- * @param {{ name: string, path: string, updated: string, reviewer?: string }} page
- */
-export function reviewedPageSchema({ name, path, updated, reviewer }) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name,
-    url: absoluteUrl(path),
-    author: { "@id": ORGANIZATION_ID },
-    publisher: { "@id": ORGANIZATION_ID },
-    isPartOf: { "@id": WEBSITE_ID },
-    dateModified: updated,
-    ...(reviewer
-      ? { lastReviewed: updated, reviewedBy: { "@type": "Person", name: reviewer } }
-      : {}),
-  };
-}
-
-/**
  * A published insight post. Dates, author and image come from the post
  * itself, so every field is something a reader can see on the page. A team
  * byline is an Organization, never dressed up as a Person.

@@ -30,11 +30,6 @@ export const AI_AUTOMATION_PAKISTAN: ServicePage = {
     { name: "Capabilities", path: "/whatwedo" },
     { name: "Intelligent Systems & Data", path: "/capabilities/intelligent-systems-data" },
   ],
-  byline: {
-    author: { name: "Devaicon", path: "/about-devaicon" },
-    updated: "2026-10-30",
-    reviewer: "Muhammad Ahmed",
-  },
   seo: {
     title: "AI Automation Services in Pakistan | ISO 27001",
     description:
