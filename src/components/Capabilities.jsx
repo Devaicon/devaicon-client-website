@@ -163,7 +163,7 @@ const CAPABILITIES_DATA = [
     description:
       "Guidance on technology decisions that actually align with business objectives. This includes system audits, architecture planning, tool selection, and long term technology roadmaps.",
     category: "Consulting & Transformation",
-    slug: "technology-strategy-advisory",
+    slug: "technology-strategy-and-advisory",
   },
   // Open edX Services
   {

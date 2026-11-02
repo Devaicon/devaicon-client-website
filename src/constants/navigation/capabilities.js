@@ -108,7 +108,7 @@ export const capabilitiesData = [
       {
         name: "Technology Strategy",
         icon: "Lightbulb",
-        id: "technology-strategy-advisory",
+        id: "technology-strategy-and-advisory",
       },
     ],
   },

@@ -226,50 +226,6 @@ export const CAPABILITIES_CONFIG = {
     ],
   },
 
-  consultingTransformation: {
-    id: "consulting-transformation",
-    title: "Strategic Consulting & Digital Transformation",
-    subtitle:
-      "Helping organisations adopt technology properly instead of bolting tools together and hoping for the best. We provide strategic guidance, transformation roadmaps, and advisory services that align technology with business objectives.",
-    cards: [
-      {
-        id: "digital-transformation-consulting",
-        title: "Digital Transformation Consulting",
-        icon: "Target",
-        iconAlt: "Digital Transformation Icon",
-        image: "/digital-transformation.webp",
-        description:
-          "Assessment and redesign of business processes using modern technology. We help organisations move from outdated systems to efficient, scalable digital operations with a clear transformation roadmap.",
-        solutionText: [
-          "Current state assessment and gap analysis",
-          "Digital transformation roadmap development",
-          "Process redesign and optimization",
-          "Change management and training programs",
-        ],
-        additionalContent:
-          "Digital transformation isn't about technology alone—it's about changing how organizations work. We help identify inefficiencies, design better processes, select appropriate tools, and manage the cultural change required for successful adoption.",
-      },
-      // Fixed this image
-      {
-        id: "technology-strategy-advisory",
-        title: "Technology Strategy & Advisory",
-        icon: "Lightbulb",
-        iconAlt: "Tech Strategy Icon",
-        image: "/assess-and-envision.webp",
-        description:
-          "Guidance on technology decisions that actually align with business objectives. This includes system audits, architecture planning, tool selection, and long term technology roadmaps.",
-        solutionText: [
-          "Technology stack evaluation and recommendations",
-          "System architecture planning and review",
-          "Vendor selection and procurement guidance",
-          "Long-term technology roadmap development",
-        ],
-        additionalContent:
-          "We help organizations make informed technology decisions—avoiding vendor lock-in, technical debt, and costly mistakes. Our advisory services provide independent, practical guidance based on your specific context, constraints, and goals.",
-      },
-    ],
-  },
-
   openEdXServices: {
     id: "open-edx-services",
     title: "Open edX Services",

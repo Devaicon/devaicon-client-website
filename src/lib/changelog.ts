@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.14.0";
+export const APP_VERSION = "2.15.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.15.0",
+    date: "2026-11-02",
+    title: "A clearer guide to our consulting and transformation work",
+    tag: "improvement",
+    items: [
+      "The Strategic Consulting & Transformation page now explains the service in full for organisations in Pakistan, instead of showing a short list of cards",
+      "Five quick questions help you tell whether you need strategy, transformation or both",
+      "You can see the five steps we follow from strategy to delivery, and the results to track at 90 days and 12 months",
+      "A readiness checklist shows what to have in place before you start a project",
+    ],
+  },
   {
     version: "2.14.0",
     date: "2026-11-02",

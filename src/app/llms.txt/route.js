@@ -4,6 +4,7 @@ import { getOpenJobs } from "@/lib/careers/api";
 import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
+import { CONSULTING_TRANSFORMATION } from "@/lib/service-pages/consulting-transformation";
 import { INDUSTRY_PAGES } from "@/lib/industries-data";
 
 /**
@@ -45,10 +46,9 @@ const SECTIONS = [
           "Scalable infrastructure, ERP systems and automation with ongoing support, so your systems stay stable and your teams focus on actual work.",
       },
       {
-        title: "Strategic Consulting & Transformation",
-        path: "/capabilities/consulting-transformation",
-        description:
-          "Strategic guidance, transformation roadmaps and advisory services that align technology with your business objectives instead of bolting tools together.",
+        title: CONSULTING_TRANSFORMATION.title,
+        path: CONSULTING_TRANSFORMATION.path,
+        description: CONSULTING_TRANSFORMATION.seo.description,
       },
       {
         title: "Open edX Services",
