@@ -1,11 +1,10 @@
 import { SITE_URL } from "@/lib/seo";
 import { listInsights } from "@/lib/blog/source";
 import { getOpenJobs } from "@/lib/careers/api";
+import { getAllIndustries } from "@/lib/industries-data";
 
 /**
- * Public, indexable pages only. The industry sub-pages are left out on
- * purpose: they render the /industries hub and canonicalise to it, and a
- * sitemap should list canonical URLs alone.
+ * Public, indexable pages only: a sitemap should list canonical URLs alone.
  *
  * Static pages carry no lastModified: their content files have no dates, and
  * a build timestamp would claim every page changed on every deploy. Insight
@@ -55,6 +54,11 @@ const STATIC_ROUTES = [
     changeFrequency: "monthly",
   },
   { path: "/industries", priority: 0.8, changeFrequency: "monthly" },
+  ...getAllIndustries().map(({ id }) => ({
+    path: `/industries/${id}`,
+    priority: 0.7,
+    changeFrequency: "monthly",
+  })),
   { path: "/engagement-models", priority: 0.8, changeFrequency: "monthly" },
   { path: "/insights", priority: 0.8, changeFrequency: "weekly" },
   { path: "/about-devaicon", priority: 0.7, changeFrequency: "monthly" },

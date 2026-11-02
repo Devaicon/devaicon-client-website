@@ -1,54 +1,13 @@
-import IndustriesContainer from "@/components/industries/IndustriesContainer";
-import PageHero from "@/components/PageHero";
-import ScrollToHash from "@/components/capabilities/ScrollToHash";
-import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
-import React, { Suspense } from "react";
+import IndustryPage, {
+  industryPageMetadata,
+} from "@/components/industries/IndustryPage";
 
-export const metadata = {
-  title: "Education & Training Technology",
-  description:
-    "Technology for education and training providers, delivered alongside Devaicon's Open edX learning platform services.",
-  alternates: {
-    canonical: "/industries",
-  },
-};
+export const metadata = industryPageMetadata("education");
 
 /**
  * Education Industry Page
  * Schools, universities, and learning management solutions
  */
-const EducationIndustryPage = () => {
-  const industriesConfig = INDUSTRIES_CONFIG.all;
-
-  return (
-    <main>
-      {/* Scroll to hash functionality for deep linking */}
-      <Suspense fallback={null}>
-        <ScrollToHash />
-      </Suspense>
-
-      {/* Hero Section */}
-      <PageHero
-        breadcrumbs={[
-          { name: "Home", path: "/" },
-          { name: "Industries", path: "/industries" },
-          { name: "Education & Training", path: "/industries/education" },
-        ]}
-        title="Industries We Serve"
-        subtitle="Specialized solutions for your sector"
-        showButton={false}
-        backgroundImage="/education.webp"
-      />
-
-      {/* Industries Container */}
-      <IndustriesContainer
-        title={industriesConfig.title}
-        subtitle={industriesConfig.subtitle}
-        cards={industriesConfig.cards}
-        showGroups={true}
-      />
-    </main>
-  );
-};
+const EducationIndustryPage = () => <IndustryPage id="education" />;
 
 export default EducationIndustryPage;

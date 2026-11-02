@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.12.0";
+export const APP_VERSION = "2.13.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.13.0",
+    date: "2026-11-02",
+    title: "Each industry now has a page of its own on the website",
+    tag: "improvement",
+    items: [
+      "Choosing an industry, such as Retail or Banking, in the website footer now opens a page about that industry alone instead of the full industries overview",
+      "Each industry page sets out the challenges that sector faces, how we help and where it is heading",
+      "At the foot of each one you can move straight on to any other industry we serve",
+      "The industry pages can now appear in search results on their own",
+    ],
+  },
   {
     version: "2.12.0",
     date: "2026-10-30",

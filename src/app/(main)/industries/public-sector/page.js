@@ -1,54 +1,13 @@
-import IndustriesContainer from "@/components/industries/IndustriesContainer";
-import PageHero from "@/components/PageHero";
-import ScrollToHash from "@/components/capabilities/ScrollToHash";
-import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
-import React, { Suspense } from "react";
+import IndustryPage, {
+  industryPageMetadata,
+} from "@/components/industries/IndustryPage";
 
-export const metadata = {
-  title: "Public Sector Technology Solutions",
-  description:
-    "Digital transformation for government agencies: better transparency, faster citizen service delivery and clear cross-departmental accountability.",
-  alternates: {
-    canonical: "/industries",
-  },
-};
+export const metadata = industryPageMetadata("public-sector");
 
 /**
  * Public Sector Industry Page
  * Government and public service solutions
  */
-const PublicSectorIndustryPage = () => {
-  const industriesConfig = INDUSTRIES_CONFIG.all;
-
-  return (
-    <main>
-      {/* Scroll to hash functionality for deep linking */}
-      <Suspense fallback={null}>
-        <ScrollToHash />
-      </Suspense>
-
-      {/* Hero Section */}
-      <PageHero
-        breadcrumbs={[
-          { name: "Home", path: "/" },
-          { name: "Industries", path: "/industries" },
-          { name: "Public Sector", path: "/industries/public-sector" },
-        ]}
-        title="Industries We Serve"
-        subtitle="Specialized solutions for your sector"
-        showButton={false}
-        backgroundImage="/public.webp"
-      />
-
-      {/* Industries Container */}
-      <IndustriesContainer
-        title={industriesConfig.title}
-        subtitle={industriesConfig.subtitle}
-        cards={industriesConfig.cards}
-        showGroups={true}
-      />
-    </main>
-  );
-};
+const PublicSectorIndustryPage = () => <IndustryPage id="public-sector" />;
 
 export default PublicSectorIndustryPage;

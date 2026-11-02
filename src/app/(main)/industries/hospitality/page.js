@@ -1,54 +1,13 @@
-import IndustriesContainer from "@/components/industries/IndustriesContainer";
-import PageHero from "@/components/PageHero";
-import ScrollToHash from "@/components/capabilities/ScrollToHash";
-import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
-import React, { Suspense } from "react";
+import IndustryPage, {
+  industryPageMetadata,
+} from "@/components/industries/IndustryPage";
 
-export const metadata = {
-  title: "Tourism & Hospitality Technology",
-  description:
-    "Technology for hotels, resorts and travel companies competing on experience — smooth booking, personalised service and fast response on every channel.",
-  alternates: {
-    canonical: "/industries",
-  },
-};
+export const metadata = industryPageMetadata("hospitality");
 
 /**
  * Hospitality Industry Page
  * Hotels, restaurants, and tourism solutions
  */
-const HospitalityIndustryPage = () => {
-  const industriesConfig = INDUSTRIES_CONFIG.all;
-
-  return (
-    <main>
-      {/* Scroll to hash functionality for deep linking */}
-      <Suspense fallback={null}>
-        <ScrollToHash />
-      </Suspense>
-
-      {/* Hero Section */}
-      <PageHero
-        breadcrumbs={[
-          { name: "Home", path: "/" },
-          { name: "Industries", path: "/industries" },
-          { name: "Tourism & Hospitality", path: "/industries/hospitality" },
-        ]}
-        title="Industries We Serve"
-        subtitle="Specialized solutions for your sector"
-        showButton={false}
-        backgroundImage="/tourism.webp"
-      />
-
-      {/* Industries Container */}
-      <IndustriesContainer
-        title={industriesConfig.title}
-        subtitle={industriesConfig.subtitle}
-        cards={industriesConfig.cards}
-        showGroups={true}
-      />
-    </main>
-  );
-};
+const HospitalityIndustryPage = () => <IndustryPage id="hospitality" />;
 
 export default HospitalityIndustryPage;

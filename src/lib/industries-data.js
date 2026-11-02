@@ -286,6 +286,71 @@ export const INDUSTRIES_CONFIG = {
 };
 
 /**
+ * What each /industries/[id] page needs beyond its card: the breadcrumb name,
+ * the page title (also its h1), the meta description and the hero image.
+ * The sitemap and llms.txt read these too, so their descriptions stay in step
+ * with the pages'.
+ */
+export const INDUSTRY_PAGES = {
+  bfsi: {
+    name: "Banking & Financial Services",
+    title: "Banking & Financial Services Technology",
+    description:
+      "Secure, compliant data management and transaction systems for banks, insurers and financial institutions working under strict regulation.",
+    heroImage: "/banking.webp",
+  },
+  "public-sector": {
+    name: "Public Sector",
+    title: "Public Sector Technology Solutions",
+    description:
+      "Digital transformation for government agencies: better transparency, faster citizen service delivery and clear cross-departmental accountability.",
+    heroImage: "/public.webp",
+  },
+  hospitality: {
+    name: "Tourism & Hospitality",
+    title: "Tourism & Hospitality Technology",
+    description:
+      "Technology for hotels, resorts and travel companies competing on experience — smooth booking, personalised service and fast response on every channel.",
+    heroImage: "/tourism.webp",
+  },
+  manufacturing: {
+    name: "Trading & Manufacturing",
+    title: "Trading & Manufacturing Technology",
+    description:
+      "Systems for manufacturers and trading companies where supply chain disruption, production delays and inventory mismatches hit revenue directly.",
+    heroImage: "/trading.webp",
+  },
+  retail: {
+    name: "Retail",
+    title: "Retail Technology Solutions",
+    description:
+      "Technology for retailers across stores, online and hybrid models — knowing what customers want, keeping it in stock and delivering it consistently.",
+    heroImage: "/retail.webp",
+  },
+  "professional-services": {
+    name: "Professional Services",
+    title: "Professional Services Technology",
+    description:
+      "Technology for consulting firms, legal practices and service providers juggling client projects, billing cycles and compliance requirements.",
+    heroImage: "/professional-services.webp",
+  },
+  nonprofit: {
+    name: "Non-Profit",
+    title: "Non-Profit Technology Solutions",
+    description:
+      "Technology for non-profits balancing programme delivery, donor relationships, regulatory requirements and clear impact measurement.",
+    heroImage: "/non-profit-organizations.webp",
+  },
+  education: {
+    name: "Education & Training",
+    title: "Education & Training Technology",
+    description:
+      "Technology for education and training providers, delivered alongside Devaicon's Open edX learning platform services.",
+    heroImage: "/education.webp",
+  },
+};
+
+/**
  * Get all industries as an array
  */
 export const getAllIndustries = () => {

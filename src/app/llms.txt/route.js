@@ -4,11 +4,11 @@ import { getOpenJobs } from "@/lib/careers/api";
 import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
+import { INDUSTRY_PAGES } from "@/lib/industries-data";
 
 /**
  * Served at /llms.txt (llmstxt.org): a plain map of the site for AI tools.
- * It lists the same canonical pages as the sitemap, so the industry
- * sub-pages are left out for the same reason. Descriptions repeat each
+ * It lists the same canonical pages as the sitemap. Descriptions repeat each
  * page's meta description; keep them in step when one changes.
  */
 const SECTIONS = [
@@ -67,6 +67,11 @@ const SECTIONS = [
         description:
           "Specialised technology solutions for banking, public sector, retail, manufacturing, hospitality, professional services, non-profits and education.",
       },
+      ...Object.entries(INDUSTRY_PAGES).map(([id, page]) => ({
+        title: page.title,
+        path: `/industries/${id}`,
+        description: page.description,
+      })),
       {
         title: "Engagement Models",
         path: "/engagement-models",

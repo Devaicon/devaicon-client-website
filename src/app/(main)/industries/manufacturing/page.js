@@ -1,54 +1,13 @@
-import IndustriesContainer from "@/components/industries/IndustriesContainer";
-import PageHero from "@/components/PageHero";
-import ScrollToHash from "@/components/capabilities/ScrollToHash";
-import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
-import React, { Suspense } from "react";
+import IndustryPage, {
+  industryPageMetadata,
+} from "@/components/industries/IndustryPage";
 
-export const metadata = {
-  title: "Trading & Manufacturing Technology",
-  description:
-    "Systems for manufacturers and trading companies where supply chain disruption, production delays and inventory mismatches hit revenue directly.",
-  alternates: {
-    canonical: "/industries",
-  },
-};
+export const metadata = industryPageMetadata("manufacturing");
 
 /**
  * Manufacturing Industry Page
  * Production, operations, and supply chain solutions
  */
-const ManufacturingIndustryPage = () => {
-  const industriesConfig = INDUSTRIES_CONFIG.all;
-
-  return (
-    <main>
-      {/* Scroll to hash functionality for deep linking */}
-      <Suspense fallback={null}>
-        <ScrollToHash />
-      </Suspense>
-
-      {/* Hero Section */}
-      <PageHero
-        breadcrumbs={[
-          { name: "Home", path: "/" },
-          { name: "Industries", path: "/industries" },
-          { name: "Trading & Manufacturing", path: "/industries/manufacturing" },
-        ]}
-        title="Industries We Serve"
-        subtitle="Specialized solutions for your sector"
-        showButton={false}
-        backgroundImage="/trading.webp"
-      />
-
-      {/* Industries Container */}
-      <IndustriesContainer
-        title={industriesConfig.title}
-        subtitle={industriesConfig.subtitle}
-        cards={industriesConfig.cards}
-        showGroups={true}
-      />
-    </main>
-  );
-};
+const ManufacturingIndustryPage = () => <IndustryPage id="manufacturing" />;
 
 export default ManufacturingIndustryPage;

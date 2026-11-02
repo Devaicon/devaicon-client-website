@@ -1,54 +1,13 @@
-import IndustriesContainer from "@/components/industries/IndustriesContainer";
-import PageHero from "@/components/PageHero";
-import ScrollToHash from "@/components/capabilities/ScrollToHash";
-import { INDUSTRIES_CONFIG } from "@/lib/industries-data";
-import React, { Suspense } from "react";
+import IndustryPage, {
+  industryPageMetadata,
+} from "@/components/industries/IndustryPage";
 
-export const metadata = {
-  title: "Banking & Financial Services Technology",
-  description:
-    "Secure, compliant data management and transaction systems for banks, insurers and financial institutions working under strict regulation.",
-  alternates: {
-    canonical: "/industries",
-  },
-};
+export const metadata = industryPageMetadata("bfsi");
 
 /**
  * BFSI Industry Page
  * Banking, Financial Services, and Insurance solutions
  */
-const BFSIIndustryPage = () => {
-  const industriesConfig = INDUSTRIES_CONFIG.all;
-
-  return (
-    <main>
-      {/* Scroll to hash functionality for deep linking */}
-      <Suspense fallback={null}>
-        <ScrollToHash />
-      </Suspense>
-
-      {/* Hero Section */}
-      <PageHero
-        breadcrumbs={[
-          { name: "Home", path: "/" },
-          { name: "Industries", path: "/industries" },
-          { name: "Banking & Financial Services", path: "/industries/bfsi" },
-        ]}
-        title="Industries We Serve"
-        subtitle="Specialized solutions for your sector"
-        showButton={false}
-        backgroundImage="/banking.webp"
-      />
-
-      {/* Industries Container */}
-      <IndustriesContainer
-        title={industriesConfig.title}
-        subtitle={industriesConfig.subtitle}
-        cards={industriesConfig.cards}
-        showGroups={true}
-      />
-    </main>
-  );
-};
+const BFSIIndustryPage = () => <IndustryPage id="bfsi" />;
 
 export default BFSIIndustryPage;
