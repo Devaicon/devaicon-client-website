@@ -12,7 +12,7 @@ import EntriesSummaryCards from "./EntriesSummaryCards";
 import type { LoggerData } from "../useLoggerData";
 
 export default function EntriesTab({ data }: { data: LoggerData }) {
-  const { logs, projects, loading, deleteLog, bulkDeleteLogs, me } = data;
+  const { logs, projects, loading, deleteLog, bulkDeleteLogs, me, unsynced } = data;
   const { fmt } = useTimeFormat();
   const reduced = useReducedMotion();
 
@@ -46,6 +46,7 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
     if (!confirm("Delete this entry?")) return;
     const result = await deleteLog(id);
     if (!result.ok) alert(result.message ?? "Could not delete this entry.");
+    else if (result.warning) alert(result.warning);
   }
 
   async function onBulkDelete() {
@@ -61,7 +62,10 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
     try {
       const result = await bulkDeleteLogs(ids);
       if (!result.ok) alert(result.message ?? "Could not delete selected entries.");
-      else setSelected(new Set());
+      else {
+        setSelected(new Set());
+        if (result.warning) alert(result.warning);
+      }
     } finally {
       setBulkBusy(false);
     }
@@ -423,6 +427,8 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
               <AnimatePresence initial={false}>
                 {pageItems.map((l) => {
                   const isApproved = !!l.approvedAt;
+                  // Held in this browser; '' until a sync is refused, then the reason.
+                  const localError = unsynced.get(l.id);
                   return (
                     // No `layout` prop: transforms on <tr> reflow unreliably
                     // across browsers, and a fade is all the row change needs.
@@ -454,7 +460,21 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
                         {l.description}
                       </td>
                       <td className="px-4 py-2">
-                        {isApproved ? (
+                        {localError !== undefined ? (
+                          <span
+                            title={
+                              localError ||
+                              "Saved in this browser only. Use Sync now to send it to the spreadsheet."
+                            }
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap ${
+                              localError
+                                ? "bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900"
+                                : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700"
+                            }`}
+                          >
+                            {localError ? "Sync refused" : "Not synced"}
+                          </span>
+                        ) : isApproved ? (
                           <span
                             title={`Approved by ${l.approvedBy} on ${new Date(
                               l.approvedAt,

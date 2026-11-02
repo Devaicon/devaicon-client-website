@@ -25,6 +25,7 @@ import {
 export const runtime = 'nodejs';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function num(v: string | null): number | null {
   if (v == null || v.trim() === '') return null;
@@ -213,15 +214,34 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Entries saved in the browser while the sheet was unreachable arrive with
+  // their own id, so a sync retried after a lost response can't add a row twice.
+  const clientId =
+    typeof body.clientId === 'string' && UUID_RE.test(body.clientId)
+      ? body.clientId.toLowerCase()
+      : undefined;
+
   try {
-    const log = await appendLog({
-      date,
-      username: user.username,
-      project,
-      category,
-      hours,
-      description,
-    });
+    if (clientId) {
+      const existing = await findLogById(clientId);
+      if (existing) {
+        if (existing.username !== user.username) {
+          return NextResponse.json({ error: 'id_conflict' }, { status: 409 });
+        }
+        return NextResponse.json({ log: existing }, { status: 200 });
+      }
+    }
+    const log = await appendLog(
+      {
+        date,
+        username: user.username,
+        project,
+        category,
+        hours,
+        description,
+      },
+      clientId,
+    );
     return NextResponse.json({ log }, { status: 201 });
   } catch (e: any) {
     console.error('POST /api/logs failed:', e?.message ?? e);

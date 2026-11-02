@@ -22,6 +22,12 @@ export type LoggerConfig = {
    * on a fetch.
    */
   preferenceSync: "server" | "local";
+  /**
+   * When the backend can't be reached, keep new entries and deletions in this
+   * browser and offer a sync to replay them. Only the Sheets backend opts in:
+   * it is the one that goes down when the spreadsheet loses its sharing.
+   */
+  localFallback: boolean;
 };
 
 export const NEW_CONFIG: LoggerConfig = {
@@ -31,6 +37,7 @@ export const NEW_CONFIG: LoggerConfig = {
   bulkDelete: "post-body",
   storageScope: "new",
   preferenceSync: "server",
+  localFallback: false,
 };
 
 export const LEGACY_CONFIG: LoggerConfig = {
@@ -40,4 +47,5 @@ export const LEGACY_CONFIG: LoggerConfig = {
   bulkDelete: "delete-query",
   storageScope: "legacy",
   preferenceSync: "local",
+  localFallback: true,
 };

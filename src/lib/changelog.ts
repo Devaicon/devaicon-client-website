@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.13.0";
+export const APP_VERSION = "2.14.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.14.0",
+    date: "2026-11-02",
+    title: "Keep logging time in the legacy logger when the spreadsheet is down",
+    tag: "feature",
+    items: [
+      "If the legacy time logger can't reach the spreadsheet, your entries and deletions are saved in your browser instead of being lost",
+      "A warning tells you when you're working from your browser's copy and how many changes are still waiting",
+      "Press Sync now to send everything you saved while it was down to the spreadsheet, without creating any duplicates",
+      "Entries that haven't reached the spreadsheet yet are marked Not synced in your entries list, with the reason shown if the spreadsheet refuses one",
+    ],
+  },
   {
     version: "2.13.0",
     date: "2026-11-02",

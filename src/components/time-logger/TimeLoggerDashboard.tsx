@@ -19,6 +19,7 @@ import { useStopwatch } from "./stopwatch/useStopwatch";
 import StopwatchBar from "./stopwatch/StopwatchBar";
 import PendingSessionStrip from "./stopwatch/PendingSessionStrip";
 import SaveSessionDialog from "./stopwatch/SaveSessionDialog";
+import SyncBanner from "./SyncBanner";
 
 const TABS = [
   { key: "overview", label: "Overview" },
@@ -219,6 +220,8 @@ function DashboardInner({
             </button>
           </div>
         )}
+
+        {config.localFallback && <SyncBanner data={data} />}
 
         <StopwatchBar sw={sw} />
         <AnimatePresence initial={false}>

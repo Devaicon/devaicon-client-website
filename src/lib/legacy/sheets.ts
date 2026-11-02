@@ -127,13 +127,15 @@ async function withSheetFallback<T>(action: () => Promise<T>): Promise<T> {
 
 export async function appendLog(
   log: Omit<TimeLog, "id" | "loggedAt" | "approvedAt" | "approvedBy">,
+  /** Supplied by entries saved in the browser while the sheet was down. */
+  id?: string,
 ): Promise<TimeLog> {
   return withSheetFallback(async () => {
     const sheets = getSheetsClient();
     const spreadsheetId = getSpreadsheetId();
 
     const full: TimeLog = {
-      id: randomUUID(),
+      id: id ?? randomUUID(),
       loggedAt: new Date().toISOString(),
       approvedAt: "",
       approvedBy: "",

@@ -51,7 +51,10 @@ export default function LogTimeTab({
   /** Called with the project name after an entry is saved from this form. */
   onLogged?: (project: string) => void;
 }) {
-  const { projects, loading, createLog } = data;
+  const { projects, loading, createLog, offline } = data;
+  // With the sheet down and no project list ever cached in this browser,
+  // there is nothing to pick from, so the name is typed instead.
+  const typedProject = offline && projects.length === 0;
   const [mode, setMode] = useState<Mode>("manual");
 
   const [form, setForm] = useState({
@@ -67,14 +70,14 @@ export default function LogTimeTab({
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitMsg, setSubmitMsg] = useState<{
-    kind: "ok" | "err";
+    kind: "ok" | "warn" | "err";
     text: string;
   } | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitMsg(null);
-    if (!form.project) {
+    if (!form.project.trim()) {
       setSubmitMsg({ kind: "err", text: "Pick a project." });
       return;
     }
@@ -93,7 +96,11 @@ export default function LogTimeTab({
         setSubmitMsg({ kind: "err", text: result.message ?? "Failed." });
         return;
       }
-      setSubmitMsg({ kind: "ok", text: "Logged." });
+      setSubmitMsg(
+        result.warning
+          ? { kind: "warn", text: result.warning }
+          : { kind: "ok", text: "Logged." },
+      );
       onLogged?.(form.project);
       setForm({
         ...form,
@@ -178,20 +185,36 @@ export default function LogTimeTab({
                 <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
                   Project
                 </label>
-                <select
-                  value={form.project}
-                  onChange={(e) => setForm({ ...form, project: e.target.value })}
-                  className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
-                  required
-                >
-                  <option value="">Select…</option>
-                  {projects.map((p) => (
-                    <option key={p.id} value={p.name}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-                {!loading && projects.length === 0 && (
+                {typedProject ? (
+                  <input
+                    type="text"
+                    value={form.project}
+                    onChange={(e) => setForm({ ...form, project: e.target.value })}
+                    placeholder="Project name, exactly as in the sheet"
+                    className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
+                    required
+                  />
+                ) : (
+                  <select
+                    value={form.project}
+                    onChange={(e) => setForm({ ...form, project: e.target.value })}
+                    className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-2 text-sm bg-white dark:bg-neutral-900"
+                    required
+                  >
+                    <option value="">Select…</option>
+                    {projects.map((p) => (
+                      <option key={p.id} value={p.name}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                {typedProject ? (
+                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-1">
+                    The project list can&apos;t load right now. A name the sheet
+                    doesn&apos;t know will be refused when you sync.
+                  </p>
+                ) : !loading && projects.length === 0 && (
                   <p className="text-xs text-amber-700 dark:text-amber-400 mt-1">
                     No projects yet — ask your admin to add one.
                   </p>
@@ -254,6 +277,8 @@ export default function LogTimeTab({
                   className={`md:col-span-6 text-sm rounded-md px-3 py-2 ${
                     submitMsg.kind === "ok"
                       ? "bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900"
+                      : submitMsg.kind === "warn"
+                      ? "bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900"
                       : "bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900"
                   }`}
                 >
