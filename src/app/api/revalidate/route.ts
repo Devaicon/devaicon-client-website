@@ -3,14 +3,14 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Called by the Express server when a post or job posting is published,
+ * Called by the Express server when a post, job posting or service page is published,
  * changed or removed, so its pages rebuild now rather than when their cache
  * next expires. Guarded by a secret both apps share (REVALIDATE_SECRET).
  *
  * `tags` names the data caches to expire; a server that sends none is
  * talking about posts.
  */
-const KNOWN_TAGS = ["insights", "careers"];
+const KNOWN_TAGS = ["insights", "careers", "services"];
 
 export async function POST(req: NextRequest) {
   const secret = process.env.REVALIDATE_SECRET ?? "";

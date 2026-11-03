@@ -53,6 +53,7 @@ export type Permission =
   | 'blog.library'
   | 'careers.manage'
   | 'careers.applications'
+  | 'services.manage'
   | 'users.manage'
   | 'roles.manage';
 

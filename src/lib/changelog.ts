@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.15.0";
+export const APP_VERSION = "2.16.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.16.0",
+    date: "2026-11-03",
+    title: "Build and publish service pages from the dashboard",
+    tag: "feature",
+    items: [
+      "If you look after the website, the new Service pages section lets you build a page about any service from ready-made blocks such as feature cards, process steps, comparison tables and FAQs",
+      "Each page has its own search settings: search title, meta description, keywords, canonical address, social sharing preview and a checklist of SEO tips as you write",
+      "You can export pages as files and import them again, here or on another site, and every import arrives as a draft for you to check",
+      "The AI prompt button gives you instructions to paste into your own AI assistant, which writes a page file you can import straight away",
+    ],
+  },
   {
     version: "2.15.0",
     date: "2026-11-02",

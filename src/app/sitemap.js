@@ -1,6 +1,7 @@
 import { SITE_URL } from "@/lib/seo";
 import { listInsights } from "@/lib/blog/source";
 import { getOpenJobs } from "@/lib/careers/api";
+import { getLiveServicePages, isSelfCanonical } from "@/lib/service-pages/managed";
 import { getAllIndustries } from "@/lib/industries-data";
 
 /**
@@ -69,15 +70,17 @@ const STATIC_ROUTES = [
   { path: "/cookies", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-// Rebuilt when a post or role is published or changed; see /api/revalidate.
+// Rebuilt when a post, role or service page is published or changed; see
+// /api/revalidate.
 export const revalidate = 300;
 
 export default async function sitemap() {
   // A content API outage leaves the posts out of this one build rather than
   // failing the sitemap for every other page.
-  const [posts, openJobs] = await Promise.all([
+  const [posts, openJobs, servicePages] = await Promise.all([
     listInsights({ limit: 200 }).catch(() => []),
     getOpenJobs().catch(() => []),
+    getLiveServicePages().catch(() => []),
   ]);
   const insights = posts
     .filter((p) => !p.noindex)
@@ -96,7 +99,15 @@ export default async function sitemap() {
     lastModified: job.updatedAt || job.publishedAt || undefined,
   }));
 
-  return [...STATIC_ROUTES, ...insights, ...jobs].map(
+  // Pages built in the dashboard, unless hidden or canonical elsewhere.
+  const services = servicePages.filter(isSelfCanonical).map((page) => ({
+    path: `/services/${page.slug}`,
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: page.updatedAt || page.publishedAt || undefined,
+  }));
+
+  return [...STATIC_ROUTES, ...services, ...insights, ...jobs].map(
     ({ path, priority, changeFrequency, lastModified }) => ({
       url: new URL(path, SITE_URL).toString(),
       changeFrequency,

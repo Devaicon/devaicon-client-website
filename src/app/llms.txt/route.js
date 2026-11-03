@@ -1,6 +1,7 @@
 import { SITE_URL, metaDescription } from "@/lib/seo";
 import { listInsights } from "@/lib/blog/source";
 import { getOpenJobs } from "@/lib/careers/api";
+import { getLiveServicePages, isSelfCanonical } from "@/lib/service-pages/managed";
 import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
@@ -126,7 +127,7 @@ const POLICIES = [
   },
 ];
 
-// Rebuilt alongside the sitemap when posts or roles change.
+// Rebuilt alongside the sitemap when posts, roles or service pages change.
 export const revalidate = 300;
 
 const line = ({ title, path, description }) =>
@@ -137,10 +138,20 @@ const section = (heading, links) =>
 
 export async function GET() {
   // As in the sitemap, an API outage drops the posts rather than the file.
-  const [posts, openJobs] = await Promise.all([
+  const [posts, openJobs, servicePages] = await Promise.all([
     listInsights({ limit: 200 }).catch(() => []),
     getOpenJobs().catch(() => []),
+    getLiveServicePages().catch(() => []),
   ]);
+  // Pages built in the dashboard join the services written in code.
+  const services = servicePages.filter(isSelfCanonical).map((p) => ({
+    title: p.title,
+    path: `/services/${p.slug}`,
+    description: metaDescription(p.metaDescription || p.subtitle),
+  }));
+  const sections = SECTIONS.map((s) =>
+    s.heading === "Services" ? { ...s, links: [...s.links, ...services] } : s
+  );
   const insights = [
     {
       title: "Insights & Resources",
@@ -170,7 +181,7 @@ export async function GET() {
     "",
     `Based in Sharjah, United Arab Emirates. Website: ${SITE_URL}/`,
     "",
-    ...SECTIONS.flatMap(({ heading, links }) => section(heading, links)),
+    ...sections.flatMap(({ heading, links }) => section(heading, links)),
     ...section("Insights", insights),
     ...section("Open roles", jobs),
     ...section("Optional", POLICIES),

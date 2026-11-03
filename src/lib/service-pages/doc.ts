@@ -8,7 +8,7 @@ import type { DocNode } from "@/lib/blog/types";
 
 const INLINE = /\*\*(.+?)\*\*|\[(.+?)\]\((.+?)\)/g;
 
-function inline(text: string): DocNode[] {
+export function inline(text: string): DocNode[] {
   const out: DocNode[] = [];
   let last = 0;
   for (const m of text.matchAll(INLINE)) {

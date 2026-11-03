@@ -89,6 +89,7 @@ export const config = {
     // aren't signed in.
     "/api/jobs/:path*",
     "/api/applications/:path*",
+    "/api/service-pages/:path*",
     "/api/auth/me",
     "/api/auth/logout",
     "/legacy/:path*",

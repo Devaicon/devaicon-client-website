@@ -4,6 +4,7 @@ import {
   Inbox,
   FileText,
   FolderKanban,
+  LayoutTemplate,
   Library,
   House,
   Settings,
@@ -87,6 +88,18 @@ export const SECTION_GROUPS: SectionGroup[] = [
         icon: Inbox,
         anyOf: ["careers.applications"],
         blurb: "Read what candidates send, download résumés and track each one.",
+      },
+    ],
+  },
+  {
+    label: "Website",
+    sections: [
+      {
+        href: "/dashboard/services",
+        label: "Service pages",
+        icon: LayoutTemplate,
+        anyOf: ["services.manage"],
+        blurb: "Build service pages from content blocks, or import ones an AI agent wrote.",
       },
     ],
   },

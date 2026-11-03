@@ -6,7 +6,7 @@ const EXPRESS_API_URL = (process.env.EXPRESS_API_URL || "http://localhost:4000")
   .trim()
   .replace(/\/+$/, "")
   .replace(/\/api$/, "");
-const UPLOAD_PERMISSIONS = ["posts.write", "blog.library"];
+const UPLOAD_PERMISSIONS = ["posts.write", "blog.library", "services.manage"];
 
 /**
  * Hands the browser a short-lived token to upload one image straight to
