@@ -172,7 +172,7 @@ export const CONSULTING_TRANSFORMATION: ServicePage = {
       "Our advisory work covers system audits, architecture planning, tool selection and long-term technology roadmaps. The guidance is independent and practical, based on your context, constraints and goals. Its purpose is to help you avoid vendor lock-in, technical debt and costly mistakes."
     ),
     p(
-      "When the plan moves to delivery, we work across AI & Machine Learning, NLP, Computer Vision, Enterprise Chatbots, Data Pipeline Design, Power Platform, Dynamics 365 and Microsoft Fabric. We use a platform where it fits the process better than a fresh build. For custom work, our engineers use Python and Django on the server and React in the browser. You can read more about our [AI and automation services in Pakistan](/ai-automation-services-pakistan)."
+      "When the plan moves to delivery, we work across AI & Machine Learning, NLP, Computer Vision, Enterprise Chatbots, Data Pipeline Design, Power Platform, Dynamics 365 and Microsoft Fabric. We use a platform where it fits the process better than a fresh build. For custom work, our engineers use Python and Django on the server and React in the browser. You can read more about our [AI and automation services in Pakistan](/services/ai-automation-services-pakistan)."
     ),
 
     h2("From strategy to execution: a five-step engagement model"),
@@ -268,7 +268,7 @@ export const CONSULTING_TRANSFORMATION: ServicePage = {
     p(
       "A single adviser suits a diagnosis, a system audit or a tool selection. A cross-functional team suits delivery across several systems, where design, build, integration and training run in parallel. Match the team to the step you are in, not to the whole programme at once."
     ),
-    p("You can [compare engagement models](/engagement-models) to see which structure fits your project."),
+    p("You can [compare engagement models](/services/engagement-models) to see which structure fits your project."),
     h3("Can your team lead the transformation internally?"),
     p(
       "Your team can lead it if three things are in place: a dedicated lead, experience delivering change across several teams, and independent technology judgement. If any of these is missing, outside support fills that specific gap. Your people should still own the result. Strategies handed entirely to outsiders rarely survive after they leave."
@@ -302,7 +302,7 @@ export const CONSULTING_TRANSFORMATION: ServicePage = {
     {
       title: "AI Automation Services in Pakistan",
       description: "WhatsApp support in Urdu and Roman Urdu, document processing and workflow automation across your systems.",
-      path: "/ai-automation-services-pakistan",
+      path: "/services/ai-automation-services-pakistan",
       image: "/implementing-ai-automation.webp",
     },
     {
@@ -314,7 +314,7 @@ export const CONSULTING_TRANSFORMATION: ServicePage = {
     {
       title: "Engagement Models",
       description: "Fixed-scope projects, dedicated teams or ongoing managed services — choose how we work together.",
-      path: "/engagement-models",
+      path: "/services/engagement-models",
       image: "/managed-services.webp",
     },
   ],

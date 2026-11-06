@@ -6,6 +6,7 @@ import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
 import { CONSULTING_TRANSFORMATION } from "@/lib/service-pages/consulting-transformation";
+import { hasMoved } from "@/lib/moved-pages.mjs";
 import { INDUSTRY_PAGES } from "@/lib/industries-data";
 
 /**
@@ -35,12 +36,6 @@ const SECTIONS = [
         description: AI_AUTOMATION_PAKISTAN.seo.description,
       },
       {
-        title: "Application & Software Development",
-        path: "/capabilities/application-software-development",
-        description:
-          "Web platforms, mobile apps and desktop software designed for usability, performance and maintainability — products your users actually want to use.",
-      },
-      {
         title: "Infrastructure & Enterprise Systems",
         path: "/capabilities/infrastructure-enterprise-systems",
         description:
@@ -68,17 +63,13 @@ const SECTIONS = [
         description:
           "Specialised technology solutions for banking, public sector, retail, manufacturing, hospitality, professional services, non-profits and education.",
       },
-      ...Object.entries(INDUSTRY_PAGES).map(([id, page]) => ({
-        title: page.title,
-        path: `/industries/${id}`,
-        description: page.description,
-      })),
-      {
-        title: "Engagement Models",
-        path: "/engagement-models",
-        description:
-          "Compare outsourcing, dedicated teams and staff augmentation to find the engagement model that cuts cost and gets your project delivered on time.",
-      },
+      ...Object.entries(INDUSTRY_PAGES)
+        .map(([id, page]) => ({
+          title: page.title,
+          path: `/industries/${id}`,
+          description: page.description,
+        }))
+        .filter(({ path }) => !hasMoved(path)),
     ],
   },
   {

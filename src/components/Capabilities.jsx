@@ -262,7 +262,7 @@ const CAPABILITIES_DATA = [
 const CATEGORY_TO_URL = {
   "Intelligent Systems & Data": "/capabilities/intelligent-systems-data",
   "Application & Software Development":
-    "/capabilities/application-software-development",
+    "/services/capabilities-application-software-development",
   "Infrastructure & Enterprise Systems":
     "/capabilities/infrastructure-enterprise-systems",
   "Consulting & Transformation": "/capabilities/consulting-transformation",

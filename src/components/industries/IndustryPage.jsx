@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { livePath } from "@/lib/moved-pages.mjs";
 import {
   ArrowRight,
   DollarSign,
@@ -31,7 +32,8 @@ const iconMap = {
   GraduationCap,
 };
 
-const pathOf = (id) => `/industries/${id}`;
+// An industry page that moved to /services keeps its links pointing there.
+const pathOf = (id) => livePath(`/industries/${id}`);
 
 /**
  * Metadata for an /industries/[id] page. Each page covers its own industry,

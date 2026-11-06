@@ -155,7 +155,7 @@ export const SAMPLE_PAGE: ServicePageFields = {
         {
           title: "Engagement Models",
           description: "Fixed-scope projects, dedicated teams or managed services.",
-          path: "/engagement-models",
+          path: "/services/engagement-models",
           image: "",
         },
       ],

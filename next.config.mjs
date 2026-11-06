@@ -1,3 +1,5 @@
+import { MOVED_PAGES } from './src/lib/moved-pages.mjs';
+
 /** @type {import('next').NextConfig} */
 // The server's origin. A trailing "/" or "/api" is dropped: every path below
 // already starts with /api, and a doubled one matches no Express route.
@@ -26,6 +28,13 @@ const nextConfig = {
       { source: '/capabilities/cloud-services', destination: '/capabilities/infrastructure-enterprise-systems', permanent: true },
       // Service pages live under /services/<slug>; there is no index of them yet.
       { source: '/services', destination: '/whatwedo', permanent: false },
+      // Pages that moved to /services/<slug>; see src/lib/moved-pages.mjs.
+      // A 301 rather than permanent's 308, since that is what SEO tools check.
+      ...Object.entries(MOVED_PAGES).map(([source, destination]) => ({
+        source,
+        destination,
+        statusCode: 301,
+      })),
     ];
   },
 

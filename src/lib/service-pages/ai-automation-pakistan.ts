@@ -16,7 +16,7 @@ const CTAS: Record<string, Cta> = {
 };
 
 export const AI_AUTOMATION_PAKISTAN: ServicePage = {
-  path: "/ai-automation-services-pakistan",
+  path: "/services/ai-automation-services-pakistan",
   title: "AI Automation Services in Pakistan for Enterprises and Growing Businesses",
   subtitle:
     "Move repetitive work from people to software: WhatsApp queries in Urdu and Roman Urdu, invoices keyed in by hand and order updates copied between systems.",
@@ -440,7 +440,7 @@ export const AI_AUTOMATION_PAKISTAN: ServicePage = {
       "You should, but only if the contract says so. The agreement should assign you ownership of custom code, workflow definitions, prompts, configuration and all conversation and business data, plus admin access to every account, hosting environment and API key, held in your organisation's name. Without that, switching vendors means rebuilding."
     ),
     p(
-      "An agency holding your WhatsApp number, model API key or n8n instance in its own name controls your operation, so treat any refusal to hand over credentials and documentation as a warning sign. Weigh Devaicon's [engagement models](/engagement-models) against the options in the table above to see which structure fits your project."
+      "An agency holding your WhatsApp number, model API key or n8n instance in its own name controls your operation, so treat any refusal to hand over credentials and documentation as a warning sign. Weigh Devaicon's [engagement models](/services/engagement-models) against the options in the table above to see which structure fits your project."
     ),
 
     h2("Guides in this series"),
@@ -475,7 +475,7 @@ export const AI_AUTOMATION_PAKISTAN: ServicePage = {
     {
       title: "Engagement Models",
       description: "Fixed-scope projects, dedicated teams or ongoing managed services — choose how we work together.",
-      path: "/engagement-models",
+      path: "/services/engagement-models",
       image: "/managed-services.webp",
     },
   ],

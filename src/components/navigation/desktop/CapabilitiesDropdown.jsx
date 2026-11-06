@@ -6,7 +6,7 @@ import { capabilitiesData } from "@/constants/navigation";
 import {
   getIconComponent,
   buildCapabilityItemUrl,
-  getCapabilitySlug,
+  buildCapabilityUrl,
 } from "@/utils/navigation";
 
 /**
@@ -95,7 +95,7 @@ export function CapabilitiesDropdown({ isOpen, handlers }) {
 
               {/* Learn More Button */}
               <Link
-                href={`/capabilities/${getCapabilitySlug(currentCapability.name)}`}
+                href={buildCapabilityUrl(currentCapability.name)}
                 className="bg-transparent border-2 border-[#3d234b] text-[#3d234b] px-6 py-2.5 rounded-md font-semibold hover:bg-[#3d234b] hover:text-white transition-all duration-200 flex items-center gap-2 w-fit"
               >
                 LEARN MORE

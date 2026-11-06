@@ -7,7 +7,7 @@ export const ROUTES = {
   INDUSTRIES: "/industries",
   CAPABILITIES: "/capabilities",
   INSIGHTS: "/insights",
-  ENGAGEMENT_MODELS: "/engagement-models",
+  ENGAGEMENT_MODELS: "/services/engagement-models",
   ABOUT: "/about-devaicon",
   WHAT_WE_DO: "/whatwedo",
   CAREERS: "/careers",
@@ -16,7 +16,7 @@ export const ROUTES = {
   // Capability-specific routes
   CAPABILITIES_INTELLIGENT_SYSTEMS: "/capabilities/intelligent-systems-data",
   CAPABILITIES_APPLICATION_SOFTWARE:
-    "/capabilities/application-software-development",
+    "/services/capabilities-application-software-development",
   CAPABILITIES_INFRASTRUCTURE:
     "/capabilities/infrastructure-enterprise-systems",
   CAPABILITIES_CONSULTING: "/capabilities/consulting-transformation",

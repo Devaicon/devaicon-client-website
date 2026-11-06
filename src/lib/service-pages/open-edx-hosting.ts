@@ -137,7 +137,7 @@ export const OPEN_EDX_HOSTING: ServicePage = {
       "**Support coverage** — business-hours support versus round-the-clock cover, and how much course-team help you need"
     ),
     p(
-      "We provide a fixed monthly quote once the platform is sized, so the cost is known before you commit. You can also compare our [engagement models](/engagement-models) for ongoing support."
+      "We provide a fixed monthly quote once the platform is sized, so the cost is known before you commit. You can also compare our [engagement models](/services/engagement-models) for ongoing support."
     ),
 
     h2("Moving an existing Open edX site to Devaicon"),
@@ -199,7 +199,7 @@ export const OPEN_EDX_HOSTING: ServicePage = {
     {
       title: "Engagement Models",
       description: "Fixed-scope projects, dedicated teams or ongoing managed services — choose how we work together.",
-      path: "/engagement-models",
+      path: "/services/engagement-models",
       image: "/managed-services.webp",
     },
   ],

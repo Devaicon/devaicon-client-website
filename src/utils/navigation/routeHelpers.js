@@ -1,4 +1,5 @@
 import { capabilitiesData } from "@/constants/navigation";
+import { livePath } from "@/lib/moved-pages.mjs";
 
 /**
  * Get capability route slug by capability name
@@ -22,7 +23,7 @@ export function getCapabilitySlug(capabilityName) {
  */
 export function buildCapabilityItemUrl(capabilityName, itemId) {
   const slug = getCapabilitySlug(capabilityName);
-  return `/capabilities/${slug}#${itemId}`;
+  return `${livePath(`/capabilities/${slug}`)}#${itemId}`;
 }
 
 /**
@@ -32,4 +33,13 @@ export function buildCapabilityItemUrl(capabilityName, itemId) {
  */
 export function buildIndustryUrl(industryId) {
   return `/industries#${industryId}`;
+}
+
+/**
+ * Build capability page URL, following the page if it has moved
+ * @param {string} capabilityName - Name of the capability
+ * @returns {string} - URL path for the capability page
+ */
+export function buildCapabilityUrl(capabilityName) {
+  return livePath(`/capabilities/${getCapabilitySlug(capabilityName)}`);
 }

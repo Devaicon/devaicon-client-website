@@ -171,7 +171,7 @@ export const OPEN_EDX_DEVELOPMENT: ServicePage = {
     {
       title: "Engagement Models",
       description: "Fixed-scope projects, dedicated teams or ongoing managed services — choose how we work together.",
-      path: "/engagement-models",
+      path: "/services/engagement-models",
       image: "/managed-services.webp",
     },
   ],

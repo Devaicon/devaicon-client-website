@@ -3,6 +3,7 @@ import { listInsights } from "@/lib/blog/source";
 import { getOpenJobs } from "@/lib/careers/api";
 import { getLiveServicePages, isSelfCanonical } from "@/lib/service-pages/managed";
 import { getAllIndustries } from "@/lib/industries-data";
+import { hasMoved } from "@/lib/moved-pages.mjs";
 
 /**
  * Public, indexable pages only: a sitemap should list canonical URLs alone.
@@ -20,13 +21,8 @@ const STATIC_ROUTES = [
     changeFrequency: "monthly",
   },
   {
-    path: "/ai-automation-services-pakistan",
+    path: "/services/ai-automation-services-pakistan",
     priority: 0.8,
-    changeFrequency: "monthly",
-  },
-  {
-    path: "/capabilities/application-software-development",
-    priority: 0.9,
     changeFrequency: "monthly",
   },
   {
@@ -55,12 +51,10 @@ const STATIC_ROUTES = [
     changeFrequency: "monthly",
   },
   { path: "/industries", priority: 0.8, changeFrequency: "monthly" },
-  ...getAllIndustries().map(({ id }) => ({
-    path: `/industries/${id}`,
-    priority: 0.7,
-    changeFrequency: "monthly",
-  })),
-  { path: "/engagement-models", priority: 0.8, changeFrequency: "monthly" },
+  ...getAllIndustries()
+    .map(({ id }) => `/industries/${id}`)
+    .filter((path) => !hasMoved(path))
+    .map((path) => ({ path, priority: 0.7, changeFrequency: "monthly" })),
   { path: "/insights", priority: 0.8, changeFrequency: "weekly" },
   { path: "/about-devaicon", priority: 0.7, changeFrequency: "monthly" },
   { path: "/careers", priority: 0.7, changeFrequency: "weekly" },

@@ -6,21 +6,21 @@ export const engagementModelsData = [
   {
     title: "Software Development Outsourcing",
     description: "Building your software with our expert team.",
-    href: "/engagement-models",
+    href: "/services/engagement-models",
   },
   {
     title: "Dedicated Teams",
     description: "Long term, integrated teams for your project success.",
-    href: "/engagement-models/dedicated-teams",
+    href: "/services/engagement-models",
   },
   {
     title: "IT Staff Augmentation",
     description: "Quick engagement to boost your team.",
-    href: "/engagement-models",
+    href: "/services/engagement-models",
   },
   {
     title: "New Venture Partnership",
     description: "Collaborative launch for your business success.",
-    href: "/engagement-models",
+    href: "/services/engagement-models",
   },
 ];

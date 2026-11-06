@@ -14,10 +14,21 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.16.0";
+export const APP_VERSION = "2.17.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.17.0",
+    date: "2026-11-06",
+    title: "Old service page addresses now open their new versions",
+    tag: "improvement",
+    items: [
+      "The Engagement Models, Application & Software Development and Banking & Financial Services pages now open the versions built in the dashboard, so old links and bookmarks still work",
+      "The AI Automation Services in Pakistan page now lives with the other service pages, at /services/ai-automation-services-pakistan",
+      "Menus, the footer and links inside pages take you straight to the new addresses",
+    ],
+  },
   {
     version: "2.16.0",
     date: "2026-11-03",

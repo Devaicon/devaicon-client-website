@@ -305,7 +305,7 @@ export const BLOCKS: BlockSpec[] = [
         fields: [
           { key: "title", label: "Title", kind: "text", max: 100, required: true },
           { key: "description", label: "Description", kind: "textarea", max: 200 },
-          { key: "path", label: "Link", kind: "url", required: true, hint: "A page on this site, e.g. /engagement-models" },
+          { key: "path", label: "Link", kind: "url", required: true, hint: "A page on this site, e.g. /services/engagement-models" },
           { key: "image", label: "Image", kind: "image" },
         ],
       },
@@ -319,12 +319,12 @@ export const BLOCK_BY_TYPE: Record<string, BlockSpec> = Object.fromEntries(BLOCK
 export const PARENTS: { path: string; name: string }[] = [
   { path: "/whatwedo", name: "Capabilities" },
   { path: "/capabilities/intelligent-systems-data", name: "Intelligent Systems & Data" },
-  { path: "/capabilities/application-software-development", name: "Application & Software Development" },
+  { path: "/services/capabilities-application-software-development", name: "Application & Software Development" },
   { path: "/capabilities/infrastructure-enterprise-systems", name: "Infrastructure & Enterprise Systems" },
   { path: "/capabilities/consulting-transformation", name: "Strategic Consulting & Transformation" },
   { path: "/capabilities/open-edx-services", name: "Open edX Services" },
   { path: "/industries", name: "Industries" },
-  { path: "/engagement-models", name: "Engagement Models" },
+  { path: "/services/engagement-models", name: "Engagement Models" },
   { path: "", name: "None (straight under Home)" },
 ];
 

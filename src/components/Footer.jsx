@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Footer = () => {
   const industries = [
-    { name: "Banking & Financial Services", href: "/industries/bfsi" },
+    { name: "Banking & Financial Services", href: "/services/industries-bfsi" },
     { name: "Public Sector", href: "/industries/public-sector" },
     { name: "Tourism & Hospitality", href: "/industries/hospitality" },
     { name: "Trading & Manufacturing", href: "/industries/manufacturing" },
@@ -22,7 +22,7 @@ const Footer = () => {
     },
     {
       name: "Application & Software Development",
-      href: "/capabilities/application-software-development",
+      href: "/services/capabilities-application-software-development",
     },
     {
       name: "Infrastructure & Enterprise Systems",

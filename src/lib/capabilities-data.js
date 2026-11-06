@@ -13,7 +13,7 @@ export const CAPABILITIES_CONFIG = {
       {
         id: "artificial-intelligence-machine-learning",
         link: {
-          href: "/ai-automation-services-pakistan",
+          href: "/services/ai-automation-services-pakistan",
           label: "Explore AI automation services in Pakistan",
         },
         title: "Artificial Intelligence & Machine Learning",
@@ -188,7 +188,7 @@ export const CAPABILITIES_CONFIG = {
       {
         id: "erp-systems-business-automation",
         link: {
-          href: "/ai-automation-services-pakistan",
+          href: "/services/ai-automation-services-pakistan",
           label: "Explore AI automation services in Pakistan",
         },
         title: "ERP Systems & Business Automation",

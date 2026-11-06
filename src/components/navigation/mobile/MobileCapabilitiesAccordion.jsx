@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { MobileAccordion } from "./MobileAccordion";
 import { capabilitiesData } from "@/constants/navigation";
-import { getCapabilitySlug, getIconComponent } from "@/utils/navigation";
+import { buildCapabilityUrl, getIconComponent } from "@/utils/navigation";
 
 /**
  * Mobile capabilities nested accordion
@@ -80,7 +80,7 @@ export function MobileCapabilitiesAccordion({ isOpen, onToggle, onClose }) {
                       })}
                     </div>
                     <Link
-                      href={`/capabilities/${getCapabilitySlug(capability.name)}`}
+                      href={buildCapabilityUrl(capability.name)}
                       onClick={onClose}
                       className="inline-flex items-center gap-1 text-xs font-semibold text-[#3d234b] hover:underline mt-2"
                     >
