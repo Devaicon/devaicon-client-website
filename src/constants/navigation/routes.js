@@ -19,6 +19,6 @@ export const ROUTES = {
     "/services/capabilities-application-software-development",
   CAPABILITIES_INFRASTRUCTURE:
     "/capabilities/infrastructure-enterprise-systems",
-  CAPABILITIES_CONSULTING: "/capabilities/consulting-transformation",
+  CAPABILITIES_CONSULTING: "/services/capabilities-consulting-transformation",
   CAPABILITIES_OPEN_EDX: "/capabilities/open-edx-services",
 };

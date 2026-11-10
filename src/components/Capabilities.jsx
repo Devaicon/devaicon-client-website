@@ -265,7 +265,7 @@ const CATEGORY_TO_URL = {
     "/services/capabilities-application-software-development",
   "Infrastructure & Enterprise Systems":
     "/capabilities/infrastructure-enterprise-systems",
-  "Consulting & Transformation": "/capabilities/consulting-transformation",
+  "Consulting & Transformation": "/services/capabilities-consulting-transformation",
   "Open edX Services": "/capabilities/open-edx-services",
 };
 

@@ -30,7 +30,7 @@ const Footer = () => {
     },
     {
       name: "Consulting & Transformation",
-      href: "/capabilities/consulting-transformation",
+      href: "/services/capabilities-consulting-transformation",
     },
     {
       name: "Open edX Services",

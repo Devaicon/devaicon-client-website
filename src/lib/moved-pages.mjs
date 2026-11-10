@@ -13,6 +13,10 @@ export const MOVED_PAGES = {
     "/services/capabilities-application-software-development",
   "/industries/bfsi": "/services/industries-bfsi",
   "/ai-automation-services-pakistan": "/services/ai-automation-services-pakistan",
+  // The dashboard's page now holds this address; the Pakistan page written in
+  // code moved to /services/consulting-transformation-pakistan.
+  "/capabilities/consulting-transformation":
+    "/services/capabilities-consulting-transformation",
 };
 
 /**

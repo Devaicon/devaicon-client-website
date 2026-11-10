@@ -16,7 +16,7 @@ const CTAS: Record<string, Cta> = {
 };
 
 export const CONSULTING_TRANSFORMATION: ServicePage = {
-  path: "/capabilities/consulting-transformation",
+  path: "/services/consulting-transformation-pakistan",
   title: "Strategic Consulting & Transformation for Organisations in Pakistan",
   subtitle:
     "Decide where your organisation should go, then change the processes, systems and habits needed to get there.",

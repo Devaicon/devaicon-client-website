@@ -14,10 +14,21 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.17.0";
+export const APP_VERSION = "2.18.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.18.0",
+    date: "2026-11-10",
+    title: "A new Strategic Consulting & Transformation page",
+    tag: "improvement",
+    items: [
+      "Consulting & Transformation in the menu, the footer and the homepage now opens the new page built in the dashboard",
+      "Old links and bookmarks to the consulting page take you to the new page too",
+      "The guide for organisations in Pakistan is still available, now at /services/consulting-transformation-pakistan",
+    ],
+  },
   {
     version: "2.17.0",
     date: "2026-11-06",

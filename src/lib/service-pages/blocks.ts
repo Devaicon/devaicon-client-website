@@ -321,7 +321,7 @@ export const PARENTS: { path: string; name: string }[] = [
   { path: "/capabilities/intelligent-systems-data", name: "Intelligent Systems & Data" },
   { path: "/services/capabilities-application-software-development", name: "Application & Software Development" },
   { path: "/capabilities/infrastructure-enterprise-systems", name: "Infrastructure & Enterprise Systems" },
-  { path: "/capabilities/consulting-transformation", name: "Strategic Consulting & Transformation" },
+  { path: "/services/capabilities-consulting-transformation", name: "Strategic Consulting & Transformation" },
   { path: "/capabilities/open-edx-services", name: "Open edX Services" },
   { path: "/industries", name: "Industries" },
   { path: "/services/engagement-models", name: "Engagement Models" },

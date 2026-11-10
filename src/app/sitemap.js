@@ -31,7 +31,7 @@ const STATIC_ROUTES = [
     changeFrequency: "monthly",
   },
   {
-    path: "/capabilities/consulting-transformation",
+    path: "/services/consulting-transformation-pakistan",
     priority: 0.9,
     changeFrequency: "monthly",
   },
