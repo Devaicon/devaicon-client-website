@@ -12,6 +12,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Sparkles,
   Star,
   Trash2,
   TriangleAlert,
@@ -26,6 +27,7 @@ import IconButton from "@/components/dashboard/IconButton";
 import { api } from "@/components/dashboard/api";
 import { useApi } from "@/components/dashboard/useApi";
 import StatusPill from "@/components/blog-editor/StatusPill";
+import PostPromptDialog from "@/components/blog-editor/PostPromptDialog";
 import {
   buildPostFile,
   downloadJson,
@@ -67,6 +69,7 @@ function Posts() {
   const [creating, setCreating] = useState(false);
   const [importing, setImporting] = useState(false);
   const [imported, setImported] = useState<ImportOutcome[] | null>(null);
+  const [prompting, setPrompting] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const q = query.trim().toLowerCase();
@@ -184,6 +187,14 @@ function Posts() {
         actions={
           can(me, "posts.write") && (
             <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setPrompting(true)}
+                title="A prompt for your own AI agent that writes a post file you can import"
+                className="inline-flex items-center gap-2 rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800"
+              >
+                <Sparkles className="h-4 w-4 text-violet-500" aria-hidden />
+                AI prompt
+              </button>
               <button
                 onClick={downloadSample}
                 title="An example post file, showing every field an import reads"
@@ -398,6 +409,15 @@ function Posts() {
           </table>
         </div>
       </section>
+
+      {prompting && (
+        <PostPromptDialog
+          livePosts={posts.filter(
+            (p) => !p.noindex && (p.status === "published" || (p.status === "scheduled" && new Date(p.publishedAt) <= new Date())),
+          )}
+          onClose={() => setPrompting(false)}
+        />
+      )}
     </div>
   );
 }

@@ -14,10 +14,22 @@ export type ChangelogEntry = {
   items: string[];
 };
 
-export const APP_VERSION = "2.18.0";
+export const APP_VERSION = "2.19.0";
 
 /** Newest first. */
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "2.19.0",
+    date: "2026-11-11",
+    title: "Write blog posts with your own AI agent",
+    tag: "feature",
+    items: [
+      "Posts now has an AI prompt button that builds a ready-made prompt from a short brief you fill in",
+      "The prompt lists your authors, categories and calls to action by name, so the post your agent writes imports without fixes",
+      "You can download a sample post file from the same window, to see every field an import reads",
+      "Paste the prompt into ChatGPT, Claude or any agent, save its reply as a .json file, and Import turns it into a draft",
+    ],
+  },
   {
     version: "2.18.0",
     date: "2026-11-10",

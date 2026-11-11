@@ -23,8 +23,8 @@ export type AiBrief = {
 
 export const EMPTY_BRIEF: AiBrief = { service: "", keyphrase: "", market: "", audience: "", facts: "", links: "", images: "" };
 
-/** Pages on the site an agent may link to. Live dashboard pages are added. */
-const SITE_PAGES = [
+/** Pages on the site an agent may link to. Live dashboard pages are added. Post prompts use it too. */
+export const SITE_PAGES: (readonly [string, string])[] = [
   ["/whatwedo", "What We Do: every capability"],
   ["/capabilities/intelligent-systems-data", "Intelligent Systems & Data (AI, ML, analytics)"],
   ["/services/capabilities-application-software-development", "Application & Software Development"],
