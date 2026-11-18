@@ -11,6 +11,10 @@ const EXPRESS_API_URL = (process.env.EXPRESS_API_URL || 'http://localhost:4000')
 const nextConfig = {
   reactCompiler: true,
 
+  // Emits .next/standalone: a minimal server.js plus only the node_modules it
+  // actually imports. The Docker image runs that instead of `next start`.
+  output: 'standalone',
+
   // The admin panel became everyone's dashboard; keep old links working.
   async redirects() {
     return [
