@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
 import {
   ClockIcon,
   DownloadIcon,
@@ -12,7 +11,6 @@ import {
   RotateCcwIcon,
   UploadIcon,
 } from "lucide-react";
-import { staggerContainer, staggerItem } from "../motion";
 import { useLoggerSettings } from "../SettingsProvider";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { TimeFormat } from "../timeFormat";
@@ -96,7 +94,6 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
   const { settings, setSetting, replaceAll, reset } = useLoggerSettings();
   const prefs = useOverviewPrefs(config);
   const sections = useSectionLayout(config.storageScope);
-  const reduced = useReducedMotion();
   const [justReset, setJustReset] = useState(false);
 
   // Import is two steps: the file is read and checked first, and nothing is
@@ -165,13 +162,8 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
   }
 
   return (
-    <motion.div
-      variants={staggerContainer(!!reduced)}
-      initial="initial"
-      animate="animate"
-      className="max-w-2xl space-y-4"
-    >
-      <motion.div variants={staggerItem(!!reduced)}>
+    <div className="max-w-2xl space-y-4">
+      <div>
         <Group
           title="Display"
           description="How hours are written across the Time Logger."
@@ -191,9 +183,9 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             )}
           </SettingRow>
         </Group>
-      </motion.div>
+      </div>
 
-      <motion.div variants={staggerItem(!!reduced)}>
+      <div>
         <Group
           title="Logging"
           description="What happens when you save an entry."
@@ -227,9 +219,9 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             )}
           </SettingRow>
         </Group>
-      </motion.div>
+      </div>
 
-      <motion.div variants={staggerItem(!!reduced)}>
+      <div>
         <Group
           title="Calendar"
           description="How you move between months."
@@ -249,9 +241,9 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             )}
           </SettingRow>
         </Group>
-      </motion.div>
+      </div>
 
-      <motion.div variants={staggerItem(!!reduced)}>
+      <div>
         <Group
           title="Sounds"
           description="Audio from the clock, and cues for the things you do most. Switching one on plays a sample."
@@ -275,9 +267,9 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             </SettingRow>
           ))}
         </Group>
-      </motion.div>
+      </div>
 
-      <motion.div variants={staggerItem(!!reduced)}>
+      <div>
         <Group
           title="Back up and move"
           description="Save your whole dashboard set-up as a JSON file, or load one from another browser."
@@ -338,9 +330,9 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             {transferNote?.text ?? ""}
           </p>
         </Group>
-      </motion.div>
+      </div>
 
-      <motion.div variants={staggerItem(!!reduced)}>
+      <div>
         <div className="flex items-center gap-3">
           <button type="button" onClick={onReset} className={OUTLINE_BUTTON}>
             <RotateCcwIcon className="h-3.5 w-3.5" />
@@ -353,9 +345,9 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             {justReset ? "Back to the defaults." : ""}
           </span>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div variants={staggerItem(!!reduced)} className="space-y-2">
+      <div className="space-y-2">
         <p className="flex items-start gap-2 text-xs text-neutral-500 dark:text-neutral-400">
           <PaletteIcon aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>
@@ -377,7 +369,7 @@ export default function SettingsTab({ config }: { config: LoggerConfig }) {
             Customise there to move, resize or hide its sections.
           </span>
         </p>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

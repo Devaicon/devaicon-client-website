@@ -15,26 +15,22 @@ export default function Card({
   title,
   children,
   className = "",
-  backdrop,
 }: {
   title: ReactNode;
   children: ReactNode;
   className?: string;
-  /** Decoration painted behind the content, edge to edge. */
-  backdrop?: ReactNode;
 }) {
   return (
     <section
-      className={`card-shine relative flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 ${className}`}
+      className={`flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 ${className}`}
     >
-      {backdrop}
-      <h3 className="relative text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+      <h3 className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
         {title}
       </h3>
       {/* A flex column so a short child can centre itself with `my-auto` and a
           tall one can fill with `h-full`, rather than every card's content
           hugging the top of a slot it was given. */}
-      <div className="relative mt-3 flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div className="mt-3 flex min-h-0 flex-1 flex-col overflow-y-auto">
         {children}
       </div>
     </section>

@@ -1,12 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { Project, TimeLog } from "@/lib/types";
 import MonthCalendar from "./MonthCalendar";
 import { buildCalendarDays } from "./metrics";
-import { monthSwap } from "./motion";
 import Card from "./overview/Card";
 import { useLoggerSettings } from "./SettingsProvider";
 import type { MutationResult, NewLogInput } from "./useLoggerData";
@@ -47,9 +45,6 @@ export default function CalendarPanel({
   // Captured once, so "today" cannot shift underneath a re-render mid-session.
   const now = useMemo(() => new Date(), []);
   const [cursor, setCursor] = useState<Cursor>(() => cursorOf(now));
-  // Which way the last step went, so the grid slides the way time moved.
-  const [direction, setDirection] = useState(1);
-  const reduced = useReducedMotion();
   const { settings } = useLoggerSettings();
 
   const days = useMemo(
@@ -59,20 +54,11 @@ export default function CalendarPanel({
 
   // Day 1 of month ± n rolls over the year correctly in either direction.
   const stepMonths = useCallback((delta: number) => {
-    setDirection(delta >= 0 ? 1 : -1);
     setCursor((c) => cursorOf(new Date(c.year, c.month + delta, 1)));
   }, []);
 
-  // Jumping back to today can cross any distance, so the slide follows whether
-  // the current month is ahead of or behind where the user was looking.
   const goToday = useCallback(() => {
-    const target = cursorOf(now);
-    setCursor((c) => {
-      const from = c.year * 12 + c.month;
-      const to = target.year * 12 + target.month;
-      setDirection(to >= from ? 1 : -1);
-      return target;
-    });
+    setCursor(cursorOf(now));
   }, [now]);
 
   // A callback ref rather than an object ref: the grid is remounted on every
@@ -193,27 +179,15 @@ export default function CalendarPanel({
 
   return (
     <Card title={header} className={className}>
-      {/* mode="wait" so only one month is ever mounted: two grids overlapping
-          would double the gesture listeners and the day buttons. */}
-      <AnimatePresence mode="wait" initial={false} custom={direction}>
-        <motion.div
-          // Remounting on a month change drops any day selected in the old month.
-          key={`${cursor.year}-${cursor.month}`}
-          custom={direction}
-          variants={monthSwap(!!reduced)}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <MonthCalendar
-            days={days}
-            projects={projects}
-            createLog={createLog}
-            deleteLog={deleteLog}
-            gridRef={setGridEl}
-          />
-        </motion.div>
-      </AnimatePresence>
+      <MonthCalendar
+        // Remounting on a month change drops any day selected in the old month.
+        key={`${cursor.year}-${cursor.month}`}
+        days={days}
+        projects={projects}
+        createLog={createLog}
+        deleteLog={deleteLog}
+        gridRef={setGridEl}
+      />
     </Card>
   );
 }

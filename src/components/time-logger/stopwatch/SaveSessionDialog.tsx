@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { CATEGORIES, type Project } from "@/lib/types";
 import DescriptionBuilder from "@/components/DescriptionBuilder";
 import { formatHuman, msToHours } from "../format";
-import { backdrop, dialogPanel } from "../motion";
 import Portal from "@/components/Portal";
 import { isoLocal, todayLocal } from "../metrics";
 import type { MutationResult, NewLogInput } from "../useLoggerData";
@@ -26,7 +24,6 @@ export default function SaveSessionDialog({
   onSaved: (project: string) => void;
 }) {
   const measuredHours = msToHours(session.elapsedMs);
-  const reduced = useReducedMotion();
 
   const [form, setForm] = useState({
     // The entry belongs to the day the timer started, not the day it stopped.
@@ -89,21 +86,16 @@ export default function SaveSessionDialog({
 
   return (
     <Portal>
-      <motion.div
-        variants={backdrop()}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+      <div
         className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
       >
-        <motion.div
+        <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="save-session-title"
-          variants={dialogPanel(!!reduced)}
           className="w-full max-w-2xl rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 text-neutral-900 dark:text-neutral-100 shadow-xl"
         >
           <div className="flex items-start justify-between gap-4">
@@ -234,14 +226,14 @@ export default function SaveSessionDialog({
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50"
+                className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50"
               >
                 {saving ? "Saving…" : "Log entry"}
               </button>
             </div>
           </form>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }

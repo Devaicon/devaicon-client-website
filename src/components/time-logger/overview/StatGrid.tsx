@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { staggerContainer } from "../motion";
 import StatTile, { type TileEdit } from "./StatTile";
 import type { LoggerMetrics } from "../metrics";
 import type { CardContext, CardDef } from "./cards";
@@ -71,7 +69,6 @@ export default function StatGrid({
   /** Supplies per-tile controls while the section is being customised. */
   editFor?: (card: CardDef) => TileEdit;
 }) {
-  const reduced = useReducedMotion();
   if (cards.length === 0) return null;
 
   // An odd card out at the end of a two-column grid takes the whole row rather
@@ -79,10 +76,7 @@ export default function StatGrid({
   const oddLast = compact && cards.length % 2 === 1;
 
   return (
-    <motion.div
-      variants={staggerContainer(!!reduced)}
-      initial="initial"
-      animate="animate"
+    <div
       className={`${compact ? COMPACT_CLASS : gridClassFor(cards.length)} ${className}`.trim()}
     >
       {cards.map((card, i) => (
@@ -95,6 +89,6 @@ export default function StatGrid({
           className={oddLast && i === cards.length - 1 ? "sm:col-span-2" : ""}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }

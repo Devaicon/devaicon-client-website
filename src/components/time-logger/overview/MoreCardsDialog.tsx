@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { XIcon } from "lucide-react";
-import { backdrop, dialogPanel } from "../motion";
 import Portal from "@/components/Portal";
 import StatGrid from "./StatGrid";
 import type { LoggerMetrics } from "../metrics";
@@ -31,7 +29,6 @@ export default function MoreCardsDialog({
   onCustomise: () => void;
   onClose: () => void;
 }) {
-  const reduced = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // Focus lands inside the window once, on opening. Kept apart from the key
@@ -50,21 +47,16 @@ export default function MoreCardsDialog({
 
   return (
     <Portal>
-      <motion.div
-        variants={backdrop()}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+      <div
         className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
       >
-        <motion.div
+        <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="more-cards-title"
-          variants={dialogPanel(!!reduced)}
           className="w-full max-w-4xl rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 p-6 text-neutral-900 dark:text-neutral-100 shadow-xl"
         >
           <div className="flex items-start justify-between gap-4">
@@ -95,8 +87,8 @@ export default function MoreCardsDialog({
           </div>
 
           <StatGrid cards={cards} metrics={metrics} ctx={ctx} className="mt-5" />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }

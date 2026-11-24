@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { DURATION, EASE } from "../motion";
 
 /**
  * A switch, not a checkbox: every setting it fronts takes effect the moment it
@@ -22,8 +20,6 @@ export default function Toggle({
   /** Shown but locked, e.g. a permission the viewer may not change. */
   disabled?: boolean;
 }) {
-  const reduced = useReducedMotion();
-
   return (
     <button
       type="button"
@@ -39,12 +35,11 @@ export default function Toggle({
           : "border-neutral-300 bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-700"
       }`}
     >
-      <motion.span
+      <span
         aria-hidden
-        className="h-4.5 w-4.5 rounded-full bg-white shadow-sm"
-        initial={false}
-        animate={{ x: checked ? 21 : 3 }}
-        transition={{ duration: reduced ? 0 : DURATION.base, ease: EASE }}
+        className={`h-4.5 w-4.5 rounded-full bg-white transition-transform motion-reduce:transition-none ${
+          checked ? "translate-x-[21px]" : "translate-x-[3px]"
+        }`}
       />
     </button>
   );

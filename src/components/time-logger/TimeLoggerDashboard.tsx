@@ -2,8 +2,6 @@
 
 import { Suspense, useCallback, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { fadeRise, slideDown } from "./motion";
 import type { LoggerConfig } from "./config";
 import { can, nameOf } from "@/lib/types";
 import { ArrowLeftIcon } from "lucide-react";
@@ -45,7 +43,6 @@ function DashboardInner({
   const searchParams = useSearchParams();
   const rawData = useLoggerData(config);
   const rawSw = useStopwatch(config.storageScope);
-  const reduced = useReducedMotion();
   const { settings } = useLoggerSettings();
   const play = useSound();
 
@@ -203,7 +200,7 @@ function DashboardInner({
             </span>
             <button
               onClick={data.logout}
-              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors shadow-sm ml-2"
+              className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 px-3 py-1.5 rounded-md border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors ml-2"
             >
               Sign out
             </button>
@@ -224,24 +221,13 @@ function DashboardInner({
         {config.localFallback && <SyncBanner data={data} />}
 
         <StopwatchBar sw={sw} />
-        <AnimatePresence initial={false}>
-          {sw.pending && !dialogOpen && (
-            <motion.div
-              key={sw.pending.id}
-              variants={slideDown(!!reduced)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="overflow-hidden"
-            >
-              <PendingSessionStrip
-                session={sw.pending}
-                onSave={() => setDismissedPendingId(null)}
-                onDiscard={sw.clearPending}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {sw.pending && !dialogOpen && (
+          <PendingSessionStrip
+            session={sw.pending}
+            onSave={() => setDismissedPendingId(null)}
+            onDiscard={sw.clearPending}
+          />
+        )}
 
         <div
           role="tablist"
@@ -273,44 +259,30 @@ function DashboardInner({
         </div>
 
         <div role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`}>
-          {/* mode="wait" so the outgoing panel clears before the next arrives —
-              two full-width panels overlapping mid-transition looks broken. */}
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active}
-              variants={fadeRise(!!reduced)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              {active === "overview" && (
-                <OverviewTab data={data} config={config} onLogged={onLogged} />
-              )}
-              {active === "log" && (
-                <LogTimeTab data={data} sw={sw} onLogged={onLogged} />
-              )}
-              {active === "entries" && <EntriesTab data={data} />}
-              {active === "settings" && (
-                <SettingsTab config={config} />
-              )}
-            </motion.div>
-          </AnimatePresence>
+          {active === "overview" && (
+            <OverviewTab data={data} config={config} onLogged={onLogged} />
+          )}
+          {active === "log" && (
+            <LogTimeTab data={data} sw={sw} onLogged={onLogged} />
+          )}
+          {active === "entries" && <EntriesTab data={data} />}
+          {active === "settings" && (
+            <SettingsTab config={config} />
+          )}
         </div>
       </div>
 
       <ClockSounds clockVisible={active === "overview"} />
 
-      <AnimatePresence>
-        {dialogOpen && sw.pending && (
-          <SaveSessionDialog
-            session={sw.pending}
-            projects={data.projects}
-            createLog={data.createLog}
-            onClose={() => setDismissedPendingId(sw.pending!.id)}
-            onSaved={onSessionSaved}
-          />
-        )}
-      </AnimatePresence>
+      {dialogOpen && sw.pending && (
+        <SaveSessionDialog
+          session={sw.pending}
+          projects={data.projects}
+          createLog={data.createLog}
+          onClose={() => setDismissedPendingId(sw.pending!.id)}
+          onSaved={onSessionSaved}
+        />
+      )}
     </main>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -8,8 +7,6 @@ import {
   TrendingUpIcon,
   XIcon,
 } from "lucide-react";
-import AnimatedNumber from "../AnimatedNumber";
-import { staggerItem } from "../motion";
 import { useTimeFormat } from "../TimeFormatProvider";
 import type { LoggerMetrics } from "../metrics";
 import {
@@ -76,7 +73,7 @@ function Figure({ value, fmt }: { value: CardValue; fmt: (h: number) => string }
     case "hours":
       return (
         <div className="text-2xl font-semibold tabular-nums">
-          <AnimatedNumber value={value.hours} format={fmt} />
+          {fmt(value.hours)}
         </div>
       );
 
@@ -96,7 +93,7 @@ function Figure({ value, fmt }: { value: CardValue; fmt: (h: number) => string }
           {!flat && <Icon aria-hidden className="h-5 w-5 shrink-0" />}
           {/* formatHoursHuman clamps negatives to zero, so the magnitude is
               formatted and the icon carries the direction. */}
-          <AnimatedNumber value={Math.abs(value.hours)} format={fmt} />
+          {fmt(Math.abs(value.hours))}
           <span className="sr-only">{up ? "more than" : "less than"} last week</span>
         </div>
       );
@@ -112,7 +109,7 @@ function Figure({ value, fmt }: { value: CardValue; fmt: (h: number) => string }
           {p === null ? (
             <span>—</span>
           ) : (
-            <AnimatedNumber value={p} format={(n) => formatPercent(n)} />
+            <span>{formatPercent(p)}</span>
           )}
           <span className={`shrink-0 truncate ${muted}`}>
             {p === null ? "nothing expected" : `of ${fmt(value.of)}`}
@@ -124,7 +121,7 @@ function Figure({ value, fmt }: { value: CardValue; fmt: (h: number) => string }
     case "count":
       return (
         <div className="truncate text-2xl font-semibold tabular-nums">
-          <AnimatedNumber value={value.count} format={(n) => String(Math.round(n))} />
+          {value.count}
           <span className={`ml-1 ${muted}`}>
             {value.count === 1 ? value.noun : value.nounPlural}
           </span>
@@ -159,7 +156,6 @@ export default function StatTile({
   edit?: TileEdit;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
   const label = card.label(ctx);
   const value = card.value(metrics, ctx);
@@ -173,9 +169,8 @@ export default function StatTile({
     "rounded-md p-1 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors";
 
   return (
-    <motion.div
-      variants={staggerItem(!!reduced)}
-      className={`card-shine relative flex h-full flex-col rounded-xl border bg-white dark:bg-neutral-900 p-5 ${
+    <div
+      className={`relative flex h-full flex-col rounded-xl border bg-white dark:bg-neutral-900 p-5 ${
         edit
           ? "border-dashed border-neutral-300 dark:border-neutral-700"
           : "border-neutral-200 dark:border-neutral-800"
@@ -213,16 +208,14 @@ export default function StatTile({
       {value.kind === "percent" && value.pct !== null && (
         <div className="mt-auto pt-3">
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
-            <motion.div
+            <div
               className={`h-full rounded-full ${percentTone(value.pct, value.tone).bar}`}
-              initial={false}
               // The figure may read past 100; the bar simply fills.
-              animate={{ width: `${Math.min(100, Math.max(0, value.pct))}%` }}
-              transition={{ duration: reduced ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
+              style={{ width: `${Math.min(100, Math.max(0, value.pct))}%` }}
             />
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

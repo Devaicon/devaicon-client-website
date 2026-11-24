@@ -1,11 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon, InfoIcon, XIcon } from "lucide-react";
 import type { TimeLog } from "@/lib/types";
 import { addDays, formatDayLabel, isoLocal } from "../metrics";
-import { fadeRise } from "../motion";
 import {
   buildDayTimeline,
   formatClockMinutes,
@@ -47,7 +45,6 @@ export default function DayTimeline({ logs }: { logs: TimeLog[] }) {
   // A minute is the finest step the bar can show; ticking faster would only
   // re-render it for nothing.
   const now = useNow(60_000);
-  const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
 
   const [picked, setPicked] = useState<string | null>(null);
@@ -287,14 +284,8 @@ export default function DayTimeline({ logs }: { logs: TimeLog[] }) {
         </ul>
 
         {/* ---------- selected session ---------- */}
-        <AnimatePresence initial={false}>
           {selected && (
-            <motion.div
-              key={selected.id}
-              variants={fadeRise(!!reduced)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+            <div
               className="relative rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950/60 p-3 pr-9 text-sm"
             >
               <button
@@ -324,9 +315,8 @@ export default function DayTimeline({ logs }: { logs: TimeLog[] }) {
                   past midnight, so where it starts is a best guess.
                 </p>
               )}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
 
         {/* ---------- what could not be drawn ---------- */}
         {day.sessions.length === 0 && day.unplaced.length === 0 && (

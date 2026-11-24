@@ -253,7 +253,7 @@ export default function LogTimeTab({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
+                  className="w-full rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors"
                 >
                   {submitting ? "Saving…" : "Save"}
                 </button>

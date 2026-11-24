@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   CheckIcon,
   PlusIcon,
@@ -38,7 +37,6 @@ export default function OverviewTab({
 }) {
   const { logs, loading, projects, createLog, deleteLog, me } = data;
   const m = useMemo(() => computeMetrics(logs), [logs]);
-  const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
   const [quickLogOpen, setQuickLogOpen] = useState(false);
   // One mode, not two. Choosing which figures you see and choosing where they
@@ -89,7 +87,7 @@ export default function OverviewTab({
         type="button"
         onClick={() => setQuickLogOpen(true)}
         disabled={loading}
-        className="flex cursor-pointer items-center gap-1.5 rounded-md bg-neutral-900 dark:bg-neutral-100 px-3 py-1.5 text-xs font-medium text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
+        className="flex cursor-pointer items-center gap-1.5 rounded-md bg-neutral-900 dark:bg-neutral-100 px-3 py-1.5 text-xs font-medium text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
       >
         <PlusIcon className="h-3.5 w-3.5" />
         Log time
@@ -167,11 +165,9 @@ export default function OverviewTab({
           <span className="tabular-nums font-medium">{fmt(m.pendingHours)}</span>
         </div>
         <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-amber-200 dark:bg-amber-900">
-          <motion.div
+          <div
             className="h-full rounded-full bg-green-600 dark:bg-green-500"
-            initial={false}
-            animate={{ width: `${approvedPct}%` }}
-            transition={{ duration: reduced ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{ width: `${approvedPct}%` }}
           />
         </div>
         {totalForApproval === 0 && (
@@ -231,16 +227,14 @@ export default function OverviewTab({
         content={content}
       />
 
-      <AnimatePresence>
-        {quickLogOpen && (
+      {quickLogOpen && (
           <QuickLogDialog
             projects={projects}
             createLog={createLog}
             onLogged={onLogged}
             onClose={() => setQuickLogOpen(false)}
           />
-        )}
-      </AnimatePresence>
+      )}
     </div>
   );
 }

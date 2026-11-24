@@ -1,20 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CATEGORIES } from "@/lib/types";
 import { formatHoursHuman } from "../format";
 import { summariseEntries, todayLocal } from "../metrics";
 import { downloadCsv, toCsv } from "../csv";
 import { useTimeFormat } from "../TimeFormatProvider";
-import { fadeRow } from "../motion";
 import EntriesSummaryCards from "./EntriesSummaryCards";
 import type { LoggerData } from "../useLoggerData";
 
 export default function EntriesTab({ data }: { data: LoggerData }) {
   const { logs, projects, loading, deleteLog, bulkDeleteLogs, me, unsynced } = data;
   const { fmt } = useTimeFormat();
-  const reduced = useReducedMotion();
 
   // filter state
   const [filterCategory, setFilterCategory] = useState<string>("");
@@ -424,92 +421,84 @@ export default function EntriesTab({ data }: { data: LoggerData }) {
                 </td>
               </tr>
             ) : (
-              <AnimatePresence initial={false}>
-                {pageItems.map((l) => {
-                  const isApproved = !!l.approvedAt;
-                  // Held in this browser; '' until a sync is refused, then the reason.
-                  const localError = unsynced.get(l.id);
-                  return (
-                    // No `layout` prop: transforms on <tr> reflow unreliably
-                    // across browsers, and a fade is all the row change needs.
-                    <motion.tr
-                      key={l.id}
-                      variants={fadeRow(!!reduced)}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      className="border-t border-neutral-100 dark:border-neutral-800"
-                    >
-                      <td className="px-4 py-2">
-                        <input
-                          type="checkbox"
-                          aria-label={`Select entry from ${l.date}`}
-                          checked={selected.has(l.id)}
-                          disabled={isApproved}
-                          onChange={() => toggleOne(l.id)}
-                          className="align-middle disabled:opacity-30"
-                        />
-                      </td>
-                      <td className="px-4 py-2">{l.date}</td>
-                      <td className="px-4 py-2">{l.project}</td>
-                      <td className="px-4 py-2">{l.category}</td>
-                      <td className="px-4 py-2 text-right tabular-nums whitespace-nowrap">
-                        {fmt(Number(l.hours), { decimals: 2, unit: false })}
-                      </td>
-                      <td className="px-4 py-2 text-neutral-700 dark:text-neutral-300 whitespace-pre-line">
-                        {l.description}
-                      </td>
-                      <td className="px-4 py-2">
-                        {localError !== undefined ? (
-                          <span
-                            title={
-                              localError ||
-                              "Saved in this browser only. Use Sync now to send it to the spreadsheet."
-                            }
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap ${
-                              localError
-                                ? "bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900"
-                                : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700"
-                            }`}
-                          >
-                            {localError ? "Sync refused" : "Not synced"}
-                          </span>
-                        ) : isApproved ? (
-                          <span
-                            title={`Approved by ${l.approvedBy} on ${new Date(
-                              l.approvedAt,
-                            ).toLocaleDateString()}`}
-                            className="inline-flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900 px-2 py-0.5 text-xs font-medium"
-                          >
-                            ✓ Approved
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900 px-2 py-0.5 text-xs font-medium">
-                            Pending
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-2 text-right">
-                        {isApproved ? (
-                          <span
-                            className="text-xs text-neutral-400 dark:text-neutral-500"
-                            title="Approved entries are locked. Ask an admin to unapprove first."
-                          >
-                            Locked
-                          </span>
-                        ) : (
-                          <button
-                            onClick={() => onDeleteLog(l.id)}
-                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </td>
-                    </motion.tr>
-                  );
-                })}
-              </AnimatePresence>
+              pageItems.map((l) => {
+                const isApproved = !!l.approvedAt;
+                // Held in this browser; '' until a sync is refused, then the reason.
+                const localError = unsynced.get(l.id);
+                return (
+                  <tr
+                    key={l.id}
+                    className="border-t border-neutral-100 dark:border-neutral-800"
+                  >
+                    <td className="px-4 py-2">
+                      <input
+                        type="checkbox"
+                        aria-label={`Select entry from ${l.date}`}
+                        checked={selected.has(l.id)}
+                        disabled={isApproved}
+                        onChange={() => toggleOne(l.id)}
+                        className="align-middle disabled:opacity-30"
+                      />
+                    </td>
+                    <td className="px-4 py-2">{l.date}</td>
+                    <td className="px-4 py-2">{l.project}</td>
+                    <td className="px-4 py-2">{l.category}</td>
+                    <td className="px-4 py-2 text-right tabular-nums whitespace-nowrap">
+                      {fmt(Number(l.hours), { decimals: 2, unit: false })}
+                    </td>
+                    <td className="px-4 py-2 text-neutral-700 dark:text-neutral-300 whitespace-pre-line">
+                      {l.description}
+                    </td>
+                    <td className="px-4 py-2">
+                      {localError !== undefined ? (
+                        <span
+                          title={
+                            localError ||
+                            "Saved in this browser only. Use Sync now to send it to the spreadsheet."
+                          }
+                          className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap ${
+                            localError
+                              ? "bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900"
+                              : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700"
+                          }`}
+                        >
+                          {localError ? "Sync refused" : "Not synced"}
+                        </span>
+                      ) : isApproved ? (
+                        <span
+                          title={`Approved by ${l.approvedBy} on ${new Date(
+                            l.approvedAt,
+                          ).toLocaleDateString()}`}
+                          className="inline-flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900 px-2 py-0.5 text-xs font-medium"
+                        >
+                          ✓ Approved
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900 px-2 py-0.5 text-xs font-medium">
+                          Pending
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2 text-right">
+                      {isApproved ? (
+                        <span
+                          className="text-xs text-neutral-400 dark:text-neutral-500"
+                          title="Approved entries are locked. Ask an admin to unapprove first."
+                        >
+                          Locked
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => onDeleteLog(l.id)}
+                          className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

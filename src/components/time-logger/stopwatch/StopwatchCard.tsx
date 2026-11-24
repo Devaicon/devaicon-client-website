@@ -76,7 +76,7 @@ export default function StopwatchCard({
             <button
               type="button"
               onClick={() => sw.start()}
-              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-600 active:scale-[0.98]"
+              className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:hover:bg-neutral-600"
             >
               Start
             </button>

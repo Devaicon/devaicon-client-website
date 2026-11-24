@@ -1,10 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import AnimatedNumber from "../AnimatedNumber";
 import { useTimeFormat } from "../TimeFormatProvider";
-import { staggerContainer, staggerItem } from "../motion";
 import type { EntriesSummary } from "../metrics";
 
 function Card({
@@ -16,10 +13,8 @@ function Card({
   children: ReactNode;
   note?: ReactNode;
 }) {
-  const reduced = useReducedMotion();
   return (
-    <motion.div
-      variants={staggerItem(!!reduced)}
+    <div
       className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4"
     >
       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
@@ -31,28 +26,23 @@ function Card({
           {note}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
 /**
  * Live summary of whatever the Entries filters currently match. Every figure
- * recomputes as the filters change, and the numbers roll rather than swap so
- * the change is visible.
+ * recomputes as the filters change.
  */
 export default function EntriesSummaryCards({
   summary,
 }: {
   summary: EntriesSummary;
 }) {
-  const reduced = useReducedMotion();
   const { fmt } = useTimeFormat();
 
   return (
-    <motion.div
-      variants={staggerContainer(!!reduced)}
-      initial="initial"
-      animate="animate"
+    <div
       className="grid grid-cols-2 gap-3 lg:grid-cols-5"
     >
       <Card
@@ -63,46 +53,37 @@ export default function EntriesSummaryCards({
             : undefined
         }
       >
-        <AnimatedNumber value={summary.totalHours} format={(n) => fmt(n)} />
+        {fmt(summary.totalHours)}
       </Card>
 
       <Card
         label="Entries"
         note={<>avg {fmt(summary.avgPerEntry)} each</>}
       >
-        <AnimatedNumber
-          value={summary.entryCount}
-          format={(n) => String(Math.round(n))}
-        />
+        {summary.entryCount}
       </Card>
 
       <Card
         label="Avg / logged day"
         note={
           <>
-            over{" "}
-            <AnimatedNumber
-              value={summary.daysCovered}
-              format={(n) => String(Math.round(n))}
-            />{" "}
+            over {summary.daysCovered}{" "}
             {summary.daysCovered === 1 ? "day" : "days"}
           </>
         }
       >
-        <AnimatedNumber value={summary.avgPerDay} format={(n) => fmt(n)} />
+        {fmt(summary.avgPerDay)}
       </Card>
 
       <Card
         label="Approved"
         note={<>{fmt(summary.pendingHours)} pending</>}
       >
-        <AnimatedNumber value={summary.approvedHours} format={(n) => fmt(n)} />
+        {fmt(summary.approvedHours)}
         <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-amber-200 dark:bg-amber-900">
-          <motion.div
+          <div
             className="h-full rounded-full bg-green-600 dark:bg-green-500"
-            initial={false}
-            animate={{ width: `${summary.approvedPct}%` }}
-            transition={{ duration: reduced ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{ width: `${summary.approvedPct}%` }}
           />
         </div>
       </Card>
@@ -121,6 +102,6 @@ export default function EntriesSummaryCards({
           {summary.topProject?.name ?? "—"}
         </span>
       </Card>
-    </motion.div>
+    </div>
   );
 }

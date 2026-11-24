@@ -10,7 +10,7 @@ export default function StopwatchBar({ sw }: { sw: UseStopwatch }) {
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 py-2.5">
       <span
         className={`h-2 w-2 shrink-0 rounded-full ${
-          sw.status === "running" ? "animate-pulse bg-red-500" : "bg-neutral-400"
+          sw.status === "running" ? "bg-red-500" : "bg-neutral-400"
         }`}
         aria-hidden="true"
       />

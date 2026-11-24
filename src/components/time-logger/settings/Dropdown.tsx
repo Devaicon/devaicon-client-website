@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
-import { dropdownPanel } from "../motion";
 
 export type DropdownOption<T extends string> = {
   value: T;
@@ -35,7 +33,6 @@ export default function Dropdown<T extends string>({
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
   const listId = useId();
 
   const selectedIndex = Math.max(
@@ -126,20 +123,15 @@ export default function Dropdown<T extends string>({
         />
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.ul
+      {open && (
+          <ul
             id={listId}
             role="listbox"
             aria-label={label}
             aria-activedescendant={`${listId}-${active}`}
             tabIndex={-1}
-            variants={dropdownPanel(!!reduced)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
             onKeyDown={onKeyDown}
-            className="absolute z-30 mt-1 w-full origin-top overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-1 shadow-lg"
+            className="absolute z-30 mt-1 w-full overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-1 shadow-lg"
           >
             {options.map((option, i) => {
               const isSelected = option.value === value;
@@ -178,9 +170,8 @@ export default function Dropdown<T extends string>({
                 </li>
               );
             })}
-          </motion.ul>
+          </ul>
         )}
-      </AnimatePresence>
     </div>
   );
 }

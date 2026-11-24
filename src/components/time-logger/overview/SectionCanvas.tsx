@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
@@ -11,7 +10,6 @@ import {
   MinimizeIcon,
   PlusIcon,
 } from "lucide-react";
-import { DURATION, EASE, fadeRise, staggerContainer, staggerItem } from "../motion";
 import {
   gridClassOf,
   hiddenSections,
@@ -123,7 +121,6 @@ export default function SectionCanvas({
   /** Rendered block for each id. A missing id simply renders nothing. */
   content: Partial<Record<SectionId, ReactNode>>;
 }) {
-  const reduced = useReducedMotion();
   // The block being dragged, and the slot the pointer is currently over.
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
@@ -136,10 +133,7 @@ export default function SectionCanvas({
 
   return (
     <div className="space-y-4">
-      <motion.div
-        variants={staggerContainer(!!reduced)}
-        initial="initial"
-        animate="animate"
+      <div
         // Rows size themselves. Each block carries its own minimum height
         // instead (see `gridClassOf`), so a block with nothing to fill a slot
         // with — the tile band — takes only the height its cards need.
@@ -180,13 +174,7 @@ export default function SectionCanvas({
                 arranging ? "cursor-grab active:cursor-grabbing" : ""
               } ${isDragging ? "opacity-40" : ""}`}
             >
-              {/* The animated element sits inside the drag host: framer-motion
-                  claims onDragStart/onDragEnd for its own pan gestures, so the
-                  native handlers would never reach the DOM from a motion.div. */}
-              <motion.div
-                variants={staggerItem(!!reduced)}
-                layout={!reduced}
-                transition={{ duration: reduced ? 0 : DURATION.card, ease: EASE }}
+              <div
                 className={`flex h-full flex-col ${
                   isTarget
                     ? "rounded-xl ring-2 ring-violet-500 ring-offset-2 ring-offset-neutral-50 dark:ring-offset-neutral-950"
@@ -221,41 +209,34 @@ export default function SectionCanvas({
                 >
                   {node}
                 </div>
-              </motion.div>
+              </div>
             </div>
           );
         })}
-      </motion.div>
+      </div>
 
-      <AnimatePresence initial={false}>
-        {arranging && hidden.length > 0 && (
-          <motion.div
-            key="hidden-tray"
-            variants={fadeRise(!!reduced)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 p-4"
-          >
-            <p className="text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-              Not on the page
-            </p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {hidden.map((def) => (
-                <button
-                  key={def.id}
-                  type="button"
-                  onClick={() => api.showSection(def.id)}
-                  className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium transition-colors hover:border-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
-                >
-                  <PlusIcon className="h-3.5 w-3.5" />
-                  {def.title}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {arranging && hidden.length > 0 && (
+        <div
+          className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 p-4"
+        >
+          <p className="text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+            Not on the page
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {hidden.map((def) => (
+              <button
+                key={def.id}
+                type="button"
+                onClick={() => api.showSection(def.id)}
+                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1.5 text-xs font-medium hover:border-neutral-400 hover:text-violet-700 dark:hover:text-violet-300"
+              >
+                <PlusIcon className="h-3.5 w-3.5" />
+                {def.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {arranging && layout.length === 0 && (
         <p className="rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 px-5 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">

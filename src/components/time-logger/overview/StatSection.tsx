@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
-import { AnimatePresence } from "framer-motion";
 import { useTimeFormat } from "../TimeFormatProvider";
 import CardPicker from "./CardPicker";
 import MoreCardsDialog from "./MoreCardsDialog";
@@ -238,8 +237,7 @@ export default function StatSection({
         </div>
       )}
 
-      <AnimatePresence>
-        {moreOpen && (
+      {moreOpen && (
           <MoreCardsDialog
             cards={extraCards}
             metrics={metrics}
@@ -250,8 +248,7 @@ export default function StatSection({
             }}
             onClose={() => setMoreOpen(false)}
           />
-        )}
-      </AnimatePresence>
+      )}
     </div>
   );
 }

@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { XIcon } from "lucide-react";
 import { CATEGORIES, type Project } from "@/lib/types";
 import { todayLocal } from "../metrics";
-import { backdrop, dialogPanel } from "../motion";
 import Portal from "@/components/Portal";
 import type { MutationResult, NewLogInput } from "../useLoggerData";
 
@@ -29,7 +27,6 @@ export default function QuickLogDialog({
   onLogged?: (project: string) => void;
   onClose: () => void;
 }) {
-  const reduced = useReducedMotion();
 
   const [form, setForm] = useState({
     date: todayLocal(),
@@ -99,21 +96,16 @@ export default function QuickLogDialog({
 
   return (
     <Portal>
-      <motion.div
-        variants={backdrop()}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+      <div
         className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/50 p-4 sm:items-center"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
       >
-        <motion.div
+        <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="quick-log-title"
-          variants={dialogPanel(!!reduced)}
           className="w-full max-w-lg rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 text-neutral-900 dark:text-neutral-100 shadow-xl"
         >
           <div className="flex items-start justify-between gap-4">
@@ -253,14 +245,14 @@ export default function QuickLogDialog({
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors shadow-sm active:scale-[0.98]"
+                className="rounded-md bg-neutral-900 dark:bg-neutral-700 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors"
               >
                 {saving ? "Saving…" : "Save"}
               </button>
             </div>
           </form>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Portal>
   );
 }
