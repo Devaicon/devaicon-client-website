@@ -345,7 +345,7 @@ function ServicePages() {
                       <div className="truncate text-xs text-neutral-500 dark:text-neutral-400">/services/{p.slug}</div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <ServicePageStatusPill status={p.status} noindex={p.noindex} />
+                      <ServicePageStatusPill status={p.status} noindex={p.noindex} redirectTo={p.redirectTo} />
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-neutral-600 dark:text-neutral-400">{p.blockCount}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-neutral-600 dark:text-neutral-400">

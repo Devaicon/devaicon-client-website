@@ -48,6 +48,8 @@ export type ServicePageSummary = {
   title: string;
   slug: string;
   status: ServicePageStatus;
+  /** Where the page's address sends visitors (a 301) once it's retired; '' when it isn't. */
+  redirectTo: string;
   noindex: boolean;
   blockCount: number;
   publishedAt: string;
@@ -107,11 +109,16 @@ export async function getLiveServicePages(): Promise<PublicServicePageSummary[]>
   return data?.pages ?? [];
 }
 
-/** A live page, or null when there's no such page. */
-export async function getServicePage(slug: string): Promise<PublicServicePage | null> {
-  const data = await get<{ page: PublicServicePage }>(`/service-pages/${encodeURIComponent(slug)}`);
-  return data?.page ?? null;
+/**
+ * A live page, `{ redirectTo }` for a retired one, or null when there's no
+ * such page.
+ */
+export async function getServicePage(slug: string): Promise<PublicServicePage | { redirectTo: string } | null> {
+  const data = await get<{ page: PublicServicePage } | { redirectTo: string }>(`/service-pages/${encodeURIComponent(slug)}`);
+  if (!data) return null;
+  return "redirectTo" in data ? { redirectTo: data.redirectTo } : data.page;
 }
+
 
 /**
  * Live pages for build-time lists. Only a build survives an unreachable API;

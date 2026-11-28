@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Check as CheckIcon, Download, ExternalLink, Eye, Lock, Plus, Send, Trash2, Undo2, X } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, Check as CheckIcon, Download, ExternalLink, Eye, Lock, Plus, Send, Trash2, Undo2, X } from "lucide-react";
 import { api } from "@/components/dashboard/api";
 import { useApi } from "@/components/dashboard/useApi";
 import { Panel } from "@/components/blog-editor/panels";
@@ -48,8 +48,27 @@ const BLANK: ServicePageContent = {
 
 const newKey = () => crypto.randomUUID();
 
-/** Draft, or Live; a live page hidden from search says so. */
-export function ServicePageStatusPill({ status, noindex = false }: { status: ServicePageStatus; noindex?: boolean }) {
+/** Another page aimed at the same search, as the server finds them. */
+type Overlap = { path: string; title: string; id: string; kind: "same" | "close"; phrase: string };
+
+/** Draft, Live, or Redirected; a live page hidden from search says so. */
+export function ServicePageStatusPill({
+  status,
+  noindex = false,
+  redirectTo = "",
+}: {
+  status: ServicePageStatus;
+  noindex?: boolean;
+  redirectTo?: string;
+}) {
+  if (redirectTo) {
+    return (
+      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-700 dark:text-sky-400" title={`301 to ${redirectTo}`}>
+        <ArrowRight className="h-3 w-3" aria-hidden />
+        Redirected
+      </span>
+    );
+  }
   const live = status === "published";
   return (
     <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${live ? "text-green-700 dark:text-green-400" : "text-neutral-600 dark:text-neutral-400"}`}>
@@ -119,6 +138,22 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
   const [dirty, setDirty] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [note, setNote] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
+  const [overlaps, setOverlaps] = useState<Overlap[]>([]);
+  const [redirectInput, setRedirectInput] = useState("");
+
+  // Other pages aimed at the same search, as of the last save.
+  const pageId = page?.id;
+  const pageVersion = page?.updatedAt;
+  useEffect(() => {
+    if (!pageId) return;
+    let stale = false;
+    api<{ overlaps: Overlap[] }>(`/service-pages/${pageId}/overlaps`).then((res) => {
+      if (!stale && res.ok && res.data) setOverlaps(res.data.overlaps);
+    });
+    return () => {
+      stale = true;
+    };
+  }, [pageId, pageVersion]);
 
   const status: ServicePageStatus = page?.status ?? "draft";
   const slugLocked = Boolean(page?.publishedAt);
@@ -210,7 +245,24 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
     if (!target || dirty) target = await save();
     if (!target) return;
     setBusy(action);
-    const res = await api<{ page: AdminServicePage }>(`/service-pages/${target.id}/${action}`, { method: "POST", body: {} });
+    let res = await api<{ page: AdminServicePage }>(`/service-pages/${target.id}/${action}`, { method: "POST", body: {} });
+    // Another page answers the same search: publish only if they say so.
+    if (!res.ok && res.error?.error === "overlap") {
+      const found = (res.error.overlaps as Overlap[] | undefined) ?? [];
+      setOverlaps(found);
+      const list = found.map((o) => `• ${o.path} — ${o.title} (${o.kind === "same" ? "same search" : "close"}: “${o.phrase}”)`).join("\n");
+      const go = confirm(
+        `These pages already answer this search:\n\n${list}\n\nTwo pages for one search compete in Google, and neither ranks as well as one would. ` +
+          `Usually it's better to improve the existing page, or to redirect one page to the other.\n\nPublish anyway?`,
+      );
+      if (go) {
+        res = await api<{ page: AdminServicePage }>(`/service-pages/${target.id}/publish`, { method: "POST", body: { allowOverlap: true } });
+      } else {
+        setBusy(null);
+        setNote({ kind: "error", text: "Not published: another page already answers this search. See “Competing pages” in the SEO panel." });
+        return;
+      }
+    }
     setBusy(null);
     if (!res.ok || !res.data) {
       setNote({ kind: "error", text: res.message ?? "Something went wrong. Try again." });
@@ -238,9 +290,61 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
     if (win) win.location.href = `/services/preview/${target.id}`;
   }
 
+  async function redirect() {
+    if (!page) return;
+    const to = redirectInput.trim();
+    if (!to) return;
+    if (
+      !confirm(
+        `Redirect /services/${page.slug} to ${to}?\n\nVisitors and search engines will be sent there with a permanent (301) redirect, and this page leaves the sitemap. ` +
+          `Move anything worth keeping into ${to} first. You can undo this later.`,
+      )
+    ) {
+      return;
+    }
+    if (dirty && !(await save())) return;
+    setBusy("redirect");
+    const res = await api<{ page: AdminServicePage; repointed: number; linkedFrom: { id: string; title: string; path: string }[] }>(
+      `/service-pages/${page.id}/redirect`,
+      { method: "POST", body: { to } },
+    );
+    setBusy(null);
+    if (!res.ok || !res.data) {
+      setNote({ kind: "error", text: res.message ?? "Something went wrong. Try again." });
+      return;
+    }
+    setPage(res.data.page);
+    setRedirectInput("");
+    const { repointed, linkedFrom } = res.data;
+    const parts = [`Redirected. /services/${res.data.page.slug} now sends visitors to ${res.data.page.redirectTo} (301).`];
+    if (repointed > 0) parts.push(`${repointed} page${repointed === 1 ? " that redirected" : "s that redirected"} here now go${repointed === 1 ? "es" : ""} straight there too.`);
+    if (linkedFrom.length > 0) {
+      parts.push(`Update the links to this page in: ${linkedFrom.map((p) => `${p.title} (${p.path})`).join(", ")}.`);
+    }
+    setNote({ kind: "ok", text: parts.join(" ") });
+  }
+
+  async function unredirect() {
+    if (!page) return;
+    if (!confirm(`Remove the redirect? /services/${page.slug} will show this page again${page.status === "published" ? "" : " once it's published"}.`)) return;
+    setBusy("redirect");
+    const res = await api<{ page: AdminServicePage }>(`/service-pages/${page.id}/redirect`, { method: "DELETE" });
+    setBusy(null);
+    if (!res.ok || !res.data) {
+      setNote({ kind: "error", text: res.message ?? "Something went wrong. Try again." });
+      return;
+    }
+    setPage(res.data.page);
+    setNote({ kind: "ok", text: res.data.page.status === "published" ? "Redirect removed. The page is live again." : "Redirect removed. The page is a draft." });
+  }
+
   async function remove() {
     if (!page) return;
-    const live = page.status === "published" ? " It will disappear from the site." : "";
+    const live = page.redirectTo
+      ? ` Its redirect goes too, so /services/${page.slug} will show “not found”. To retire a page, keep its redirect instead.`
+      : page.status === "published"
+        ? " It will disappear from the site."
+        : "";
     if (!confirm(`Delete “${page.title}” for good?${live}`)) return;
     const res = await api(`/service-pages/${page.id}`, { method: "DELETE" });
     if (!res.ok) {
@@ -291,7 +395,7 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
           Service pages
         </Link>
         <div className="flex items-center gap-3 text-sm">
-          <ServicePageStatusPill status={status} noindex={form.seo.noindex} />
+          <ServicePageStatusPill status={status} noindex={form.seo.noindex} redirectTo={page?.redirectTo} />
           {dirty && <span className="text-amber-700 dark:text-amber-400">Unsaved changes</span>}
         </div>
       </div>
@@ -306,6 +410,19 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
           }`}
         >
           {note.text}
+        </div>
+      )}
+
+      {page?.redirectTo && (
+        <div className="flex flex-wrap items-center gap-2 rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-900 dark:border-sky-900 dark:bg-sky-950/50 dark:text-sky-200">
+          <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
+          <span>
+            /services/{page.slug} redirects (301) to{" "}
+            <a href={page.redirectTo} target="_blank" rel="noopener" className="font-medium underline">
+              {page.redirectTo}
+            </a>
+            . This page isn&apos;t shown on the site or in the sitemap.
+          </span>
         </div>
       )}
 
@@ -404,7 +521,7 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
               {busy === "save" ? "Saving…" : page ? "Save" : "Save draft"}
             </button>
             {status === "draft" ? (
-              <button onClick={() => transition("publish")} disabled={disabled} className={`${secondary} w-full`}>
+              <button onClick={() => transition("publish")} disabled={disabled || Boolean(page?.redirectTo)} title={page?.redirectTo ? "Remove the redirect first" : undefined} className={`${secondary} w-full`}>
                 <Send className="h-4 w-4" aria-hidden />
                 {busy === "publish" ? "Publishing…" : "Publish"}
               </button>
@@ -436,7 +553,7 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
                   ? `${blocksNeedingWork} block${blocksNeedingWork === 1 ? " needs" : "s need"} finishing before publishing (marked ⚠).`
                   : "Only people with dashboard access can see a draft. Preview shows it with the real template."}
             </p>
-            {page && status === "published" && (
+            {page && status === "published" && !page.redirectTo && (
               <a href={`/services/${page.slug}`} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-sm hover:underline">
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                 View on site
@@ -479,15 +596,71 @@ function ServicePageEditor({ page: initial }: { page: AdminServicePage | null })
             </Field>
           </Panel>
 
+          {page && (
+            <Panel title="Redirect" defaultOpen={Boolean(page.redirectTo)}>
+              {page.redirectTo ? (
+                <>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    Sends visitors and search engines from /services/{page.slug} to <span className="font-medium">{page.redirectTo}</span> with a permanent (301) redirect.
+                  </p>
+                  <button onClick={unredirect} disabled={disabled} className={`${secondary} w-full`}>
+                    <Undo2 className="h-4 w-4" aria-hidden />
+                    {busy === "redirect" ? "Removing…" : "Remove redirect"}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Field
+                    label="Redirect this page to"
+                    htmlFor="redirect-to"
+                    hint="Retire this page when another one answers the same search: any page on the site, including pages not built here (e.g. /capabilities/open-edx-services). Move anything worth keeping there first."
+                  >
+                    <input
+                      id="redirect-to"
+                      value={redirectInput}
+                      onChange={(e) => setRedirectInput(e.target.value)}
+                      disabled={disabled}
+                      placeholder={overlaps[0]?.path ?? "/services/…"}
+                      className={INPUT}
+                    />
+                  </Field>
+                  <button onClick={redirect} disabled={disabled || !redirectInput.trim()} className={`${secondary} w-full`}>
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                    {busy === "redirect" ? "Redirecting…" : "Redirect (301)"}
+                  </button>
+                </>
+              )}
+            </Panel>
+          )}
+
           <Panel title="SEO" badge={<span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${scoreTone}`}>{passed}/{checks.length}</span>}>
             <div className="rounded-md border border-neutral-200 dark:border-neutral-800 p-3" aria-label="Search result preview">
               <div className="text-[11px] text-neutral-500">devaicon.com › services › {form.slug || "…"}</div>
               <div className="mt-0.5 line-clamp-1 text-[15px] text-[#1a0dab] dark:text-[#8ab4f8]">{searchTitle(form) || "Page title"}</div>
               <div className="mt-0.5 line-clamp-2 text-xs text-neutral-600 dark:text-neutral-400">{searchDescription(form) || "Add a meta description."}</div>
             </div>
-            <Field label="Focus keyphrase" htmlFor="seo-key" hint="The search people should find this page with.">
+            <Field label="Focus keyphrase" htmlFor="seo-key" hint="The search people should find this page with. Each search should have one page.">
               <input id="seo-key" value={form.seo.focusKeyphrase} disabled={disabled} maxLength={100} onChange={(e) => setSeo({ focusKeyphrase: e.target.value })} className={INPUT} />
             </Field>
+            {overlaps.length > 0 && !page?.redirectTo && (
+              <div role="alert" className="rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-200">
+                <div className="mb-1.5 flex items-center gap-1.5 font-semibold">
+                  <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
+                  Competing pages
+                </div>
+                <p className="mb-2">These already answer this search{dirty ? " (as of the last save)" : ""}. Google ranks one page per search best: improve that page instead, or redirect one page to the other.</p>
+                <ul className="space-y-1">
+                  {overlaps.map((o) => (
+                    <li key={o.path}>
+                      <a href={o.id ? `/dashboard/services/${o.id}` : o.path} target="_blank" rel="noopener" className="font-medium underline">
+                        {o.path}
+                      </a>{" "}
+                      — {o.kind === "same" ? "same search" : "close"}: “{o.phrase}”
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <Field label="Search title (meta title)" htmlFor="seo-title" hint="Leave empty to use the page title. The brand is added when it fits." extra={<Counter value={searchTitle(form)} ideal={TITLE_IDEAL} />}>
               <input id="seo-title" value={form.seo.metaTitle} placeholder={form.title} disabled={disabled} maxLength={120} onChange={(e) => setSeo({ metaTitle: e.target.value })} className={INPUT} />
             </Field>

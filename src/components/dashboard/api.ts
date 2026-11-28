@@ -7,7 +7,14 @@
 
 import { startProgress } from "@/lib/progress";
 
-export type ApiResult<T> = { ok: boolean; data?: T; message?: string; status?: number };
+export type ApiResult<T> = {
+  ok: boolean;
+  data?: T;
+  message?: string;
+  status?: number;
+  /** A refusal's whole body, e.g. `{ error: "overlap", overlaps: [...] }`. */
+  error?: { error?: string; [key: string]: unknown };
+};
 
 export async function api<T = unknown>(
   path: string,
@@ -29,7 +36,7 @@ export async function api<T = unknown>(
           : res.status === 403
             ? "You don't have permission to do that."
             : "Something went wrong. Try again.";
-      return { ok: false, message, status: res.status };
+      return { ok: false, message, status: res.status, error: data };
     }
     return { ok: true, data: data as T, status: res.status };
   } catch {
