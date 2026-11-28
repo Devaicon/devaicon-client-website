@@ -1,4 +1,4 @@
-import { MOVED_PAGES } from './src/lib/moved-pages.mjs';
+import { MOVED_PAGES, RETIRED_URLS } from './src/lib/moved-pages.mjs';
 
 /** @type {import('next').NextConfig} */
 // The server's origin. A trailing "/" or "/api" is dropped: every path below
@@ -22,14 +22,8 @@ const nextConfig = {
       { source: '/admin/:path*', destination: '/dashboard/:path*', permanent: true },
       // Temporary, like the legacy logger itself (LEGACY_TIME_LOGGER).
       { source: '/legacy', destination: '/legacy/login', permanent: false },
-      // Retired public URLs Google still lists or posts still link to; each
-      // goes to the page that now covers its content.
-      { source: '/contact', destination: '/contact-us', permanent: true },
-      { source: '/capabilities', destination: '/whatwedo', permanent: true },
-      { source: '/capabilities/ai', destination: '/capabilities/intelligent-systems-data', permanent: true },
-      { source: '/capabilities/data', destination: '/capabilities/intelligent-systems-data', permanent: true },
-      { source: '/capabilities/business-applications', destination: '/capabilities/infrastructure-enterprise-systems', permanent: true },
-      { source: '/capabilities/cloud-services', destination: '/capabilities/infrastructure-enterprise-systems', permanent: true },
+      // Retired public URLs; see src/lib/moved-pages.mjs.
+      ...Object.entries(RETIRED_URLS).map(([source, destination]) => ({ source, destination, permanent: true })),
       // Service pages live under /services/<slug>; there is no index of them yet.
       { source: '/services', destination: '/whatwedo', permanent: false },
       // Pages that moved to /services/<slug>; see src/lib/moved-pages.mjs.

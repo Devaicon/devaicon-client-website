@@ -1,4 +1,5 @@
 import {
+  ArrowRightLeft,
   Briefcase,
   Clock,
   Inbox,
@@ -100,6 +101,13 @@ export const SECTION_GROUPS: SectionGroup[] = [
         icon: LayoutTemplate,
         anyOf: ["services.manage"],
         blurb: "Build service pages from content blocks, or import ones an AI agent wrote.",
+      },
+      {
+        href: "/dashboard/redirects",
+        label: "Redirects",
+        icon: ArrowRightLeft,
+        anyOf: ["services.manage"],
+        blurb: "Send old addresses, such as pages written in code, to the pages that replaced them.",
       },
     ],
   },

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { readSessionFromToken, SESSION_COOKIE_NAME } from "./lib/session";
 import * as legacy from "./lib/legacy/session";
 
-// Apart from redirecting retired service pages, signed in or not is all this
-// decides. Which dashboard sections someone may open depends on their
+// For the public site this only applies the dashboard's redirects. For the
+// dashboard and its API, signed in or not is all it decides. Which dashboard sections someone may open depends on their
 // permissions, which only Express knows; the dashboard asks it, and Express
 // refuses anything they aren't allowed.
 
@@ -11,11 +11,12 @@ import * as legacy from "./lib/legacy/session";
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith("/services/")) return serviceRedirect(req);
-
   if (pathname.startsWith("/legacy/") || pathname.startsWith("/api/legacy/")) {
     return legacyProxy(req);
   }
+  const signedInArea =
+    pathname === "/login" || pathname === "/dashboard" || pathname.startsWith("/dashboard/") || pathname.startsWith("/api/");
+  if (!signedInArea) return siteRedirect(req);
 
   const token = req.cookies.get(SESSION_COOKIE_NAME)?.value;
   const session = await readSessionFromToken(token);
@@ -41,10 +42,13 @@ export default async function proxy(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Retired service pages, set in the dashboard's editor: each old address
-// answers with a 301 (what SEO tools check for) to the page that replaced it.
-// Kept for a short while per server instance, so a page view rarely waits on
-// the API; until a change reaches here, the page route itself redirects.
+// Redirects set in the dashboard: retired service pages (their editor's
+// Redirect panel) and old addresses such as pages written in code (the
+// Redirects module). Each old address answers with a 301, what SEO tools
+// check for, to the page that replaced it. The list is kept for a short while
+// per server instance, so a page view rarely waits on the API; until a change
+// reaches here, a retired service page's own route redirects (with a 308).
+// next.config.mjs's redirects, MOVED_PAGES among them, run before this.
 const REDIRECTS_TTL_MS = 30_000;
 let redirects: { map: Record<string, string>; at: number } | null = null;
 let loading: Promise<Record<string, string>> | null = null;
@@ -53,8 +57,8 @@ let loading: Promise<Record<string, string>> | null = null;
 const API = (process.env.EXPRESS_API_URL || "http://localhost:4000").trim().replace(/\/+$/, "").replace(/\/api$/, "");
 
 async function fetchServiceRedirects(): Promise<Record<string, string>> {
-  const res = await fetch(`${API}/api/public/service-redirects`, { cache: "no-store", signal: AbortSignal.timeout(3000) });
-  if (!res.ok) throw new Error(`service-redirects returned ${res.status}`);
+  const res = await fetch(`${API}/api/public/redirects`, { cache: "no-store", signal: AbortSignal.timeout(3000) });
+  if (!res.ok) throw new Error(`redirects returned ${res.status}`);
   return ((await res.json()) as { redirects?: Record<string, string> }).redirects ?? {};
 }
 
@@ -73,8 +77,8 @@ async function serviceRedirects(): Promise<Record<string, string>> {
   return loading;
 }
 
-async function serviceRedirect(req: NextRequest) {
-  const path = req.nextUrl.pathname.replace(/\/+$/, "").toLowerCase();
+async function siteRedirect(req: NextRequest) {
+  const path = req.nextUrl.pathname.replace(/(.)\/+$/, "$1").toLowerCase();
   const to = (await serviceRedirects())[path];
   if (!to) return NextResponse.next();
   const url = req.nextUrl.clone();
@@ -114,8 +118,9 @@ async function legacyProxy(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // Public: only checked against the dashboard's retired service pages.
-    "/services/:path*",
+    // Every public page, for the dashboard's redirects. Files (anything with
+    // a dot), Next's own assets and the signed-in areas are left out.
+    "/((?!_next|api/|dashboard|login|legacy|.*\\..*).*)",
     "/login",
     "/dashboard/:path*",
     // Express-backed routes (rewritten to the Express server). Login is left

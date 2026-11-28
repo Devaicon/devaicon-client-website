@@ -20,6 +20,21 @@ export const MOVED_PAGES = {
 };
 
 /**
+ * Retired public URLs Google still lists or posts still link to; each goes to
+ * the page that now covers its content. Permanent (308) redirects in
+ * next.config.mjs. New ones are made in the dashboard's Redirects module
+ * instead, which shows these too.
+ */
+export const RETIRED_URLS = {
+  "/contact": "/contact-us",
+  "/capabilities": "/whatwedo",
+  "/capabilities/ai": "/capabilities/intelligent-systems-data",
+  "/capabilities/data": "/capabilities/intelligent-systems-data",
+  "/capabilities/business-applications": "/capabilities/infrastructure-enterprise-systems",
+  "/capabilities/cloud-services": "/capabilities/infrastructure-enterprise-systems",
+};
+
+/**
  * Where a site path lives now.
  *
  * @param {string} path

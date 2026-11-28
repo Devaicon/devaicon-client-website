@@ -10,6 +10,7 @@ import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
 import { CONSULTING_TRANSFORMATION } from "@/lib/service-pages/consulting-transformation";
 import { hasMoved } from "@/lib/moved-pages.mjs";
+import { getRedirects } from "@/lib/redirects";
 import { INDUSTRY_PAGES } from "@/lib/industries-data";
 
 /**
@@ -132,10 +133,11 @@ const section = (heading, links) =>
 
 export async function GET() {
   // As in the sitemap, an API outage drops the posts rather than the file.
-  const [posts, openJobs, servicePages] = await Promise.all([
+  const [posts, openJobs, servicePages, redirects] = await Promise.all([
     listInsights({ limit: 200 }).catch(() => []),
     getOpenJobs().catch(() => []),
     getLiveServicePages().catch(() => []),
+    getRedirects(),
   ]);
   // Pages built in the dashboard join the services written in code.
   const services = servicePages.filter(isSelfCanonical).map((p) => ({
@@ -143,9 +145,12 @@ export async function GET() {
     path: `/services/${p.slug}`,
     description: metaDescription(p.metaDescription || p.subtitle),
   }));
-  const sections = SECTIONS.map((s) =>
-    s.heading === "Services" ? { ...s, links: [...s.links, ...services] } : s,
-  );
+  // Pages written in code that the dashboard's Redirects module sends
+  // elsewhere are left out, as in the sitemap.
+  const sections = SECTIONS.map((s) => ({
+    ...s,
+    links: (s.heading === "Services" ? [...s.links, ...services] : s.links).filter(({ path }) => !redirects[path]),
+  }));
   const insights = [
     {
       title: "Insights & Resources",

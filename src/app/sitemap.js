@@ -4,6 +4,7 @@ import { getOpenJobs } from "@/lib/careers/api";
 import { getLiveServicePages, isSelfCanonical } from "@/lib/service-pages/managed";
 import { getAllIndustries } from "@/lib/industries-data";
 import { hasMoved } from "@/lib/moved-pages.mjs";
+import { getRedirects } from "@/lib/redirects";
 
 /**
  * Public, indexable pages only: a sitemap should list canonical URLs alone.
@@ -87,10 +88,11 @@ export const revalidate = 300;
 export default async function sitemap() {
   // A content API outage leaves the posts out of this one build rather than
   // failing the sitemap for every other page.
-  const [posts, openJobs, servicePages] = await Promise.all([
+  const [posts, openJobs, servicePages, redirects] = await Promise.all([
     listInsights({ limit: 200 }).catch(() => []),
     getOpenJobs().catch(() => []),
     getLiveServicePages().catch(() => []),
+    getRedirects(),
   ]);
   const insights = posts
     .filter((p) => !p.noindex)
@@ -125,7 +127,9 @@ export default async function sitemap() {
     "/insights": newest(insights, CONTENT_REVIEWED),
     "/careers": newest(jobs, CONTENT_REVIEWED),
   };
-  const staticRoutes = STATIC_ROUTES.map((route) =>
+  // A page written in code that the dashboard's Redirects module sends
+  // elsewhere isn't a page any more.
+  const staticRoutes = STATIC_ROUTES.filter((route) => !redirects[route.path]).map((route) =>
     route.path in listingDates
       ? { ...route, lastModified: listingDates[route.path] }
       : route
