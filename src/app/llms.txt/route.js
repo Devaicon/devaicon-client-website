@@ -1,7 +1,10 @@
 import { SITE_URL, metaDescription } from "@/lib/seo";
 import { listInsights } from "@/lib/blog/source";
 import { getOpenJobs } from "@/lib/careers/api";
-import { getLiveServicePages, isSelfCanonical } from "@/lib/service-pages/managed";
+import {
+  getLiveServicePages,
+  isSelfCanonical,
+} from "@/lib/service-pages/managed";
 import { OPEN_EDX_HOSTING } from "@/lib/service-pages/open-edx-hosting";
 import { OPEN_EDX_DEVELOPMENT } from "@/lib/service-pages/open-edx-development";
 import { AI_AUTOMATION_PAKISTAN } from "@/lib/service-pages/ai-automation-pakistan";
@@ -141,7 +144,7 @@ export async function GET() {
     description: metaDescription(p.metaDescription || p.subtitle),
   }));
   const sections = SECTIONS.map((s) =>
-    s.heading === "Services" ? { ...s, links: [...s.links, ...services] } : s
+    s.heading === "Services" ? { ...s, links: [...s.links, ...services] } : s,
   );
   const insights = [
     {
@@ -168,7 +171,7 @@ export async function GET() {
   const body = [
     "# Devaicon",
     "",
-    "> Devaicon builds AI, automation, cloud and enterprise software solutions for organisations across banking, retail, manufacturing and the public sector. 18+ years of delivery, 550+ projects.",
+    "> Devaicon builds AI, automation, cloud and enterprise software solutions for organisations across banking, retail, manufacturing and the public sector. 5 years of delivery, 100+ projects.",
     "",
     `Based in Sharjah, United Arab Emirates. Website: ${SITE_URL}/`,
     "",

@@ -54,7 +54,7 @@ const ContactFormSection = () => {
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-gray-900 mb-1 tracking-tight">
-                        550+ PROJECTS COMPLETED
+                        100+ projects COMPLETED
                       </h3>
                       <p className="text-sm text-gray-600 leading-relaxed">
                         Delivering project success no matter what

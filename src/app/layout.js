@@ -3,10 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import JsonLd from "@/components/seo/JsonLd";
 import PageProgress from "@/components/PageProgress";
-import {
-  organizationSchema,
-  webSiteSchema,
-} from "@/lib/seo/structured-data";
+import { organizationSchema, webSiteSchema } from "@/lib/seo/structured-data";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,7 +21,7 @@ export const metadata = {
     template: "%s | Devaicon",
   },
   description:
-    "Transform your business with Devaicon's AI, automation, cloud and enterprise application services. 18+ years of delivery, 550+ projects.",
+    "Transform your business with Devaicon's AI, automation, cloud and enterprise application services. 5 years of delivery, 100+ projects.",
   keywords: [
     "AI solutions",
     "business automation",
@@ -77,7 +74,7 @@ export const metadata = {
     siteName: "Devaicon",
     title: "Devaicon - Value Driven Innovation Through Automation & AI",
     description:
-      "Transform your business with AI, automation, and cloud solutions. 18+ years of expertise, 550+ projects, trusted by global industry leaders.",
+      "Transform your business with AI, automation, and cloud solutions. 5 years of expertise, 100+ projects, trusted by global industry leaders.",
     images: [
       {
         url: "/og-image.webp",
@@ -91,7 +88,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Devaicon - Value Driven Innovation Through Automation & AI",
     description:
-      "Transform your business with AI, automation, and cloud solutions. 18+ years of expertise, 550+ projects.",
+      "Transform your business with AI, automation, and cloud solutions. 5 years of expertise, 100+ projects.",
     images: ["/twitter-image.webp"],
     creator: "@devaicon",
   },

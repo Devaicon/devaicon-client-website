@@ -13,7 +13,7 @@ const WhatWeDoGroups = () => {
     {
       id: 1,
       icon: Award,
-      title: "18+ Years",
+      title: "5 years",
       description: "Proven industry experience",
       bgColor: "#3d234b",
     },
